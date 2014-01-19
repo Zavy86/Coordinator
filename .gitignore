@@ -1,0 +1,25 @@
+# -[ IGNORE !EXCEPT ]-----------------------------------------------------------
+.DS_Store
+/*
+!/accounts
+!/chats
+/chats/chats/*
+!/chats/chats/index.php
+!/core
+!/cron
+!/dashboard
+!/logs
+!/settings
+!/stats
+/stats/charts/*
+!/stats/charts/index.php
+!/uploads
+/uploads/accounts/avatars/*
+!/uploads/accounts/avatars/index.php
+!/uploads/accounts/avatars/avatar.jpg
+!.gitignore
+!README.md
+!config.inc.php.temp
+!index.php
+!query.sql
+!robots.txt

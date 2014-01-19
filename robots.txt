@@ -1,0 +1,4 @@
+User-Agent: *
+Disallow: /core/
+Disallow: /config.inc.php
+Allow: /
