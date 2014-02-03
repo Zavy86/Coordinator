@@ -13,6 +13,10 @@ switch($act){
  case "permissions_add":permissions_add();break;
  case "permissions_del":permissions_del();break;
  case "permissions_reset":permissions_reset();break;
+ // menus
+ case "menu_save":menu_save();break;
+ case "menu_move_up":menu_move("up");break;
+ case "menu_move_down":menu_move("down");break;
  // default
  default:header("location: index.php");
 }
@@ -138,5 +142,126 @@ function permissions_reset(){
  // redirect
  header("location: permissions_edit.php?module=".$g_module);
 }
+
+
+/* -[ Menu Save ]------------------------------------------------------------ */
+function menu_save(){
+ if(!api_checkPermission("settings","menu_edit")){api_die("accessDenied");}
+ // acquire variables
+ $g_id=$_GET['id'];
+ if($g_id>0){$menu=$GLOBALS['db']->queryUniqueObject("SELECT * FROM settings_menus WHERE id='".$g_id."'");}
+ $p_idMenu=$_POST['idMenu'];
+ $p_menu=addslashes($_POST['menu']);
+ $p_module=addslashes($_POST['module']);
+ $p_url=addslashes($_POST['url']);
+ // set position
+ if($menu->id>0 && $menu->idMenu==$p_idMenu){
+  // no change
+  $position=$menu->position; 
+ }else{
+  // set maximum position
+  $position=$GLOBALS['db']->countOf("settings_menus","idMenu='".$p_idMenu."'");
+  $position++;
+  // if changed parent menu move back submenu located after
+  if($p_idMenu<>$menu->idMenu){
+   echo $GLOBALS['db']->execute("UPDATE settings_menus SET position=position-1 WHERE position>'".$menu->position."' AND idMenu='".$menu->idMenu."'");
+  }
+ }
+ // build query
+ if($menu->id>0){
+  $query="UPDATE settings_menus SET
+   idMenu='".$p_idMenu."',
+   menu='".$p_menu."',
+   module='".$p_module."',
+   url='".$p_url."',
+   position='".$position."'
+   WHERE id='".$g_id."'";
+  // execute query
+  $GLOBALS['db']->execute($query);
+  // redirect
+  $alert="&alert=menuUpdated&alert_class=alert-success";
+  header("location: menus_edit.php?idMenu=".$p_idMenu.$alert);
+ }else{
+  $query="INSERT INTO settings_menus
+   (idMenu,menu,module,url,position) VALUES
+   ('".$p_idMenu."','".$p_menu."','".$p_module."','".$p_url."','".$position."')";
+  // execute query
+  $GLOBALS['db']->execute($query);
+  // set id to last inserted id
+  $g_id=$GLOBALS['db']->lastInsertedId();
+  // redirect
+  $alert="&alert=menuCreated&alert_class=alert-success";
+  header("location: menus_edit.php?idMenu=".$p_idMenu.$alert);
+ }
+}
+
+/* -[ Menu Move ]------------------------------------------------------------ */
+function menu_move($to){
+ if(!api_checkPermission("settings","menu_edit")){api_die("accessDenied");}
+ // acquire variables
+ $g_id=$_GET['id'];
+ if(!$g_id){$g_id=0;}
+ $g_idMenu=$_GET['idMenu'];
+ if(!$g_idMenu){$g_idMenu=0;}
+ if($g_id>0 && $g_idMenu>0){
+  $moved=FALSE;
+  // get current position
+  $position=$GLOBALS['db']->queryUniqueValue("SELECT position FROM settings_menus WHERE id='".$g_id."'");
+  // move field
+  switch($to){
+   case "up":
+    if($position>1){
+     echo $GLOBALS['db']->execute("UPDATE settings_menus SET position=".$position." WHERE position='".($position-1)."' AND idMenu='".$g_idMenu."'");
+     echo $GLOBALS['db']->execute("UPDATE settings_menus SET position=".($position-1)." WHERE id='".$g_id."'");
+     $moved=TRUE;
+    }
+    break;
+   case "down":
+    $max_position=$GLOBALS['db']->countOf("settings_menus","idMenu='".$g_idMenu."'");
+    if($position<$max_position){
+     echo $GLOBALS['db']->execute("UPDATE settings_menus SET position=".$position." WHERE position='".($position+1)."' AND idMenu='".$g_idMenu."'");
+     echo $GLOBALS['db']->execute("UPDATE settings_menus SET position=".($position+1)." WHERE id='".$g_id."'");
+     $moved=TRUE;
+    }
+    break;
+  }
+  // alert and redirect
+  if($moved){$alert="&alert=menuMoved&alert_class=alert-success";}
+   else{$alert="&alert=settingError&alert_class=alert-error";}
+  exit(header("location: menus_edit.php?idMenu=".$g_idMenu.$alert));
+ }else{
+  // redirect
+  $alert="&alert=settingError&alert_class=alert-error";
+  exit(header("location: menus_edit.php?idMenu=".$g_idMenu.$alert));
+ }
+}
+
+
+/* -[ Workflow Field Delete ]------------------------------------------------ */
+function workflow_field_delete(){
+ if(!api_checkPermission("helpdesk","helpdesk_admin")){api_die("accessDenied");}
+ // acquire variables
+ $g_id=$_GET['id'];
+ if(!$g_id){$g_id=0;}
+ $g_idWorkflow=$_GET['idWorkflow'];
+ if(!$g_idWorkflow){$g_idWorkflow=0;}
+ if($g_idWorkflow>0 && $g_id>0){
+  // get field position
+  $position=$GLOBALS['db']->queryUniqueValue("SELECT position FROM helpdesk_workflows_fields WHERE id='".$g_id."'");
+  // delete action
+  echo $GLOBALS['db']->execute("DELETE FROM helpdesk_workflows_fields WHERE id='".$g_id."'");
+  // moves back fields located after
+  echo $GLOBALS['db']->execute("UPDATE helpdesk_workflows_fields SET position=position-1 WHERE position>'".$position."' AND idWorkflow='".$g_idWorkflow."'");
+  // redirect
+  $alert="&alert=fieldDeleted&alert_class=alert-success";
+  exit(header("location: helpdesk_workflows_fields_edit.php?id=".$g_idWorkflow.$alert));
+ }else{
+  // redirect
+  $alert="&alert=workflowError&alert_class=alert-error";
+  exit(header("location: helpdesk_workflows_fields_edit.php?id=".$g_idWorkflow.$alert));
+ }
+}
+
+
 
 ?>
