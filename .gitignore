@@ -1,25 +1,14 @@
-# -[ IGNORE !EXCEPT ]-----------------------------------------------------------
-.DS_Store
-/*
-!/accounts
-!/chats
+# -[ IGNORE ]-------------------------------------------------------------------
+/config.inc.php
+/nbproject/
 /chats/chats/*
-!/chats/chats/index.php
-!/core
-!/cron
-!/dashboard
-!/logs
-!/settings
-!/stats
 /stats/charts/*
+/uploads/*
+
+# -[ !EXCEPT ]------------------------------------------------------------------
+!/chats/chats/index.php
 !/stats/charts/index.php
-!/uploads
-/uploads/accounts/avatars/*
+!/uploads/index.php
 !/uploads/accounts/avatars/index.php
 !/uploads/accounts/avatars/avatar.jpg
-!.gitignore
-!README.md
-!config.inc.php.temp
-!index.php
-!query.sql
-!robots.txt
+!/uploads/test/index.php
