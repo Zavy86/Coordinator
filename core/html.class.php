@@ -73,7 +73,7 @@ public function header($title="",$nav="dashboard",$navbar=TRUE){
  <style>
   body{}
  </style>
- 
+
 </head>
 
 <body>
@@ -98,29 +98,33 @@ public function header($title="",$nav="dashboard",$navbar=TRUE){
 
       <li<?php if($nav=="dashboard"){echo " class=\"active\"";} ?>><a href="<?php echo $GLOBALS['dir']."dashboard/index.php";?>">Bacheca</a></li>
 
-      <?php if(api_checkPermissionShowModule("registries")){ ?>
-      <li class="dropdown<?php if($nav=="registries"){echo " active";} ?>">
-       <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-        Anagrafica <b class="caret"></b>
-       </a>
-       <ul class="dropdown-menu">
-        <?php if(api_checkPermission("registries","companies_list")){echo "<li><a href=\"".$GLOBALS['dir']."registries/companies_list.php\">Societ&agrave;</a></li>";}?>
-        <?php if(api_checkPermission("registries","divisions_list")){echo "<li><a href=\"".$GLOBALS['dir']."registries/divisions_list.php\">Divisioni</a></li>";}?>
-        <?php if(api_checkPermission("registries","suppliers_list")){echo "<li><a href=\"".$GLOBALS['dir']."registries/suppliers_list.php\">Fornitori</a></li>";}?>
-        <?php if(api_checkPermission("registries","customers_list")){echo "<li><a href=\"".$GLOBALS['dir']."registries/customers_list.php\">Clienti</a></li>";}?>
-       </ul>
-      </li>
-      <?php } ?>
-
-      <?php if(api_checkPermission("projects","projects_view")){echo "<li";if($nav=="projects"){echo " class=\"active\"";}echo "><a href=\"".$GLOBALS['dir']."projects/index.php\">Progetti</a></li>";}?>
-
-      <?php if(api_checkPermission("offers","offers_view")){echo "<li";if($nav=="offers"){echo " class=\"active\"";}echo "><a href=\"".$GLOBALS['dir']."offers/index.php\">Offerte</a></li>";}?>
-
-      <?php if(api_checkPermission("quotations","quotations_view")){echo "<li";if($nav=="quotations"){echo " class=\"active\"";}echo "><a href=\"".$GLOBALS['dir']."quotations/index.php\">Preventivi</a></li>";}?>
-
-      <?php if(api_checkPermission("archives","archives_index")){echo "<li";if($nav=="archives"){echo " class=\"active\"";}echo "><a href=\"".$GLOBALS['dir']."archives/index.php\">Archivio</a></li>";}?>
-      
-      <?php if(api_checkPermission("flues","flues_view")){echo "<li";if($nav=="flues"){echo " class=\"active\"";}echo "><a href=\"".$GLOBALS['dir']."flues/index.php\">Camini</a></li>";}?>
+      <?php
+       // acquire main menu
+       $menus=$GLOBALS['db']->query("SELECT * FROM settings_menus WHERE idMenu='1' ORDER BY position ASC");
+       while($menu=$GLOBALS['db']->fetchNextObject($menus)){
+        //if(api_checkMenuPermission($menu->id,FALSE)){
+        if(api_checkPermissionShowModule($menu->module,FALSE)){
+         echo "<li class=\"";
+         $submenus=$GLOBALS['db']->countOf("settings_menus","idMenu='".$menu->id."'");
+         if($nav==$menu->module){echo "active";}
+         if($submenus==0){
+          echo "\"><a href='".$GLOBALS['dir'].$menu->module."/".$menu->url."'>".stripslashes($menu->menu)."</a>";
+         }else{
+          echo " dropdown\">";
+          echo "<a href='#' class='dropdown-toggle' data-toggle='dropdown'>";
+          echo stripslashes($menu->menu)." <b class='caret'></b></a>\n";
+          // submenus
+          echo "<ul class='dropdown-menu'>\n";
+          $submenus=$GLOBALS['db']->query("SELECT * FROM settings_menus WHERE idMenu='".$menu->id."' ORDER BY position ASC");
+          while($submenu=$GLOBALS['db']->fetchNextObject($submenus)){
+           echo "<li><a href='".$GLOBALS['dir'].$submenu->module."/".$submenu->url."'>".stripslashes($submenu->menu)."</a></li>";
+          }
+          echo "</ul>\n";
+         }
+         echo "</li>\n";
+        }
+       }
+      ?>
 
      </ul>
 
@@ -144,28 +148,6 @@ public function header($title="",$nav="dashboard",$navbar=TRUE){
 
       <?php } ?>
 
-      <?php if(api_checkPermission("applications","applications_list")){ ?>
-
-      <li class="dropdown">
-       <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-        <i class="icon-bookmark"></i> <b class="caret"></b>
-       </a>
-       <ul class="dropdown-menu">
-        <li class="nav-header">Applicativi</li>
-        <li><a href="http://sysaid:8080/" target="_blank">Assistenza (SysAid)</a></li>
-        <li><a href="http://jasper:8080/jasperserver/" target="_blank">Reportistica (JasperSoft)</a></li>
-        <?php if(api_checkPermission("applications","applications_test")){ ?>
-        <li class="nav-header">Applicativi in test</li>
-        <li><a href="http://sis-temp/glpi/" target="_blank">GLPI</a></li>
-        <li><a href="http://sis-temp/ocsreports/" target="_blank">OCS Inventory</a></li>
-        <li><a href="http://jasper2:8080/jasperserver-pro/" target="_blank">JasperSoft Professional</a></li>
-        
-        <?php } ?>
-       </ul>
-      </li>
-
-      <?php } ?>
-
       <li class="dropdown">
        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
         <img src="<?php echo api_accountAvatar();?>" class="img-rounded" style="width:22px;margin:-6px 0 0 0;padding:0;"> <b class="caret"></b>
@@ -175,7 +157,7 @@ public function header($title="",$nav="dashboard",$navbar=TRUE){
         <li><a href="<?php echo $GLOBALS['dir']."accounts/index.php";?>">Account</a></li>
         <?php if(api_checkPermission("stats","stats_server")){echo "<li><a href=\"".$GLOBALS['dir']."stats/index.php\">Statistiche</a></li>";}?>
         <?php if(api_checkPermission("settings","settings_edit")||api_checkPermission("settings","permissions_edit")){echo "<li><a href=\"".$GLOBALS['dir']."settings/index.php\">Impostazioni</a></li>";}?>
-        
+
         <?php
          if(api_checkPermission("wiki","wiki_view")){
           if($GLOBALS['db']->queryUniqueObject("SELECT * FROM wiki_pages WHERE path='".api_baseModule()."'")){
@@ -185,10 +167,10 @@ public function header($title="",$nav="dashboard",$navbar=TRUE){
           }
          }
         ?>
-        
+
         <?php if(api_checkPermission("dashboard","notifications_send")){echo "<li><a href=\"".$GLOBALS['dir']."dashboard/notifications_send.php\">Invia una notifica</a></li>";}?>
         <?php if(api_checkPermission("logs","logs_list")){echo "<li><a href=\"".$GLOBALS['dir']."logs/index.php\">Registro eventi</a></li>";}?>
-        <?php if(api_checkPermission("saprfc","saprfc_list")){echo "<li><a href=\"".$GLOBALS['dir']."saprfc/index.php\">SAP RFC</a></li>";}?>        
+        <?php if(api_checkPermission("saprfc","saprfc_list")){echo "<li><a href=\"".$GLOBALS['dir']."saprfc/index.php\">SAP RFC</a></li>";}?>
         <?php
          if($_SESSION['account']->administrator && $_SESSION['account']->id>1){
           echo "<li class='divider'></li>\n";
@@ -255,7 +237,7 @@ public function footer($wiki_link=NULL,$copyright=TRUE){
 
     <span class="muted credit pull-right">Copyright 2009-<?php echo date("Y");?> &copy; <a href="http://www.coordinator.it" target="_blank">Coordinator</a> - All Rights Reserved</span>
     <span class="muted">Last Refresh: <?php echo date("H:i:s"); ?></span>
-    
+
    </footer>
   </div><!-- /row -->
 
@@ -265,9 +247,9 @@ public function footer($wiki_link=NULL,$copyright=TRUE){
 
  <!-- Javascript -->
  <script src="<?php echo $GLOBALS['dir']."core/bootstrap/js/bootstrap.min.js";?>" type="text/javascript"></script>
- 
+
  <script src="<?php echo $GLOBALS['dir']."core/bootstrap-datetimepicker/js/bootstrap-datetimepicker.min.js";?>" type="text/javascript"></script>
- 
+
  <script src="<?php echo $GLOBALS['dir']."core/bootstrap-markdown/js/bootstrap-markdown.js";?>" type="text/javascript"></script>
 
  <script src="<?php echo $GLOBALS['dir']."core/bootstrap-select2/select2.min.js";?>" type="text/javascript"></script>
@@ -323,7 +305,7 @@ public function footer($wiki_link=NULL,$copyright=TRUE){
  ?>
 
  <!-- Piwik -->
- <script type="text/javascript"> 
+ <script type="text/javascript">
   var _paq=_paq||[];
   _paq.push(['trackPageView']);
   _paq.push(['enableLinkTracking']);

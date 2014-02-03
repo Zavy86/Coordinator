@@ -332,9 +332,9 @@ function api_checkPermission($module,$action,$alert=FALSE){
 // @param $module : Module to check
 function api_checkPermissionShowModule($module,$admin=TRUE){
  // if account is root return always true
- if($_SESSION['account']->id==1){return TRUE;}
+ if($_SESSION['account']->id==1 && $admin==TRUE){return TRUE;}
  // if account typology is administrator return always true
- if($_SESSION['account']->typology==1 && $admin=TRUE){return TRUE;}
+ if($_SESSION['account']->typology==1 && $admin==TRUE){return TRUE;}
  // retrieve the permissions list
  $permissions=$GLOBALS['db']->query("SELECT * FROM settings_permissions WHERE module='".$module."' ORDER BY id ASC");
  while($permission=$GLOBALS['db']->fetchNextObject($permissions)){
