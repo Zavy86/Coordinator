@@ -11,21 +11,13 @@ $html->header("Statistiche");
  <!-- Navigation -->
  <ul class="nav nav-tabs">
 
-  <?php 
+  <?php
    echo "<li";if(api_baseName()=="stats_server.php"){echo " class='active'";}
    if(!api_checkPermission("stats","stats_server")){echo " class='disabled'><a href='#'";}
    else{echo "><a href='stats_server.php'";}
    echo ">Server</a></li>";
   ?>
-  
-  <?php 
-   echo "<li";if(api_baseName()=="stats_intranet.php"){echo " class='active'";}
-   //if(!api_checkPermission("stats","stats_server")){echo " class='disabled'><a href='#'";}
-   //else{echo "><a href='stats_intranet.php'";}
-   echo "><a href='stats_intranet.php'";
-   echo ">Intranet</a></li>";
-  ?>
-  
+
  </ul>
 
 <?php if($checkPermission==NULL){content();}else{if(api_checkPermission("stats",$checkPermission,TRUE)){content();}} ?>
