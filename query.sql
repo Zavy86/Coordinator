@@ -181,6 +181,7 @@ CREATE TABLE IF NOT EXISTS `settings_permissions` (
 INSERT INTO `settings_permissions` (`id`, `module`, `action`, `description`, `locked`) VALUES
 (NULL, 'settings', 'settings_edit', 'Gestire le impostazioni', 1),
 (NULL, 'settings', 'permissions_edit', 'Gestire i permessi', 1),
+(NULL, 'settings', 'menus_edit', 'Gestire i menu', 0),
 (NULL, 'accounts', 'accounts_list', 'Visualizzare la lista degli accounts', 0),
 (NULL, 'accounts', 'accounts_add', 'Aggiungere un account', 0),
 (NULL, 'accounts', 'accounts_edit', 'Modificare un account', 0),
