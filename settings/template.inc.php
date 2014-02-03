@@ -25,6 +25,13 @@ $html->header("Settings");
    echo ">Permessi</a></li>";
   ?>
   
+  <?php 
+   echo "<li";if(api_baseName()=="menus_edit.php"){echo " class='active'";}
+   if(!api_checkPermission("settings","menus_edit")){echo " class='disabled'><a href='#'";}
+   else{echo "><a href='menus_edit.php'";}
+   echo ">Menu</a></li>";
+  ?>
+  
  </ul>
 
 <?php if($checkPermission==NULL){content();}else{if(api_checkPermission("settings",$checkPermission,TRUE)){content();}} ?>
