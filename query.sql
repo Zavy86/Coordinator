@@ -1,5 +1,5 @@
 --
--- Database: `intranet`
+-- Database: `coordinator`
 --
 
 -- --------------------------------------------------------
@@ -113,7 +113,7 @@ CREATE TABLE IF NOT EXISTS `accounts_groups_join_accounts` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- --------------------------------------------------------
- 
+
 --
 -- Struttura della tabella `logs_logs`
 --
@@ -217,6 +217,30 @@ CREATE TABLE IF NOT EXISTS `settings_permissions_join_accounts_groups` (
 -- --------------------------------------------------------
 
 --
+-- Struttura della tabella `settings_menus`
+--
+
+CREATE TABLE IF NOT EXISTS `settings_menus` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `idMenu` int(11) NOT NULL DEFAULT '0',
+  `menu` varchar(25) COLLATE utf8_unicode_ci NOT NULL,
+  `module` varchar(25) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `url` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `position` int(3) unsigned NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT='Menu';
+
+--
+-- Dump dei dati per la tabella `settings_menus`
+--
+
+INSERT INTO `settings_menus` (`id`, `idMenu`, `menu`, `module`, `url`, `position`) VALUES
+(1, 0, 'main', '', '', 0),
+(2, 0, 'user', '', '', 0);
+
+-- --------------------------------------------------------
+
+--
 -- Struttura della tabella `settings_settings`
 --
 
@@ -231,16 +255,17 @@ CREATE TABLE IF NOT EXISTS `settings_settings` (
 --
 
 INSERT INTO `settings_settings` (`code`, `value`) VALUES
-('cron_token', 'e209db4af8d2dc746a811c63962d1a2p'),
+('cron_token', 'c4312c2a07bf7ded608a4d7cee2228dd'),
 ('google_analytics', ''),
 ('maintenance', '0'),
 ('maintenance_description', 'This service is currently undergoing scheduled maintenance.<br>Please try back in 60 minutes. Sorry for the inconvenience.'),
-('owner', 'Cogne Acciai Speciali'),
-('owner_mail', 'intranet@cogne.com'),
-('owner_mail_from', 'COGNE Intranet'),
-('owner_url', 'http://www.cogne.com'),
-('piwik_analytics', 'sis/piwik:2'),
+('owner', 'Coordinator'),
+('owner_mail', 'info@coordiantor.it'),
+('owner_mail_from', 'Coordiantor'),
+('owner_url', 'http://www.coordinator.it'),
+('piwik_analytics', ''),
+('show_logo', '0'),
 ('temp_token', ''),
-('title', 'COGNE');
+('title', 'Coordinator');
 
 -- --------------------------------------------------------
