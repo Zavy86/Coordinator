@@ -31,6 +31,7 @@ function settings_save(){
  if($_POST['owner_mail']<>NULL){$GLOBALS['db']->execute("UPDATE settings_settings SET value='".addslashes($_POST['owner_mail'])."' WHERE code='owner_mail'");}
  if($_POST['owner_mail_from']<>NULL){$GLOBALS['db']->execute("UPDATE settings_settings SET value='".addslashes($_POST['owner_mail_from'])."' WHERE code='owner_mail_from'");}
  if($_POST['title']<>NULL){$GLOBALS['db']->execute("UPDATE settings_settings SET value='".addslashes($_POST['title'])."' WHERE code='title'");}
+ if($_POST['show_logo']=="on"){$GLOBALS['db']->execute("UPDATE settings_settings SET value='1' WHERE code='show_logo'");}else{$GLOBALS['db']->execute("UPDATE settings_settings SET value='0' WHERE code='show_logo'");}
  if(isset($_POST['google_analytics'])){$GLOBALS['db']->execute("UPDATE settings_settings SET value='".addslashes($_POST['google_analytics'])."' WHERE code='google_analytics'");}
  if(isset($_POST['piwik_analytics'])){$GLOBALS['db']->execute("UPDATE settings_settings SET value='".addslashes($_POST['piwik_analytics'])."' WHERE code='piwik_analytics'");}
  if($_POST['cron_token']<>NULL){$GLOBALS['db']->execute("UPDATE settings_settings SET value='".addslashes($_POST['cron_token'])."' WHERE code='cron_token'");}
@@ -80,10 +81,10 @@ function permissions_add_group_grouprole($idPermission,$idGroup,$idGrouprole){
   $GLOBALS['db']->execute($query="DELETE FROM settings_permissions_join_accounts_groups WHERE idPermission='".$idPermission."' AND (idGroup='0' OR idGroup='".$idGroup."')");
  }
  // add group permission
- $GLOBALS['db']->execute("INSERT INTO settings_permissions_join_accounts_groups (idPermission,idGroup,idGrouprole) VALUES ('".$idPermission."','".$idGroup."','".$idGrouprole."')");  
+ $GLOBALS['db']->execute("INSERT INTO settings_permissions_join_accounts_groups (idPermission,idGroup,idGrouprole) VALUES ('".$idPermission."','".$idGroup."','".$idGrouprole."')");
 }
 
- 
+
 /* -[ Permissions Add ]------------------------------------------------------ */
 function permissions_add(){
  if(!api_checkPermission("settings","permissions_edit")){api_die("accessDenied");}
@@ -157,7 +158,7 @@ function menu_save(){
  // set position
  if($menu->id>0 && $menu->idMenu==$p_idMenu){
   // no change
-  $position=$menu->position; 
+  $position=$menu->position;
  }else{
   // set maximum position
   $position=$GLOBALS['db']->countOf("settings_menus","idMenu='".$p_idMenu."'");
