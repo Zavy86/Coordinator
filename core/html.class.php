@@ -87,10 +87,15 @@ public function header($title="",$nav="dashboard",$navbar=TRUE){
      <span class="icon-bar"></span>
      <span class="icon-bar"></span>
     </a>
-    <?php /*<a class="brand" href="<?php echo $GLOBALS['dir']."index.php"; ?>"><?php echo api_getOption('title');?></a>*/ ?>
-    <a class="brand-logo" href="<?php echo $GLOBALS['dir']."index.php"; ?>"><img src="<?php echo $GLOBALS['dir']; ?>/core/images/logos/logo.png"></a>
+    <?php
+     if(file_exists("../uploads/core/logo.png") && api_getOption('show_logo')){
+      echo "<a class='brand-logo' href='".$GLOBALS['dir']."index.php'><img src='".$GLOBALS['dir']."uploads/core/logo.png'></a>\n";
+     }else{
+      echo "<a class='brand' href='".$GLOBALS['dir']."index.php'>".api_getOption('title')."</a>\n";
+     }
+    ?>
 
-<?php if($navbar){ ?>
+    <?php if($navbar){ ?>
 
     <div class="nav-collapse collapse">
 
@@ -190,25 +195,25 @@ public function header($title="",$nav="dashboard",$navbar=TRUE){
 
     </div><!-- /nav-collapse -->
 
-<?php } ?>
+    <?php } ?>
 
    </div><!-- /container -->
   </div>
  </div><!-- /navbar -->
 
-<?php
- if(api_checkPermission("chats","chats_chat")){
-  // modal new message
-  echo "<div id='modalNew' class='modal hide fade' role='dialog' aria-hidden='true'>\n";
-  echo "<div class='modal-header'>\n";
-  echo "<button type='button' class='close' data-dismiss='modal' aria-hidden='true'>&times;</button>\n";
-  echo "<h4>Nuovo messaggio</h4>";
-  echo "</div>\n";
-  echo "<div class='modal-body'>\n";
-  echo "<input type='hidden' id='chat_idAccountTo' name='chat_idAccountTo' style='width:520px'>\n";
-  echo "</div>\n</div>\n";
- }
-?>
+ <?php
+  if(api_checkPermission("chats","chats_chat")){
+   // modal new message
+   echo "<div id='modalNew' class='modal hide fade' role='dialog' aria-hidden='true'>\n";
+   echo "<div class='modal-header'>\n";
+   echo "<button type='button' class='close' data-dismiss='modal' aria-hidden='true'>&times;</button>\n";
+   echo "<h4>Nuovo messaggio</h4>";
+   echo "</div>\n";
+   echo "<div class='modal-body'>\n";
+   echo "<input type='hidden' id='chat_idAccountTo' name='chat_idAccountTo' style='width:520px'>\n";
+   echo "</div>\n</div>\n";
+  }
+ ?>
 
  <!-- Content -->
  <div class="container">
@@ -241,7 +246,7 @@ public function footer($wiki_link=NULL,$copyright=TRUE){
    </footer>
   </div><!-- /row -->
 
-<?php } ?>
+ <?php } ?>
 
  </div><!-- /container -->
 
