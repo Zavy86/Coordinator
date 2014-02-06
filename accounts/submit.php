@@ -39,12 +39,12 @@ function account_login(){
  $p_account=addslashes($_POST['account']);
  $p_password=$_POST['password'];
  // [ LDAP START ]--------------------------------------------------------------
- // if username is not an account
- if(strpos($p_account,"@")==FALSE && $p_account<>"root"){
+ // if account is not an email
+ if(strpos($p_account,"@")==FALSE && $p_account<>"root" && api_getOption('ldap')){
   // try ldap authentication
   include('../config.inc.php');
   include('../core/ldap.inc.php');
-  if(ldap_authenticate($ldap_host,$ldap_dn,$ldap_domain,$p_account,$p_password,$ldap_group)){
+  if(ldap_authenticate(api_getOption('ldap_host'),api_getOption('ldap_dn'),api_getOption('ldap_domain'),$p_account,$p_password,api_getOption('ldap_group'))){
    $account=$GLOBALS['db']->queryUniqueObject("SELECT * FROM accounts_accounts WHERE ldapUsername='".$p_account."'");
    if($account->id){
     // account exist
@@ -54,6 +54,11 @@ function account_login(){
      $alert="?alert=loginDisabled&alert_class=alert-warning";
      header("location: login.php".$alert);
     }else{
+     // check maintenance
+     if($account->typology<>1 && api_getOption("maintenance")){
+      $alert="?alert=maintenance&alert_class=alert-warning";
+      exit(header("location: login.php".$alert));
+     }
      // account enabled
      session_destroy();
      session_start();
@@ -79,6 +84,11 @@ function account_login(){
  // retrieve account
  $account=$GLOBALS['db']->queryUniqueObject("SELECT * FROM accounts_accounts WHERE account='".$p_account."' AND password='".md5($p_password)."' AND typology>'0'");
  if($account->id){
+  // check maintenance
+  if($account->typology<>1 && api_getOption("maintenance")){
+   $alert="?alert=maintenance&alert_class=alert-warning";
+   exit(header("location: login.php".$alert));
+  }
   // open new session
   session_destroy();
   session_start();
@@ -134,7 +144,7 @@ function account_save(){
    idCompany='".$p_idCompany."'
    WHERE id='".$g_id."'";
   // execute query
-  $GLOBALS['db']->execute($query);  
+  $GLOBALS['db']->execute($query);
   // Grouprole
   // acquire variables
   $p_idGroup=$_POST['idGroup'];
@@ -186,7 +196,7 @@ function account_customize(){
  $p_name=addslashes($_POST['name']);
  $p_password=$_POST['password'];
  $p_confirm=$_POST['confirm'];
- // build query 
+ // build query
  if(strlen($p_password)>6&&$p_password==$p_confirm){
   $query="UPDATE accounts_accounts SET
    name='".$p_name."',
@@ -214,7 +224,7 @@ function account_customize(){
    }
   }
  }
- // redirect  
+ // redirect
  header("location: index.php".$alert);
 }
 
@@ -283,7 +293,7 @@ function password_reset(){
  $p_account=$_POST['account'];
  $p_password=$_POST['password'];
  $p_confirm=$_POST['confirm'];
- // check account 
+ // check account
  if($p_secret==NULL||$p_account==NULL){die("FATAL ERROR /!\\");}
  if($p_password<>$p_confirm){die("FATAL ERROR /!\\");}
  $account=$GLOBALS['db']->queryUniqueObject("SELECT * FROM accounts_accounts WHERE account='".$p_account."' AND secret='".$p_secret."'");
@@ -292,7 +302,7 @@ function password_reset(){
  if($account->id>0){
   $query="UPDATE accounts_accounts SET
    password='".md5($p_password)."',
-   secret=NULL   
+   secret=NULL
    WHERE id='".$account->id."'";
   // execute query
   $GLOBALS['db']->execute($query);
