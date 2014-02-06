@@ -32,7 +32,7 @@ function content(){
 <?php
  // get total menu entry
  $totMenus=$GLOBALS['db']->countOf("settings_menus","idMenu='".$g_idMenu."'");
- // 
+ //
  $menus=$GLOBALS['db']->query("SELECT * FROM settings_menus WHERE idMenu='".$g_idMenu."' ORDER BY position ASC,id ASC");
  while($menu=$GLOBALS['db']->fetchNextObject($menus)){
   // count items
@@ -50,10 +50,10 @@ function content(){
   if($count>0){
    echo "<td class='nowarp'><a href='menus_edit.php?idMenu=".$menu->id."'><i class='icon-plus'></i></a></td>\n";
   }else{
-   echo "<td class='nowarp'><i class='icon-minus'></i></td>\n"; 
+   echo "<td class='nowarp'><i class='icon-minus'></i></td>\n";
   }
   if(strlen($menu->url)>0){$url="/".stripslashes($menu->url);}else{$url=NULL;}
-  echo "<td class='nowarp text-center'>".$position."</td>\n";
+  echo "<td class='nowarp text-center'>".$position.$menu->position."</td>\n";
   echo "<td class='nowarp'>".stripslashes($menu->menu)."</td>\n";
   echo "<td class='nowarp'>".stripslashes($menu->module).$url."</td>\n";
   echo "<td class='nowarp'><a href='menus_edit.php?idMenu=".$menu->idMenu."&id=".$menu->id."'><i class='icon-edit'></i></a></td>\n";
@@ -70,9 +70,9 @@ function content(){
  if($selectedMenu->id>0){echo "<center><h5>Modifica menu</h5></center><br>\n";}
   else{echo "<center><h5>Aggiungi menu</h5></center><br>\n";}
 ?>
- 
+
 <form class="form-horizontal" action="<?php echo "submit.php?act=menu_save&id=".$selectedMenu->id;?>" method="post">
- 
+
  <div class="control-group">
   <label class="control-label">Categoria padre</label>
   <div class="controls">
@@ -95,22 +95,22 @@ function content(){
    </select>
   </div>
  </div>
- 
+
  <div class="control-group">
   <label class="control-label" for="menu">Nome</label>
   <div class="controls"><input type="text" id="menu" class="input-large" name="menu" value="<?php echo stripslashes($selectedMenu->menu);?>"></div>
  </div>
- 
+
  <div class="control-group">
   <label class="control-label" for="module">Modulo</label>
   <div class="controls"><input type="text" id="module" class="input-large" name="module" value="<?php echo stripslashes($selectedMenu->module);?>"></div>
  </div>
- 
+
  <div class="control-group">
   <label class="control-label" for="url">URL</label>
   <div class="controls"><input type="text" id="url" class="input-xlarge" name="url" value="<?php echo stripslashes($selectedMenu->url);?>"></div>
  </div>
- 
+
  <div class="control-group">
   <div class="controls">
    <input type='submit' class='btn btn-primary' name='submit' value='Salva menu'>
@@ -118,16 +118,16 @@ function content(){
    if($selectedMenu->id>0){
     $count=$GLOBALS['db']->countOf("settings_menus","idMenu='".$selectedMenu->id."'");
     if($count==0){
-     echo "<a href='submit.php?act=menu_delete&id=".$selectedMenu->id."' class='btn btn-danger' onClick=\"return confirm('Sei sicuro di voler eliminare questa voce di menu?')\">Elimina</a>\n";
+     echo "<a href='submit.php?act=menu_delete&idMenu=".$selectedMenu->idMenu."&id=".$selectedMenu->id."' class='btn btn-danger' onClick=\"return confirm('Sei sicuro di voler eliminare questa voce di menu?')\">Elimina</a>\n";
     }
     echo "<a href='menus_edit.php?idMenu=".$selectedMenu->idMenu."' class='btn'>Annulla</a>\n";
    }
    ?>
   </div>
  </div>
- 
+
 </form>
 
-</div><!-- /span6 --> 
+</div><!-- /span6 -->
 </div><!-- /row-fluid -->
 <?php } ?>
