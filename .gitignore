@@ -1,14 +1,32 @@
-# -[ IGNORE ]-------------------------------------------------------------------
-/config.inc.php
-/nbproject/
-/chats/chats/*
-/stats/charts/*
-/uploads/*
+################################################################################
+#                                                                              #
+#                        _.-=[ www.coordinator.it ]=-._                        #
+#             ____                    _ _             _                        #
+#            / ___|___   ___  _ __ __| (_)_ __   __ _| |_ ___  _ __            #
+#           | |   / _ \ / _ \| '__/ _` | | '_ \ / _` | __/ _ \| '__|           #
+#           | |__| (_) | (_) | | | (_| | | | | | (_| | || (_) | |              #
+#            \____\___/ \___/|_|  \__,_|_|_| |_|\__,_|\__\___/|_|              #
+#                                                                              #
+################################################################################
 
-# -[ !EXCEPT ]------------------------------------------------------------------
-!/chats/chats/index.php
-!/stats/charts/index.php
-!/uploads/index.php
-!/uploads/accounts/avatars/index.php
-!/uploads/accounts/avatars/avatar.jpg
-!/uploads/test/index.php
+# ignore configuration file
+/config.inc.php
+
+# ignore project directory
+/nbproject/
+
+# ignore Chats directory
+/chats/chats/*
+
+# ignore Charts Stats directory
+/stats/charts/*
+
+# ignore Uploads directory but not Core and Account directory
+/uploads/*
+/uploads/core/*
+!/uploads/core/
+/uploads/accounts/*
+!/uploads/accounts/
+
+# Never ignore index.php files
+!index.php
