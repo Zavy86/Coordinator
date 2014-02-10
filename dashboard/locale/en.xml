@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<locale language="IT">
+
+ <!-- Test -->
+ <text key="notifications">Notifications</text>
+ <text key="archived-notifications">Archived notifications</text>
+
+</locale>

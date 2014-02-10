@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<locale language="IT">
+
+ <!-- sss -->
+ <text key="core_accounts">Account</text>
+ <text key="core_stats">Statistiche</text>
+
+</locale>

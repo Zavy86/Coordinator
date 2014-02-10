@@ -53,7 +53,7 @@ while($notification=$GLOBALS['db']->fetchNextObject($notifications)){
   echo "<td class='nowarp'>".api_timestampFormat($notification->archived,TRUE)."</td>\n";
   //echo "<td class='nowarp'>".api_accountName($notification->idAccountArchived)."</td>\n";
  }
- echo "<td><a href='#modal".$notification->id."' data-toggle='modal' id='read".$notification->id."'>".stripslashes($notification->subject)."</a></td>\n"; 
+ echo "<td><a href='#modal".$notification->id."' data-toggle='modal' id='read".$notification->id."'>".stripslashes($notification->subject)."</a></td>\n";
  echo "</tr>\n";
  // modal label
  echo "<div id='modal".$notification->id."' class='modal hide fade' role='dialog' aria-hidden='true'>\n";
@@ -87,7 +87,7 @@ while($notification=$GLOBALS['db']->fetchNextObject($notifications)){
   $action="notification_restore";
   $button="Ripristina";
  }
- echo "<a class='btn' href='submit.php?act=".$action."&id=".$notification->idAction."'".$confirm.">".$button."</a>\n"; 
+ echo "<a class='btn' href='submit.php?act=".$action."&id=".$notification->idAction."'".$confirm.">".$button."</a>\n";
  echo "</div>\n</div>\n";
 }
 if(!$count){echo "<tr><td colspan=".$colspan.">Non &egrave; presente nessuna nuova notifica..</td></tr>\n";}

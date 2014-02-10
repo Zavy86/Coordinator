@@ -7,6 +7,7 @@ global $html;                 // html structure resource
 global $db;                   // database resource
 global $dir;                  // base path resource
 global $alert;                // base path resource
+global $locale_array;         // array with translation
 include("../config.inc.php"); // Include the configuration file
 include("alerts.inc.php");    // Include the alerts
 include("html.class.php");    // Include the html class
@@ -14,6 +15,8 @@ include("db.class.php");      // Include the database class
 // build class
 $html=new HTML();
 $db=new DB($db_host,$db_user,$db_pass,$db_name);
+// load core locale file
+api_loadLocaleFile("../core");
 
 
 /* -[ Check Session or Token ]----------------------------------------------- */
@@ -67,6 +70,53 @@ if((strpos($_SERVER['HTTP_USER_AGENT'],'Chrome')==false)
    &&(strpos($_SERVER['HTTP_USER_AGENT'],'11')==false)){
  $GLOBALS['alert']->alert="changeBrowser";
  $GLOBALS['alert']->class="alert-error";
+}
+
+/* -[ Load Locale Files ]---------------------------------------------------- */
+// @param $path : Path of locale if not default
+function api_loadLocaleFile($path=NULL){
+ if($path==NULL){$path=".";}
+ if($_SESSION['language']<>NULL && file_exists($path."/locale/".strtolower($_SESSION['language']).".xml")){
+  // load choised locale file
+  $xml=simplexml_load_file($path."/locale/".strtolower($_SESSION['language']).".xml");
+ }elseif(file_exists($path."/locale/default.xml")){
+  // load deafult locale file
+  $xml=simplexml_load_file($path."/locale/default.xml");
+ }else{
+  return FALSE;
+ }
+ if($xml<>NULL){
+  $GLOBALS['locale_array']=array();
+  foreach($xml->text as $text_xml){
+   $key=(string)$text_xml['key'];
+   $GLOBALS['locale_array'][$key]=(string)$text_xml;
+  }
+ }
+ return TRUE;
+}
+
+
+/* -[ Text Translation ]----------------------------------------------------- */
+// @param $key : Text key
+// @param $parameters : String or array
+function api_text($key,$parameters=NULL){
+ // get text by key from locale array
+ $text=$GLOBALS['locale_array'][$key];
+ // if key not found
+ if(strlen($text)==0){return "[Error, text key {".$key."} not found]";}
+ // replace parameters
+ if($parameters<>NULL){
+  if(is_array($parameters)){
+   $count=0;
+   foreach($parameters as $parameter){
+    $text=str_replace("{".$count."}",$parameter,$text);
+    $count++;
+   }
+  }else{
+   $text=str_replace("{0}",$parameters,$text);
+  }
+ }
+ return $text;
 }
 
 
@@ -273,7 +323,7 @@ function api_randomString($size=10){
 // @param $from_mail : Sender mail
 // @param $from_name : Sender name
 function api_sendmail($to_mail,$message,$subject="",$from_mail="",$from_name=""){
- // headers 
+ // headers
  if($from_mail==""){$from_mail=api_getOption('owner_mail');}
  if($from_name==""){$from_name=api_getOption('owner_mail_from');}
  $headers= "MIME-Version: 1.0\r\n";
@@ -670,7 +720,7 @@ function api_pagination($recordsCount=0,$recordsLimit=10,$currentPage=1,$url="?"
    }else{
     $pagination.= "<li class='".$class_li_disabled."'><span>&raquo;</span></li>";
    }
-   $pagination.= "</ul>\n";      
+   $pagination.= "</ul>\n";
   }
   // show pagination
   echo $pagination;
@@ -862,7 +912,7 @@ function api_rm_recursive($dir,$execute=FALSE){
   // recursive rm
   $count+=api_rm_recursive($dir."/".$value,$execute);
  }
- // remove emptied directory 
+ // remove emptied directory
  if($execute){rmdir($dir);}
   else{echo "rmdir: ".$dir."<br>";}
  $count++;
