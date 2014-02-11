@@ -17,6 +17,8 @@ $html=new HTML();
 $db=new DB($db_host,$db_user,$db_pass,$db_name);
 // load core locale file
 api_loadLocaleFile("../core");
+// load module locale file
+api_loadLocaleFile();
 
 
 /* -[ Check Session or Token ]----------------------------------------------- */
@@ -1020,12 +1022,67 @@ function api_convertUnit($number,$unit_from,$unit_to,$decimals=3){
 }
 
 
-/* -[ Icon ]------------------------------------------------------------ */
+
+/* ---------------------------[ DOCUMENTATE ]-------------------------------- */
+
+
+
+/* -[ Icon ]----------------------------------------------------------------- */
 // @string $icon : bootstrap icon glyphs
 function api_icon($icon){
  if($icon==NULL){return FALSE;}
  $return="<i class='".$icon."'></i>";
  return $return;
+}
+
+
+/* -[ Navigation Tab ]------------------------------------------------------- */
+// @string $label : label of the tab
+// @string $url : link url
+// @string $get : additional get parameters for link (&key=value)
+// @string $class : input css class
+function api_navigationTab($label,$url=NULL,$get=NULL,$class=NULL){
+ if(strlen($label)==0){return FALSE;}
+ $nt=new stdClass();
+ $nt->label=$label;
+ $nt->url=$url;
+ $nt->get=$get;
+ $nt->class=$class;
+ return $nt;
+}
+
+
+/* -[ Navigation ]----------------------------------------------------------- */
+// @array $nt_array : array of navigation tabs
+// @string $class : navigation css class
+function api_navigation($nt_array,$class=NULL){
+ // open navigation
+ echo "<!-- navigation tabs -->\n";
+ echo "<ul class='nav nav-tabs ".$class."'>\n";
+ // show tabs
+ if(is_array($nt_array)){
+  // show field
+  foreach($nt_array as $nt){
+   if(!is_object($nt)){continue;}
+   $active=FALSE;
+   echo " <li";
+   if(substr($nt->url,0,(strpos($nt->url,"?")>0)?strpos($nt->url,"?"):strlen($nt->url))==api_baseName()){
+    $active=TRUE;
+    parse_str(parse_url($nt->url,PHP_URL_QUERY),$gets);
+    if(count($gets)>0){
+     $active=FALSE;
+     foreach($gets as $key=>$value){
+      if($_GET[$key]==$value){$active=TRUE;};
+     }
+    }
+   }
+   if($active){echo " class='active ".$nt->class."'><a href='#'";}
+    else{echo "><a href='".$nt->url.$nt->get."'";}
+   echo ">".$nt->label."</a></li>\n";
+  }
+ }
+ // close navigation
+ echo "</ul><!-- /navigation tabs -->\n\n";
 }
 
 
@@ -1073,7 +1130,7 @@ function api_tableRow($fields,$class=NULL){
 // @array $tr_array : array of rows
 // @string $unvalued : text to show if no results
 // @boolean $sortable : show headers sortable link (true) or not
-// @string $get : additional get parameters for sortable link
+// @string $get : additional get parameters for sortable link (&key=value)
 // @string $class : table css class
 function api_table($th_array,$tr_array,$unvalued=NULL,$sortable=FALSE,$get=NULL,$class=NULL){
  $return=TRUE;
@@ -1328,6 +1385,16 @@ function api_form($ff_array,$fc_array,$action,$method="get",$name="form",$class=
   echo "</form>\n";
  }
 }
+
+
+
+
+
+
+
+
+
+
 
 
 ?>
