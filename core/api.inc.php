@@ -1070,9 +1070,8 @@ function api_navigation($nt_array,$class=NULL){
     $active=TRUE;
     parse_str(parse_url($nt->url,PHP_URL_QUERY),$gets);
     if(count($gets)>0){
-     $active=FALSE;
      foreach($gets as $key=>$value){
-      if($_GET[$key]==$value){$active=TRUE;};
+      if($_GET[$key]<>$value){$active=FALSE;}
      }
     }
    }
