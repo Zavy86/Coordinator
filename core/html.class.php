@@ -262,6 +262,8 @@ public function footer($wiki_link=NULL,$copyright=TRUE){
  <?php if(api_checkPermission("chats","chats_chat")){ ?>
  <script type="text/javascript">
   $(document).ready(function(){
+   // active popovers
+   $("[data-toggle=popover]").popover({trigger:"hover"});
    // refresh chats every 10 sec
    var refreshChatCounter=setInterval(function(){
     $.get("../chats/chat_counter.inc.php",function(data){
