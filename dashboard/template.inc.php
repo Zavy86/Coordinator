@@ -11,8 +11,6 @@ $status=$_GET['s'];
 if(!$status){$status=1;}
 ?>
 
-<div class="row-fluid">
-
  <!-- Navigation -->
  <ul class="nav nav-tabs">
 
@@ -28,10 +26,14 @@ if(!$status){$status=1;}
    echo ">".api_text("archived-notifications")."</a></li>";
   ?>
 
+  <?php
+   if(api_baseName()=="notifications_send.php"){
+    echo "<li class='active'><a href='#'>".api_text("send-notifications")."</a></li>";
+   }
+  ?>
+
  </ul>
 
 <?php if($checkPermission==NULL){content();}else{if(api_checkPermission("dashboard",$checkPermission,TRUE)){content();}} ?>
-
-</div><!-- /row -->
 
 <?php $html->footer(); ?>

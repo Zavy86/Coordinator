@@ -103,7 +103,7 @@ function api_text($key,$parameters=NULL){
  // get text by key from locale array
  $text=$GLOBALS['locale_array'][$key];
  // if key not found
- if(strlen($text)==0){return "[Error, text key {".$key."} not found]";}
+ if(strlen($text)==0){return "{".$key."}";}
  // replace parameters
  if($parameters<>NULL){
   if(is_array($parameters)){
@@ -237,7 +237,12 @@ function api_notification_administrators($typology,$module,$subject,$message,$li
 /* -[ Send notification to group members ]----------------------------------- */
 function api_notification_group($idGroup,$idGrouprole,$typology,$module,$subject,$message,$link=NULL,$idAccountFrom=NULL){
  if($typology==2){$idAction=md5(date('YdmHsi').api_randomString());}
- $accounts=$GLOBALS['db']->query("SELECT * FROM accounts_groups_join_accounts WHERE idGroup='".$idGroup."' AND idGrouprole>='".$idGrouprole."'");
+ $groups="idGroup='".$idGroup."'";
+ // check for subgroups
+ $subgroups=$GLOBALS['db']->query("SELECT * FROM accounts_groups WHERE idGroup='".$idGroup."'");
+ while($subgroup=$GLOBALS['db']->fetchNextObject($subgroups)){$groups.=" OR idGroup='".$subgroup->id."'";}
+ // get accounts in groups
+ $accounts=$GLOBALS['db']->query("SELECT distinct(idAccount) FROM accounts_groups_join_accounts WHERE (".$groups.") AND idGrouprole>='".$idGrouprole."'");
  while($account=$GLOBALS['db']->fetchNextObject($accounts)){
   api_notification_send($account->idAccount,$typology,$module,$subject,$message,$link,$idAccountFrom,$idAction);
  }
@@ -1013,5 +1018,316 @@ function api_convertUnit($number,$unit_from,$unit_to,$decimals=3){
  }
  return $number_return;
 }
+
+
+/* -[ Icon ]------------------------------------------------------------ */
+// @string $icon : bootstrap icon glyphs
+function api_icon($icon){
+ if($icon==NULL){return FALSE;}
+ $return="<i class='".$icon."'></i>";
+ return $return;
+}
+
+
+/* -[ Table Header ]--------------------------------------------------------- */
+// @string $name : column header name
+// @string $class : column header css class
+// @string $width : column header width
+function api_tableHeader($name,$class=NULL,$width=NULL,$order=NULL){
+ if(strlen($name)==0){return FALSE;}
+ $th=new stdClass();
+ $th->name=$name;
+ $th->class=$class;
+ $th->width=$width;
+ $th->order=$order;
+ return $th;
+}
+
+
+/* -[ Table Field ]---------------------------------------------------------- */
+// @string $content : field content
+// @string $class : field css class
+function api_tableField($content,$class=NULL){
+ if(strlen($content)==0){return FALSE;}
+ $td=new stdClass();
+ $td->content=$content;
+ $td->class=$class;
+ return $td;
+}
+
+
+/* -[ Table Row ]------------------------------------------------------------ */
+// @array $fields : row field object
+// @string $class : row css class
+function api_tableRow($fields,$class=NULL){
+ if(!is_array($fields)){return FALSE;}
+ $tr=new stdClass();
+ $tr->fields=$fields;
+ $tr->class=$class;
+ return $tr;
+}
+
+
+/* -[ Table ]---------------------------------------------------------------- */
+// @array $th_array : array of column headers
+// @array $tr_array : array of rows
+// @string $unvalued : text to show if no results
+// @boolean $sortable : show headers sortable link (true) or not
+// @string $get : additional get parameters for sortable link
+// @string $class : table css class
+function api_table($th_array,$tr_array,$unvalued=NULL,$sortable=FALSE,$get=NULL,$class=NULL){
+ $return=TRUE;
+ // open table
+ echo "<table class='table table-striped table-hover table-condensed ".$class."'>\n";
+ // open head
+ if(is_array($th_array)){
+  echo "<thead>\n<tr>\n";
+  // show headers
+  foreach($th_array as $th){
+   if(!is_object($th)){$return=-1;}
+   echo "<th class='".$th->class."' width='".$th->width."'>";
+   if($sortable && $th->order<>NULL){
+    // show order link
+    if($th->order==$_GET['of']){if($_GET['om']==1){$order=0;}else{$order=1;}}else{$order=1;}
+    echo "<a href='".api_baseName()."?of=".$th->order."&om=".$order.$get."'>";
+   }
+   echo $th->name;
+   if($sortable){echo "</a>";}
+   "</th>\n";
+  }
+  echo "</tr>\n";
+  // close head
+  echo "</thead>\n";
+ }
+ // open body
+ echo "<tbody>\n";
+ if(is_array($tr_array)){
+  foreach($tr_array as $tr){
+   // show rows
+   if(!is_object($tr)){$return=-2;}
+   echo "<tr class='".$tr->class."'>\n";
+   // show fields
+   if(is_array($tr->fields)){
+    foreach($tr->fields as $td){
+     // show field
+     if(!is_object($td)){$return=-3;}
+     echo "<td class='".$td->class."'>".$td->content."</td>\n";
+    }
+   }
+   echo "</tr>\n";
+  }
+ }
+ // show no value text
+ if(!count($tr_array) && $unvalued<>NULL){echo "<tr><td colspan=".count($th_array).">".$unvalued."</td></tr>\n";}
+ // close body
+ echo "</tbody>\n";
+ // close table
+ echo "</table>\n";
+ return $return;
+}
+
+
+/* -[ Form Field ]----------------------------------------------------------- */
+// @string $type : hidden, text, password, checkbox, radio, select, textarea, file
+// @string $name : name of the form input (spaces not allowed)
+// @string $label : label for the field
+// @string $value : default value
+// @string $class : input css class
+// @string $placeholder : placeholder message
+// @array $options : array of fields options
+// @boolean $disabled : disable input field (true) or not
+// @integer $rows : number of textarea rows
+function api_formField($type,$name,$label=NULL,$value=NULL,$class=NULL,$placeholder=NULL,$options=NULL,$disabled=FALSE,$rows=7){
+ if(strlen($type)==0 || strlen($name)==0){return FALSE;}
+ $ff=new stdClass();
+ $ff->type=$type;
+ $ff->name=$name;
+ $ff->label=$label;
+ $ff->value=$value;
+ $ff->class=$class;
+ $ff->placeholder=$placeholder;
+ $ff->options=$options;
+ $ff->disabled=$disabled;
+ $ff->rows=$rows;
+ return $ff;
+}
+
+
+/* -[ Form Field Options ]--------------------------------------------------- */
+// @string $value : option value
+// @string $label : label for the field option
+// @boolean $checked : checked or selected field option (true) or not
+// @boolean $disabled : disable field option (true) or not
+function api_formFieldOption($value,$label,$checked=FALSE,$disabled=FALSE){
+ if(strlen($value)==0 || strlen($label)==0){return FALSE;}
+ $fo=new stdClass();
+ $fo->value=$value;
+ $fo->label=$label;
+ $fo->checked=$checked;
+ $fo->disabled=$disabled;
+ return $fo;
+}
+
+
+/* -[ Form Control ]--------------------------------------------------------- */
+// @string $type : submit, reset, button, link
+// @string $label : label for the control
+// @string $class : input css class
+// @string $url : link url
+// @string $confirm : confirmation message to approve if not null
+// @boolean $disabled : disable control (true) or not
+function api_formControl($type,$label,$class=NULL,$url=NULL,$confirm=NULL,$disabled=FALSE){
+ if(strlen($type)==0 || strlen($label)==0){return FALSE;}
+ $fc=new stdClass();
+ $fc->type=$type;
+ $fc->label=$label;
+ $fc->class=$class;
+ $fc->url=$url;
+ $fc->confirm=$confirm;
+ $fc->disabled=$disabled;
+ return $fc;
+}
+
+
+/* -[ Form ]----------------------------------------------------------------- */
+// @array $ff_array : array of form fields
+// @array $fc_array : array of form controls
+// @string $action : form action url
+// @boolean $method : get, post
+// @string $name : form name
+// @string $class : form css class
+function api_form($ff_array,$fc_array,$action,$method="get",$name="form",$class="form-horizontal"){
+ if(strlen($action)==0 || !(strtolower($method)=="get" || strtolower($method)=="post")){return FALSE;}
+ // open form
+ echo "<form name='".$name."' action='".$action."' method='".$method."' class='".$class."'>\n\n";
+ // show fields
+ if(is_array($ff_array)){
+  // show field
+  foreach($ff_array as $index=>$ff){
+   if(!is_object($ff)){continue;}
+   $options=FALSE;
+   // open group
+   echo "<div id='field_".$ff->name."' class='control-group'>\n";
+   if($ff->label<>NULL){
+    echo " <label class='control-label'>".$ff->label."</label>\n";
+    echo " <div class='controls'>\n";
+   }
+   // show input
+   switch(strtolower($ff->type)){
+    // hidden, text, password
+    case "hidden":
+    case "text":
+    case "password":
+     if(!$ff->label){echo "  ";}
+     echo "  <input type='".$ff->type."' name='".$ff->name."' class='".$ff->class."' placeholder=\"".$ff->placeholder."\" value=\"".$ff->value."\"";
+     if($ff->disabled){echo " disabled='disabled'";}
+     echo ">\n";
+     if(!$ff->label){echo "\n";}
+     break;
+    // checkbox, radio
+    case "checkbox":
+    case "radio":
+     $options=TRUE;
+     break;
+    // select
+    case "select":
+     $options=TRUE;
+     // open select
+     echo "  <select name='".$ff->name."' class='".$ff->class."'";
+     if($ff->disabled){echo " disabled='disabled'";}
+     echo ">\n";
+     break;
+    // textarea
+    case "textarea":
+     echo "  <textarea name='".$ff->name."' rows='".$ff->rows."' class='".$ff->class."' placeholder=\"".$ff->placeholder."\"";
+     if($ff->disabled){echo " disabled='disabled'";}
+     echo ">".$ff->value."</textarea>\n";
+     break;
+    // file
+    case "file":
+     if($ff->placeholder==NULL){$ff->placeholder="Select a file to upload";}
+     echo "  <input type='file' id='file_".$index."' name='".$ff->name."' style='display:none'>\n";
+     echo "  <div class='input-append'>\n";
+     echo "   <input type='text' id='file_".$index."_show' class='".$ff->class."' placeholder=\"".$ff->placeholder."\" onDblClick=\"$('input[id=file_".$index."]').click();\" readonly>\n";
+     echo "   <a class='btn' onClick=\"$('input[id=file_".$index."]').click();\">Sfoglia</a>\n";
+     echo "  </div>\n";
+     break;
+   }
+   // show options
+   if($options){
+    // if single option build array
+    if(!is_array($ff->options)){if(is_object($ff->options)){$ff->options=array($ff->options);}}
+    if(is_array($ff->options)){
+     // show option
+     foreach($ff->options as $fo){
+      // show checkbox or radio option
+      switch(strtolower($ff->type)){
+       case "checkbox":
+       case "radio":
+        echo "  <label class='".$ff->type." ".$ff->class."'>";
+        echo "<input type='".$ff->type."' name='".$ff->name."' value=\"".$fo->value."\"";
+        if($fo->checked){echo " checked='checked'";}
+        if($fo->disabled){echo " disabled='disabled'";}
+        echo ">".$fo->label."</label>\n";
+        break;
+       // show select option
+       case "select":
+        echo "   <option value=\"".$fo->value."\"";
+        if($fo->checked){echo " selected='selected'";}
+        echo ">".$fo->label."</option>\n";
+        break;
+      }
+     }
+    }
+   }
+   // close select
+   if(strtolower($ff->type)=="select"){echo "  </select>\n";}
+   // close group
+   if($ff->label<>NULL){echo " </div>\n";}
+   echo "</div>\n\n";
+   // file script
+   if(strtolower($ff->type)=="file"){
+    echo "<script type='text/javascript'>\n";
+    echo " $('input[id=file_".$index."]').change(function(){\n";
+    echo "  $('#file_".$index."_show').val($(this).val());\n";
+    echo " });\n";
+    echo "</script>\n\n";
+   }
+  }
+  // show controls
+  if(is_array($fc_array)){
+   // open group
+   echo "<div class='control-group'>\n";
+   echo " <div class='controls'>\n";
+   // show control
+   foreach($fc_array as $fc){
+    switch(strtolower($fc->type)){
+     // submit
+     case "submit":
+      echo "  <input type='submit' name='submit' class='btn btn-primary ".$fc->class."' value='".$fc->label."'>\n";
+      break;
+     // reset
+     case "reset":
+      echo "  <input type='reset' name='submit' class='btn ".$fc->class."' value='".$fc->label."'>\n";
+      break;
+     // button, link
+     case "button":
+     case "link":
+      echo "  <a href='".$fc->url."' ";
+      if(strtolower($fc->type)=="button"){echo "class='btn ".$fc->class."'";}
+       else{echo "class='".$fc->class."'";}
+      if(strlen($fc->confirm)){echo " onClick=\"return confirm('".$fc->confirm."')\"";}
+      echo ">".$fc->label."</a>\n";
+      break;
+    }
+   }
+  }
+  // close group
+  echo " </div>\n</div>\n\n";
+  // close form
+  echo "</form>\n";
+ }
+}
+
 
 ?>
