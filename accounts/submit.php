@@ -63,6 +63,8 @@ function account_login(){
      session_destroy();
      session_start();
      $_SESSION['account']=$account;
+     // update session language
+     $_SESSION['language']=$account->language;
      if($account->typology==1){$_SESSION['account']->typology=2;$_SESSION['account']->administrator=TRUE;}
      // update lastLogin
      $GLOBALS['db']->execute("UPDATE accounts_accounts SET lastLogin='".date('Y-m-d H:i:s')."' WHERE id='".$account->id."'");
@@ -93,6 +95,8 @@ function account_login(){
   session_destroy();
   session_start();
   $_SESSION['account']=$account;
+  // update session language
+  $_SESSION['language']=$account->language;
   if($account->typology==1){$_SESSION['account']->typology=2;$_SESSION['account']->administrator=TRUE;}
   // update lastLogin
   $GLOBALS['db']->execute("UPDATE accounts_accounts SET lastLogin='".date('Y-m-d H:i:s')."' WHERE id='".$account->id."'");
@@ -133,6 +137,7 @@ function account_save(){
  $p_name=addslashes($_POST['name']);
  $p_account=addslashes($_POST['account']);
  $p_typology=$_POST['typology'];
+ $p_language=addslashes($_POST['language']);
  $p_idCompany=$_POST['idCompany'];
  // build query
  if($g_id>0){
@@ -141,6 +146,7 @@ function account_save(){
    name='".$p_name."',
    account='".$p_account."',
    typology='".$p_typology."',
+   language='".$p_language."',
    idCompany='".$p_idCompany."'
    WHERE id='".$g_id."'";
   // execute query
@@ -194,10 +200,13 @@ function account_save(){
 function account_customize(){
  // acquire variables
  $p_name=addslashes($_POST['name']);
+ $p_language=addslashes($_POST['language']);
  $p_password=$_POST['password'];
  $p_confirm=$_POST['confirm'];
+ // update session language
+ $_SESSION['language']=$p_language;
  // build query
- if(strlen($p_password)>6&&$p_password==$p_confirm){
+ if(strlen($p_password)>6 && $p_password==$p_confirm){
   $query="UPDATE accounts_accounts SET
    name='".$p_name."',
    password='".md5($p_password)."'
@@ -206,12 +215,13 @@ function account_customize(){
   $GLOBALS['db']->execute($query);
   $alert="?alert=accountPasswordChanged&alert_class=alert-success";
   // sendmail
-  $message="Ciao ".$account->name.",\n";
+  $message="Ciao ".$_SESSION['account']->name.",\n";
   $message.=" la modifica della tua password è avvenuta correttamente.";
   api_sendmail($_SESSION['account']->account,$message,"Notifica di variazione della password");
  }else{
   $query="UPDATE accounts_accounts SET
-   name='".$p_name."'
+   name='".$p_name."',
+   language='".$p_language."'
    WHERE id='".$_SESSION['account']->id."'";
   // execute query
   $GLOBALS['db']->execute($query);

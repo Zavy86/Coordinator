@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<locale language="IT">
+
+ <!-- template.inc.php -->
+ <text key="notifications">Notifications</text>
+ <text key="archived-notifications">Notifications Archive</text>
+ <text key="send-notifications">Send a notification</text>
+
+ <!-- notifications_list.php -->
+ <text key="th-reception-date">Reception date</text>
+ <text key="th-archived-date">Archived date</text>
+ <text key="th-notification">Notification</text>
+ <text key="tr-no-results">There are no new notifications..</text>
+
+ <!-- notifications_send.php -->
+ <text key="ff-typology">Typology</text>
+ <text key="fo-notice">Notice</text>
+ <text key="fo-action">Action</text>
+ <text key="ff-recipient">Recipient</text>
+ <text key="fo-user">Single user</text>
+ <text key="fo-group">Group of users</text>
+ <text key="fo-all">All users</text>
+ <text key="ff-user">User</text>
+ <text key="ff-user-placeholder">Select a recipient</text>
+ <text key="ff-group">Group</text>
+ <text key="ff-group-placeholder">Select a group</text>
+ <text key="ff-subject">Subject</text>
+ <text key="ff-subject-placeholder">Subject of notification</text>
+ <text key="ff-message">Message</text>
+ <text key="ff-message-placeholder">Write a message</text>
+ <text key="ff-link">Link</text>
+ <text key="ff-link-placeholder">If necessary enter here the link</text>
+ <text key="fc-submit">Send notification</text>
+ <text key="fc-cancel">Cancel</text>
+
+
+</locale>

@@ -15,9 +15,9 @@ include("db.class.php");      // Include the database class
 // build class
 $html=new HTML();
 $db=new DB($db_host,$db_user,$db_pass,$db_name);
-// load core locale file
-api_loadLocaleFile("../core");
-// load module locale file
+// load core translation file
+api_loadLocaleFile("../");
+// load module translation file
 api_loadLocaleFile();
 
 
@@ -44,16 +44,6 @@ if($g_submit=="cron"){
   }
  }
 }
-/* -[ Check session ]-------------------------------------------------------- */
-/*if(!isset($_SESSION['account'])){
- // redirect
- if(api_baseName()<>"login.php"
-    && api_baseName()<>"password_retrieve.php"
-    && api_baseName()<>"password_reset.php"
-    && api_baseName()<>"request_account_ldap.php"){
-  header("location: ".$GLOBALS['dir']."accounts/login.php");
- }
-}*/
 
 
 /* -[ Check new logs ]------------------------------------------------------- */
@@ -74,16 +64,17 @@ if((strpos($_SERVER['HTTP_USER_AGENT'],'Chrome')==false)
  $GLOBALS['alert']->class="alert-error";
 }
 
+
 /* -[ Load Locale Files ]---------------------------------------------------- */
 // @param $path : Path of locale if not default
 function api_loadLocaleFile($path=NULL){
  if($path==NULL){$path=".";}
- if($_SESSION['language']<>NULL && file_exists($path."/locale/".strtolower($_SESSION['language']).".xml")){
+ if($_SESSION['language']<>NULL && file_exists($path."/languages/".strtolower($_SESSION['language']).".xml")){
   // load choised locale file
-  $xml=simplexml_load_file($path."/locale/".strtolower($_SESSION['language']).".xml");
- }elseif(file_exists($path."/locale/default.xml")){
+  $xml=simplexml_load_file($path."/languages/".strtolower($_SESSION['language']).".xml");
+ }elseif(file_exists($path."/languages/default.xml")){
   // load deafult locale file
-  $xml=simplexml_load_file($path."/locale/default.xml");
+  $xml=simplexml_load_file($path."/languages/default.xml");
  }else{
   return FALSE;
  }

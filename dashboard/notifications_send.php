@@ -8,7 +8,7 @@ function content(){
  // form fields array
  $ff_array=array();
   $fo_array=array();
-  $fo_array[]=api_formFieldOption(1,api_text("fo-notify"),TRUE);
+  $fo_array[]=api_formFieldOption(1,api_text("fo-notice"),TRUE);
   $fo_array[]=api_formFieldOption(2,api_text("fo-action"));
  $ff_array[]=api_formField("radio","typology",api_text("ff-typology"),NULL,"inline",NULL,$fo_array);
   $fo_array=array();

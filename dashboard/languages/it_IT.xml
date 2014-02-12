@@ -15,7 +15,7 @@
 
  <!-- notifications_send.php -->
  <text key="ff-typology">Tipologia</text>
- <text key="fo-notify">Notifica</text>
+ <text key="fo-notice">Notifica</text>
  <text key="fo-action">Azione</text>
  <text key="ff-recipient">Destinatario</text>
  <text key="fo-user">Singolo utente</text>

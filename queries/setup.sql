@@ -15,6 +15,7 @@ CREATE TABLE IF NOT EXISTS `accounts_accounts` (
   `secret` varchar(32) COLLATE utf8_unicode_ci DEFAULT NULL,
   `name` varchar(25) COLLATE utf8_unicode_ci NOT NULL,
   `typology` tinyint(1) unsigned NOT NULL DEFAULT '0' COMMENT '0 disabled, 1 administrator, 2 user',
+  `language` varchar(10) COLLATE utf8_unicode_ci NOT NULL DEFAULT 'default',
   `idCompany` int(11) unsigned NOT NULL DEFAULT '0',
   `registration` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `lastLogin` datetime DEFAULT NULL,
