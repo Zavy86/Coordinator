@@ -1,8 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<locale language="EN">
+<locale language="IT">
 
- <!--  -->
- <text key="key">Value</text>
+ <!-- html.class.php -->
+ <text key="core-menu-dashboard">Bacheca</text>
+ <text key="core-menu-accounts">Account</text>
+ <text key="core-menu-statistics">Statistiche</text>
+ <text key="core-menu-settings">Impostazioni</text>
+ <text key="core-menu-logs">Registro eventi</text>
+ <text key="core-menu-become-administrator">Diventa Amministratore</text>
+ <text key="core-menu-become-user">Diventa Utente</text>
+ <text key="core-menu-logout">Esci</text>
 
 </locale>

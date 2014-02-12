@@ -17,20 +17,13 @@ public function header($title="",$nav="dashboard",$navbar=TRUE){
  <meta charset="utf-8">
  <meta name="viewport" content="width=device-width, initial-scale=1.0">
  <meta name="author" content="Manuel Zavatta">
- <meta name="copyright" content="2009-<?php echo date('Y'); ?> © Zavynet.org [www.zavynet.org]">
+ <meta name="copyright" content="2009-<?php echo date('Y'); ?> © Coordinator [www.coordinator.it]">
  <meta name="owner" content="<?php echo api_getOption('owner'); ?>">
- <meta name="keywords" content="coordinator,erp,software gestionale,coordinator erp,coordinator gestionale,enterprise resource planner">
- <meta name="description" content="Coordinator - Software gestionale modulare">
+ <meta name="description" content="Coordinator is an Open Source modular web application">
  <title><?php echo $title; ?></title>
 
  <!-- Stylesheet -->
  <link href="<?php echo $GLOBALS['dir']."core/bootstrap/css/bootstrap.min.css";?>" rel="stylesheet">
- <style type="text/css">
-  body{
-   padding-top:60px;
-   padding-bottom:10px;
-  }
- </style>
  <link href="<?php echo $GLOBALS['dir']."core/bootstrap/css/bootstrap-responsive.min.css";?>" rel="stylesheet">
  <link href="<?php echo $GLOBALS['dir']."core/template.css";?>" rel="stylesheet">
 
@@ -70,10 +63,6 @@ public function header($title="",$nav="dashboard",$navbar=TRUE){
  <link rel="apple-touch-icon-precomposed" sizes="72x72" href="<?php echo $GLOBALS['dir']."core/images/logos/logo_72.png";?>">
  <link rel="apple-touch-icon-precomposed" href="<?php echo $GLOBALS['dir']."core/images/logos/logo_57.png";?>">
 
- <style>
-  body{}
- </style>
-
 </head>
 
 <body>
@@ -82,11 +71,13 @@ public function header($title="",$nav="dashboard",$navbar=TRUE){
  <div class="navbar navbar-fixed-top <?php if($GLOBALS['debug']){echo "navbar-inverse";}?>">
   <div class="navbar-inner">
    <div class="container">
+    <!-- collapse -->
     <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
      <span class="icon-bar"></span>
      <span class="icon-bar"></span>
      <span class="icon-bar"></span>
     </a>
+
     <?php
      if(file_exists("../uploads/core/logo.png") && api_getOption('show_logo')){
       echo "<a class='brand-logo' href='".$GLOBALS['dir']."index.php'><img src='".$GLOBALS['dir']."uploads/core/logo.png'></a>\n";
@@ -101,7 +92,7 @@ public function header($title="",$nav="dashboard",$navbar=TRUE){
 
      <ul class="nav">
 
-      <li<?php if($nav=="dashboard"){echo " class=\"active\"";} ?>><a href="<?php echo $GLOBALS['dir']."dashboard/index.php";?>">Bacheca</a></li>
+      <li<?php if($nav=="dashboard"){echo " class=\"active\"";} ?>><a href="<?php echo $GLOBALS['dir']."dashboard/index.php";?>"><?php echo api_text("core-menu-dashboard"); ?></a></li>
 
       <?php
        // acquire main menu
@@ -159,9 +150,9 @@ public function header($title="",$nav="dashboard",$navbar=TRUE){
        </a>
        <ul class="dropdown-menu">
         <li class="nav-header"><?php echo $_SESSION['account']->name;?></li>
-        <li><a href="<?php echo $GLOBALS['dir']."accounts/index.php";?>">Account</a></li>
-        <?php if(api_checkPermission("stats","stats_server")){echo "<li><a href=\"".$GLOBALS['dir']."stats/index.php\">Statistiche</a></li>";}?>
-        <?php if(api_checkPermission("settings","settings_edit")||api_checkPermission("settings","permissions_edit")){echo "<li><a href=\"".$GLOBALS['dir']."settings/index.php\">Impostazioni</a></li>";}?>
+        <li><a href="<?php echo $GLOBALS['dir']."accounts/index.php";?>"><?php echo api_text("core-menu-accounts"); ?></a></li>
+        <?php if(api_checkPermission("stats","stats_server")){echo "<li><a href=\"".$GLOBALS['dir']."stats/index.php\">".api_text("core-menu-statistics")."</a></li>";}?>
+        <?php if(api_checkPermission("settings","settings_edit")||api_checkPermission("settings","permissions_edit")){echo "<li><a href=\"".$GLOBALS['dir']."settings/index.php\">".api_text("core-menu-settings")."</a></li>";}?>
 
         <?php
          if(api_checkPermission("wiki","wiki_view")){
@@ -174,20 +165,20 @@ public function header($title="",$nav="dashboard",$navbar=TRUE){
         ?>
 
         <?php if(api_checkPermission("dashboard","notifications_send")){echo "<li><a href=\"".$GLOBALS['dir']."dashboard/notifications_send.php\">Invia una notifica</a></li>";}?>
-        <?php if(api_checkPermission("logs","logs_list")){echo "<li><a href=\"".$GLOBALS['dir']."logs/index.php\">Registro eventi</a></li>";}?>
+        <?php if(api_checkPermission("logs","logs_list")){echo "<li><a href=\"".$GLOBALS['dir']."logs/index.php\">".api_text("core-menu-logs")."</a></li>";}?>
         <?php if(api_checkPermission("saprfc","saprfc_list")){echo "<li><a href=\"".$GLOBALS['dir']."saprfc/index.php\">SAP RFC</a></li>";}?>
         <?php
          if($_SESSION['account']->administrator && $_SESSION['account']->id>1){
           echo "<li class='divider'></li>\n";
           if($_SESSION['account']->typology==2){
-           echo "<li><a href='".$GLOBALS['dir']."accounts/submit.php?act=account_switch_to_admin'>Diventa amministratore</a></li>";
+           echo "<li><a href='".$GLOBALS['dir']."accounts/submit.php?act=account_switch_to_admin'>".api_text("core-menu-become-administrator")."</a></li>";
           }else{
-           echo "<li><a href='".$GLOBALS['dir']."accounts/submit.php?act=account_switch_to_user'>Diventa utente</a></li>";
+           echo "<li><a href='".$GLOBALS['dir']."accounts/submit.php?act=account_switch_to_user'>".api_text("core-menu-become-user")."</a></li>";
           }
          }
         ?>
         <li class="divider"></li>
-        <li><a href="<?php echo $GLOBALS['dir']."accounts/submit.php?act=account_logout";?>">Esci</a></li>
+        <li><a href="<?php echo $GLOBALS['dir']."accounts/submit.php?act=account_logout";?>"><?php echo api_text("core-menu-logout"); ?></a></li>
        </ul>
       </li>
 

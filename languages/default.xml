@@ -2,7 +2,14 @@
 
 <locale language="EN">
 
- <!--  -->
- <text key="key">Value</text>
+ <!-- html.class.php -->
+ <text key="core-menu-dashboard">Dashboard</text>
+ <text key="core-menu-accounts">Accounts</text>
+ <text key="core-menu-statistics">Statistics</text>
+ <text key="core-menu-settings">Settings</text>
+ <text key="core-menu-logs">Logs registry</text>
+ <text key="core-menu-become-administrator">Become an Administrator</text>
+ <text key="core-menu-become-user">Become an User</text>
+ <text key="core-menu-logout">Logout</text>
 
 </locale>

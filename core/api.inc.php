@@ -7,18 +7,18 @@ global $html;                 // html structure resource
 global $db;                   // database resource
 global $dir;                  // base path resource
 global $alert;                // base path resource
-global $locale_array;         // array with translation
+global $locale;               // array with translation
 include("../config.inc.php"); // Include the configuration file
 include("alerts.inc.php");    // Include the alerts
 include("html.class.php");    // Include the html class
 include("db.class.php");      // Include the database class
-// build class
-$html=new HTML();
-$db=new DB($db_host,$db_user,$db_pass,$db_name);
 // load core translation file
 api_loadLocaleFile("../");
 // load module translation file
 api_loadLocaleFile();
+// build class
+$html=new HTML();
+$db=new DB($db_host,$db_user,$db_pass,$db_name);
 
 
 /* -[ Check Session or Token ]----------------------------------------------- */
@@ -79,10 +79,10 @@ function api_loadLocaleFile($path=NULL){
   return FALSE;
  }
  if($xml<>NULL){
-  $GLOBALS['locale_array']=array();
+  if(!is_array($GLOBALS['locale'])){$GLOBALS['locale']=array();}
   foreach($xml->text as $text_xml){
    $key=(string)$text_xml['key'];
-   $GLOBALS['locale_array'][$key]=(string)$text_xml;
+   $GLOBALS['locale'][$key]=(string)$text_xml;
   }
  }
  return TRUE;
@@ -94,7 +94,7 @@ function api_loadLocaleFile($path=NULL){
 // @param $parameters : String or array
 function api_text($key,$parameters=NULL){
  // get text by key from locale array
- $text=$GLOBALS['locale_array'][$key];
+ $text=$GLOBALS['locale'][$key];
  // if key not found
  if(strlen($text)==0){return "{".$key."}";}
  // replace parameters
