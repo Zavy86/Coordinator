@@ -1022,6 +1022,27 @@ function api_convertUnit($number,$unit_from,$unit_to,$decimals=3){
 }
 
 
+/* -[ Restore MySQL Dump ]----------------------------------------------------------------- */
+// @string $file : mysql dump file path
+function api_restoreMysqlDump($file){
+ if(!file_exists($file)){return FALSE;}
+ $query="";
+ $lines=file($file);
+ foreach($lines as $line){
+  // skip comments
+  if(substr($line,0,2)=="--" || $line==""){continue;}
+  $query.=$line;
+  // search for query end signal
+  if(substr(trim($line),-1,1)==';'){
+   // execute query
+   $GLOBALS['db']->execute($query);
+   $query="";
+  }
+ }
+ return TRUE;
+}
+
+
 
 /* ---------------------------[ DOCUMENTATE ]-------------------------------- */
 
@@ -1384,32 +1405,6 @@ function api_form($ff_array,$fc_array,$action,$method="get",$name="form",$class=
   echo "</form>\n";
  }
 }
-
-
-function api_restoreMysqlDump($file){
- if(!file_exists($file)){return FALSE;}
- $query="";
- $lines=file($file);
- foreach($lines as $line){
-  // skip comments
-  if(substr($line,0,2)=="--" || $line==""){continue;}
-  $query.=$line;
-  // search for query end signal
-  if(substr(trim($line),-1,1)==';'){
-   // execute query
-   $GLOBALS['db']->execute($query);
-   $query="";
-  }
- }
- return TRUE;
-}
-
-
-
-
-
-
-
 
 
 ?>

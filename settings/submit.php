@@ -9,6 +9,9 @@ switch($act){
  case "settings_save":settings_save();break;
  // validations
  case "validations_toggle":validations_toggle();break;
+ // modules
+ case "module_setup":module_setup();break;
+ case "module_update":module_update();break;
  // permissions
  case "permissions_add":permissions_add();break;
  case "permissions_del":permissions_del();break;
@@ -269,6 +272,67 @@ function menu_delete(){
   // redirect
   $alert="&alert=settingError&alert_class=alert-error";
   exit(header("location: menus_edit.php?idMenu=".$g_idMenu.$alert));
+ }
+}
+
+
+/* -[ Module Setup ]--------------------------------------------------------- */
+function module_setup(){
+ if(!api_checkPermission("settings","module_setup")){api_die("accessDenied");}
+ // acquire variables
+ $g_module=$_GET['module'];
+ $module_path="../".$g_module."/";
+ if(file_exists($module_path."module.inc.php")){
+  // include module informations
+  include($module_path."module.inc.php");
+  // insert module into database
+  $query="INSERT INTO settings_modules (module,version,title,description) VALUES
+   ('".$module_name."','1.0.0','".$module_title."','".$module_description."')";
+  $GLOBALS['db']->execute($query);
+  // restore mysql dump
+  if(file_exists($module_path."queries/setup.sql")){api_restoreMysqlDump($module_path."queries/setup.sql");}
+  // redirect
+  $alert="?alert=moduleSetup&alert_class=alert-success";
+  exit(header("location: modules_edit.php".$alert));
+ }else{
+  // redirect
+  $alert="?alert=settingError&alert_class=alert-error";
+  exit(header("location: modules_edit.php".$alert));
+ }
+}
+
+
+/* -[ Module Update ]-------------------------------------------------------- */
+function module_update(){
+ if(!api_checkPermission("settings","module_setup")){api_die("accessDenied");}
+ // acquire variables
+ $g_module=$_GET['module'];
+ $module_path="../".$g_module."/";
+ if(file_exists($module_path."module.inc.php")){
+  $infinite_loop=0;
+  // include module informations
+  include($module_path."module.inc.php");
+  // get current installed version
+  $current_version=$GLOBALS['db']->queryUniqueValue("SELECT version FROM settings_modules WHERE module='".$module_name."'");
+  // check for update
+  while($current_version<>$module_version){
+   // execute update
+   api_restoreMysqlDump($module_path."queries/update_".$current_version.".sql");
+   $current_version=$GLOBALS['db']->queryUniqueValue("SELECT version FROM settings_modules WHERE module='".$module_name."'");
+   // check for infinite loop
+   $infinite_loop++;
+   if($infinite_loop==9999999){
+    $alert="?alert=moduleUpdateSqlError&alert_class=alert-error";
+    exit(header("location: modules_edit.php".$alert));
+   }
+  }
+  // redirect
+  $alert="?alert=moduleUpdated&alert_class=alert-success";
+  exit(header("location: modules_edit.php".$alert));
+ }else{
+  // redirect
+  $alert="?alert=settingError&alert_class=alert-error";
+  exit(header("location: modules_edit.php".$alert));
  }
 }
 
