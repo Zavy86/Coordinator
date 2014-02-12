@@ -241,6 +241,20 @@ INSERT INTO `settings_menus` (`id`, `idMenu`, `menu`, `module`, `url`, `position
 -- --------------------------------------------------------
 
 --
+-- Struttura della tabella `settings_modules`
+--
+
+CREATE TABLE IF NOT EXISTS `settings_modules` (
+  `module` varchar(25) COLLATE utf8_unicode_ci NOT NULL,
+  `version` varchar(10) COLLATE utf8_unicode_ci NOT NULL DEFAULT '1.0.0',
+  `title` varchar(50) COLLATE utf8_unicode_ci NOT NULL,
+  `description` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  PRIMARY KEY (`module`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
 -- Struttura della tabella `settings_settings`
 --
 
