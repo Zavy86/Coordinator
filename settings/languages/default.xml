@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<locale language="EN">
+
+ <!-- modules_edit.inc.php -->
+ <text key="modules-th-module">Module</text>
+ <text key="modules-th-version">Version</text>
+ <text key="modules-th-description">Description</text>
+
+</locale>

@@ -14,6 +14,28 @@ footer .credit a{color:#333333;}
  text-align:center;
 }
 
+.login-form{
+ position: fixed;
+ top:50%;
+ left:50%;
+ width:250px;
+ margin-top:-120px;
+ margin-left:-125px;
+ padding:0 20px 0px 20px;
+ background-color:#f9f9f9;
+ -webkit-border-radius:8px;
+    -moz-border-radius:8px;
+         border-radius:8px;
+ -webkit-box-shadow:0 1px 2px #ccc;
+    -moz-box-shadow:0 1px 2px #ccc;
+         box-shadow:0 1px 2px #ccc;
+}
+
+.login-form .control-group{margin-left:-80px;}
+
+.login-form input[type=text]{margin-bottom:10px;width:236px;}
+.login-form input[type=password]{margin-bottom:10px;width:236px;}
+
 th{
  font-size: 0.75em;
  text-transform: uppercase;

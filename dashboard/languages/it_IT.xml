@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<locale language="IT">
+
+ <!-- template.inc.php -->
+ <text key="notifications">Notifiche</text>
+ <text key="archived-notifications">Archivio notifiche</text>
+ <text key="send-notifications">Invia una notifica</text>
+
+ <!-- notifications_list.php -->
+ <text key="th-reception-date">Data ricezione</text>
+ <text key="th-archived-date">Data Archiviazione</text>
+ <text key="th-notification">Notifica</text>
+ <text key="tr-no-results">Non è presente nessuna nuova notifica..</text>
+
+ <!-- notifications_send.php -->
+ <text key="ff-typology">Tipologia</text>
+ <text key="fo-notice">Notifica</text>
+ <text key="fo-action">Azione</text>
+ <text key="ff-recipient">Destinatario</text>
+ <text key="fo-user">Singolo utente</text>
+ <text key="fo-group">Gruppo di utenti</text>
+ <text key="fo-all">Tutti gli utenti</text>
+ <text key="ff-user">Utente</text>
+ <text key="ff-user-placeholder">Seleziona un destinatario</text>
+ <text key="ff-group">Gruppo</text>
+ <text key="ff-group-placeholder">Seleziona un gruppo</text>
+ <text key="ff-subject">Oggetto</text>
+ <text key="ff-subject-placeholder">Oggetto della notifica</text>
+ <text key="ff-message">Messaggio</text>
+ <text key="ff-message-placeholder">Scrivi un messaggio</text>
+ <text key="ff-link">Link</text>
+ <text key="ff-link-placeholder">Inserisci qui un eventuale link</text>
+ <text key="fc-submit">Invia notifica</text>
+ <text key="fc-cancel">Annulla</text>
+
+
+</locale>

@@ -39,6 +39,30 @@ function content(){
  </div>
 
  <div class="control-group">
+  <label class="control-label">Lingua</label>
+  <div class="controls">
+   <select name="language">
+    <option value="default">Default</option>
+    <?php
+     $dir="../languages/";
+     if(is_dir($dir)){
+      if($dh=opendir($dir)){
+       while(($file=readdir($dh))!==false){
+        if(substr($file,-4)==".xml" && $file<>"default.xml"){
+         echo "<option value='".substr($file,0,-4)."'";
+         if(substr($file,0,-4)==$account->language){echo " selected='selected'";}
+         echo ">".substr($file,0,-4)."</option>\n";
+        }
+       }
+       closedir($dh);
+      }
+     }
+    ?>
+   </select>
+  </div>
+ </div>
+
+ <div class="control-group">
   <label class="control-label">Societ&agrave;</label>
   <div class="controls">
    <select name="idCompany">
@@ -97,7 +121,7 @@ function content(){
  if($count==0){echo "<tr><td colspan='3'><i>Nessun gruppo definito..</i></td></tr>\n";}
 ?>
   </tbody>
- </table> 
+ </table>
 
  <select class="span5" name="idGroup">
   <option value="0">Aggiungi un gruppo</option>
@@ -126,12 +150,12 @@ function content(){
  }
 ?>
  </select>
-  
+
  <button type="submit" name="account_grouprole_add" class="btn"><i class="icon-plus"></i></button>
 
 <?php } /* root check */ ?>
 
-</div><!-- /span6 --> 
+</div><!-- /span6 -->
 </div><!-- /row-fluid -->
 
 </form>

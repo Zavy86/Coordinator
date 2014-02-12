@@ -11,6 +11,8 @@ function api_alert(){
  }
  switch($alert){
   // core
+  case "maintenance":$alert=api_getOption('maintenance_description');break;
+  case "accessDenied":$alert="<h4>ACCESSO NEGATO</h4>I permessi del tuo account non sono sufficienti per completare l'operazione desiderata";break;
   case "newLogs":$alert="Sono presenti delle nuove notifiche nel Registro degli Eventi. <a href='".$GLOBALS['dir']."logs/logs_list.php'>Visualizza eventi</a>";break;
   case "changeBrowser":$alert="Il browser utilizzato sembra non supportare completamente il formato HTML5, si consiglia di utilizzare <a href='http://chrome.google.com' target='_blank'>Google Chrome</a> o <a href='http://www.apple.com/safari' target='_blank'>Apple Safari</a>.";break;
   case "submitFunctionNotFound":$alert="Attenzione, la funzione richiamata non è stata implementata, contattare l'amministratore per maggiori informazioni.";break;
@@ -36,9 +38,6 @@ function api_alert(){
   // dashboard
   case "notificationSend":$alert="La notifica è stata inoltrata correttamente";break;
   case "notificationSendError":$alert="Si è verificato un errore durante la compilazione della notifica";break;
-  // settings
-  case "accessDenied":$alert="<h4>ACCESSO NEGATO</h4>I permessi del tuo account non sono sufficienti per completare l'operazione desiderata";break;
-  case "settingsSaved":$alert="Le impostazioni sono state salvate correttamente";break;
  }
  // include module alert if exist
  if(file_exists("alerts.php")){include("alerts.php");}

@@ -5,102 +5,51 @@
 $checkPermission="notifications_send";
 include("template.inc.php");
 function content(){
+ // form fields array
+ $ff_array=array();
+  $fo_array=array();
+  $fo_array[]=api_formFieldOption(1,api_text("fo-notice"),TRUE);
+  $fo_array[]=api_formFieldOption(2,api_text("fo-action"));
+ $ff_array[]=api_formField("radio","typology",api_text("ff-typology"),NULL,"inline",NULL,$fo_array);
+  $fo_array=array();
+  $fo_array[]=api_formFieldOption(1,api_text("fo-user"),TRUE);
+  $fo_array[]=api_formFieldOption(2,api_text("fo-group"));
+  if(api_checkPermission("dashboard","notifications_send_all")){
+   $fo_array[]=api_formFieldOption(3,api_text("fo-all"));
+  }
+ $ff_array[]=api_formField("radio","to",api_text("ff-recipient"),NULL,"inline",NULL,$fo_array);
+ $ff_array[]=api_formField("hidden","idAccountTo",api_text("ff-user"),NULL,"input-xlarge");
+ $ff_array[]=api_formField("hidden","idGroup",api_text("ff-group"),NULL,"input-xlarge");
+ $ff_array[]=api_formField("text","subject",api_text("ff-subject"),NULL,"input-xxlarge",api_text("ff-subject-placeholder"));
+ $ff_array[]=api_formField("textarea","message",api_text("ff-message"),NULL,"input-xxlarge",api_text("ff-message-placeholder"));
+ $ff_array[]=api_formField("text","link",api_text("ff-link"),NULL,"input-xxlarge",api_text("ff-link-placeholder"));
+ // form controls array
+ $fc_array=array();
+ $fc_array[]=api_formControl("submit",api_text("fc-submit"));
+ $fc_array[]=api_formControl("button",api_text("fc-cancel"),NULL,"notification_list.php");
+ // print form
+ api_form($ff_array,$fc_array,"submit.php?act=notification_send","post","notification");
 ?>
-
-<form class="form-horizontal" action="submit.php?act=notification_send" method="post">
-
- <div class="control-group">
-  <label class="control-label">Tipologia</label>
-  <div class="controls">
-   <label class="radio inline">
-    <input type="radio" name="typology" value="1" checked>
-    Notifica
-   </label>
-   <label class="radio inline">
-    <input type="radio" name="typology" value="2">
-    Azione
-   </label>
-  </div>
- </div>
- 
- <div class="control-group">
-  <label class="control-label">Destinatario</label>
-  <div class="controls">
-   <label class="radio inline">
-    <input type="radio" name="to" value="1" checked>
-    Singolo utente
-   </label>
-   <label class="radio inline">
-    <input type="radio" name="to" value="2">
-    Gruppo di utenti
-   </label>
-   <?php if(api_checkPermission("dashboard","notifications_send_all")){ ?>
-   <label class="radio inline">
-    <input type="radio" name="to" value="3">
-    Tutti gli utenti
-   </label>
-   <?php } ?>
-  </div>
- </div>
- 
- <div id="dSingle" class="control-group">
-  <label class="control-label" for="iIdAccountTo">Utente</label>
-  <div class="controls">
-   <input type="hidden" id="iIdAccountTo" name="idAccountTo" class="input-xlarge">
-  </div>
- </div>
- 
- <div id="dGroup" class="control-group">
-  <label class="control-label" for="iIdGroup">Gruppo</label>
-  <div class="controls">
-   <input type="hidden" id="iIdGroup" name="idGroup" class="input-xlarge">
-  </div>
- </div>
- 
- <div class="control-group">
-  <label class="control-label" for="iSubject">Oggetto</label>
-  <div class="controls"><input type="text" id="iSubject" class="input-xxlarge" name="subject" placeholder="Specifica un oggetto"></div>
- </div>
- 
- <div class="control-group">
-  <label class="control-label" for="iMessage">Messaggio</label>
-  <div class="controls"><textarea id="iMessage" class="input-xxlarge" name="message" rows="7" placeholder="Scrivi un messaggio.."></textarea></div>
- </div>
-
- <div class="control-group">
-  <label class="control-label" for="iLink">Link</label>
-  <div class="controls"><input type="text" id="iLink" class="input-xxlarge" name="link" placeholder="Inserisci qui un eventuale link"></div>
- </div>
-
- <div class="control-group">
-  <div class="controls">
-   <input type="submit" class="btn btn-primary" value="Invia notifica">
-   <a href="notifications_list.php" class="btn">Annulla</a>
-  </div>
- </div>
-
-</form>
 
 <script type="text/javascript">
  $(document).ready(function(){
-  $("#dGroup").hide();
+  $("#field_idGroup").hide();
   // change radio to
   $("input[name='to']").change(function(){
-   if($("input[name='to']:checked").val()=='1'){
-    $("#dSingle").show();
-    $("#dGroup").hide();
-   }else if($("input[name='to']:checked").val()=='2'){
-    $("#dSingle").hide();
-    $("#dGroup").show();
+   if($("input[name='to']:checked").val()==='1'){
+    $("#field_idAccountTo").show();
+    $("#field_idGroup").hide();
+   }else if($("input[name='to']:checked").val()==='2'){
+    $("#field_idAccountTo").hide();
+    $("#field_idGroup").show();
    }else{
-    $("#dSingle").hide();
-    $("#dGroup").hide();
+    $("#field_idAccountTo").hide();
+    $("#field_idGroup").hide();
    }
   });
-  
   // select2 idAccountTo
-  $("#iIdAccountTo").select2({
-   placeholder:"Seleziona un destinatario",
+  $("input[name='idAccountTo']").select2({
+   placeholder:"<?php echo api_text("ff-user-placeholder"); ?>",
    minimumInputLength:2,
    ajax:{
     url:"../accounts/accounts_json.inc.php",
@@ -110,7 +59,7 @@ function content(){
    }
   });
   // select2 idGroup
-  $("#iIdGroup").select2({
+  $("input[name='idGroup']").select2({
    placeholder:"Oppure seleziona un gruppo",
    ajax:{
     url:"../accounts/groups_json.inc.php",

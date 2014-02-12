@@ -1,18 +1,12 @@
 <?php
 
 /* -[ Core parameter ]------------------------------------------------------- */
-$dir="/intranet/";
+$dir="/coordinator/";
 
 /* -[ Database parameter ]--------------------------------------------------- */
-$db_host="localhost";
+$db_host="hostname";
 $db_user="username";
 $db_pass="password";
-$db_name="intranet";
-
-/* -[ LDAP parameter ]------------------------------------------------------- */
-$ldap_host="localhost";
-$ldap_dn="DC=domain,DC=com";
-$ldap_domain="@domain.com";
-$ldap_group=NULL;
+$db_name="database";
 
 ?>

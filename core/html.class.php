@@ -241,7 +241,6 @@ public function footer($wiki_link=NULL,$copyright=TRUE){
     ?>
 
     <span class="muted credit pull-right">Copyright 2009-<?php echo date("Y");?> &copy; <a href="http://www.coordinator.it" target="_blank">Coordinator</a> - All Rights Reserved</span>
-    <span class="muted">Last Refresh: <?php echo date("H:i:s"); ?></span>
 
    </footer>
   </div><!-- /row -->
@@ -263,6 +262,8 @@ public function footer($wiki_link=NULL,$copyright=TRUE){
  <?php if(api_checkPermission("chats","chats_chat")){ ?>
  <script type="text/javascript">
   $(document).ready(function(){
+   // active popovers
+   $("[data-toggle=popover]").popover({trigger:"hover"});
    // refresh chats every 10 sec
    var refreshChatCounter=setInterval(function(){
     $.get("../chats/chat_counter.inc.php",function(data){

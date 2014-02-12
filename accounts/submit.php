@@ -39,12 +39,12 @@ function account_login(){
  $p_account=addslashes($_POST['account']);
  $p_password=$_POST['password'];
  // [ LDAP START ]--------------------------------------------------------------
- // if username is not an account
- if(strpos($p_account,"@")==FALSE && $p_account<>"root"){
+ // if account is not an email
+ if(strpos($p_account,"@")==FALSE && $p_account<>"root" && api_getOption('ldap')){
   // try ldap authentication
   include('../config.inc.php');
   include('../core/ldap.inc.php');
-  if(ldap_authenticate($ldap_host,$ldap_dn,$ldap_domain,$p_account,$p_password,$ldap_group)){
+  if(ldap_authenticate(api_getOption('ldap_host'),api_getOption('ldap_dn'),api_getOption('ldap_domain'),$p_account,$p_password,api_getOption('ldap_group'))){
    $account=$GLOBALS['db']->queryUniqueObject("SELECT * FROM accounts_accounts WHERE ldapUsername='".$p_account."'");
    if($account->id){
     // account exist
@@ -54,10 +54,17 @@ function account_login(){
      $alert="?alert=loginDisabled&alert_class=alert-warning";
      header("location: login.php".$alert);
     }else{
+     // check maintenance
+     if($account->typology<>1 && api_getOption("maintenance")){
+      $alert="?alert=maintenance&alert_class=alert-warning";
+      exit(header("location: login.php".$alert));
+     }
      // account enabled
      session_destroy();
      session_start();
      $_SESSION['account']=$account;
+     // update session language
+     $_SESSION['language']=$account->language;
      if($account->typology==1){$_SESSION['account']->typology=2;$_SESSION['account']->administrator=TRUE;}
      // update lastLogin
      $GLOBALS['db']->execute("UPDATE accounts_accounts SET lastLogin='".date('Y-m-d H:i:s')."' WHERE id='".$account->id."'");
@@ -79,10 +86,17 @@ function account_login(){
  // retrieve account
  $account=$GLOBALS['db']->queryUniqueObject("SELECT * FROM accounts_accounts WHERE account='".$p_account."' AND password='".md5($p_password)."' AND typology>'0'");
  if($account->id){
+  // check maintenance
+  if($account->typology<>1 && api_getOption("maintenance")){
+   $alert="?alert=maintenance&alert_class=alert-warning";
+   exit(header("location: login.php".$alert));
+  }
   // open new session
   session_destroy();
   session_start();
   $_SESSION['account']=$account;
+  // update session language
+  $_SESSION['language']=$account->language;
   if($account->typology==1){$_SESSION['account']->typology=2;$_SESSION['account']->administrator=TRUE;}
   // update lastLogin
   $GLOBALS['db']->execute("UPDATE accounts_accounts SET lastLogin='".date('Y-m-d H:i:s')."' WHERE id='".$account->id."'");
@@ -123,6 +137,7 @@ function account_save(){
  $p_name=addslashes($_POST['name']);
  $p_account=addslashes($_POST['account']);
  $p_typology=$_POST['typology'];
+ $p_language=addslashes($_POST['language']);
  $p_idCompany=$_POST['idCompany'];
  // build query
  if($g_id>0){
@@ -131,10 +146,11 @@ function account_save(){
    name='".$p_name."',
    account='".$p_account."',
    typology='".$p_typology."',
+   language='".$p_language."',
    idCompany='".$p_idCompany."'
    WHERE id='".$g_id."'";
   // execute query
-  $GLOBALS['db']->execute($query);  
+  $GLOBALS['db']->execute($query);
   // Grouprole
   // acquire variables
   $p_idGroup=$_POST['idGroup'];
@@ -184,10 +200,13 @@ function account_save(){
 function account_customize(){
  // acquire variables
  $p_name=addslashes($_POST['name']);
+ $p_language=addslashes($_POST['language']);
  $p_password=$_POST['password'];
  $p_confirm=$_POST['confirm'];
- // build query 
- if(strlen($p_password)>6&&$p_password==$p_confirm){
+ // update session language
+ $_SESSION['language']=$p_language;
+ // build query
+ if(strlen($p_password)>6 && $p_password==$p_confirm){
   $query="UPDATE accounts_accounts SET
    name='".$p_name."',
    password='".md5($p_password)."'
@@ -196,12 +215,13 @@ function account_customize(){
   $GLOBALS['db']->execute($query);
   $alert="?alert=accountPasswordChanged&alert_class=alert-success";
   // sendmail
-  $message="Ciao ".$account->name.",\n";
+  $message="Ciao ".$_SESSION['account']->name.",\n";
   $message.=" la modifica della tua password è avvenuta correttamente.";
   api_sendmail($_SESSION['account']->account,$message,"Notifica di variazione della password");
  }else{
   $query="UPDATE accounts_accounts SET
-   name='".$p_name."'
+   name='".$p_name."',
+   language='".$p_language."'
    WHERE id='".$_SESSION['account']->id."'";
   // execute query
   $GLOBALS['db']->execute($query);
@@ -214,7 +234,7 @@ function account_customize(){
    }
   }
  }
- // redirect  
+ // redirect
  header("location: index.php".$alert);
 }
 
@@ -283,7 +303,7 @@ function password_reset(){
  $p_account=$_POST['account'];
  $p_password=$_POST['password'];
  $p_confirm=$_POST['confirm'];
- // check account 
+ // check account
  if($p_secret==NULL||$p_account==NULL){die("FATAL ERROR /!\\");}
  if($p_password<>$p_confirm){die("FATAL ERROR /!\\");}
  $account=$GLOBALS['db']->queryUniqueObject("SELECT * FROM accounts_accounts WHERE account='".$p_account."' AND secret='".$p_secret."'");
@@ -292,7 +312,7 @@ function password_reset(){
  if($account->id>0){
   $query="UPDATE accounts_accounts SET
    password='".md5($p_password)."',
-   secret=NULL   
+   secret=NULL
    WHERE id='".$account->id."'";
   // execute query
   $GLOBALS['db']->execute($query);

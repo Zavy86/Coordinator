@@ -9,6 +9,9 @@ function content(){
 
 <form class="form-horizontal" action="submit.php?act=settings_save" method="post">
 
+<div class="row-fluid">
+<div class="span6">
+
  <div class="control-group">
   <label class="control-label" for="iOwner">Azienda</label>
   <div class="controls"><input type="text" id="iOwner" class="input-large" name="owner" placeholder="Nome dell'azienda" value="<?php echo api_getOption("owner");?>"></div>
@@ -57,6 +60,23 @@ function content(){
  <hr>
 
  <div class="control-group">
+  <label class="control-label">Manutenzione</label>
+  <div class="controls">
+   <label class="checkbox"><input type="checkbox" name="maintenance"
+   <?php if(api_getOption("maintenance")){echo " checked='checked'";}?>
+   > Blocca il software per manutenzione</label>
+  </div>
+ </div>
+
+ <div class="control-group">
+  <label class="control-label" for="iMaintenanceDescription">Messaggio</label>
+  <div class="controls"><input type="text" id="iMaintenanceDescription" class="input-xlarge" name="maintenance_description" placeholder="Messaggio di avviso per manutenzione" value="<?php echo api_getOption("maintenance_description");?>"></div>
+ </div>
+
+</div><!-- /span6 -->
+<div class="span6">
+
+ <div class="control-group">
   <label class="control-label" for="iGoogleAnalytics">Google Analytics</label>
   <div class="controls"><input type="text" id="iGoogleAnalytics" class="input-medium" name="google_analytics" placeholder="UA-XXXXXXXX-X" value="<?php echo api_getOption("google_analytics");?>"></div>
  </div>
@@ -76,29 +96,46 @@ function content(){
   </div>
  </div>
 
-
-
  <hr>
 
  <div class="control-group">
-  <label class="control-label">Manutenzione</label>
+  <label class="control-label">LDAP</label>
   <div class="controls">
-   <label class="checkbox"><input type="checkbox" name="maintenance"
-   <?php if(api_getOption("maintenance")){echo " checked='checked'";}?>
-   > Blocca il software per manutenzione</label>
+   <label class="checkbox"><input type="checkbox" name="ldap"
+    <?php if(api_getOption("ldap")){echo " checked='checked'";} ?>
+    > Abilita autenticazione LDAP
+   </label>
   </div>
  </div>
 
  <div class="control-group">
-  <label class="control-label" for="iMaintenanceDescription">Messaggio</label>
-  <div class="controls"><input type="text" id="iMaintenanceDescription" class="input-xxlarge" name="maintenance_description" placeholder="Messaggio di avviso per manutenzione" value="<?php echo api_getOption("maintenance_description");?>"></div>
+  <label class="control-label" for="ldap_host">Host</label>
+  <div class="controls"><input type="text" id="ldap_host" class="input-large" name="ldap_host" placeholder="domaincontroller" value="<?php echo api_getOption("ldap_host");?>"></div>
  </div>
 
  <div class="control-group">
-  <div class="controls">
-   <input type="submit" class="btn btn-primary" value="Salva">
-   <input type="reset" class="btn" value="Annulla">
-  </div>
+  <label class="control-label" for="ldap_dn">DN</label>
+  <div class="controls"><input type="text" id="ldap_dn" class="input-large" name="ldap_dn" placeholder="dc=domain,dc=local" value="<?php echo api_getOption("ldap_dn");?>"></div>
+ </div>
+
+ <div class="control-group">
+  <label class="control-label" for="ldap_domain">Domain</label>
+  <div class="controls"><input type="text" id="ldap_domain" class="input-large" name="ldap_domain" placeholder="@domain.local" value="<?php echo api_getOption("ldap_domain");?>"></div>
+ </div>
+
+ <div class="control-group">
+  <label class="control-label" for="ldap_group">Group</label>
+  <div class="controls"><input type="text" id="ldap_group" class="input-large" name="ldap_group" value="<?php echo api_getOption("ldap_group");?>"></div>
+ </div>
+
+</div><!-- /span6 -->
+</div><!-- /row-fluid -->
+
+ <hr>
+
+ <div class="pull-right">
+  <input type="submit" class="btn btn-primary" value="Salva">
+  <input type="reset" class="btn" value="Annulla">
  </div>
 
 </form>
