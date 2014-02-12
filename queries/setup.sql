@@ -1,11 +1,11 @@
 --
--- Database: `coordinator`
+-- Setup Coordinator
 --
 
 -- --------------------------------------------------------
 
 --
--- Struttura della tabella `accounts_accounts`
+-- Table structure for table `accounts_accounts`
 --
 
 CREATE TABLE IF NOT EXISTS `accounts_accounts` (
@@ -22,19 +22,19 @@ CREATE TABLE IF NOT EXISTS `accounts_accounts` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `account` (`account`),
   UNIQUE KEY `ldapUsername` (`ldapUsername`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT='Accounts utente';
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
--- Dump dei dati per la tabella `accounts_accounts`
+-- Dumping data for table `accounts_accounts`
 --
 
 INSERT INTO `accounts_accounts` (`id`, `account`, `password`, `secret`, `name`, `typology`, `idCompany`, `registration`, `lastLogin`, `ldapUsername`) VALUES
-(NULL, 'root', '63a9f0ea7bb98050796b649e85481845', NULL, 'Administrator', 1, 0, '2010-01-01 10:00:00', NULL, NULL);
+('1', 'root', '63a9f0ea7bb98050796b649e85481845', NULL, 'Administrator', 1, 0, '2009-06-01 10:00:00', NULL, NULL);
 
 -- --------------------------------------------------------
 
 --
--- Struttura della tabella `accounts_companies`
+-- Table structure for table `accounts_companies`
 --
 
 CREATE TABLE IF NOT EXISTS `accounts_companies` (
@@ -43,19 +43,19 @@ CREATE TABLE IF NOT EXISTS `accounts_companies` (
   `division` varchar(25) COLLATE utf8_unicode_ci NOT NULL,
   `name` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT='Società';
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
--- Dump dei dati per la tabella `accounts_companies`
+-- Dumping data for table `accounts_companies`
 --
 
 INSERT INTO `accounts_companies` (`id`, `company`, `division`, `name`) VALUES
-(NULL, 'IT58', '0001', 'Cogne Acciai Speciali s.p.a.');
+(NULL, 'Default Company', 'Default Division', 'Default Company Inc.');
 
 -- --------------------------------------------------------
 
 --
--- Struttura della tabella `accounts_groups`
+-- Table structure for table `accounts_groups`
 --
 
 CREATE TABLE IF NOT EXISTS `accounts_groups` (
@@ -65,19 +65,19 @@ CREATE TABLE IF NOT EXISTS `accounts_groups` (
   `description` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `group` (`name`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT='Gruppi';
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
--- Dump dei dati per la tabella `accounts_groups`
+-- Dumping data for table `accounts_groups`
 --
 
 INSERT INTO `accounts_groups` (`id`, `name`, `description`) VALUES
-(NULL, 'Sistemi Informativi', '');
+(NULL, 'Deafault', 'Default group');
 
 -- --------------------------------------------------------
 
 --
--- Struttura della tabella `accounts_grouproles`
+-- Table structure for table `accounts_grouproles`
 --
 
 CREATE TABLE IF NOT EXISTS `accounts_grouproles` (
@@ -86,23 +86,23 @@ CREATE TABLE IF NOT EXISTS `accounts_grouproles` (
   `description` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `name` (`name`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT='Ruoli di gruppo';
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
--- Dump dei dati per la tabella `accounts_grouproles`
+-- Dumping data for table `accounts_grouproles`
 --
 
 INSERT INTO `accounts_grouproles` (`id`, `name`, `description`) VALUES
-(NULL, 'Consulter', 'Consultatore'),
-(NULL, 'Redactor', 'Editore'),
-(NULL, 'Employee', 'Impiegato'),
-(NULL, 'Leader', 'Responsabile'),
-(NULL, 'Manager', 'Dirigente');
+(NULL, 'Consulter', 'External read only role'),
+(NULL, 'Redactor', 'External read and write role'),
+(NULL, 'Employee', 'Employee role'),
+(NULL, 'Leader', 'Leader role'),
+(NULL, 'Manager', 'Manager role');
 
 -- --------------------------------------------------------
 
 --
--- Struttura della tabella `accounts_groups_join_accounts`
+-- Table structure for table `accounts_groups_join_accounts`
 --
 
 CREATE TABLE IF NOT EXISTS `accounts_groups_join_accounts` (
@@ -115,7 +115,7 @@ CREATE TABLE IF NOT EXISTS `accounts_groups_join_accounts` (
 -- --------------------------------------------------------
 
 --
--- Struttura della tabella `logs_logs`
+-- Table structure for table `logs_logs`
 --
 
 CREATE TABLE IF NOT EXISTS `logs_logs` (
@@ -130,12 +130,12 @@ CREATE TABLE IF NOT EXISTS `logs_logs` (
   `new` tinyint(1) NOT NULL DEFAULT '1' COMMENT '0 false, 1 true',
   PRIMARY KEY (`id`),
   KEY `timestamp` (`timestamp`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT='Registro eventi';
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- --------------------------------------------------------
 
 --
--- Struttura della tabella `notifications_notifications`
+-- Table structure for table `notifications_notifications`
 --
 
 CREATE TABLE IF NOT EXISTS `notifications_notifications` (
@@ -156,12 +156,12 @@ CREATE TABLE IF NOT EXISTS `notifications_notifications` (
   KEY `idAccountTo` (`idAccountTo`),
   KEY `typology` (`typology`),
   KEY `status` (`status`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT='Notifiche';
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- --------------------------------------------------------
 
 --
--- Struttura della tabella `settings_permissions`
+-- Table structure for table `settings_permissions`
 --
 
 CREATE TABLE IF NOT EXISTS `settings_permissions` (
@@ -172,40 +172,37 @@ CREATE TABLE IF NOT EXISTS `settings_permissions` (
   `locked` tinyint(1) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   KEY `module` (`module`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT='Permessi';
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
--- Dump dei dati per la tabella `settings_permissions`
+-- Dumping data for table `settings_permissions`
 --
 
 INSERT INTO `settings_permissions` (`id`, `module`, `action`, `description`, `locked`) VALUES
-(NULL, 'settings', 'settings_edit', 'Gestire le impostazioni', 1),
-(NULL, 'settings', 'modules_edit', 'Gestire i moduli', 1),
-(NULL, 'settings', 'permissions_edit', 'Gestire i permessi', 1),
-(NULL, 'settings', 'menus_edit', 'Gestire i menu', 0),
-(NULL, 'accounts', 'accounts_list', 'Visualizzare la lista degli accounts', 0),
-(NULL, 'accounts', 'accounts_add', 'Aggiungere un account', 0),
-(NULL, 'accounts', 'accounts_edit', 'Modificare un account', 0),
-(NULL, 'accounts', 'accounts_delete', 'Eliminare un account', 1),
-(NULL, 'accounts', 'groups_list', 'Visualizzare la lista dei gruppi', 0),
-(NULL, 'accounts', 'groups_add', 'Aggiungere un gruppo', 0),
-(NULL, 'accounts', 'groups_edit', 'Modificare un gruppo', 0),
-(NULL, 'accounts', 'groups_delete', 'Eliminare un gruppo', 1),
-(NULL, 'accounts', 'companies_list', 'Visualizzare la lista delle società', 0),
-(NULL, 'accounts', 'companies_add', 'Aggiungere una società', 0),
-(NULL, 'accounts', 'companies_edit', 'Modificare una società', 0),
-(NULL, 'accounts', 'companies_delete', 'Eliminare una società', 1),
-(NULL, 'dashboard', 'notifications_send', 'Inviare notifiche', 0),
-(NULL, 'dashboard', 'notifications_send_all', 'Inviare notifiche a tutti gli utenti', 0),
-(NULL, 'logs', 'logs_list', 'Visualizzare gli eventi', 0),
-(NULL, 'applications', 'applications_list', 'Visualizzare i link delle applicazioni esterne', 0),
-(NULL, 'applications', 'applications_test', 'Visualizzare i link delle applicazioni in fase di test', 0);
-
+(NULL, 'settings', 'settings_edit', 'Manage settings', 1),
+(NULL, 'settings', 'modules_edit', 'Manage modules', 1),
+(NULL, 'settings', 'permissions_edit', 'Manage permissions', 1),
+(NULL, 'settings', 'menus_edit', 'Manage menus', 0),
+(NULL, 'accounts', 'accounts_list', 'View accounts list', 0),
+(NULL, 'accounts', 'accounts_add', 'Add an account', 0),
+(NULL, 'accounts', 'accounts_edit', 'Edit an account', 0),
+(NULL, 'accounts', 'accounts_delete', 'Delete an account', 1),
+(NULL, 'accounts', 'groups_list', 'View groups list', 0),
+(NULL, 'accounts', 'groups_add', 'Add a group', 0),
+(NULL, 'accounts', 'groups_edit', 'Edit group', 0),
+(NULL, 'accounts', 'groups_delete', 'Delete a group', 1),
+(NULL, 'accounts', 'companies_list', 'View company list', 0),
+(NULL, 'accounts', 'companies_add', 'Add a company', 0),
+(NULL, 'accounts', 'companies_edit', 'Edit a company', 0),
+(NULL, 'accounts', 'companies_delete', 'Delete a company', 1),
+(NULL, 'dashboard', 'notifications_send', 'Send notifications', 0),
+(NULL, 'dashboard', 'notifications_send_all', 'Send notifications to all users', 0),
+(NULL, 'logs', 'logs_list', 'View logs', 0);
 
 -- --------------------------------------------------------
 
 --
--- Struttura della tabella `settings_permissions_join_accounts_groups`
+-- Table structure for table `settings_permissions_join_accounts_groups`
 --
 
 CREATE TABLE IF NOT EXISTS `settings_permissions_join_accounts_groups` (
@@ -218,7 +215,7 @@ CREATE TABLE IF NOT EXISTS `settings_permissions_join_accounts_groups` (
 -- --------------------------------------------------------
 
 --
--- Struttura della tabella `settings_menus`
+-- Table structure for table `settings_menus`
 --
 
 CREATE TABLE IF NOT EXISTS `settings_menus` (
@@ -229,10 +226,10 @@ CREATE TABLE IF NOT EXISTS `settings_menus` (
   `url` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
   `position` int(3) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT='Menu';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
--- Dump dei dati per la tabella `settings_menus`
+-- Dumping data for table `settings_menus`
 --
 
 INSERT INTO `settings_menus` (`id`, `idMenu`, `menu`, `module`, `url`, `position`) VALUES
@@ -242,7 +239,7 @@ INSERT INTO `settings_menus` (`id`, `idMenu`, `menu`, `module`, `url`, `position
 -- --------------------------------------------------------
 
 --
--- Struttura della tabella `settings_modules`
+-- Table structure for table `settings_modules`
 --
 
 CREATE TABLE IF NOT EXISTS `settings_modules` (
@@ -256,17 +253,17 @@ CREATE TABLE IF NOT EXISTS `settings_modules` (
 -- --------------------------------------------------------
 
 --
--- Struttura della tabella `settings_settings`
+-- Table structure for table `settings_settings`
 --
 
 CREATE TABLE IF NOT EXISTS `settings_settings` (
   `code` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `value` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
   PRIMARY KEY (`code`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT='Impostazioni';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
--- Dump dei dati per la tabella `settings_settings`
+-- Dumping data for table `settings_settings`
 --
 
 INSERT INTO `settings_settings` (`code`, `value`) VALUES
@@ -279,13 +276,14 @@ INSERT INTO `settings_settings` (`code`, `value`) VALUES
 ('ldap_host', NULL),
 ('maintenance', '0'),
 ('maintenance_description', 'This service is currently undergoing scheduled maintenance. Please try back in 60 minutes. Sorry for the inconvenience.'),
-('owner', 'Coordinator'),
-('owner_mail', 'info@coordiantor.it'),
-('owner_mail_from', 'Coordiantor'),
-('owner_url', 'http://www.coordinator.it'),
+('owner', 'Default Company Inc.'),
+('owner_mail', 'info@defaultcompany.com'),
+('owner_mail_from', 'Default Company'),
+('owner_url', 'http://www.defaultcompany.com'),
 ('piwik_analytics', ''),
 ('show_logo', '0'),
 ('temp_token', ''),
-('title', 'Coordinator');
+('title', 'Coordinator'),
+('version', '1.0.0');
 
 -- --------------------------------------------------------
