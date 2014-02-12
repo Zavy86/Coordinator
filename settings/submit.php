@@ -278,7 +278,7 @@ function menu_delete(){
 
 /* -[ Module Setup ]--------------------------------------------------------- */
 function module_setup(){
- if(!api_checkPermission("settings","module_setup")){api_die("accessDenied");}
+ if(!api_checkPermission("settings","modules_edit")){api_die("accessDenied");}
  // acquire variables
  $g_module=$_GET['module'];
  $module_path="../".$g_module."/";
@@ -304,7 +304,7 @@ function module_setup(){
 
 /* -[ Module Update ]-------------------------------------------------------- */
 function module_update(){
- if(!api_checkPermission("settings","module_setup")){api_die("accessDenied");}
+ if(!api_checkPermission("settings","modules_edit")){api_die("accessDenied");}
  // acquire variables
  $g_module=$_GET['module'];
  $module_path="../".$g_module."/";
