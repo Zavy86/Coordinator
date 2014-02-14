@@ -2,13 +2,14 @@
 
 <locale language="EN">
 
+ <!-- alerts -->
+ <text key="newLogs">There are new notifications in the events log, &lt;a href='../logs/logs_list.php'&gt;view events&lt;/a&gt;</text>
+ <text key="changeBrowser">The browser you are using does not seem to fully support the HTML5 format, we recommend using &lt;a href='http://chrome.google.com' target='_blank'&gt;Google Chrome&lt;/a&gt; or &lt;a href='http://www.apple.com/safari' target='_blank'&gt;Apple Safari&lt;/a&gt;</text>
+ <text key="submitFunctionNotFound">Warning, the callback function has not been implemented, contact the administrator for more information</text>
+ <text key="accessDenied"><h4>ACCESS DENIED</h4>The permissions of your account are not sufficient to perform the desired operation</text>
+
  <!-- alerts
- // core
- case "newLogs":$alert="Sono presenti delle nuove notifiche nel Registro degli Eventi. <a href='".$GLOBALS['dir']."logs/logs_list.php'>Visualizza eventi</a>";break;
- case "changeBrowser":$alert="Il browser utilizzato sembra non supportare completamente il formato HTML5, si consiglia di utilizzare <a href='http://chrome.google.com' target='_blank'>Google Chrome</a> o <a href='http://www.apple.com/safari' target='_blank'>Apple Safari</a>.";break;
- case "submitFunctionNotFound":$alert="Attenzione, la funzione richiamata non è stata implementata, contattare l'amministratore per maggiori informazioni.";break;
  // settings
- case "accessDenied":$alert="<h4>ACCESSO NEGATO</h4>I permessi del tuo account non sono sufficienti per completare l'operazione desiderata";break;
  case "settingsSaved":$alert="Le impostazioni sono state salvate correttamente";break;
  // dashboard
  case "notificationSend":$alert="La notifica è stata inoltrata correttamente";break;

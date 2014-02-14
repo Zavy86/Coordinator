@@ -10,7 +10,9 @@ switch($act){
  case "notification_archive":notification_archive();break;
  case "notification_restore":notification_restore();break;
  // default
- default:header("location: index.php");
+ default:
+  $alert="?alert=submitFunctionNotFound&alert_class=alert-warning&act=".$act;
+  header("location: index.php".$alert);
 }
 
 
