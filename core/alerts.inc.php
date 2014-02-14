@@ -1,7 +1,7 @@
 <?php
 
 /* -[ Alerts ]--------------------------------------------------------------- */
-function api_alert(){
+function api_alert2(){
  if(isset($_GET['alert'])){
   $alert=$_GET['alert'];
   $class=$_GET['alert_class'];
@@ -16,25 +16,6 @@ function api_alert(){
   case "newLogs":$alert="Sono presenti delle nuove notifiche nel Registro degli Eventi. <a href='".$GLOBALS['dir']."logs/logs_list.php'>Visualizza eventi</a>";break;
   case "changeBrowser":$alert="Il browser utilizzato sembra non supportare completamente il formato HTML5, si consiglia di utilizzare <a href='http://chrome.google.com' target='_blank'>Google Chrome</a> o <a href='http://www.apple.com/safari' target='_blank'>Apple Safari</a>.";break;
   case "submitFunctionNotFound":$alert="Attenzione, la funzione richiamata non è stata implementata, contattare l'amministratore per maggiori informazioni.";break;
-  // accounts
-  case "loginFailed":$alert="L'account o la password inseriti non sono stati riconosciuti";break;
-  case "loginDisabled":$alert="L'account inserito è stato disabilitato, contatta l'amministratore di sistema per maggiori informazioni";break;
-  case "accountCreated":$alert="Il nuovo account è stato creato correttamente, seleziona i gruppi a cui assegnarlo";break;
-  case "accountEdited":$alert="L'account è stato modificato correttamente";break;
-  case "accountCustomized":$alert="Il tuo account è stato modificato correttamente";break;
-  case "accountPasswordChanged":$alert="La tua password è stata variata con successo";break;
-  case "accountSwitched1":$alert="Da questo momento stai operando con i privilegi di amministratore, ogni porta ti sarà aperta.. :)";break;
-  case "accountSwitched2":$alert="Da questo momento stai operando con i privilegi di un normalissimo utente.. :(";break;
-  case "passwordRetrived":$alert="La tua richiesta di ripristino della password è stata inoltrata correttamente";break;
-  case "passwordResetted":$alert="Il ripristino della tua password è avvenuto correttamente";break;
-  case "groupSaved":$alert="Il gruppo è stato salvato correttamente";break;
-  case "groupDeleted":$alert="Il gruppo è stato eliminato definitivamente";break;
-  case "companySaved":$alert="La società è stata salvata correttamente";break;
-  case "companyDeleted":$alert="La società è stata eliminata definitivamente";break;
-  case "typologySaved":$alert="La tipologia è stata salvata correttamente";break;
-  case "typologyDeleted":$alert="La tipologia è stata eliminata definitivamente";break;
-  case "ldapCreated":$alert="Il nuovo account è stato creato correttamente, ora puoi eseguire l'accesso";break;
-  case "ldapCreatedError":$alert="Si è verificato un errore durante la creazione dell'account";break;
   // dashboard
   case "notificationSend":$alert="La notifica è stata inoltrata correttamente";break;
   case "notificationSendError":$alert="Si è verificato un errore durante la compilazione della notifica";break;

@@ -5,37 +5,26 @@
 if($_GET['id']>0){$checkPermission="companies_edit";}else{$checkPermission="companies_add";}
 include("template.inc.php");
 function content(){
+ // acquire variables
  $g_id=$_GET['id'];
  if(!isset($g_id)){$g_id=0;}
+ // get company object
  $company=$GLOBALS['db']->queryUniqueObject("SELECT * FROM accounts_companies WHERE id='".$g_id."'");
+ // form fields array
+ $ff_array=array();
+ $ff_array[]=api_formField("text","company",api_text("companies_edit-ff-company"),stripslashes($company->company),"input-medium",api_text("companies_edit-ff-company-placeholder"));
+ $ff_array[]=api_formField("text","division",api_text("companies_edit-ff-division"),stripslashes($company->division),"input-medium",api_text("companies_edit-ff-division-placeholder"));
+ $ff_array[]=api_formField("text","name",api_text("companies_edit-ff-name"),stripslashes($company->name),"input-xlarge",api_text("companies_edit-ff-name-placeholder"));
+ // form controls array
+ $fc_array=array();
+ $fc_array[]=api_formControl("submit",api_text("companies_edit-fc-save"));
+ $fc_array[]=api_formControl("button",api_text("companies_edit-fc-cancel"),NULL,"companies_list.php");
+ if($company->id>0 && api_checkPermission("accounts","companies_delete")){
+  $fc_array[]=api_formControl("button",api_text("companies_edit-fc-delete"),"btn-danger","submit.php?act=company_delete&id=".$company->id,api_text("companies_edit-fc-delete-confirm"));
+ }
+ // print form
+ api_form($ff_array,$fc_array,"submit.php?act=company_save&id=".$company->id,"post","companies");
 ?>
-
-<form class="form-horizontal" action="submit.php?act=company_save&id=<?php echo $g_id;?>" method="post">
-
- <div class="control-group">
-  <label class="control-label" for="iDescription">Societ&agrave;</label>
-  <div class="controls"><input type="text" id="iCompany" class="input-large" name="company" placeholder="Societ&agrave;" value="<?php echo $company->company;?>"></div>
- </div>
-    
- <div class="control-group">
-  <label class="control-label" for="iName">Divisione</label>
-  <div class="controls"><input type="text" id="iDivision" class="input-large" name="division" placeholder="Nome divisione" value="<?php echo $company->division;?>"></div>
- </div>
- 
- <div class="control-group">
-  <label class="control-label" for="iCompanyName">Ragione sociale</label>
-  <div class="controls"><input type="text" id="iName" class="input-xlarge" name="name" placeholder="Ragione sociale" value="<?php echo $company->name;?>"></div>
- </div>
- 
- <div class="control-group">
-  <div class="controls">
-   <input type="submit" class="btn btn-primary" value="Salva">
-   <a href="groups_list.php" class="btn">Annulla</a>
-  </div>
- </div>
- 
-</form>
-
 <script type="text/javascript">
  $(document).ready(function(){
   $('input[type="submit"]').attr('disabled','disabled');
@@ -55,7 +44,6 @@ function content(){
   });
  });
 </script>
-
 <?php
 }
 ?>
