@@ -8,14 +8,6 @@
  <text key="submitFunctionNotFound">Warning, the callback function has not been implemented, contact the administrator for more information</text>
  <text key="accessDenied"><h4>ACCESS DENIED</h4>The permissions of your account are not sufficient to perform the desired operation</text>
 
- <!-- alerts
- // settings
- case "settingsSaved":$alert="Le impostazioni sono state salvate correttamente";break;
- // dashboard
- case "notificationSend":$alert="La notifica è stata inoltrata correttamente";break;
- case "notificationSendError":$alert="Si è verificato un errore durante la compilazione della notifica";break;
- -->
-
  <!-- html.class.php -->
  <text key="core-menu-dashboard">Dashboard</text>
  <text key="core-menu-accounts">Accounts</text>
