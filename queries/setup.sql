@@ -276,6 +276,7 @@ INSERT INTO `settings_settings` (`code`, `value`) VALUES
 ('ldap_domain', NULL),
 ('ldap_group', NULL),
 ('ldap_host', NULL),
+('ldap_userfield', NULL),
 ('maintenance', '0'),
 ('maintenance_description', 'This service is currently undergoing scheduled maintenance. Please try back in 60 minutes. Sorry for the inconvenience.'),
 ('owner', 'Default Company Inc.'),

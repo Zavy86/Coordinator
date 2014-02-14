@@ -124,6 +124,11 @@ function content(){
  </div>
 
  <div class="control-group">
+  <label class="control-label" for="ldap_userfield">Userfield</label>
+  <div class="controls"><input type="text" id="ldap_userfield" class="input-large" name="ldap_userfield" value="<?php echo api_getOption("ldap_userfield");?>"></div>
+ </div>
+
+ <div class="control-group">
   <label class="control-label" for="ldap_group">Group</label>
   <div class="controls"><input type="text" id="ldap_group" class="input-large" name="ldap_group" value="<?php echo api_getOption("ldap_group");?>"></div>
  </div>

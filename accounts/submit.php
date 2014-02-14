@@ -45,7 +45,7 @@ function account_login(){
   // try ldap authentication
   include('../config.inc.php');
   include('../core/ldap.inc.php');
-  if(ldap_authenticate(api_getOption('ldap_host'),api_getOption('ldap_dn'),api_getOption('ldap_domain'),$p_account,$p_password,api_getOption('ldap_group'))){
+  if(ldap_authenticate(api_getOption('ldap_host'),api_getOption('ldap_dn'),api_getOption('ldap_domain'),$p_account,$p_password,api_getOption('ldap_userfield'),api_getOption('ldap_group'))){
    $account=$GLOBALS['db']->queryUniqueObject("SELECT * FROM accounts_accounts WHERE ldapUsername='".$p_account."'");
    if($account->id){
     // account exist
