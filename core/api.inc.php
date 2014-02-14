@@ -1471,4 +1471,29 @@ function api_form($ff_array,$fc_array,$action,$method="get",$name="form",$class=
 }
 
 
+/* -[ Modal Window ]--------------------------------------------------------- */
+// @string $id : id of the modal window
+// @string $heaeder : header of the modal window
+// @string $body : body of the modal window
+// @string $footer : footer of the modal window
+// @string $class : modal window css class
+function api_modal($id,$header,$body,$footer=NULL,$class=NULL){
+ if(strlen($id)==0 || strlen($body)==0){return FALSE;}
+ // open modal window
+ echo "<!-- modal window ".$id." -->\n";
+ echo "<div id='modal_".$id."' class='modal hide fade ".$class."' role='dialog' aria-hidden='true'>\n";
+ // modal window header
+ echo " <div class='modal-header'>\n";
+ echo "  <button type='button' class='close' data-dismiss='modal' aria-hidden='true'>&times;</button>\n";
+ if(strlen($header)>0){echo "  <h4>".$header."</h4>\n";}
+ echo " </div>\n";
+ // modal window body
+ echo " <div class='modal-body'>\n".$body."\n </div>\n";
+ // modal window footer
+ if(strlen($footer)>0){echo " <div class='modal-footer'>\n".$footer."\n </div>\n";}
+ // close modal window
+ echo "</div><!-- /modal window -->\n\n";
+}
+
+
 ?>
