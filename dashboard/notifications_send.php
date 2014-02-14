@@ -30,7 +30,6 @@ function content(){
  // print form
  api_form($ff_array,$fc_array,"submit.php?act=notification_send","post","notification");
 ?>
-
 <script type="text/javascript">
  $(document).ready(function(){
   $("#field_idGroup").hide();
@@ -78,5 +77,4 @@ function content(){
   });
  });
 </script>
-
 <?php } ?>
