@@ -2,6 +2,10 @@
 
 <locale language="IT">
 
+ <!-- alerts -->
+ <text key="notificationSend">The notification has been submitted successfully</text>
+ <text key="notificationSendError">There was an error while sending the notification</text>
+
  <!-- template.inc.php -->
  <text key="notifications">Notifications</text>
  <text key="archived-notifications">Notifications Archive</text>

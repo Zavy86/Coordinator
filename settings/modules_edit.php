@@ -1,8 +1,8 @@
 <?php
-/* ------------------------------------------------------------------------- *\
-|* -[ Settings - Menus Edit ]----------------------------------------------- *|
-\* ------------------------------------------------------------------------- */
-$checkPermission="menus_edit";
+/* -------------------------------------------------------------------------- *\
+|* -[ Settings - Modules Edit ]---------------------------------------------- *|
+\* -------------------------------------------------------------------------- */
+$checkPermission="modules_edit";
 include("template.inc.php");
 function content(){
  // acquire variables
@@ -27,7 +27,7 @@ function content(){
  }
  // sort alphabetically
  sort($directory_array);
- //
+ // loop modules directories
  foreach($directory_array as $module){
   $module_name=NULL;
   $module_version=NULL;
@@ -72,15 +72,16 @@ function content(){
   switch($module->action){
    case "setup":
     $tr_class="success";
-    $td="<a href='submit.php?act=module_setup&module=".$module->name."'>Setup</a>";
+    $td="<a href='submit.php?act=module_setup&module=".$module->name."'>".api_text("modules-td-setup")."</a>";
+    $td.=" - <a href='submit.php?act=module_remove&module=".$module->name."' onClick=\"return confirm('".api_text("modules-td-remove-confirm")."');\">".api_text("modules-td-remove")."</a>";
     break;
    case "update":
     $tr_class="warning";
-    $td="<a href='submit.php?act=module_update&module=".$module->name."'>Update from ".$module_obj->installed_version."</a>";
+    $td="<a href='submit.php?act=module_update&module=".$module->name."'>".api_text("modules-td-update",$module_obj->installed_version)."</a>";
     break;
    default:
     $tr_class=NULL;
-    $td="&nbsp;";
+    $td="<a href='submit.php?act=module_uninstall&module=".$module->name."' onClick=\"return confirm('".api_text("modules-td-uninstall-confirm")."');\">".api_text("modules-td-uninstall")."</a>";
   }
   $td_array[]=api_tableField($td,"nowarp");
   // build table row

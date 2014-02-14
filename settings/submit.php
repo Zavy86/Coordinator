@@ -2,16 +2,18 @@
 /* ------------------------------------------------------------------------- *\
 |* -[ Settings - Submit ]--------------------------------------------------- *|
 \* ------------------------------------------------------------------------- */
-include('../core/api.inc.php'); // Include the core API function
+include('../core/api.inc.php');
 $act=$_GET['act'];
 switch($act){
  // settings
  case "settings_save":settings_save();break;
  // validations
- case "validations_toggle":validations_toggle();break;
+ //case "validations_toggle":validations_toggle();break;
  // modules
  case "module_setup":module_setup();break;
  case "module_update":module_update();break;
+ case "module_uninstall":module_uninstall();break;
+ case "module_remove":module_remove();break;
  // permissions
  case "permissions_add":permissions_add();break;
  case "permissions_del":permissions_del();break;
@@ -49,6 +51,7 @@ function settings_save(){
  if(isset($_POST['ldap_host'])){$GLOBALS['db']->execute("UPDATE settings_settings SET value='".addslashes($_POST['ldap_host'])."' WHERE code='ldap_host'");}
  if(isset($_POST['ldap_dn'])){$GLOBALS['db']->execute("UPDATE settings_settings SET value='".addslashes($_POST['ldap_dn'])."' WHERE code='ldap_dn'");}
  if(isset($_POST['ldap_domain'])){$GLOBALS['db']->execute("UPDATE settings_settings SET value='".addslashes($_POST['ldap_domain'])."' WHERE code='ldap_domain'");}
+ if(isset($_POST['ldap_userfield'])){$GLOBALS['db']->execute("UPDATE settings_settings SET value='".addslashes($_POST['ldap_userfield'])."' WHERE code='ldap_userfield'");}
  if(isset($_POST['ldap_group'])){$GLOBALS['db']->execute("UPDATE settings_settings SET value='".addslashes($_POST['ldap_group'])."' WHERE code='ldap_group'");}
  // redirect
  $alert="?alert=settingSaved&alert_class=alert-success";
@@ -78,6 +81,128 @@ function validations_toggle(){
  }
  // redirect
  header("location: validations_edit.php?module=".$g_module);
+}
+
+
+/* -[ Module Setup ]--------------------------------------------------------- */
+function module_setup(){
+ if(!api_checkPermission("settings","modules_edit")){api_die("accessDenied");}
+ // acquire variables
+ $g_module=$_GET['module'];
+ $module_path="../".$g_module."/";
+ if(file_exists($module_path."module.inc.php")){
+  // include module informations
+  include($module_path."module.inc.php");
+  // insert module into database
+  $query="INSERT INTO settings_modules (module,version,title,description) VALUES
+   ('".$module_name."','1.0.0','".$module_title."','".$module_description."')";
+  $GLOBALS['db']->execute($query);
+  // get maximum position for main menu
+  $position=$GLOBALS['db']->countOf("settings_menus","idMenu='1'");
+  $position++;
+  // insert module into main menu
+  $query="INSERT INTO settings_menus
+   (idMenu,menu,module,url,position) VALUES
+   ('1','".$module_title."','".$module_name."','','".$position."')";
+  // execute query
+  $GLOBALS['db']->execute($query);
+  // execute setup queries by mysql dump
+  if(file_exists($module_path."queries/setup.sql")){api_restoreMysqlDump($module_path."queries/setup.sql");}
+  // redirect
+  $alert="?alert=moduleSetup&alert_class=alert-success";
+  exit(header("location: modules_edit.php".$alert));
+ }else{
+  // redirect
+  $alert="?alert=settingError&alert_class=alert-error";
+  exit(header("location: modules_edit.php".$alert));
+ }
+}
+
+
+/* -[ Module Update ]-------------------------------------------------------- */
+function module_update(){
+ if(!api_checkPermission("settings","modules_edit")){api_die("accessDenied");}
+ // acquire variables
+ $g_module=$_GET['module'];
+ $module_path="../".$g_module."/";
+ if(file_exists($module_path."module.inc.php")){
+  $infinite_loop=0;
+  // include module informations
+  include($module_path."module.inc.php");
+  // get current installed version
+  $current_version=$GLOBALS['db']->queryUniqueValue("SELECT version FROM settings_modules WHERE module='".$module_name."'");
+  // check for update
+  while($current_version<>$module_version){
+   // execute update queries by mysql dump
+   api_restoreMysqlDump($module_path."queries/update_".$current_version.".sql");
+   $current_version=$GLOBALS['db']->queryUniqueValue("SELECT version FROM settings_modules WHERE module='".$module_name."'");
+   // check for infinite loop
+   $infinite_loop++;
+   if($infinite_loop==9999999){
+    $alert="?alert=moduleUpdateSqlError&alert_class=alert-error";
+    exit(header("location: modules_edit.php".$alert));
+   }
+  }
+  // redirect
+  $alert="?alert=moduleUpdated&alert_class=alert-success";
+  exit(header("location: modules_edit.php".$alert));
+ }else{
+  // redirect
+  $alert="?alert=settingError&alert_class=alert-error";
+  exit(header("location: modules_edit.php".$alert));
+ }
+}
+
+/* -[ Module Uninstall ]--------------------------------------------------------- */
+function module_uninstall(){
+ if(!api_checkPermission("settings","modules_edit")){api_die("accessDenied");}
+ // acquire variables
+ $g_module=$_GET['module'];
+ $module_path="../".$g_module."/";
+ if(file_exists($module_path."module.inc.php")){
+  // include module informations
+  include($module_path."module.inc.php");
+  // delete module from menus
+  $GLOBALS['db']->execute("DELETE FROM settings_menus WHERE module='".$module_name."'");
+  // delete module from permissions
+  $permissions=$GLOBALS['db']->query("SELECT * FROM settings_permissions WHERE module='".$module_name."'");
+  while($permission=$GLOBALS['db']->fetchNextObject($permissions)){
+   $GLOBALS['db']->execute("DELETE FROM settings_permissions_join_accounts_groups WHERE idPermission='".$permission->id."'");
+  }
+  $GLOBALS['db']->execute("DELETE FROM settings_permissions WHERE module='".$module_name."'");
+  // delete module from database
+  $GLOBALS['db']->execute("DELETE FROM settings_modules WHERE module='".$module_name."'");
+  // execute unistall queries by mysql dump
+  if(file_exists($module_path."queries/uninstall.sql")){api_restoreMysqlDump($module_path."queries/uninstall.sql");}
+  // redirect
+  $alert="?alert=moduleUninstalled&alert_class=alert-warning";
+  exit(header("location: modules_edit.php".$alert));
+ }else{
+  // redirect
+  $alert="?alert=settingError&alert_class=alert-error";
+  exit(header("location: modules_edit.php".$alert));
+ }
+}
+
+/* -[ Module Remove ]--------------------------------------------------------- */
+function module_remove(){
+ if(!api_checkPermission("settings","modules_edit")){api_die("accessDenied");}
+ // acquire variables
+ $g_module=$_GET['module'];
+ $module_path="../".$g_module."/";
+ if(file_exists($module_path."module.inc.php")){
+  // include module informations
+  include($module_path."module.inc.php");
+  // delete module direcory
+  api_rm_recursive(substr($module_path,0,-1),FALSE);
+  // redirect
+  $alert="?alert=moduleRemoved&alert_class=alert-warning";
+  exit(header("location: modules_edit.php".$alert));
+ }else{
+  // redirect
+  $alert="?alert=settingError&alert_class=alert-error";
+  exit(header("location: modules_edit.php".$alert));
+ }
 }
 
 
@@ -249,7 +374,6 @@ function menu_move($to){
  }
 }
 
-
 /* -[ Menu Delete ]---------------------------------------------------------- */
 function menu_delete(){
  if(!api_checkPermission("settings","menu_edit")){api_die("accessDenied");}
@@ -272,67 +396,6 @@ function menu_delete(){
   // redirect
   $alert="&alert=settingError&alert_class=alert-error";
   exit(header("location: menus_edit.php?idMenu=".$g_idMenu.$alert));
- }
-}
-
-
-/* -[ Module Setup ]--------------------------------------------------------- */
-function module_setup(){
- if(!api_checkPermission("settings","modules_edit")){api_die("accessDenied");}
- // acquire variables
- $g_module=$_GET['module'];
- $module_path="../".$g_module."/";
- if(file_exists($module_path."module.inc.php")){
-  // include module informations
-  include($module_path."module.inc.php");
-  // insert module into database
-  $query="INSERT INTO settings_modules (module,version,title,description) VALUES
-   ('".$module_name."','1.0.0','".$module_title."','".$module_description."')";
-  $GLOBALS['db']->execute($query);
-  // restore mysql dump
-  if(file_exists($module_path."queries/setup.sql")){api_restoreMysqlDump($module_path."queries/setup.sql");}
-  // redirect
-  $alert="?alert=moduleSetup&alert_class=alert-success";
-  exit(header("location: modules_edit.php".$alert));
- }else{
-  // redirect
-  $alert="?alert=settingError&alert_class=alert-error";
-  exit(header("location: modules_edit.php".$alert));
- }
-}
-
-
-/* -[ Module Update ]-------------------------------------------------------- */
-function module_update(){
- if(!api_checkPermission("settings","modules_edit")){api_die("accessDenied");}
- // acquire variables
- $g_module=$_GET['module'];
- $module_path="../".$g_module."/";
- if(file_exists($module_path."module.inc.php")){
-  $infinite_loop=0;
-  // include module informations
-  include($module_path."module.inc.php");
-  // get current installed version
-  $current_version=$GLOBALS['db']->queryUniqueValue("SELECT version FROM settings_modules WHERE module='".$module_name."'");
-  // check for update
-  while($current_version<>$module_version){
-   // execute update
-   api_restoreMysqlDump($module_path."queries/update_".$current_version.".sql");
-   $current_version=$GLOBALS['db']->queryUniqueValue("SELECT version FROM settings_modules WHERE module='".$module_name."'");
-   // check for infinite loop
-   $infinite_loop++;
-   if($infinite_loop==9999999){
-    $alert="?alert=moduleUpdateSqlError&alert_class=alert-error";
-    exit(header("location: modules_edit.php".$alert));
-   }
-  }
-  // redirect
-  $alert="?alert=moduleUpdated&alert_class=alert-success";
-  exit(header("location: modules_edit.php".$alert));
- }else{
-  // redirect
-  $alert="?alert=settingError&alert_class=alert-error";
-  exit(header("location: modules_edit.php".$alert));
  }
 }
 

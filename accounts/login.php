@@ -1,14 +1,13 @@
 <?php
-/* ------------------------------------------------------------------------- *\
-|* -[ Accounts - Login ]---------------------------------------------------- *|
-\* ------------------------------------------------------------------------- */
+/* -------------------------------------------------------------------------- *\
+|* -[ Accounts - Login ]----------------------------------------------------- *|
+\* -------------------------------------------------------------------------- */
 include("../core/api.inc.php");
 // reset current session
 session_destroy();
 session_start();
 $html->header(NULL,NULL,FALSE);
 ?>
-
 <div class="login-form">
  <h3>Accesso al sistema</h3>
  <form class="form-horizontal" action="submit.php?act=account_login" method="post">
@@ -24,7 +23,6 @@ $html->header(NULL,NULL,FALSE);
    ?>
  </form>
 </div>
-
 <script type="text/javascript">
  $(document).ready(function(){
   // validation
@@ -37,5 +35,7 @@ $html->header(NULL,NULL,FALSE);
   });
  });
 </script>
-
+</div><!-- /container -->
+</body>
+</html>
 <?php //$html->footer(); ?>

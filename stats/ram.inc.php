@@ -1,6 +1,6 @@
 <?php
 /* -------------------------------------------------------------------------- *\
-|* -[ Stats - CPU Chart ]---------------------------------------------------- *|
+|* -[ Stats - RAM Chart ]---------------------------------------------------- *|
 \* -------------------------------------------------------------------------- */
 session_start();
 // pChart inclusion
@@ -30,7 +30,7 @@ $graph->drawFilledRoundedRectangle(7,7,293,293,5,240,240,240);
 $graph->drawRoundedRectangle(5,5,295,295,5,230,230,230);
 $graph->drawGraphArea(255,255,255,TRUE);
 // draw the line graph
-$graph->drawFlatPieGraphWithShadow($DataSet->GetData(),$DataSet->GetDataDescription(),150,150,85,PIE_PERCENTAGE_LABEL,10);  
+$graph->drawFlatPieGraphWithShadow($DataSet->GetData(),$DataSet->GetDataDescription(),150,150,85,PIE_PERCENTAGE_LABEL,10);
 // finish the graph
 //$graph->Render("charts/ram.png");
 $graph->Stroke();

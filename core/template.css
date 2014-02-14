@@ -1,5 +1,10 @@
 /* -[ template.css ]-------------------------------------------------------- */
 
+body{
+ padding-top:60px;
+ padding-bottom:10px;
+}
+
 .brand-logo{float:left;padding:2px 15px 0 0;}
 .brand-logo img{height:36px;}
 img.logo{height:36px;}
