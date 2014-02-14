@@ -55,6 +55,9 @@ public function header($title="",$nav="dashboard",$navbar=TRUE){
  <link rel="shortcut icon" type="image/x-icon" href="<?php echo $GLOBALS['dir']."core/images/favicon.ico";?>">
  <link rel="shortcut icon" href="<?php echo $GLOBALS['dir']."core/images/favicon.png";?>">
 
+ <!-- Web Application Icon -->
+ <link rel="icon" sizes="144x144" href="<?php echo $GLOBALS['dir']."core/images/logos/logo_144.png";?>" type="image/png">
+
  <!-- Apple iOS -->
  <meta name="apple-mobile-web-app-capable" content="yes">
  <link rel="shortcut icon" href="../assets/ico/favicon.ico">
