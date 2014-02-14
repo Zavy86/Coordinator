@@ -1473,7 +1473,7 @@ function api_form($ff_array,$fc_array,$action,$method="get",$name="form",$class=
 
 /* -[ Modal Window ]--------------------------------------------------------- */
 // @string $id : id of the modal window
-// @string $heaeder : header of the modal window
+// @string $header : header of the modal window
 // @string $body : body of the modal window
 // @string $footer : footer of the modal window
 // @string $class : modal window css class
@@ -1495,5 +1495,14 @@ function api_modal($id,$header,$body,$footer=NULL,$class=NULL){
  echo "</div><!-- /modal window -->\n\n";
 }
 
+
+/* -[ Modal Window Link ]---------------------------------------------------- */
+// @string $id : id of the modal window
+// @string $label : label of the link
+// @string $class : modal link css class
+function api_modalLink($id,$label,$class=NULL){
+ if(strlen($id)==0 || strlen($label)==0){return FALSE;}
+ return "<a href='#modal_".$id."' data-toggle='modal' class='".$class."'>".$label."</a>";
+}
 
 ?>
