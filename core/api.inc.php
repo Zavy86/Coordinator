@@ -9,7 +9,6 @@ global $dir;                  // base path resource
 global $alert;                // base path resource
 global $locale;               // array with translation
 include("../config.inc.php"); // Include the configuration file
-include("alerts.inc.php");    // Include the alerts
 include("html.class.php");    // Include the html class
 include("db.class.php");      // Include the database class
 // load core translation file
@@ -126,6 +125,40 @@ function api_die($error=""){
  $die.="know the difference between the dream world and the real world?\"</em>\n";
  $die.="<br><br><br>".$url."Continue &raquo;</a></center></body></html>\n";
  die($die);
+}
+
+
+/* -[ Alerts ]--------------------------------------------------------------- */
+function api_alert(){
+ if(isset($_GET['alert'])){
+  $alert=$_GET['alert'];
+  $class=$_GET['alert_class'];
+  $parameters=$_GET['alert_parameters'];
+ }elseif(isset($GLOBALS['alert'])){
+  $alert=$GLOBALS['alert']->alert;
+  $class=$GLOBALS['alert']->class;
+  $parameters=$GLOBALS['alert']->parameters;
+ }
+ // show the alert
+ if(isset($alert)){
+  $alert=api_text($alert,$parameters);
+  echo "<div id=\"alert-message\" class=\"alert ".$class."\">\n";
+  echo "<button type=\"button\" class=\"close\" data-dismiss=\"alert\">&times;</button>";
+  echo "\n".$alert."\n";
+  echo "</div>\n";
+  // auto close if alert-success
+  if($class=="alert-success"){
+   echo "<script type=\"text/javascript\">\n";
+   echo "window.setTimeout(function(){\$('#alert-message').alert('close');},5000);\n";
+   echo "</script>\n";
+  }
+  // auto close if alert-info
+  if($class=="alert-info"){
+   echo "<script type=\"text/javascript\">\n";
+   echo "window.setTimeout(function(){\$('#alert-message').alert('close');},10000);\n";
+   echo "</script>\n";
+  }
+ }
 }
 
 
@@ -597,13 +630,12 @@ function api_sexName($idSex,$lang=""){
 
 /* -[ Avatar by account id ]------------------------------------------------- */
 // @param $idAccount : ID of the account
-function api_accountAvatar($idAccount=NULL,$customUnavailable=FALSE){
+function api_accountAvatar($idAccount=NULL){
  if($idAccount==NULL){$idAccount=$_SESSION['account']->id;}
  if(file_exists("../uploads/accounts/avatars/avatar_".$idAccount.".jpg")){
   return "../uploads/accounts/avatars/avatar_".$idAccount.".jpg";
  }else{
-  if($customUnavailable){return $customUnavailable;}
-  else{return $GLOBALS['dir']."uploads/accounts/avatars/avatar.jpg";}
+  return $GLOBALS['dir']."uploads/accounts/avatars/avatar.jpg";
  }
 }
 
@@ -1041,9 +1073,10 @@ function api_restoreMysqlDump($file){
 
 /* -[ Icon ]----------------------------------------------------------------- */
 // @string $icon : bootstrap icon glyphs
-function api_icon($icon){
+// @string $style : manual styles tag
+function api_icon($icon,$style=NULL){
  if($icon==NULL){return FALSE;}
- $return="<i class='".$icon."'></i>";
+ $return="<i class='".$icon."' style='".$style."'></i>";
  return $return;
 }
 
@@ -1053,13 +1086,17 @@ function api_icon($icon){
 // @string $url : link url
 // @string $get : additional get parameters for link (&key=value)
 // @string $class : input css class
-function api_navigationTab($label,$url=NULL,$get=NULL,$class=NULL){
+// @array $dropdown : array of navigation tabs
+// @boolean $enabled : enable the navigation tab (true) or not
+function api_navigationTab($label,$url=NULL,$get=NULL,$class=NULL,$dropdown=NULL,$enabled=TRUE){
  if(strlen($label)==0){return FALSE;}
  $nt=new stdClass();
  $nt->label=$label;
  $nt->url=$url;
  $nt->get=$get;
  $nt->class=$class;
+ $nt->dropdown=$dropdown;
+ $nt->enabled=$enabled;
  return $nt;
 }
 
@@ -1076,7 +1113,14 @@ function api_navigation($nt_array,$class=NULL){
   // show field
   foreach($nt_array as $nt){
    if(!is_object($nt)){continue;}
+   // check dropdown menu
+   if(is_array($nt->dropdown)){
+    $dropdown=TRUE;
+    $nt->label.=" <b class='caret'></b>";
+   }else{$dropdown=FALSE;}
+   // check active
    $active=FALSE;
+   if(strlen($nt->url)==0){$nt->url="#";}
    echo " <li";
    if(substr($nt->url,0,(strpos($nt->url,"?")>0)?strpos($nt->url,"?"):strlen($nt->url))==api_baseName()){
     $active=TRUE;
@@ -1087,9 +1131,29 @@ function api_navigation($nt_array,$class=NULL){
      }
     }
    }
+   // check active disabled and dropdown
    if($active){echo " class='active ".$nt->class."'><a href='#'";}
-    else{echo "><a href='".$nt->url.$nt->get."'";}
-   echo ">".$nt->label."</a></li>\n";
+    elseif(!$nt->enabled){echo " class='disabled ".$nt->class."'><a href='#'";}
+    elseif($dropdown){echo " class='dropdown ".$nt->class."'><a class='dropdown-toggle' data-toggle='dropdown' href='#'";}
+    else{echo " class='".$nt->class."'><a href='".$nt->url.$nt->get."'";}
+   // show label
+   echo ">".$nt->label."</a>";
+   // dropdown items
+   if(is_array($nt->dropdown)){
+    echo "\n  <ul class='dropdown-menu'>\n";
+    foreach($nt->dropdown as $ntd){
+     if(!is_object($ntd)){continue;}
+     echo "   <li";
+     if($ntd->enabled){
+      echo "><a href='".$ntd->url.$ntd->get."'";
+     }else{
+      echo " class='disabled ".$ntd->class."'><a href='#'";
+     }
+     echo ">".$ntd->label."</a></li>\n";
+    }
+    echo "  </ul>\n ";
+   }
+   echo "</li>\n";
   }
  }
  // close navigation
@@ -1101,13 +1165,15 @@ function api_navigation($nt_array,$class=NULL){
 // @string $name : column header name
 // @string $class : column header css class
 // @string $width : column header width
-function api_tableHeader($name,$class=NULL,$width=NULL,$order=NULL){
+// @integer $colspan : column span
+function api_tableHeader($name,$class=NULL,$width=NULL,$order=NULL,$colspan=1){
  if(strlen($name)==0){return FALSE;}
  $th=new stdClass();
  $th->name=$name;
  $th->class=$class;
  $th->width=$width;
  $th->order=$order;
+ $th->colspan=$colspan;
  return $th;
 }
 
@@ -1115,11 +1181,13 @@ function api_tableHeader($name,$class=NULL,$width=NULL,$order=NULL){
 /* -[ Table Field ]---------------------------------------------------------- */
 // @string $content : field content
 // @string $class : field css class
-function api_tableField($content,$class=NULL){
+// @integer $colspan : column span
+function api_tableField($content,$class=NULL,$colspan=1){
  if(strlen($content)==0){return FALSE;}
  $td=new stdClass();
  $td->content=$content;
  $td->class=$class;
+ $td->colspan=$colspan;
  return $td;
 }
 
@@ -1149,21 +1217,26 @@ function api_table($th_array,$tr_array,$unvalued=NULL,$sortable=FALSE,$get=NULL,
  echo "<table class='table table-striped table-hover table-condensed ".$class."'>\n";
  // open head
  if(is_array($th_array)){
-  echo "<thead>\n<tr>\n";
+  echo "<thead>\n <tr>\n";
   // show headers
   foreach($th_array as $th){
    if(!is_object($th)){$return=-1;}
-   echo "<th class='".$th->class."' width='".$th->width."'>";
+   echo "  <th class='".$th->class."' width='".$th->width."' colspan='".$th->colspan."'>";
    if($sortable && $th->order<>NULL){
     // show order link
     if($th->order==$_GET['of']){if($_GET['om']==1){$order=0;}else{$order=1;}}else{$order=1;}
+    // check order
+    if($th->order==$_GET['of']){
+     if($_GET['om']==0){echo api_icon("icon-circle-arrow-down","margin-top:-0.5px;")."&nbsp;";}
+     if($_GET['om']==1){echo api_icon("icon-circle-arrow-up","margin-top:-0.5px;")."&nbsp;";}
+    }
     echo "<a href='".api_baseName()."?of=".$th->order."&om=".$order.$get."'>";
    }
    echo $th->name;
    if($sortable){echo "</a>";}
-   "</th>\n";
+   echo "</th>\n";
   }
-  echo "</tr>\n";
+  echo " </tr>\n";
   // close head
   echo "</thead>\n";
  }
@@ -1173,16 +1246,16 @@ function api_table($th_array,$tr_array,$unvalued=NULL,$sortable=FALSE,$get=NULL,
   foreach($tr_array as $tr){
    // show rows
    if(!is_object($tr)){$return=-2;}
-   echo "<tr class='".$tr->class."'>\n";
+   echo " <tr class='".$tr->class."'>\n";
    // show fields
    if(is_array($tr->fields)){
     foreach($tr->fields as $td){
      // show field
      if(!is_object($td)){$return=-3;}
-     echo "<td class='".$td->class."'>".$td->content."</td>\n";
+     echo "  <td class='".$td->class."' colspan='".$td->colspan."'>".$td->content."</td>\n";
     }
    }
-   echo "</tr>\n";
+   echo " </tr>\n";
   }
  }
  // show no value text
@@ -1397,5 +1470,39 @@ function api_form($ff_array,$fc_array,$action,$method="get",$name="form",$class=
  }
 }
 
+
+/* -[ Modal Window ]--------------------------------------------------------- */
+// @string $id : id of the modal window
+// @string $header : header of the modal window
+// @string $body : body of the modal window
+// @string $footer : footer of the modal window
+// @string $class : modal window css class
+function api_modal($id,$header,$body,$footer=NULL,$class=NULL){
+ if(strlen($id)==0 || strlen($body)==0){return FALSE;}
+ // open modal window
+ echo "<!-- modal window ".$id." -->\n";
+ echo "<div id='modal_".$id."' class='modal hide fade ".$class."' role='dialog' aria-hidden='true'>\n";
+ // modal window header
+ echo " <div class='modal-header'>\n";
+ echo "  <button type='button' class='close' data-dismiss='modal' aria-hidden='true'>&times;</button>\n";
+ if(strlen($header)>0){echo "  <h4>".$header."</h4>\n";}
+ echo " </div>\n";
+ // modal window body
+ echo " <div class='modal-body'>\n".$body."\n </div>\n";
+ // modal window footer
+ if(strlen($footer)>0){echo " <div class='modal-footer'>\n".$footer."\n </div>\n";}
+ // close modal window
+ echo "</div><!-- /modal window -->\n\n";
+}
+
+
+/* -[ Modal Window Link ]---------------------------------------------------- */
+// @string $id : id of the modal window
+// @string $label : label of the link
+// @string $class : modal link css class
+function api_modalLink($id,$label,$class=NULL){
+ if(strlen($id)==0 || strlen($label)==0){return FALSE;}
+ return "<a href='#modal_".$id."' data-toggle='modal' class='".$class."' id='modal-link_".$id."'>".$label."</a>";
+}
 
 ?>

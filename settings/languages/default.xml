@@ -2,9 +2,26 @@
 
 <locale language="EN">
 
+ <!-- alerts -->
+ <text key="settingSaved">Settings has been successfully saved</text>
+ <text key="settingError">There was an error saving your settings</text>
+ <text key="moduleSetup">The module has been installed</text>
+ <text key="moduleUpdated">The module has been updated</text>
+ <text key="moduleUninstalled">The module has been uninstalled</text>
+ <text key="menuCreated">The menu has been created</text>
+ <text key="menuUpdated">The menu has been updated</text>
+ <text key="menuMoved">The menu has been moved</text>
+ <text key="menuDeleted">The menu has been deleted</text>
+
  <!-- modules_edit.inc.php -->
  <text key="modules-th-module">Module</text>
  <text key="modules-th-version">Version</text>
  <text key="modules-th-description">Description</text>
+ <text key="modules-td-setup">Setup</text>
+ <text key="modules-td-update">Update from {0}</text>
+ <text key="modules-td-uninstall">Uninstall</text>
+ <text key="modules-td-uninstall-confirm">Are you sure you want to uninstall this module?\nAll the tables and their data will be deleted</text>
+ <text key="modules-td-remove">Remove</text>
+ <text key="modules-td-remove-confirm">Are you sure you want to remove this module?\nThe module directory will be deleted</text>
 
 </locale>

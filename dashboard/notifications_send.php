@@ -26,11 +26,10 @@ function content(){
  // form controls array
  $fc_array=array();
  $fc_array[]=api_formControl("submit",api_text("fc-submit"));
- $fc_array[]=api_formControl("button",api_text("fc-cancel"),NULL,"notification_list.php");
+ $fc_array[]=api_formControl("button",api_text("fc-cancel"),NULL,"notifications_list.php?s=1");
  // print form
  api_form($ff_array,$fc_array,"submit.php?act=notification_send","post","notification");
 ?>
-
 <script type="text/javascript">
  $(document).ready(function(){
   $("#field_idGroup").hide();
@@ -78,5 +77,4 @@ function content(){
   });
  });
 </script>
-
 <?php } ?>

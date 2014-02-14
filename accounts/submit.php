@@ -1,8 +1,8 @@
 <?php
-/* ------------------------------------------------------------------------- *\
-|* -[ Accounts - Submit ]--------------------------------------------------- *|
-\* ------------------------------------------------------------------------- */
-include('../core/api.inc.php'); // Include the core API function
+/* -------------------------------------------------------------------------- *\
+|* -[ Accounts - Submit ]---------------------------------------------------- *|
+\* -------------------------------------------------------------------------- */
+include('../core/api.inc.php');
 $act=$_GET['act'];
 switch($act){
  // accounts
@@ -10,7 +10,9 @@ switch($act){
  case "account_logout":account_logout();break;
  case "account_save":account_save();break;
  case "account_customize":account_customize();break;
+ case "account_grouprole_add":account_grouprole_add();break;
  case "account_grouprole_delete":account_grouprole_delete();break;
+ case "account_delete":account_delete();break;
  // accounts switch
  case "account_switch_to_admin":account_switch(1);break;
  case "account_switch_to_user":account_switch(2);break;
@@ -20,16 +22,15 @@ switch($act){
  // groups
  case "group_save":group_save();break;
  case "group_delete":group_delete();break;
- // typologies
- case "typology_save":typology_save();break;
- case "typology_delete":typology_delete();break;
  // companies
  case "company_save":company_save();break;
  case "company_delete":company_delete();break;
  // ldap
  case "ldap_account_create":ldap_account_create();break;
  // default
- default:header("location: index.php");
+ default:
+  $alert="?alert=submitFunctionNotFound&alert_class=alert-warning&act=".$act;
+  header("location: index.php".$alert);
 }
 
 
@@ -44,7 +45,7 @@ function account_login(){
   // try ldap authentication
   include('../config.inc.php');
   include('../core/ldap.inc.php');
-  if(ldap_authenticate(api_getOption('ldap_host'),api_getOption('ldap_dn'),api_getOption('ldap_domain'),$p_account,$p_password,api_getOption('ldap_group'))){
+  if(ldap_authenticate(api_getOption('ldap_host'),api_getOption('ldap_dn'),api_getOption('ldap_domain'),$p_account,$p_password,api_getOption('ldap_userfield'),api_getOption('ldap_group'))){
    $account=$GLOBALS['db']->queryUniqueObject("SELECT * FROM accounts_accounts WHERE ldapUsername='".$p_account."'");
    if($account->id){
     // account exist
@@ -170,7 +171,7 @@ function account_save(){
    header("location: accounts_edit.php?id=".$g_id);
   }else{
    // redirect
-   $alert="?alert=accountEdited&alert_class=alert-success";
+   $alert="?alert=accountUpdated&alert_class=alert-success&alert_parameters=".$p_name;
    header("location: accounts_list.php".$alert);
   }
  }else{
@@ -181,7 +182,7 @@ function account_save(){
    ('".$p_account."','".md5(api_randomString(10))."','".$secret."','".$p_name."','".$p_typology."','".$p_idCompany."')";
   // execute query
   $GLOBALS['db']->execute($query);
-  $alert="&alert=accountCreated&alert_class=alert-success";
+  $alert="&alert=accountCreated&alert_class=alert-success&alert_parameters=".$p_name;
   // set id to last inserted id
   $g_id=$GLOBALS['db']->lastInsertedId();
   // sendmail
@@ -238,6 +239,29 @@ function account_customize(){
  header("location: index.php".$alert);
 }
 
+/* -[ Account Grouprole Add ]--------------------------------------------------------- */
+function account_grouprole_add(){
+ $g_id=$_GET['id'];
+ if(!isset($g_id)){$g_id=0;}
+ // acquire variables
+ $p_idGroup=$_POST['idGroup'];
+ if(!isset($p_idGroup)){$p_idGroup=0;}
+ $p_idGrouprole=$_POST['idGrouprole'];
+ if(!isset($p_idGrouprole)){$p_idGrouprole=1;}
+ $account=$GLOBALS['db']->queryUniqueObject("SELECT * FROM accounts_accounts WHERE id='".$g_id."'");
+ if($account->id>0 && $p_idGroup>0 && $p_idGrouprole>0){
+  if(!api_checkPermission("accounts","accounts_edit")){api_die("accessDenied");}
+  $query="INSERT INTO accounts_groups_join_accounts
+   (idGroup,idAccount,idGrouprole) VALUES
+   ('".$p_idGroup."','".$g_id."','".$p_idGrouprole."')";
+  // execute query
+  $GLOBALS['db']->execute($query);
+  // alert
+  $alert="&alert=accountUpdated&alert_class=alert-success&alert_parameters=".$account->name;
+ }
+ header("location: accounts_edit.php?id=".$g_id.$alert);
+}
+
 /* -[ Account Grouprole Delete ]--------------------------------------------- */
 function account_grouprole_delete(){
  if(!api_checkPermission("accounts","accounts_edit")){api_die("accessDenied");}
@@ -255,6 +279,23 @@ function account_grouprole_delete(){
   else{header("location: accounts_edit.php?id=".$g_idAccount);}
 }
 
+/* -[ Account Delete ]--------------------------------------------------------- */
+function account_delete(){
+ if(!api_checkPermission("accounts","accounts_delete")){api_die("accessDenied");}
+ $g_id=$_GET['id'];
+ if(!isset($g_id)){$g_id=0;}
+ $account=$GLOBALS['db']->queryUniqueObject("SELECT * FROM accounts_accounts WHERE id='".$g_id."'");
+ if($account->id>0){
+  die("Function disabled for security reason");
+  // delete account
+  //$GLOBALS['db']->execute("DELETE FROM accounts_accounts WHERE id='".$account->id."'");
+  // delete groups
+  //$GLOBALS['db']->execute("DELETE FROM accounts_groups_join_accounts WHERE idAccount='".$account->id."'");
+ }
+ // redirect
+ $alert="?alert=accountDeleted&alert_class=alert&alert_parameters=".$account->name;
+ header("location: accounts_list.php".$alert);
+}
 
 /* -[ Account administrators can switch to different typology ]-------------- */
 function account_switch($typology){
@@ -343,16 +384,17 @@ function group_save(){
    name='".$p_name."',
    description='".$p_description."'
    WHERE id='".$g_id."'";
+  $alert="?alert=groupUpdated&alert_class=alert-success&alert_parameters=".$p_name;
  }else{
   if(!api_checkPermission("accounts","groups_add")){api_die("accessDenied");}
   $query="INSERT INTO accounts_groups
    (idGroup,name,description) VALUES
    ('".$p_idGroup."','".$p_name."','".$p_description."')";
+  $alert="?alert=groupCreated&alert_class=alert-success&alert_parameters=".$p_name;
  }
  // execute query
  $GLOBALS['db']->execute($query);
  // redirect
- $alert="?alert=groupSaved&alert_class=alert-success";
  header("location: groups_list.php".$alert);
 }
 
@@ -361,59 +403,16 @@ function group_delete(){
  if(!api_checkPermission("accounts","groups_delete")){api_die("accessDenied");}
  $g_id=$_GET['id'];
  if(!isset($g_id)){$g_id=0;}
- if($g_id>0){
+ $group=$GLOBALS['db']->queryUniqueObject("SELECT * FROM accounts_groups WHERE id='".$g_id."'");
+ if($group->id>0){
   // delete group
-  $GLOBALS['db']->execute("DELETE FROM accounts_groups WHERE id='".$g_id."'");
+  $GLOBALS['db']->execute("DELETE FROM accounts_groups WHERE id='".$group->id."'");
   // delete group links
-  $GLOBALS['db']->execute("DELETE FROM accounts_groups_links WHERE idGroup='".$g_id."'");
+  $GLOBALS['db']->execute("DELETE FROM accounts_groups_join_accounts WHERE idGroup='".$group->id."'");
  }
  // redirect
- $alert="?alert=groupDeleted&alert_class=alert";
+ $alert="?alert=groupDeleted&alert_class=alert&alert_parameters=".$group->name;
  header("location: groups_list.php".$alert);
-}
-
-
-/* -[ Typology Save ]-------------------------------------------------------- */
-function typology_save(){
- $g_id=$_GET['id'];
- if(!isset($g_id)){$g_id=0;}
- // acquire variables
- $p_name=addslashes($_POST['name']);
- $p_description=addslashes($_POST['description']);
- // build query
- if($g_id>0){
-  if(!api_checkPermission("accounts","typologies_edit")){api_die("accessDenied");}
-  $query="UPDATE accounts_typologies SET
-   name='".$p_name."',
-   description='".$p_description."'
-   WHERE id='".$g_id."'";
- }else{
-  if(!api_checkPermission("accounts","typologies_add")){api_die("accessDenied");}
-  $query="INSERT INTO accounts_typologies
-   (name,description) VALUES
-   ('".$p_name."','".$p_description."')";
- }
- // execute query
- $GLOBALS['db']->execute($query);
- // redirect
- $alert="?alert=typologySaved&alert_class=alert-success";
- header("location: typologies_list.php".$alert);
-}
-
-/* -[ Typology Delete ]------------------------------------------------------ */
-function typology_delete(){
- if(!api_checkPermission("accounts","typologies_delete")){api_die("accessDenied");}
- $g_id=$_GET['id'];
- if(!isset($g_id)){$g_id=0;}
- if($g_id>0){
-  // delete typology
-  $GLOBALS['db']->execute("DELETE FROM accounts_typologies WHERE id='".$g_id."'");
-  // disable account with typology
-  $GLOBALS['db']->execute("UPDATE accounts_accounts SET typology='0' WHERE typology='".$g_id."'");
- }
- // redirect
- $alert="?alert=typologyDeleted&alert_class=alert";
- header("location: typologies_list.php".$alert);
 }
 
 
@@ -433,16 +432,35 @@ function company_save(){
    division='".$p_division."',
    name='".$p_name."'
    WHERE id='".$g_id."'";
+  $alert="?alert=companyUpdated&alert_class=alert-success&alert_parameters=".$p_name;
  }else{
   if(!api_checkPermission("accounts","companies_add")){api_die("accessDenied");}
   $query="INSERT INTO accounts_companies
    (company,division,name) VALUES
    ('".$p_company."','".$p_division."','".$p_name."')";
+  $alert="?alert=companyCreated&alert_class=alert-success&alert_parameters=".$p_name;
  }
  // execute query
  $GLOBALS['db']->execute($query);
  // redirect
- $alert="?alert=companySaved&alert_class=alert-success";
+ header("location: companies_list.php".$alert);
+}
+
+/* -[ Company Delete ]--------------------------------------------------------- */
+function company_delete(){
+ if(!api_checkPermission("accounts","companies_delete")){api_die("accessDenied");}
+ $g_id=$_GET['id'];
+ if(!isset($g_id)){$g_id=0;}
+ $company=$GLOBALS['db']->queryUniqueObject("SELECT * FROM accounts_companies WHERE id='".$g_id."'");
+ if($company->id>0){
+  die("Function disabled for security reason");
+  // count if accounts_divisions==0
+  // count if accounts_accounts==0
+  // delete company
+  //$GLOBALS['db']->execute("DELETE FROM accounts_companies WHERE id='".$company->id."'");
+ }
+ // redirect
+ $alert="?alert=companyDeleted&alert_class=alert&alert_parameters=".$company->name;
  header("location: companies_list.php".$alert);
 }
 
@@ -451,7 +469,7 @@ function company_save(){
 function ldap_account_create(){
  // acquire variables
  $p_ldapUsername=addslashes(strtolower($_POST['ldapUsername']));
- $p_ldapPassword=addslashes($_POST['ldapPassword']);
+ //$p_ldapPassword=addslashes($_POST['ldapPassword']);
  $p_account=addslashes(strtolower($_POST['account']));
  $p_firstname=addslashes($_POST['firstname']);
  $p_lastname=addslashes($_POST['lastname']);

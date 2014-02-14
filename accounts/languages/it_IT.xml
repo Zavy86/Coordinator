@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<locale language="EN">
+
+ <!-- alerts -->
+ <text key="loginFailed">L'account o la password inseriti non sono stati riconosciuti</text>
+ <text key="loginDisabled">L'account inserito è stato disabilitato, contatta l'amministratore di sistema per maggiori informazioni</text>
+ <text key="accountCreated">L'account {0} è stato creato, seleziona i gruppi a cui assegnarlo</text>
+ <text key="accountUpdated">L'account {0} è stato aggiornato</text>
+ <text key="accountDeleted">L'account {0} è stato eliminato</text>
+ <text key="accountCustomized">Il tuo account è stato aggiornato</text>
+ <text key="accountPasswordChanged">La tua password è stata aggiornata</text>
+ <text key="accountSwitched1">Da questo momento stai operando con i privilegi di amministratore, ogni porta ti sarà aperta.. :)</text>
+ <text key="accountSwitched2">Da questo momento stai operando con i privilegi di un normalissimo utente.. :(</text>
+ <text key="passwordRetrived">La tua richiesta di ripristino della password è stata inoltrata, riceverai a breve una mail</text>
+ <text key="passwordResetted">Il ripristino della tua password è avvenuto correttamente</text>
+ <text key="groupCreated">Il gruppo {0} è stato creato</text>
+ <text key="groupUpdated">Il gruppo {0} è stato aggiornato</text>
+ <text key="groupDeleted">Il gruppo {0} è stato eliminato</text>
+ <text key="companyCreated">La società {0} è stata creata</text>
+ <text key="companyUpdated">La società {0} è stata aggiornata</text>
+ <text key="companyDeleted">La società {0} è stata eliminata</text>
+ <text key="ldapCreated">Il nuovo account è stato creato correttamente, ora puoi eseguire l'accesso</text>
+ <text key="ldapCreatedError">Si è verificato un errore durante la creazione dell'account</text>
+
+ <!-- template.inc.php -->
+ <text key="nav-profile">Profilo personale</text>
+ <text key="nav-accounts">Utenti</text>
+ <text key="nav-groups">Gruppi</text>
+ <text key="nav-companies">Società</text>
+ <text key="nav-add">Aggiungi</text>
+ <text key="nav-edit">Modifica</text>
+ <text key="nav-account">Utente</text>
+ <text key="nav-group">Gruppo</text>
+ <text key="nav-company">Società</text>
+
+ <!-- accounts_list.php -->
+ <text key="accounts_list-th-name">Nome</text>
+ <text key="accounts_list-th-typology">Tipologia</text>
+ <text key="accounts_list-th-company">Società</text>
+ <text key="accounts_list-th-account">Account</text>
+ <text key="accounts_list-th-lastAccess">Ultimo accesso</text>
+ <text key="accounts_list-td-CompanyNotAssigned">Non assegnato</text>
+ <text key="accounts_list-tr-unvalued">Non è presente nessun account..</text>
+
+ <!-- accounts_edit.php -->
+ <text key="accounts_edit-ff-name">Nome</text>
+ <text key="accounts_edit-ff-name-placeholder">Cognome e Nome</text>
+ <text key="accounts_edit-ff-account">Account</text>
+ <text key="accounts_edit-ff-account-placeholder">Indirizzo mail</text>
+ <text key="accounts_edit-ff-typology">Tipologia</text>
+ <text key="accounts_edit-fo-disabled">Disabilitato</text>
+ <text key="accounts_edit-fo-administrator">Amministratore</text>
+ <text key="accounts_edit-fo-user">Utente</text>
+ <text key="accounts_edit-ff-language">Lingua</text>
+ <text key="accounts_edit-ff-company">Società</text>
+ <text key="accounts_edit-fo-CompanyNotAssigned">Non assegnato</text>
+ <text key="accounts_edit-fc-save">Salva</text>
+ <text key="accounts_edit-fc-cancel">Annulla</text>
+ <text key="accounts_edit-fc-delete">Elimina</text>
+ <text key="accounts_edit-fc-delete-confirm">Eliminare definitivamente questo utente?</text>
+ <text key="accounts_edit-th-group">Gruppo</text>
+ <text key="accounts_edit-th-role">Ruolo</text>
+ <text key="accounts_edit-td-groupDelete-confirm">Eliminare questa associazione?</text>
+
+ <!-- groups_list.php -->
+ <text key="groups_list-th-group">Gruppo</text>
+ <text key="groups_list-th-description">Descrizione</text>
+ <text key="groups_list-th-members">Membri</text>
+ <text key="groups_list-tr-unvalued">Non è presente nessun gruppo..</text>
+
+ <!-- groups_edit.php -->
+ <text key="groups_edit-ff-group">Gruppo</text>
+ <text key="groups_edit-fo-main">Principale</text>
+ <text key="groups_edit-ff-name">Nome</text>
+ <text key="groups_edit-ff-name-placeholder">Nome del gruppo</text>
+ <text key="groups_edit-ff-description">Descrizione</text>
+ <text key="groups_edit-ff-description-placeholder">Descrizione del gruppo</text>
+ <text key="groups_edit-fc-save">Salva</text>
+ <text key="groups_edit-fc-cancel">Annulla</text>
+ <text key="groups_edit-fc-delete">Elimina</text>
+ <text key="groups_edit-fc-delete-confirm">Eliminare definitivamente questo gruppo?</text>
+
+ <!-- companies_list.php -->
+ <text key="companies_list-th-company">Società</text>
+ <text key="companies_list-th-name">Nome</text>
+ <text key="companies_list-th-members">Membri</text>
+ <text key="companies_list-tr-unvalued">Non è presente nessuna società..</text>
+
+ <!-- companies_edit.php -->
+ <text key="companies_edit-ff-company">Società</text>
+ <text key="companies_edit-ff-company-placeholder">Identificativo società</text>
+ <text key="companies_edit-ff-division">Divisione</text>
+ <text key="companies_edit-ff-division-placeholder">Identificativo divisione</text>
+ <text key="companies_edit-ff-name">Ragione sociale</text>
+ <text key="companies_edit-ff-name-placeholder">Ragione sociale completa</text>
+ <text key="companies_edit-fc-save">Salva</text>
+ <text key="companies_edit-fc-cancel">Annulla</text>
+ <text key="companies_edit-fc-delete">Elimina</text>
+ <text key="companies_edit-fc-delete-confirm">Eliminare definitivamente questa società?</text>
+
+</locale>

@@ -2,6 +2,12 @@
 
 <locale language="EN">
 
+ <!-- alerts -->
+ <text key="newLogs">There are new notifications in the events log, &lt;a href='../logs/logs_list.php'&gt;view events&lt;/a&gt;</text>
+ <text key="changeBrowser">The browser you are using does not seem to fully support the HTML5 format, we recommend using &lt;a href='http://chrome.google.com' target='_blank'&gt;Google Chrome&lt;/a&gt; or &lt;a href='http://www.apple.com/safari' target='_blank'&gt;Apple Safari&lt;/a&gt;</text>
+ <text key="submitFunctionNotFound">Warning, the callback function has not been implemented, contact the administrator for more information</text>
+ <text key="accessDenied"><h4>ACCESS DENIED</h4>The permissions of your account are not sufficient to perform the desired operation</text>
+
  <!-- html.class.php -->
  <text key="core-menu-dashboard">Dashboard</text>
  <text key="core-menu-accounts">Accounts</text>
