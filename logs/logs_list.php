@@ -10,10 +10,10 @@ function content(){
  <thead>
   <tr>
    <th width="16">&nbsp;</th>
-   <th class='nowarp'>Data</th>
-   <th>Modulo</th>
-   <th width="100%">Log (Seleziona per maggiori dettagli)</th>
-   <th class="nowarp">Account</th>
+   <th class='nowarp'><?php echo api_text("list-th-date"); ?></th>
+   <th><?php echo api_text("list-th-module"); ?></th>
+   <th width="100%"><?php echo api_text("list-th-log"); ?></th>
+   <th class="nowarp"><?php echo api_text("list-th-account"); ?></th>
   </tr>
  </thead>
  <tbody>

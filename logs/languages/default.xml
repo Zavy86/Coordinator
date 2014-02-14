@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<locale language="EN">
+
+ <!-- template.inc.php -->
+ <text key="nav-allEvents">All events</text>
+ <text key="nav-warningsAndErrors">Warnings and Errors</text>
+ <text key="nav-notices">Notices</text>
+ <text key="nav-warnings">Warnings</text>
+ <text key="nav-errors">Errors</text>
+ <text key="nav-lastDays">Last {0} days</text>
+ <text key="nav-allModules">All Modules</text>
+ <text key="nav-module">Module {0}</text>
+
+ <!-- logs_list.php -->
+ <text key="list-th-date">Date</text>
+ <text key="list-th-module">Module</text>
+ <text key="list-th-log">Log (Select for more details)</text>
+ <text key="list-th-account">Account</text>
+
+</locale>

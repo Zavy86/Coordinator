@@ -3,6 +3,7 @@
 |* -[ Logs - Template ]------------------------------------------------------ *|
 \* -------------------------------------------------------------------------- */
 include("../core/api.inc.php");
+// show header
 $html->header("Logs");
 // acquire variables
 $g_interval=$_GET['i'];
@@ -11,74 +12,48 @@ $g_typology=$_GET['t'];
 if(!isset($g_typology)){$g_typology=0;}
 $g_module=$_GET['m'];
 if(!isset($g_module)){$g_module=NULL;}
+// build navigation tab
+$nt_array=array();
+// switch typology label
+switch($g_typology){
+ case -1:$label=api_text("nav-warningsAndErrors");break;
+ case 1:$label=api_text("nav-notices");break;
+ case 2:$label=api_text("nav-warnings");break;
+ case 3:$label=api_text("nav-errors");break;
+ default:$label=api_text("nav-allEvents");break;
+}
+// build typology tab
+$ntd_array=array();
+$ntd_array[]=api_navigationTab(api_text("nav-allEvents"),"logs_list.php?t=0","&i=".$g_interval);
+$ntd_array[]=api_navigationTab(api_text("nav-warningsAndErrors"),"logs_list.php?t=-1","&i=".$g_interval);
+$ntd_array[]=api_navigationTab(api_text("nav-notices"),"logs_list.php?t=1","&i=".$g_interval);
+$ntd_array[]=api_navigationTab(api_text("nav-warnings"),"logs_list.php?t=2","&i=".$g_interval);
+$ntd_array[]=api_navigationTab(api_text("nav-errors"),"logs_list.php?t=3","&i=".$g_interval);
+$nt_array[]=api_navigationTab($label,NULL,NULL,NULL,$ntd_array);
+// build interval tab
+$label=api_text("nav-lastDays",$g_interval);
+$ntd_array=array();
+$ntd_array[]=api_navigationTab(api_text("nav-lastDays",3),"logs_list.php?i=3","&t=".$g_typology);
+$ntd_array[]=api_navigationTab(api_text("nav-lastDays",7),"logs_list.php?i=7","&t=".$g_typology);
+$ntd_array[]=api_navigationTab(api_text("nav-lastDays",30),"logs_list.php?i=30","&t=".$g_typology);
+$ntd_array[]=api_navigationTab(api_text("nav-lastDays",90),"logs_list.php?i=90","&t=".$g_typology);
+$ntd_array[]=api_navigationTab(api_text("nav-lastDays",365),"logs_list.php?i=365","&t=".$g_typology);
+$nt_array[]=api_navigationTab($label,NULL,NULL,NULL,$ntd_array);
+// build modules tab
+if($g_module<>NULL){$label=api_text("nav-module",strtoupper($g_module));}
+ else{$label=api_text("nav-allModules");}
+$ntd_array=array();
+$ntd_array[]=api_navigationTab(api_text("nav-allModules"),"logs_list.php","?t=".$g_typology."&i=".$g_interval);
+// get modules in the interval
+$modules=$GLOBALS['db']->query("SELECT DISTINCT module FROM logs_logs WHERE timestamp BETWEEN CURDATE()- INTERVAL ".($g_interval-1)." DAY AND NOW() ORDER BY module ASC");
+while($module=$GLOBALS['db']->fetchNextObject($modules)){
+ $ntd_array[]=api_navigationTab(strtoupper($module->module),"logs_list.php?m=".$module->module,"&t=".$g_typology."&i=".$g_interval);
+}
+$nt_array[]=api_navigationTab($label,NULL,NULL,NULL,$ntd_array);
+// show navigation tab
+api_navigation($nt_array);
+// check permissions before displaying module
+if($checkPermission==NULL){content();}else{if(api_checkPermission("logs",$checkPermission,TRUE)){content();}}
+// show footer
+$html->footer();
 ?>
-
-<div class="row-fluid">
-
- <!-- Navigation -->
- <ul class="nav nav-tabs">
-  
-  <li class="dropdown">
-   <a class="dropdown-toggle" data-toggle="dropdown" href="#">
-    <?php
-     switch($g_typology){
-      case -1:echo "Avvertimenti ed errori";break;
-      case 1:echo "Notifiche";break;
-      case 2:echo "Avvertimenti";break;
-      case 3:echo "Errori";break;
-      default:echo "Tutti gli eventi";
-     }    
-    ?>
-    <b class="caret"></b>
-   </a>
-   <ul class="dropdown-menu">
-    <li><a href="<?php echo "logs_list.php?i=".$g_interval."&t=0"; ?>">Tutti gli eventi</a></li>
-    <li><a href="<?php echo "logs_list.php?i=".$g_interval."&t=-1"; ?>">Avvertimenti ed errori</a></li>
-    <li><a href="<?php echo "logs_list.php?i=".$g_interval."&t=1"; ?>">Solo notifiche</a></li>
-    <li><a href="<?php echo "logs_list.php?i=".$g_interval."&t=2"; ?>">Solo avvertimenti</a></li>
-    <li><a href="<?php echo "logs_list.php?i=".$g_interval."&t=3"; ?>">Solo errori</a></li>
-   </ul>
-  </li>
-  
-  <li class="dropdown">
-   <a class="dropdown-toggle" data-toggle="dropdown" href="#">
-    <?php echo "Ultimi ".$g_interval." giorni"; ?>
-    <b class="caret"></b>
-   </a>
-   <ul class="dropdown-menu">
-    <li><a href="<?php echo "logs_list.php?i=3&t=".$g_typology; ?>">Ultimi 3 giorni</a></li>
-    <li><a href="<?php echo "logs_list.php?i=7&t=".$g_typology; ?>">Ultimi 7 giorni</a></li>
-    <li><a href="<?php echo "logs_list.php?i=30&t=".$g_typology; ?>">Ultimi 30 giorni</a></li>
-    <li><a href="<?php echo "logs_list.php?i=90&t=".$g_typology; ?>">Ultimi 90 giorni</a></li>
-    <li><a href="<?php echo "logs_list.php?i=365&t=".$g_typology; ?>">Ultimi 365 giorni</a></li>
-   </ul>
-  </li>
-  
-  <li class="dropdown">
-   <a class="dropdown-toggle" data-toggle="dropdown" href="#">
-    <?php
-     if($g_module<>NULL){echo "Modulo ".strtoupper($g_module);}
-      else{echo "Tutti i moduli";}
-    ?>
-    <b class="caret"></b>
-   </a>
-   <ul class="dropdown-menu">
-    <?php
-     $modules_array=array();
-     $modules=$GLOBALS['db']->query("SELECT DISTINCT module FROM logs_logs WHERE timestamp BETWEEN CURDATE()- INTERVAL ".($g_interval-1)." DAY AND NOW() ORDER BY module ASC");
-     echo "<li><a href='logs_list.php?i=".$g_interval."&t=".$g_typology."'>Tutti i moduli</a></li>";
-     while($module=$GLOBALS['db']->fetchNextObject($modules)){$modules_array[]=$module;}
-     foreach($modules_array as $module){
-      echo "<li><a href='logs_list.php?i=".$g_interval."&t=".$g_typology."&m=".$module->module."'>Modulo ".strtoupper($module->module)."</a></li>";
-     }
-    ?>
-   </ul>
-  </li>
-  
- </ul>
-
-<?php if($checkPermission==NULL){content();}else{if(api_checkPermission("logs",$checkPermission,TRUE)){content();}} ?>
-
-</div><!-- /row -->
-
-<?php $html->footer(); ?>
