@@ -1502,7 +1502,7 @@ function api_modal($id,$header,$body,$footer=NULL,$class=NULL){
 // @string $class : modal link css class
 function api_modalLink($id,$label,$class=NULL){
  if(strlen($id)==0 || strlen($label)==0){return FALSE;}
- return "<a href='#modal_".$id."' data-toggle='modal' class='".$class."'>".$label."</a>";
+ return "<a href='#modal_".$id."' data-toggle='modal' class='".$class."' id='modal-link_".$id."'>".$label."</a>";
 }
 
 ?>
