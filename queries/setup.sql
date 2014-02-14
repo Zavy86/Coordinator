@@ -184,6 +184,8 @@ INSERT INTO `settings_permissions` (`id`, `module`, `action`, `description`, `lo
 (NULL, 'settings', 'modules_edit', 'Manage modules', 1),
 (NULL, 'settings', 'permissions_edit', 'Manage permissions', 1),
 (NULL, 'settings', 'menus_edit', 'Manage menus', 0),
+(NULL, 'logs', 'logs_list', 'View logs', 0),
+(NULL, 'stats', 'stats_server', 'View server stats', 0),
 (NULL, 'accounts', 'accounts_list', 'View accounts list', 0),
 (NULL, 'accounts', 'accounts_add', 'Add an account', 0),
 (NULL, 'accounts', 'accounts_edit', 'Edit an account', 0),
@@ -197,8 +199,7 @@ INSERT INTO `settings_permissions` (`id`, `module`, `action`, `description`, `lo
 (NULL, 'accounts', 'companies_edit', 'Edit a company', 0),
 (NULL, 'accounts', 'companies_delete', 'Delete a company', 1),
 (NULL, 'dashboard', 'notifications_send', 'Send notifications', 0),
-(NULL, 'dashboard', 'notifications_send_all', 'Send notifications to all users', 0),
-(NULL, 'logs', 'logs_list', 'View logs', 0);
+(NULL, 'dashboard', 'notifications_send_all', 'Send notifications to all users', 0);
 
 -- --------------------------------------------------------
 

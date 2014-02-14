@@ -1,7 +1,7 @@
 <?php
-/* ------------------------------------------------------------------------- *\
-|* -[ Settings - Settings Edit ]-------------------------------------------- *|
-\* ------------------------------------------------------------------------- */
+/* -------------------------------------------------------------------------- *\
+|* -[ Stats - Server ]------------------------------------------------------- *|
+\* -------------------------------------------------------------------------- */
 $checkPermission="stats_server";
 include("template.inc.php");
 function content(){
@@ -20,7 +20,7 @@ function content(){
 <div class="span5">
  <h4><?php echo strtoupper($_SERVER['SERVER_NAME']);?> - RAM</h4>
  <img id="imgRAM" src="ram.inc.php">
-</div><!-- /span5 --> 
+</div><!-- /span5 -->
 </div><!-- /row-fluid -->
 
 <br>
@@ -33,7 +33,7 @@ function content(){
 <div class="span5">
  <h4>SIS-MYSQL - RAM</h4>
  <img id="imgRAM-sql" src="http://sis-mysql/scripts/stats/ram.inc.php">
-</div><!-- /span5 --> 
+</div><!-- /span5 -->
 </div><!-- /row-fluid -->
 
 <script type="text/javascript">

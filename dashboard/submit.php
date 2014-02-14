@@ -2,7 +2,7 @@
 /* ------------------------------------------------------------------------- *\
 |* -[ Dashboard - Submit ]-------------------------------------------------- *|
 \* ------------------------------------------------------------------------- */
-include('../core/api.inc.php'); // Include the core API function
+include('../core/api.inc.php');
 $act=$_GET['act'];
 switch($act){
  // notifications
@@ -23,7 +23,7 @@ function notification_send(){
  $p_typology=$_POST['typology'];
  $p_subject=addslashes($_POST['subject']);
  $p_message=addslashes($_POST['message']);
- $p_link=addslashes($_POST['link']); 
+ $p_link=addslashes($_POST['link']);
  if(strlen($p_subject)>0 && strlen($p_message)>0){
   switch($p_to){
    case 1:api_notification_send($p_idAccountTo,$p_typology,"dashboard",$p_subject,$p_message,$p_link);break;
@@ -39,7 +39,7 @@ function notification_send(){
   header("location: notifications_send.php".$alert);
  }
 }
- 
+
 
 /* -[ Notification Archive ]------------------------------------------------- */
 function notification_archive(){
