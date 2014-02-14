@@ -5,6 +5,9 @@
  <!-- alerts -->
  <text key="settingSaved">Le impostazioni sono state salvate correttamente</text>
  <text key="settingError">Si è verificato un errore durante il salvataggio delle impostazioni</text>
+ <text key="moduleSetup">Il modulo è stato installato</text>
+ <text key="moduleUpdated">Il modulo è stato aggiornato</text>
+ <text key="moduleUninstalled">Il modulo è stato disinstallato</text>
  <text key="menuCreated">Il menu è stato creato</text>
  <text key="menuUpdated">Il menu è stato aggiornato</text>
  <text key="menuMoved">Il menu è stato spostato</text>
@@ -14,5 +17,11 @@
  <text key="modules-th-module">Modulo</text>
  <text key="modules-th-version">Versione</text>
  <text key="modules-th-description">Descrizione</text>
+ <text key="modules-td-setup">Installa</text>
+ <text key="modules-td-update">Aggiorna da {0}</text>
+ <text key="modules-td-uninstall">Disintalla</text>
+ <text key="modules-td-uninstall-confirm">Sei sicuro di voler disinstallare questo modulo?\nTutte le tabelle ed i relativi dati verranno eliminati</text>
+ <text key="modules-td-remove">Elimina</text>
+ <text key="modules-td-remove-confirm">Sei sicuro di voler rimuovere questo modulo?\nLa directory del modulo verrà eliminata</text>
 
 </locale>
