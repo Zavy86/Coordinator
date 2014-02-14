@@ -151,10 +151,10 @@ public function header($title="",$nav="dashboard",$navbar=TRUE){
        <ul class="dropdown-menu">
         <li class="nav-header"><?php echo $_SESSION['account']->name;?></li>
         <li><a href="<?php echo $GLOBALS['dir']."accounts/index.php";?>"><?php echo api_text("core-menu-accounts"); ?></a></li>
-        <?php if(api_checkPermission("stats","stats_server")){echo "<li><a href=\"".$GLOBALS['dir']."stats/index.php\">".api_text("core-menu-statistics")."</a></li>";}?>
-        <?php if(api_checkPermission("settings","settings_edit")||api_checkPermission("settings","permissions_edit")){echo "<li><a href=\"".$GLOBALS['dir']."settings/index.php\">".api_text("core-menu-settings")."</a></li>";}?>
+        <?php if(api_checkPermission("stats","stats_server")){echo "<li><a href=\"".$GLOBALS['dir']."stats/index.php\">".api_text("core-menu-statistics")."</a></li>";} ?>
+        <?php if(api_checkPermission("settings","settings_edit")||api_checkPermission("settings","permissions_edit")){echo "<li><a href=\"".$GLOBALS['dir']."settings/index.php\">".api_text("core-menu-settings")."</a></li>";} ?>
 
-        <?php
+        <?php/*
          if(api_checkPermission("wiki","wiki_view")){
           if($GLOBALS['db']->queryUniqueObject("SELECT * FROM wiki_pages WHERE path='".api_baseModule()."'")){
            echo "<li><a href=\"".$GLOBALS['dir']."wiki/wiki_view.php?page=".api_baseModule()."\">Documentazione</a></li>";
@@ -162,11 +162,11 @@ public function header($title="",$nav="dashboard",$navbar=TRUE){
            echo "<li><a href=\"".$GLOBALS['dir']."wiki/index.php\">Documentazione</a></li>";
           }
          }
-        ?>
+        */?>
 
-        <?php if(api_checkPermission("dashboard","notifications_send")){echo "<li><a href=\"".$GLOBALS['dir']."dashboard/notifications_send.php\">Invia una notifica</a></li>";}?>
-        <?php if(api_checkPermission("logs","logs_list")){echo "<li><a href=\"".$GLOBALS['dir']."logs/index.php\">".api_text("core-menu-logs")."</a></li>";}?>
-        <?php if(api_checkPermission("saprfc","saprfc_list")){echo "<li><a href=\"".$GLOBALS['dir']."saprfc/index.php\">SAP RFC</a></li>";}?>
+        <?php if(api_checkPermission("dashboard","notifications_send")){echo "<li><a href=\"".$GLOBALS['dir']."dashboard/notifications_send.php\">Invia una notifica</a></li>";} ?>
+        <?php if(api_checkPermission("logs","logs_list")){echo "<li><a href=\"".$GLOBALS['dir']."logs/index.php\">".api_text("core-menu-logs")."</a></li>";} ?>
+        <?php //if(api_checkPermission("saprfc","saprfc_list")){echo "<li><a href=\"".$GLOBALS['dir']."saprfc/index.php\">SAP RFC</a></li>";} ?>
         <?php
          if($_SESSION['account']->administrator && $_SESSION['account']->id>1){
           echo "<li class='divider'></li>\n";
