@@ -2,6 +2,14 @@
 
 <locale language="EN">
 
+ <!-- alerts -->
+ <text key="settingSaved">Le impostazioni sono state salvate correttamente</text>
+ <text key="settingError">Si è verificato un errore durante il salvataggio delle impostazioni</text>
+ <text key="menuCreated">Il menu è stato creato</text>
+ <text key="menuUpdated">Il menu è stato aggiornato</text>
+ <text key="menuMoved">Il menu è stato spostato</text>
+ <text key="menuDeleted">Il menu è stato cancellato</text>
+
  <!-- modules_edit.inc.php -->
  <text key="modules-th-module">Module</text>
  <text key="modules-th-version">Version</text>

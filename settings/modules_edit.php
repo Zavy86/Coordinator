@@ -1,8 +1,8 @@
 <?php
-/* ------------------------------------------------------------------------- *\
-|* -[ Settings - Menus Edit ]----------------------------------------------- *|
-\* ------------------------------------------------------------------------- */
-$checkPermission="menus_edit";
+/* -------------------------------------------------------------------------- *\
+|* -[ Settings - Modules Edit ]---------------------------------------------- *|
+\* -------------------------------------------------------------------------- */
+$checkPermission="modules_edit";
 include("template.inc.php");
 function content(){
  // acquire variables
@@ -27,7 +27,7 @@ function content(){
  }
  // sort alphabetically
  sort($directory_array);
- //
+ // loop modules directories
  foreach($directory_array as $module){
   $module_name=NULL;
   $module_version=NULL;

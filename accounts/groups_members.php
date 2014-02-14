@@ -1,13 +1,13 @@
 <?php
-/* ------------------------------------------------------------------------- *\
-|* -[ Accounts - Groups Members ]------------------------------------------- *|
-\* ------------------------------------------------------------------------- */
+/* -------------------------------------------------------------------------- *\
+|* -[ Accounts - Groups Members ]-------------------------------------------- *|
+\* -------------------------------------------------------------------------- */
 $checkPermission="groups_list";
 include("template.inc.php");
 function content(){
  $g_idGroup=$_GET['idGroup'];
  if(!isset($g_idGroup)){$g_idGroup=0;}
- $group=$GLOBALS['db']->queryUniqueObject("SELECT * FROM accounts_groups WHERE id='".$g_idGroup."'"); 
+ $group=$GLOBALS['db']->queryUniqueObject("SELECT * FROM accounts_groups WHERE id='".$g_idGroup."'");
 ?>
 
 <h3><?php echo $group->name; ?></h3>

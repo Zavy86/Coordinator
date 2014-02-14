@@ -9,7 +9,6 @@ global $dir;                  // base path resource
 global $alert;                // base path resource
 global $locale;               // array with translation
 include("../config.inc.php"); // Include the configuration file
-include("alerts.inc.php");    // Include the alerts
 include("html.class.php");    // Include the html class
 include("db.class.php");      // Include the database class
 // load core translation file

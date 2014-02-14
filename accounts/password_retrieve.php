@@ -1,7 +1,7 @@
 <?php
-/* ------------------------------------------------------------------------- *\
-|* -[ Accounts - Password Retrieve ]---------------------------------------- *|
-\* ------------------------------------------------------------------------- */
+/* -------------------------------------------------------------------------- *\
+|* -[ Accounts - Password Retrieve ]----------------------------------------- *|
+\* -------------------------------------------------------------------------- */
 include("../core/api.inc.php");
 $html->header("Password retrieve",NULL,FALSE);
 ?>
@@ -20,7 +20,7 @@ $html->header("Password retrieve",NULL,FALSE);
    <input type="submit" class="btn btn-warning" value="Ripristina password">
   </div>
  </div>
- 
+
 </form>
 
 <script type="text/javascript">

@@ -1,7 +1,7 @@
 <?php
-/* ------------------------------------------------------------------------- *\
-|* -[ Accounts - Password Reset ]------------------------------------------- *|
-\* ------------------------------------------------------------------------- */
+/* -------------------------------------------------------------------------- *\
+|* -[ Accounts - Password Reset ]-------------------------------------------- *|
+\* -------------------------------------------------------------------------- */
 include("../core/api.inc.php");
 $html->header("Account request",NULL,FALSE);
 // acquire variables
@@ -36,19 +36,19 @@ if($ldap){
 <form class="form-horizontal" action="submit.php?act=ldap_account_create" method="post">
 
  <p>Benvenuto, compila il seguente modulo per procedere alla creazione del tuo account:</p><br>
- 
+
  <div class="control-group">
   <label class="control-label" for="iName">Account</label>
   <div class="controls"><input type="text" id="iLdapUsername" class="input-xlarge" name="ldapUsername" value="<?php echo $g_account;?>" <?php if($g_account<>NULL){echo "readonly";} ?>></div>
  </div>
- 
+
  <?php /*
  <div class="control-group">
   <label class="control-label" for="iName">Password</label>
   <div class="controls"><input type="password" id="iLdapPassword" class="input-xlarge" name="ldapPassword" placeholder="Password attuale"></div>
  </div>
  */ ?>
- 
+
  <div class="control-group">
   <label class="control-label" for="iName">Indirizzo e-mail</label>
   <div class="controls"><input type="text" id="iAccount" class="input-xlarge" name="account" placeholder="Indirizzo e-mail" value="<?php echo $ldap_mail;?>"></div>
@@ -58,12 +58,12 @@ if($ldap){
   <label class="control-label" for="iName">Cognome</label>
   <div class="controls"><input type="text" id="iLastName" class="input-xlarge" name="lastname" placeholder="Cognome" value="<?php echo $ldap_lastname;?>"></div>
  </div>
- 
+
  <div class="control-group">
   <label class="control-label" for="iName">Nome</label>
   <div class="controls"><input type="text" id="iFirstName" class="input-xlarge" name="firstname" placeholder="Nome" value="<?php echo $ldap_firsname;?>"></div>
  </div>
- 
+
  <div class="control-group">
   <label class="control-label">Societ&agrave;</label>
   <div class="controls">
@@ -87,7 +87,7 @@ if($ldap){
    <input type="submit" class="btn btn-primary" value="Continua">
   </div>
  </div>
- 
+
 </form>
 
 <script type="text/javascript">
