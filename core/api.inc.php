@@ -632,10 +632,10 @@ function api_sexName($idSex,$lang=""){
 // @param $idAccount : ID of the account
 function api_accountAvatar($idAccount=NULL){
  if($idAccount==NULL){$idAccount=$_SESSION['account']->id;}
- if(file_exists("../uploads/accounts/avatars/avatar_".$idAccount.".jpg")){
-  return "../uploads/accounts/avatars/avatar_".$idAccount.".jpg";
+ if(file_exists("../uploads/accounts/avatar_".$idAccount.".jpg")){
+  return "../uploads/accounts/avatar_".$idAccount.".jpg";
  }else{
-  return $GLOBALS['dir']."uploads/accounts/avatars/avatar.jpg";
+  return $GLOBALS['dir']."uploads/accounts/avatar.jpg";
  }
 }
 
