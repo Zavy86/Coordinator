@@ -10,6 +10,7 @@
 
  <!-- html.class.php -->
  <text key="core-menu-dashboard">Dashboard</text>
+ <text key="core-menu-admin">Other modules</text>
  <text key="core-menu-accounts">Accounts</text>
  <text key="core-menu-statistics">Statistics</text>
  <text key="core-menu-settings">Settings</text>

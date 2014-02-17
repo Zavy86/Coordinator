@@ -98,6 +98,8 @@ public function header($title="",$nav="dashboard",$navbar=TRUE){
       <li<?php if($nav=="dashboard"){echo " class=\"active\"";} ?>><a href="<?php echo $GLOBALS['dir']."dashboard/index.php";?>"><?php echo api_text("core-menu-dashboard"); ?></a></li>
 
       <?php
+       // admin menu shortcut array
+       $admin_menu_array=array();
        // acquire main menu
        $menus=$GLOBALS['db']->query("SELECT * FROM settings_menus WHERE idMenu='1' ORDER BY position ASC");
        while($menu=$GLOBALS['db']->fetchNextObject($menus)){
@@ -121,7 +123,20 @@ public function header($title="",$nav="dashboard",$navbar=TRUE){
           echo "</ul>\n";
          }
          echo "</li>\n";
+        }elseif($_SESSION['account']->typology==1){
+         $admin_menu_array[]=$menu;
         }
+       }
+       // show admin menu shortcut
+       if($_SESSION['account']->typology==1 && count($admin_menu_array)>0){
+        echo "<li class='dropdown'><a href='#' class='dropdown-toggle' data-toggle='dropdown'>";
+        echo api_text("core-menu-admin")." <b class='caret'></b></a>\n";
+         echo "<ul class='dropdown-menu'>\n";
+         foreach($admin_menu_array as $menu){
+          echo "<li><a href='".$GLOBALS['dir'].$menu->module."/".$menu->url."'>".stripslashes($menu->menu)."</a></li>";
+         }
+         echo "</ul>\n";
+        echo "</li>\n";
        }
       ?>
 

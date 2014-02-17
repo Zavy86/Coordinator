@@ -10,6 +10,7 @@
 
  <!-- html.class.php -->
  <text key="core-menu-dashboard">Bacheca</text>
+ <text key="core-menu-admin">Altri moduli</text>
  <text key="core-menu-accounts">Account</text>
  <text key="core-menu-statistics">Statistiche</text>
  <text key="core-menu-settings">Impostazioni</text>
