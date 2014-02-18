@@ -692,7 +692,7 @@ function api_checkAccountCompany($idCompany,$idAccount=NULL){
 // @param $class_li          : Class for pagination ul li
 // @param $class_li_active   : Class for pagination ul li of current page
 // @param $class_li_disabled : Class for pagination ul li of disabled pages
-function api_pagination($recordsCount=0,$recordsLimit=10,$currentPage=1,$url="?",$class_div="pagination",$class_ul="",$class_li="",$class_li_active="active",$class_li_disabled="disabled"){
+function api_pagination($recordsCount=0,$recordsLimit=10,$currentPage=1,$url="?",$class_div="pagination-small pagination-right",$class_ul="",$class_li="",$class_li_active="active",$class_li_disabled="disabled"){
  if($recordsCount>0){
   $adjacents="2";
   if(substr($url,-1)<>"?"&&substr($url,-1)<>"&"){
@@ -703,7 +703,7 @@ function api_pagination($recordsCount=0,$recordsLimit=10,$currentPage=1,$url="?"
   $lastpage=ceil($recordsCount/$recordsLimit);
   $lpm1=$lastpage-1;
   if($lastpage>1){
-   $pagination="<div class='".$class_div."'>\n";
+   $pagination="<div class='pagination ".$class_div."'>\n";
    $pagination.="<ul class='".$class_ul."'>\n";
    if($currentPage>1){
     $pagination.= "<li class='".$class_li."'><a href='".$url."p=".$prev."'>&laquo;</a></li>";
