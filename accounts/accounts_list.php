@@ -10,23 +10,20 @@ function content(){
  if(!isset($g_idCompany)){$g_idCompany=NULL;}
  $g_orderField=$_GET['of'];
  $g_orderMode=$_GET['om'];
+ // build table
+ $table=new str_table(api_text("list-tr-unvalued"),TRUE);
  // build table header
- $th_array=array(
-  api_tableHeader("&nbsp;",NULL,"16"),
-  api_tableHeader(api_text("accounts_list-th-name"),"nowarp",NULL,"name"),
-  api_tableHeader(api_text("accounts_list-th-typology"),"nowarp",NULL,"typology"),
-  api_tableHeader(api_text("accounts_list-th-company"),"nowarp",NULL,"idCompany"),
-  api_tableHeader(api_text("accounts_list-th-account"),NULL,"100%","account"),
-  api_tableHeader(api_text("accounts_list-th-lastAccess"),"nowarp",NULL,"lastLogin")
- );
+ $table->addHeader("&nbsp;",NULL,"16");
+ $table->addHeader(api_text("accounts_list-th-name"),"nowarp",NULL,"name");
+ $table->addHeader(api_text("accounts_list-th-typology"),"nowarp",NULL,"typology");
+ $table->addHeader(api_text("accounts_list-th-company"),"nowarp",NULL,"idCompany");
+ $table->addHeader(api_text("accounts_list-th-account"),NULL,"100%","account");
+ $table->addHeader(api_text("accounts_list-th-lastAccess"),"nowarp",NULL,"lastLogin");
  // build query
  $query_where="1";
  if($g_idCompany<>NULL){$query_where="idCompany='".$g_idCompany."'";}
- // order
- $query_order_field=$g_orderField;
- if(!$query_order_field){$query_order_field="idCompany ASC,typology ASC,name ASC,account";$g_orderMode=1;}
- if($g_orderMode==1){$query_order_mode=" ASC";}else{$query_order_mode=" DESC";}
- $query_order=" ORDER BY ".$query_order_field.$query_order_mode;
+ // query order
+ $query_order=api_queryOrder("idCompany ASC,typology ASC,name ASC,account ASC");
  // execute query
  $accounts=$GLOBALS['db']->query("SELECT * FROM accounts_accounts WHERE ".$query_where.$query_order);
  while($account=$GLOBALS['db']->fetchNextObject($accounts)){
@@ -38,18 +35,17 @@ function content(){
   }
   // make company name
   if($account->idCompany>0){$company=api_companyName($account->idCompany);}else{$company="<i>".api_text("accounts_list-td-CompanyNotAssigned")."</i>";}
-  // build table data
-  $td_array=array();
-  $td_array[]=api_tableField("<a href=\"accounts_edit.php?id=".$account->id."\">".api_icon('icon-edit')."</a>","nowarp");
-  $td_array[]=api_tableField(stripslashes($account->name),"nowarp");
-  $td_array[]=api_tableField($typology,"nowarp");
-  $td_array[]=api_tableField($company,"nowarp");
-  $td_array[]=api_tableField(stripslashes($account->account),"nowarp");
-  $td_array[]=api_tableField(api_timestampFormat($account->lastLogin,TRUE),"nowarp");
-  // build group table row
-  $tr_array[]=api_tableRow($td_array);
+  // build table row
+  $table->addRow();
+  // build table fields
+  $table->addField("<a href=\"accounts_edit.php?id=".$account->id."\">".api_icon('icon-edit')."</a>","nowarp");
+  $table->addField(stripslashes($account->name),"nowarp");
+  $table->addField($typology,"nowarp");
+  $table->addField($company,"nowarp");
+  $table->addField(stripslashes($account->account),"nowarp");
+  $table->addField(api_timestampFormat($account->lastLogin,TRUE),"nowarp");
  }
  // show table
- api_table($th_array,$tr_array,api_text("list-tr-unvalued"),TRUE);
+ $table->render();
 }
 ?>
