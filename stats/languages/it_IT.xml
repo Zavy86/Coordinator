@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<locale language="EN">
+
+ <!-- template.inc.php -->
+ <text key="module-title">Statistiche</text>
+ <text key="nav-servers">Servers</text>
+
+</locale>
