@@ -19,7 +19,7 @@ if(api_baseName()=="notifications_send.php"){
 // show navigation tab
 $nav->render();
 // check permissions before displaying module
-if($checkPermission==NULL){content();}else{if(api_checkPermission("dashboard",$checkPermission,TRUE)){content();}}
+if($checkPermission==NULL){content();}else{if(api_checkPermission($module_name,$checkPermission,TRUE)){content();}}
 // show footer
 $html->footer();
 ?>
