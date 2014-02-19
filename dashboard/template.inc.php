@@ -2,18 +2,22 @@
 /* ------------------------------------------------------------------------- *\
 |* -[ Dashboard - Template ]------------------------------------------------ *|
 \* ------------------------------------------------------------------------- */
+include("module.inc.php");
+// include core api functions
 include("../core/api.inc.php");
+// if exist include module api functions
+if(file_exists("api.inc.php")){include("api.inc.php");}
 // show header
-$html->header("Bacheca","dashboard");
+$html->header(api_text("module-title"),$module_name);
 // build navigation tab
-$nt_array=array();
-$nt_array[]=api_navigationTab(api_text("notifications"),"notifications_list.php?s=1");
-$nt_array[]=api_navigationTab(api_text("archived-notifications"),"notifications_list.php?s=2");
+$nav=new str_navigation();
+$nav->addTab(api_text("nav-notifications"),"notifications_list.php?s=1");
+$nav->addTab(api_text("nav-archived-notifications"),"notifications_list.php?s=2");
 if(api_baseName()=="notifications_send.php"){
- $nt_array[]=api_navigationTab(api_text("send-notifications"),"notifications_send.php");
+ $nav->addTab(api_text("nav-send-notifications"),"notifications_send.php");
 }
 // show navigation tab
-api_navigation($nt_array);
+$nav->render();
 // check permissions before displaying module
 if($checkPermission==NULL){content();}else{if(api_checkPermission("dashboard",$checkPermission,TRUE)){content();}}
 // show footer

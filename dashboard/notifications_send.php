@@ -5,30 +5,26 @@
 $checkPermission="notifications_send";
 include("template.inc.php");
 function content(){
- // form fields array
- $ff_array=array();
-  $fo_array=array();
-  $fo_array[]=api_formFieldOption(1,api_text("fo-notice"),TRUE);
-  $fo_array[]=api_formFieldOption(2,api_text("fo-action"));
- $ff_array[]=api_formField("radio","typology",api_text("ff-typology"),NULL,"inline",NULL,$fo_array);
-  $fo_array=array();
-  $fo_array[]=api_formFieldOption(1,api_text("fo-user"),TRUE);
-  $fo_array[]=api_formFieldOption(2,api_text("fo-group"));
-  if(api_checkPermission("dashboard","notifications_send_all")){
-   $fo_array[]=api_formFieldOption(3,api_text("fo-all"));
-  }
- $ff_array[]=api_formField("radio","to",api_text("ff-recipient"),NULL,"inline",NULL,$fo_array);
- $ff_array[]=api_formField("hidden","idAccountTo",api_text("ff-user"),NULL,"input-xlarge");
- $ff_array[]=api_formField("hidden","idGroup",api_text("ff-group"),NULL,"input-xlarge");
- $ff_array[]=api_formField("text","subject",api_text("ff-subject"),NULL,"input-xxlarge",api_text("ff-subject-placeholder"));
- $ff_array[]=api_formField("textarea","message",api_text("ff-message"),NULL,"input-xxlarge",api_text("ff-message-placeholder"));
- $ff_array[]=api_formField("text","link",api_text("ff-link"),NULL,"input-xxlarge",api_text("ff-link-placeholder"));
- // form controls array
- $fc_array=array();
- $fc_array[]=api_formControl("submit",api_text("fc-submit"));
- $fc_array[]=api_formControl("button",api_text("fc-cancel"),NULL,"notifications_list.php?s=1");
- // print form
- api_form($ff_array,$fc_array,"submit.php?act=notification_send","post","notification");
+ // build form
+ $form=new str_form("submit.php?act=notification_send","post","notification");
+ $form->addField("radio","typology",api_text("send-ff-typology"),NULL,"inline");
+ $form->addFieldOption(1,api_text("send-fo-notice"),TRUE);
+ $form->addFieldOption(2,api_text("send-fo-action"));
+ $form->addField("radio","to",api_text("send-ff-recipient"),NULL,"inline");
+ $form->addFieldOption(1,api_text("send-fo-user"),TRUE);
+ $form->addFieldOption(2,api_text("send-fo-group"));
+ if(api_checkPermission("dashboard","notifications_send_all")){
+  $form->addFieldOption(3,api_text("send-fo-all"));
+ }
+ $form->addField("hidden","idAccountTo",api_text("send-ff-user"),NULL,"input-xlarge");
+ $form->addField("hidden","idGroup",api_text("send-ff-group"),NULL,"input-xlarge");
+ $form->addField("text","subject",api_text("send-ff-subject"),NULL,"input-xxlarge",api_text("send-ff-subject-placeholder"));
+ $form->addField("textarea","message",api_text("send-ff-message"),NULL,"input-xxlarge",api_text("send-ff-message-placeholder"));
+ $form->addField("text","link",api_text("send-ff-link"),NULL,"input-xxlarge",api_text("send-ff-link-placeholder"));
+ $form->addControl("submit",api_text("send-fc-submit"));
+ $form->addControl("button",api_text("send-fc-cancel"),NULL,"notifications_list.php?s=1");
+ // show form
+ $form->render();
 ?>
 <script type="text/javascript">
  $(document).ready(function(){
@@ -48,7 +44,7 @@ function content(){
   });
   // select2 idAccountTo
   $("input[name='idAccountTo']").select2({
-   placeholder:"<?php echo api_text("ff-user-placeholder"); ?>",
+   placeholder:"<?php echo api_text("send-ff-user-placeholder"); ?>",
    minimumInputLength:2,
    ajax:{
     url:"../accounts/accounts_json.inc.php",
@@ -59,7 +55,7 @@ function content(){
   });
   // select2 idGroup
   $("input[name='idGroup']").select2({
-   placeholder:"Oppure seleziona un gruppo",
+   placeholder:"<?php echo api_text("send-ff-group-placeholder"); ?>",
    ajax:{
     url:"../accounts/groups_json.inc.php",
     dataType:'json',
