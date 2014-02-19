@@ -97,15 +97,17 @@ function module_setup(){
   $query="INSERT INTO settings_modules (module,version,title,description) VALUES
    ('".$module_name."','1.0.0','".$module_title."','".$module_description."')";
   $GLOBALS['db']->execute($query);
-  // get maximum position for main menu
-  $position=$GLOBALS['db']->countOf("settings_menus","idMenu='1'");
-  $position++;
-  // insert module into main menu
-  $query="INSERT INTO settings_menus
-   (idMenu,menu,module,url,position) VALUES
-   ('1','".$module_title."','".$module_name."','','".$position."')";
-  // execute query
-  $GLOBALS['db']->execute($query);
+  if($module_create_menu){
+   // get maximum position for main menu
+   $position=$GLOBALS['db']->countOf("settings_menus","idMenu='1'");
+   $position++;
+   // insert module into main menu
+   $query="INSERT INTO settings_menus
+    (idMenu,menu,module,url,position) VALUES
+    ('1','".$module_title."','".$module_name."','','".$position."')";
+   // execute query
+   $GLOBALS['db']->execute($query);
+  }
   // execute setup queries by mysql dump
   if(file_exists($module_path."queries/setup.sql")){api_restoreMysqlDump($module_path."queries/setup.sql");}
   // redirect
@@ -162,8 +164,10 @@ function module_uninstall(){
  if(file_exists($module_path."module.inc.php")){
   // include module informations
   include($module_path."module.inc.php");
-  // delete module from menus
-  $GLOBALS['db']->execute("DELETE FROM settings_menus WHERE module='".$module_name."'");
+  if($module_create_menu){
+   // delete module from menus
+   $GLOBALS['db']->execute("DELETE FROM settings_menus WHERE module='".$module_name."'");
+  }
   // delete module from permissions
   $permissions=$GLOBALS['db']->query("SELECT * FROM settings_permissions WHERE module='".$module_name."'");
   while($permission=$GLOBALS['db']->fetchNextObject($permissions)){
