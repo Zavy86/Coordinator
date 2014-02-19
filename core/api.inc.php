@@ -2,15 +2,16 @@
 
 /* -[ Global parameter ]----------------------------------------------------- */
 session_start();
-global $debug;                // debug variable
-global $html;                 // html structure resource
-global $db;                   // database resource
-global $dir;                  // base path resource
-global $alert;                // base path resource
-global $locale;               // array with translation
-include("../config.inc.php"); // Include the configuration file
-include("html.class.php");    // Include the html class
-include("db.class.php");      // Include the database class
+global $debug;                  // debug variable
+global $html;                   // html structure resource
+global $db;                     // database resource
+global $dir;                    // base path resource
+global $alert;                  // base path resource
+global $locale;                 // array with translation
+include("../config.inc.php");   // include the configuration file
+include("html.class.php");      // include the html class
+include("structure.class.php"); // include structure classes
+include("db.class.php");        // include the database class
 // load core translation file
 api_loadLocaleFile("../");
 // load module translation file
@@ -1064,6 +1065,27 @@ function api_restoreMysqlDump($file){
  }
  return TRUE;
 }
+
+
+
+/* -[ Query Order ]---------------------------------------------------------- */
+// @string $default : default order fields and methods
+function api_queryOrder($default=NULL){
+ // acquire variables
+ $query_order_field=$_GET['of'];
+ $query_order_mode=$_GET['om'];
+ if(!$query_order_field){
+  return " ORDER BY ".$default;
+ }else{
+  if($query_order_mode==1){$query_order_mode=" ASC";}else{$query_order_mode=" DESC";}
+  return " ORDER BY ".$query_order_field.$query_order_mode;
+ }
+}
+
+
+
+
+
 
 
 
