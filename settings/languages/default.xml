@@ -13,7 +13,14 @@
  <text key="menuMoved">The menu has been moved</text>
  <text key="menuDeleted">The menu has been deleted</text>
 
- <!-- modules_edit.inc.php -->
+ <!-- template.inc.php -->
+ <text key="module-title">Settings</text>
+ <text key="nav-settings">Settings</text>
+ <text key="nav-modules">Modules</text>
+ <text key="nav-permissions">Permissions</text>
+ <text key="nav-menus">Menus</text>
+
+ <!-- modules_edit.php -->
  <text key="modules-th-module">Module</text>
  <text key="modules-th-version">Version</text>
  <text key="modules-th-description">Description</text>
@@ -23,5 +30,20 @@
  <text key="modules-td-uninstall-confirm">Are you sure you want to uninstall this module?\nAll the tables and their data will be deleted</text>
  <text key="modules-td-remove">Remove</text>
  <text key="modules-td-remove-confirm">Are you sure you want to remove this module?\nThe module directory will be deleted</text>
+
+ <!-- menu_edit.php -->
+ <text key="menus-th-menu">Menu</text>
+ <text key="menus-th-module">Module</text>
+ <text key="menus-ff-parent">Parent menu</text>
+ <text key="menus-ff-menu">Menu</text>
+ <text key="menus-ff-menu-placeholder">Label of menu</text>
+ <text key="menus-ff-module">Module</text>
+ <text key="menus-ff-module-placeholder">Module directory name</text>
+ <text key="menus-ff-url">URL</text>
+ <text key="menus-ff-url-placeholder">Path of file to load</text>
+ <text key="menus-fc-submit">Save</text>
+ <text key="menus-fc-cancel">Cancel</text>
+ <text key="menus-fc-delete">Delete</text>
+ <text key="menus-fc-delete-confirm">Are you sure you want to delete this menu?</text>
 
 </locale>

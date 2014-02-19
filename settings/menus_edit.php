@@ -12,27 +12,21 @@ function content(){
  if(!$g_idMenu){$g_idMenu=0;}
  if($g_id>0){$selectedMenu=$GLOBALS['db']->queryUniqueObject("SELECT * FROM settings_menus WHERE id='".$g_id."'");}
  if($g_idMenu>0){$parentMenu=$GLOBALS['db']->queryUniqueObject("SELECT * FROM settings_menus WHERE id='".$g_idMenu."'");}
-?>
-<div class="row-fluid">
-<div class="span6">
-<?php
+ // split page
+ $GLOBALS['html']->split_open();
+ $GLOBALS['html']->split_span(6);
  if($parentMenu-id>0){echo "<h5><a href='menus_edit.php?idMenu=".$parentMenu->idMenu."'>&laquo;</a> ".stripslashes($parentMenu->menu)."</h5>\n";}
-?>
-<table class="table table-striped table-hover table-condensed">
- <thead>
-  <tr>
-   <th width='16'>&nbsp;</th>
-   <th width='32'>&nbsp;</th>
-   <th class='nowarp'>Menu</th>
-   <th width='100%'>Modulo</th>
-   <th width='16'>&nbsp;</th>
-  </tr>
- </thead>
- <tbody>
-<?php
+ // build table
+ $table=new str_table(api_text("menus-tr-unvalued"));
+ $table->addHeader("&nbsp;",NULL,"16");
+ $table->addHeader("&nbsp;",NULL,"16");
+ $table->addHeader(api_text("menus-th-menu"),"nowarp");
+ $table->addHeader(api_text("menus-th-module"),NULL,"100%");
+ $table->addHeader("&nbsp;",NULL,"16");
+
  // get total menu entry
  $totMenus=$GLOBALS['db']->countOf("settings_menus","idMenu='".$g_idMenu."'");
- //
+ // execute query
  $menus=$GLOBALS['db']->query("SELECT * FROM settings_menus WHERE idMenu='".$g_idMenu."' ORDER BY position ASC,id ASC");
  while($menu=$GLOBALS['db']->fetchNextObject($menus)){
   // count items
@@ -42,92 +36,59 @@ function content(){
   if($menu->position>1){
    $position="<a href='submit.php?act=menu_move_up&idMenu=".$menu->idMenu."&id=".$menu->id."'><i class='icon-arrow-up'></i></a>";
   }
-  if($menu->position<$totMenus){
+  if($menu->position>0 && $menu->position<$totMenus){
    $position.="<a href='submit.php?act=menu_move_down&idMenu=".$menu->idMenu."&id=".$menu->id."'><i class='icon-arrow-down'></i></a>";
   }
-  // show record
-  echo "<tr>\n";
-  if($count>0){
-   echo "<td class='nowarp'><a href='menus_edit.php?idMenu=".$menu->id."'><i class='icon-plus'></i></a></td>\n";
-  }else{
-   echo "<td class='nowarp'><i class='icon-minus'></i></td>\n";
-  }
+  // url
   if(strlen($menu->url)>0){$url="/".stripslashes($menu->url);}else{$url=NULL;}
-  echo "<td class='nowarp text-center'>".$position.$menu->position."</td>\n";
-  echo "<td class='nowarp'>".stripslashes($menu->menu)."</td>\n";
-  echo "<td class='nowarp'>".stripslashes($menu->module).$url."</td>\n";
-  echo "<td class='nowarp'><a href='menus_edit.php?idMenu=".$menu->idMenu."&id=".$menu->id."'><i class='icon-edit'></i></a></td>\n";
-  echo "</tr>\n";
+  // icon
+  $icon=api_icon('icon-minus');
+  if($count>0){$icon="<a href='menus_edit.php?idMenu=".$menu->id."'>".api_icon('icon-search')."</a>";}
+  // build table row
+  $table->addRow();
+  // build table fields
+  $table->addField($icon,"nowarp");
+  $table->addField($position,"nowarp text-center");
+  $table->addField(stripslashes($menu->menu),"nowarp");
+  $table->addField(stripslashes($menu->module).$url);
+  $table->addField("<a href='menus_edit.php?idMenu=".$menu->idMenu."&id=".$menu->id."'>".api_icon('icon-edit')."</i></a>","nowarp");
  }
-?>
- </tbody>
-</table>
-
-</div><!-- /span6 -->
-<div class="span6">
-
-<?php
- if($selectedMenu->id>0){echo "<center><h5>Modifica menu</h5></center><br>\n";}
-  else{echo "<center><h5>Aggiungi menu</h5></center><br>\n";}
-?>
-
-<form class="form-horizontal" action="<?php echo "submit.php?act=menu_save&id=".$selectedMenu->id;?>" method="post">
-
- <div class="control-group">
-  <label class="control-label">Categoria padre</label>
-  <div class="controls">
-   <select name="idMenu">
-    <?php
-     $menus=$GLOBALS['db']->query("SELECT * FROM settings_menus WHERE id<>'".$selectedMenu->id."' ORDER BY idMenu ASC,position ASC,id ASC");
-     while($menu=$GLOBALS['db']->fetchNextObject($menus)){
-      if($menu->idMenu==0 || $menu->idMenu==1){
-       echo "<option value='".$menu->id."'";
-       if($selectedMenu->idMenu>0){
-        if($menu->id==$selectedMenu->idMenu){echo " selected";}
-       }else{
-        if($menu->id==$g_idMenu){echo " selected";}
-       }
-       echo ">".stripslashes($menu->menu);
-       echo "</option>\n";
-      }
-     }
-    ?>
-   </select>
-  </div>
- </div>
-
- <div class="control-group">
-  <label class="control-label" for="menu">Nome</label>
-  <div class="controls"><input type="text" id="menu" class="input-large" name="menu" value="<?php echo stripslashes($selectedMenu->menu);?>"></div>
- </div>
-
- <div class="control-group">
-  <label class="control-label" for="module">Modulo</label>
-  <div class="controls"><input type="text" id="module" class="input-large" name="module" value="<?php echo stripslashes($selectedMenu->module);?>"></div>
- </div>
-
- <div class="control-group">
-  <label class="control-label" for="url">URL</label>
-  <div class="controls"><input type="text" id="url" class="input-xlarge" name="url" value="<?php echo stripslashes($selectedMenu->url);?>"></div>
- </div>
-
- <div class="control-group">
-  <div class="controls">
-   <input type='submit' class='btn btn-primary' name='submit' value='Salva menu'>
-   <?php
-   if($selectedMenu->id>0){
-    $count=$GLOBALS['db']->countOf("settings_menus","idMenu='".$selectedMenu->id."'");
-    if($count==0){
-     echo "<a href='submit.php?act=menu_delete&idMenu=".$selectedMenu->idMenu."&id=".$selectedMenu->id."' class='btn btn-danger' onClick=\"return confirm('Sei sicuro di voler eliminare questa voce di menu?')\">Elimina</a>\n";
-    }
-    echo "<a href='menus_edit.php?idMenu=".$selectedMenu->idMenu."' class='btn'>Annulla</a>\n";
+ // show table
+ $table->render();
+ // split page
+ $GLOBALS['html']->split_span(6);
+ // edit form
+ if($selectedMenu->id>0){echo "<center><h5>Modifica menu</h5></center><br>\n\n";}
+  else{echo "<center><h5>Aggiungi menu</h5></center><br>\n\n";}
+ // build form
+ $form=new str_form("submit.php?act=menu_save&id=".$selectedMenu->id,"post","menus");
+ $form->addField("select","idMenu",api_text("menus-ff-parent"));
+ $menus=$GLOBALS['db']->query("SELECT * FROM settings_menus WHERE id<>'".$selectedMenu->id."' ORDER BY idMenu ASC,position ASC,id ASC");
+ while($menu=$GLOBALS['db']->fetchNextObject($menus)){
+  if($menu->idMenu==0 || $menu->idMenu==1){
+   $selected=FALSE;
+   if($selectedMenu->idMenu>0){
+    if($menu->id==$selectedMenu->idMenu){$selected=TRUE;}
+   }else{
+    if($menu->id==$g_idMenu){$selected=TRUE;}
    }
-   ?>
-  </div>
- </div>
-
-</form>
-
-</div><!-- /span6 -->
-</div><!-- /row-fluid -->
-<?php } ?>
+   $form->addFieldOption($menu->id,stripslashes($menu->menu),$selected);
+  }
+ }
+ $form->addField("text","menu",api_text("menus-ff-menu"),stripslashes($selectedMenu->menu),NULL,api_text("menus-ff-menu-placeholder"));
+ $form->addField("text","module",api_text("menus-ff-module"),stripslashes($selectedMenu->module),NULL,api_text("menus-ff-module-placeholder"));
+ $form->addField("text","url",api_text("menus-ff-url"),stripslashes($selectedMenu->url),NULL,api_text("menus-ff-url-placeholder"));
+ $form->addControl("submit",api_text("menus-fc-submit"));
+ if($selectedMenu->id>0){
+  if($GLOBALS['db']->countOf("settings_menus","idMenu='".$selectedMenu->id."'")==0){
+   $form->addControl("button",api_text("menus-fc-delete"),"btn-danger","submit.php?act=menu_delete&idMenu=".$selectedMenu->idMenu."&id=".$selectedMenu->id,api_text("menus-fc-delete-confirm"));
+  }
+  $form->addControl("button",api_text("menus-fc-cancel"),NULL,"menus_edit.php?idMenu=".$selectedMenu->idMenu);
+ }
+ // show form
+ $form->render();
+ // split page
+ $GLOBALS['html']->split_span(6);
+ $GLOBALS['html']->split_close();
+}
+?>

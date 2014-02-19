@@ -53,21 +53,14 @@ function content(){
   }
   $modules_array[]=$module_obj;
  }
- // build table header
- $th_array=array(
-  api_tableHeader(api_text("modules-th-module"),"nowarp",NULL,"created"),
-  api_tableHeader(api_text("modules-th-version"),"nowarp",NULL,"created"),
-  api_tableHeader(api_text("modules-th-description"),NULL,"100%","created"),
-  api_tableHeader("&nbsp;","nowarp",NULL,"created")
- );
+ // build table
+ $table=new str_table(api_text("modules-tr-no-results"),TRUE);
+ $table->addHeader(api_text("modules-th-module"),"nowarp");
+ $table->addHeader(api_text("modules-th-version"),"nowarp");
+ $table->addHeader(api_text("modules-th-description"),NULL,"100%");
+ $table->addHeader("&nbsp;","nowarp",NULL);
  // loop modules
  foreach($modules_array as $module){
-  // build table fields
-  $td_array=array(
-   api_tableField($module->name,"nowarp"),
-   api_tableField($module->version,"nowarp"),
-   api_tableField($module->description)
-  );
   // switch actions
   switch($module->action){
    case "setup":
@@ -83,11 +76,15 @@ function content(){
     $tr_class=NULL;
     $td="<a href='submit.php?act=module_uninstall&module=".$module->name."' onClick=\"return confirm('".api_text("modules-td-uninstall-confirm")."');\">".api_text("modules-td-uninstall")."</a>";
   }
-  $td_array[]=api_tableField($td,"nowarp");
   // build table row
-  $tr_array[]=api_tableRow($td_array,$tr_class);
+  $table->addRow($tr_class);
+  // build table fields
+  $table->addField($module->name,"nowarp");
+  $table->addField($module->version,"nowarp");
+  $table->addField($module->description);
+  $table->addField($td,"nowarp");
  }
  // show table
- api_Table($th_array,$tr_array,api_text("modules-tr-no-results"),TRUE);
+ $table->render();
 }
 ?>
