@@ -10,85 +10,73 @@ function content(){
  if(!isset($g_id)){$g_id=0;}
  // get account object
  $account=$GLOBALS['db']->queryUniqueObject("SELECT * FROM accounts_accounts WHERE id='".$g_id."'");
-
-?>
-<div class="row-fluid">
-<div class="span6">
-<?php
- // form fields array
- $ff_array=array();
- $ff_array[]=api_formField("text","name",api_text("accounts_edit-ff-name"),stripslashes($account->name),"input-large",api_text("accounts_edit-ff-name-placeholder"));
+ // split window
+ $GLOBALS['html']->split_open();
+ $GLOBALS['html']->split_span(6);
+ // build form
+ $form=new str_form("submit.php?act=account_save&id=".$account->id,"post","accounts");
+ $form->addField("text","name",api_text("accounts_edit-ff-name"),stripslashes($account->name),"input-large",api_text("accounts_edit-ff-name-placeholder"));
  // root checker
  if($account->id<>1){
-  $ff_array[]=api_formField("text","account",api_text("accounts_edit-ff-account"),stripslashes($account->account),"input-xlarge",api_text("accounts_edit-ff-account-placeholder"));
-   $fo_array=array(
-    api_formFieldOption(0,api_text("accounts_edit-fo-disabled"),($account->typology==0)?TRUE:FALSE),
-    api_formFieldOption(1,api_text("accounts_edit-fo-administrator"),($account->typology==1)?TRUE:FALSE),
-    api_formFieldOption(2,api_text("accounts_edit-fo-user"),($account->typology==2)?TRUE:FALSE)
-   );
-  $ff_array[]=api_formField("select","typology",api_text("accounts_edit-ff-typology"),NULL,"input-medium",NULL,$fo_array);
-   $fo_array=array();
-   $fo_array[]=api_formFieldOption("default","Default");
-   $dir="../languages/";
-   if(is_dir($dir)){
-    if($dh=opendir($dir)){
-     while(($file=readdir($dh))!==false){
-      if(substr($file,-4)==".xml" && $file<>"default.xml"){
-       $language=substr($file,0,-4);
-       $fo_array[]=api_formFieldOption($language,$language,($language==$account->language)?TRUE:FALSE);
-      }
+  $form->addField("text","account",api_text("accounts_edit-ff-account"),stripslashes($account->account),"input-xlarge",api_text("accounts_edit-ff-account-placeholder"));
+  $form->addField("select","typology",api_text("accounts_edit-ff-typology"),NULL,"input-medium");
+  $form->addFieldOption(0,api_text("accounts_edit-fo-disabled"),($account->typology==0)?TRUE:FALSE);
+  $form->addFieldOption(1,api_text("accounts_edit-fo-administrator"),($account->typology==1)?TRUE:FALSE);
+  $form->addFieldOption(2,api_text("accounts_edit-fo-user"),($account->typology==2)?TRUE:FALSE);
+  $form->addField("select","language",api_text("accounts_edit-ff-language"),NULL,"input-medium",NULL,$fo_array);
+  $form->addFieldOption("default","Default");
+  $dir="../languages/";
+  if(is_dir($dir)){
+   if($dh=opendir($dir)){
+    while(($file=readdir($dh))!==false){
+     if(substr($file,-4)==".xml" && $file<>"default.xml"){
+      $language=substr($file,0,-4);
+      $form->addFieldOption($language,$language,($language==$account->language)?TRUE:FALSE);
      }
-     closedir($dh);
     }
+    closedir($dh);
    }
-  $ff_array[]=api_formField("select","language",api_text("accounts_edit-ff-language"),NULL,"input-medium",NULL,$fo_array);
-   $fo_array=array();
-   $fo_array[]=api_formFieldOption(0,api_text("accounts_edit-fo-CompanyNotAssigned"));
-   $companies=$GLOBALS['db']->query("SELECT * FROM accounts_companies ORDER BY company ASC,division ASC");
-   while($company=$GLOBALS['db']->fetchNextObject($companies)){
-    $fo_array[]=api_formFieldOption($company->id,$company->company." - ".$company->division,($company->id==$account->idCompany)?TRUE:FALSE);
-   }
-  $ff_array[]=api_formField("select","idCompany",api_text("accounts_edit-ff-company"),NULL,"input-large",NULL,$fo_array);
+  }
+  $form->addField("select","idCompany",api_text("accounts_edit-ff-company"),NULL,"input-large");
+  $form->addFieldOption(0,api_text("accounts_edit-fo-CompanyNotAssigned"));
+  $companies=$GLOBALS['db']->query("SELECT * FROM accounts_companies ORDER BY company ASC,division ASC");
+  while($company=$GLOBALS['db']->fetchNextObject($companies)){
+   $form->addFieldOption($company->id,$company->company." - ".$company->division,($company->id==$account->idCompany)?TRUE:FALSE);
+  }
  }
-
- // form controls array
- $fc_array=array();
- $fc_array[]=api_formControl("submit",api_text("accounts_edit-fc-save"));
- $fc_array[]=api_formControl("button",api_text("accounts_edit-fc-cancel"),NULL,"accounts_list.php");
+ $form->addControl("submit",api_text("accounts_edit-fc-save"));
+ $form->addControl("button",api_text("accounts_edit-fc-cancel"),NULL,"accounts_list.php");
  if($account->id>0 && api_checkPermission("accounts","accounts_delete")){
-  $fc_array[]=api_formControl("button",api_text("accounts_edit-fc-delete"),"btn-danger","submit.php?act=account_delete&id=".$account->id,api_text("accounts_edit-fc-delete-confirm"));
+  $form->addControl("button",api_text("accounts_edit-fc-delete"),"btn-danger","submit.php?act=account_delete&id=".$account->id,api_text("accounts_edit-fc-delete-confirm"));
  }
- // print form
- api_form($ff_array,$fc_array,"submit.php?act=account_save&id=".$account->id,"post","accounts");
-?>
-</div><!-- /span6 -->
-<div class="span6">
-<?php
+ // show form
+ $form->render();
+ // split window
+ $GLOBALS['html']->split_span(6);
  // if edit account show groups
  if($account->id>1){
-  // build table header
-  $th_array=array(
-   api_tableHeader(api_text("accounts_edit-th-group"),NULL,"100%"),
-   api_tableHeader(api_text("accounts_edit-th-role"),"nowarp"),
-   api_tableHeader("&nbsp;",NULL,"16")
-  );
+  // build table
+  $table=new str_table(api_text("list-tr-unvalued"));
+  // table headers
+  $table->addHeader(api_text("accounts_edit-th-group"),NULL,"100%");
+  $table->addHeader(api_text("accounts_edit-th-role"),"nowarp");
+  $table->addHeader("&nbsp;",NULL,"16");
   // execute query
   $query="SELECT accounts_groups.*,accounts_groups_join_accounts.idGrouprole FROM accounts_groups_join_accounts JOIN accounts_groups ON accounts_groups_join_accounts.idGroup=accounts_groups.id WHERE accounts_groups_join_accounts.idAccount='".$account->id."'";
   $groups=$GLOBALS['db']->query($query);
   while($group=$GLOBALS['db']->fetchNextObject($groups)){
    $name=$group->name;
    if($group->description){$name.=" (".$group->description.")";}
-   // build table data
-   $td_array=array();
-   $td_array[]=api_tableField($name);
-   $td_array[]=api_tableField(api_grouproleName($group->idGrouprole),"nowarp");
-   $td_array[]=api_tableField("<a href=\"submit.php?act=account_grouprole_delete&idAccount=".$account->id."&idGroup=".$group->id."\" onClick=\"return confirm('".api_text("accounts_edit-td-groupDelete-confirm")."');\">".api_icon('icon-trash')."</a>","text-center");
    // build group table row
-   $tr_array[]=api_tableRow($td_array);
+   $table->addRow();
+   // build table fields
+   $table->addField($name);
+   $table->addField(api_grouproleName($group->idGrouprole),"nowarp");
+   $table->addField("<a href=\"submit.php?act=account_grouprole_delete&idAccount=".$account->id."&idGroup=".$group->id."\" onClick=\"return confirm('".api_text("accounts_edit-td-groupDelete-confirm")."');\">".api_icon('icon-trash')."</a>","text-center");
   }
   // show table
-  api_table($th_array,$tr_array,api_text("list-tr-unvalued"));
-  // add group
+  $table->render();
+  // add group form
  ?>
  <form class="form-horizontal" action="submit.php?act=account_grouprole_add&id=<?php echo $account->id;?>" method="post" name="accounts_groups">
  <select class="span5" name="idGroup">
@@ -119,9 +107,10 @@ function content(){
   ?>
  </select>
  <button type="submit" name="account_grouprole_add" class="btn"><i class="icon-plus"></i></button>
-<?php } ?>
-</div><!-- /span6 -->
-</div><!-- /row-fluid -->
+<?php
+ }
+ $GLOBALS['html']->split_close();
+?>
 <script type="text/javascript">
  $(document).ready(function(){
   // validation

@@ -13,6 +13,13 @@
  <text key="menuMoved">Il menu è stato spostato</text>
  <text key="menuDeleted">Il menu è stato cancellato</text>
 
+ <!-- template.inc.php -->
+ <text key="module-title">Impostazioni</text>
+ <text key="nav-settings">Impostazioni</text>
+ <text key="nav-modules">Moduli</text>
+ <text key="nav-permissions">Permessi</text>
+ <text key="nav-menus">Menu</text>
+
  <!-- modules_edit.inc.php -->
  <text key="modules-th-module">Modulo</text>
  <text key="modules-th-version">Versione</text>
@@ -23,5 +30,20 @@
  <text key="modules-td-uninstall-confirm">Sei sicuro di voler disinstallare questo modulo?\nTutte le tabelle ed i relativi dati verranno eliminati</text>
  <text key="modules-td-remove">Elimina</text>
  <text key="modules-td-remove-confirm">Sei sicuro di voler rimuovere questo modulo?\nLa directory del modulo verrà eliminata</text>
+
+ <!-- menu_edit.php -->
+ <text key="menus-th-menu">Menu</text>
+ <text key="menus-th-module">Modulo</text>
+ <text key="menus-ff-parent">Menu padre</text>
+ <text key="menus-ff-menu">Menu</text>
+ <text key="menus-ff-menu-placeholder">Etichetta di menu</text>
+ <text key="menus-ff-module">Modulo</text>
+ <text key="menus-ff-module-placeholder">Directory del modulo</text>
+ <text key="menus-ff-url">URL</text>
+ <text key="menus-ff-url-placeholder">Percorso del file da caricare</text>
+ <text key="menus-fc-submit">Salva</text>
+ <text key="menus-fc-cancel">Annulla</text>
+ <text key="menus-fc-delete">Elimina</text>
+ <text key="menus-fc-delete-confirm">Sei sicuro di voler eliminare questo menu?</text>
 
 </locale>

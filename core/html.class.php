@@ -341,6 +341,59 @@ public function footer($wiki_link=NULL,$copyright=TRUE){
 
 <?php
 }
+
+
+
+
+ //private $current_split;
+ //protected $splits;
+
+ protected $split_open;
+ protected $split_columns;
+
+ protected $class;
+
+ /* -[ Construct ]----------------------------------------------------------- */
+ public function __construct(){
+  $this->split_open=FALSE;
+  $this->split_columns=0;
+ }
+
+ /* -[ Open ]---------------------------------------------------------------- */
+ // @string $class : splitting css class
+ function split_open($class=NULL){
+  echo "<!-- row-fluid -->\n";
+  echo "<div class='row-fluid ".$class."'>\n";
+ }
+
+ /* -[ Span ]---------------------------------------------------------------- */
+ // @string $columns : number of columns
+ // @string $class : span css class
+ function split_span($columns,$class=NULL){
+  if($columns<1 && $columns>12){return FALSE;}
+  if($this->split_open){
+   echo "\n </div><!-- /span".$this->columns." -->\n";
+  }else{
+   $this->split_open=TRUE;
+   $this->columns=$columns;
+  }
+  echo " <div class='span".$columns." ".$class."'>\n\n";
+ }
+
+ /* -[ Close ]--------------------------------------------------------------- */
+ function split_close(){
+  if($this->split_open){
+   echo "\n </div><!-- /span".$this->columns." -->\n";
+   $this->split_open=FALSE;
+  }
+  echo "</div><!-- /row-fluid -->\n\n";
+ }
+
+
+
+
+
+
 // /class
 }
 ?>

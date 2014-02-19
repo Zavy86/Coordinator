@@ -2,26 +2,20 @@
 /* -------------------------------------------------------------------------- *\
 |* -[ Stats - Template ]----------------------------------------------------- *|
 \* -------------------------------------------------------------------------- */
+include("module.inc.php");
+// include core api functions
 include("../core/api.inc.php");
-$html->header("Statistiche");
+// if exist include module api functions
+if(file_exists("api.inc.php")){include("api.inc.php");}
+// show header
+$html->header(api_text("module-title"),$module_name);
+// build navigation tab
+$nav=new str_navigation();
+$nav->addTab(api_text("nav-servers"),"stats_server.php");
+// show navigation tab
+$nav->render();
+// check permissions before displaying module
+if($checkPermission==NULL){content();}else{if(api_checkPermission($module_name,$checkPermission,TRUE)){content();}}
+// show footer
+$html->footer();
 ?>
-
-<div class="row-fluid">
-
- <!-- Navigation -->
- <ul class="nav nav-tabs">
-
-  <?php
-   echo "<li";if(api_baseName()=="stats_server.php"){echo " class='active'";}
-   if(!api_checkPermission("stats","stats_server")){echo " class='disabled'><a href='#'";}
-   else{echo "><a href='stats_server.php'";}
-   echo ">Server</a></li>";
-  ?>
-
- </ul>
-
-<?php if($checkPermission==NULL){content();}else{if(api_checkPermission("stats",$checkPermission,TRUE)){content();}} ?>
-
-</div><!-- /row -->
-
-<?php $html->footer(); ?>

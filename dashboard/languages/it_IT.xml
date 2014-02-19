@@ -7,36 +7,40 @@
  <text key="notificationSendError">Si è verificato un errore durante la compilazione della notifica</text>
 
  <!-- template.inc.php -->
- <text key="notifications">Notifiche</text>
- <text key="archived-notifications">Archivio notifiche</text>
- <text key="send-notifications">Invia una notifica</text>
+ <text key="module-title">Bacheca</text>
+ <text key="nav-notifications">Notifiche</text>
+ <text key="nav-archived-notifications">Archivio notifiche</text>
+ <text key="nav-send-notifications">Invia una notifica</text>
 
  <!-- notifications_list.php -->
- <text key="th-reception-date">Data ricezione</text>
- <text key="th-archived-date">Data Archiviazione</text>
- <text key="th-notification">Notifica</text>
- <text key="tr-no-results">Non è presente nessuna nuova notifica..</text>
+ <text key="list-th-reception-date">Data ricezione</text>
+ <text key="list-th-archived-date">Data Archiviazione</text>
+ <text key="list-th-notification">Notifica</text>
+ <text key="list-tr-no-results">Non è presente nessuna nuova notifica..</text>
+ <text key="list-m-confirm">Confermi di aver eseguito questa azione?</text>
+ <text key="list-m-archive">Archive</text>
+ <text key="list-m-archiveAsDone">Archive as done</text>
 
  <!-- notifications_send.php -->
- <text key="ff-typology">Tipologia</text>
- <text key="fo-notice">Notifica</text>
- <text key="fo-action">Azione</text>
- <text key="ff-recipient">Destinatario</text>
- <text key="fo-user">Singolo utente</text>
- <text key="fo-group">Gruppo di utenti</text>
- <text key="fo-all">Tutti gli utenti</text>
- <text key="ff-user">Utente</text>
- <text key="ff-user-placeholder">Seleziona un destinatario</text>
- <text key="ff-group">Gruppo</text>
- <text key="ff-group-placeholder">Seleziona un gruppo</text>
- <text key="ff-subject">Oggetto</text>
- <text key="ff-subject-placeholder">Oggetto della notifica</text>
- <text key="ff-message">Messaggio</text>
- <text key="ff-message-placeholder">Scrivi un messaggio</text>
- <text key="ff-link">Link</text>
- <text key="ff-link-placeholder">Inserisci qui un eventuale link</text>
- <text key="fc-submit">Invia notifica</text>
- <text key="fc-cancel">Annulla</text>
+ <text key="send-ff-typology">Tipologia</text>
+ <text key="send-fo-notice">Notifica</text>
+ <text key="send-fo-action">Azione</text>
+ <text key="send-ff-recipient">Destinatario</text>
+ <text key="send-fo-user">Singolo utente</text>
+ <text key="send-fo-group">Gruppo di utenti</text>
+ <text key="send-fo-all">Tutti gli utenti</text>
+ <text key="send-ff-user">Utente</text>
+ <text key="send-ff-user-placeholder">Seleziona un destinatario</text>
+ <text key="send-ff-group">Gruppo</text>
+ <text key="send-ff-group-placeholder">Oppure seleziona un gruppo</text>
+ <text key="send-ff-subject">Oggetto</text>
+ <text key="send-ff-subject-placeholder">Oggetto della notifica</text>
+ <text key="send-ff-message">Messaggio</text>
+ <text key="send-ff-message-placeholder">Scrivi un messaggio</text>
+ <text key="send-ff-link">Link</text>
+ <text key="send-ff-link-placeholder">Inserisci qui un eventuale link</text>
+ <text key="send-fc-submit">Invia notifica</text>
+ <text key="send-fc-cancel">Annulla</text>
 
 
 </locale>
