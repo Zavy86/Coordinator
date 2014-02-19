@@ -18,7 +18,9 @@ function content(){
    while(($file=readdir($dh))!==false){
     if(is_dir($dir.$file)&&$file<>"."&&$file<>".."){
      if(file_exists($dir.$file."/module.inc.php")){
-      $directory_array[]=$dir.$file."/";
+      $module_core=FALSE;
+      include($dir.$file."/module.inc.php");
+      if(!$module_core){$directory_array[]=$dir.$file."/";}
      }
     }
    }
