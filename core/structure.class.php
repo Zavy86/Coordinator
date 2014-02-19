@@ -136,6 +136,132 @@ class str_navigation{
 
 
 
+/* -------------------------------------------------------------------------- *\
+|* -[ Pagination ]----------------------------------------------------------- *|
+\* -------------------------------------------------------------------------- */
+class str_pagination{
+
+ protected $url;
+ protected $total;
+ protected $limit;
+ protected $page;
+ protected $class;
+ protected $class_ul;
+ protected $class_li;
+ protected $class_li_active;
+ protected $class_li_disabled;
+
+ /* -[ Construct ]----------------------------------------------------------- */
+ // @string $table
+ // @string $where
+ // @string $get : url of the page
+ // @integet $limit
+ // @string $class : pagination css class
+ // @string $class_ul : pagination ul css class
+ // @string $class_li : pagination ul li css class
+ // @string $class_li_active : pagination ul li of current page css class
+ // @string $class_li_disabled : pagination ul li of disabled pages css class
+ public function __construct($table=NULL,$where=NULL,$get=NULL,$limit=20,$class="pagination-small pagination-right",$class_ul="",$class_li="",$class_li_active="active",$class_li_disabled="disabled"){
+  if($table==NULL || !is_int($limit)){return FALSE;}
+  // acquire variables
+  $g_limit=$_GET['l'];
+  if($g_limit>0){$limit=$g_limit;}
+  $g_page=$_GET['p'];
+  if(!$g_page){$g_page=1;}
+  // count total rows
+  if($where<>NULL){
+   $total=$GLOBALS['db']->countOf($table,$where);
+  }else{
+   $total=$GLOBALS['db']->countOfAll($table);
+  }
+  // build url
+  $url=api_baseName()."?p={p}".$get;
+  // set variables
+  $this->url=$url;
+  $this->total=$total;
+  $this->limit=$limit;
+  $this->page=$g_page;
+  $this->class=$class;
+  $this->class_ul=$class_ul;
+  $this->class_li=$class_li;
+  $this->class_li_active=$class_li_active;
+  $this->class_li_disabled=$class_li_disabled;
+  return TRUE;
+ }
+
+ /* -[ Query Limit ]--------------------------------------------------------- */
+ function queryLimit(){
+  $start=($this->page-1)*$this->limit;
+  return " LIMIT ".$start.",".$this->limit;
+ }
+
+ /* -[ Render ]------------------------------------------------------------- */
+ function render(){
+  if(!$this->total>0){return FALSE;}
+  $adjacents="2";
+  $prev=$this->page-1;
+  $next=$this->page+1;
+  $lastpage=ceil($this->total/$this->limit);
+  $lpm1=$lastpage-1;
+  if($lastpage>1){
+   // open pavigation
+   echo "<!-- pagination -->\n";
+   echo "<div class='pagination ".$this->class."'>\n";
+   echo " <ul class='".$this->class_ul."'>\n";
+   if($this->page>1){echo "  <li class='".$this->class_li."'><a href='".str_replace("{p}",$prev,$this->url)."'>&laquo;</a></li>\n";}
+    else{echo "  <li class='".$this->class_li_disabled."'><span>&laquo;</span></li>\n";}
+   if($lastpage<7+($adjacents*2)){
+    for($counter=1;$counter<=$lastpage;$counter++){
+     if($counter==$this->page){echo "  <li class='".$this->class_li_active."'><span>".$counter."</span></li>\n";}
+      else{echo "  <li class='".$this->class_li."'><a href='".str_replace("{p}",$counter,$this->url)."'>".$counter."</a></li>\n";}
+    }
+   }elseif($lastpage>5+($adjacents*2)){
+    if($this->page<2+($adjacents*2)){
+     for($counter=1;$counter<4+($adjacents*2);$counter++){
+      if($counter==$this->page){echo "  <li class='".$this->class_li_active."'><span>".$counter."</span></li>\n";}
+       else{echo "  <li class='".$this->class_li."'><a href='".str_replace("{p}",$counter,$this->url)."'>".$counter."</a></li>\n";}
+     }
+     echo "  <li class='".$this->class_li_disabled."'><span>&hellip;</span></li>\n";
+     echo "  <li><a href='".str_replace("{p}",$lpm1,$this->url)."'>".$lpm1."</a></li>\n";
+     echo "  <li><a href='".str_replace("{p}",$lastpage,$this->url)."'>".$lastpage."</a></li>\n";
+    }elseif($lastpage-($adjacents*2)>$this->page&&$this->page>($adjacents*2)){
+     echo "  <li class='".$this->class_li."'><a href='".str_replace("{p}","1",$this->url)."'>1</a></li>\n";
+     echo "  <li class='".$this->class_li."'><a href='".str_replace("{p}","2",$this->url)."'>2</a></li>\n";
+     echo "  <li class='".$this->class_li_disabled."'><span>&hellip;</span></li>\n";
+     for($counter=$this->page-$adjacents;$counter<=$this->page+$adjacents;$counter++){
+      if($counter==$this->page){echo " <li class='".$this->class_li_active."'><span>".$counter."</span></li>\n";}
+       else{echo "  <li class='".$this->class_li."'><a href='".str_replace("{p}",$counter,$this->url)."'>".$counter."</a></li>\n";}
+     }
+     echo "  <li class='".$this->class_li_disabled."'><span>&hellip;</span></li>\n";
+     echo "  <li class='".$this->class_li."'><a href='".str_replace("{p}",$lpm1,$this->url)."'>".$lpm1."</a></li>\n";
+     echo "  <li class='".$this->class_li."'><a href='".str_replace("{p}",$lastpage,$this->url)."'>".$lastpage."</a></li>\n";
+    }else{
+     echo "  <li class='".$this->class_li."'><a href='".str_replace("{p}","1",$this->url)."'>1</a></li>\n";
+     echo "  <li class='".$this->class_li."'><a href='".str_replace("{p}","2",$this->url)."'>2</a></li>\n";
+     echo "  <li class='".$this->class_li_disabled."'><span>&hellip;</span></li>\n";
+     for($counter=$lastpage-(2+($adjacents*2));$counter<=$lastpage;$counter++){
+      if($counter==$this->page){echo "  <li class='".$this->class_li_active."'><span>".$counter."</span></li>\n";}
+       else{echo "  <li class='".$this->class_li."'><a href='".str_replace("{p}",$counter,$this->url)."'>".$counter."</a></li>\n";}
+     }
+    }
+   }
+   if($this->page<$counter-1){
+    echo "  <li class='".$this->class_li."'><a href='".str_replace("{p}",$next,$this->url)."'>&raquo;</a></li>\n";
+   }else{
+    echo "  <li class='".$this->class_li_disabled."'><span>&raquo;</span></li>\n";
+   }
+   echo " </ul>\n";
+   echo "</div><!-- /pagination -->\n\n";
+  }
+  return TRUE;
+ }
+
+}
+
+
+
+
+
 
 
 /* -------------------------------------------------------------------------- *\
@@ -491,6 +617,92 @@ class str_form{
   echo "</form><!-- /form-".$this->name." -->\n\n";
  }
 }
+
+
+
+
+
+
+/* -------------------------------------------------------------------------- *\
+|* -[ Modal window ]--------------------------------------------------------- *|
+\* -------------------------------------------------------------------------- */
+class str_modal{
+
+ protected $id;
+ protected $header;
+ protected $body;
+ protected $footer;
+ protected $class;
+
+ /* -[ Contruct ]------------------------------------------------------------ */
+ // @string $id : id of the modal window
+ // @string $header : header of the modal window
+ // @string $body : body of the modal window
+ // @string $footer : footer of the modal window
+ // @string $class : modal window css class
+ public function __construct($id,$class=NULL){
+  if(strlen($id)==0){return FALSE;}
+  $this->id=$id;
+  $this->class=$class;
+  return TRUE;
+ }
+
+ /* -[ Modal Window Link ]--------------------------------------------------- */
+ // @string $label : label of the link
+ // @string $class : modal link css class
+ function link($label,$class=NULL){
+  if(strlen($label)==0){return FALSE;}
+  return "<a href='#modal_".$this->id."' data-toggle='modal' class='".$class."' id='modal-link_".$this->id."'>".$label."</a>";
+ }
+
+ /* -[ Modal Window Header ]------------------------------------------------- */
+ // @string $label : label of the header
+ function header($label){
+  if(strlen($label)==0){return FALSE;}
+  $this->header=$label;
+  return TRUE;
+ }
+
+ /* -[ Modal Window Body ]--------------------------------------------------- */
+ // @string $content : content of the body
+ function body($content){
+  if(strlen($content)==0){return FALSE;}
+  $this->body=$content;
+  return TRUE;
+ }
+
+ /* -[ Modal Window Footer ]------------------------------------------------- */
+ // @string $content : content of the footer
+ function footer($content){
+  if(strlen($content)==0){return FALSE;}
+  $this->footer=$content;
+  return TRUE;
+ }
+
+ /* -[ Render ]-------------------------------------------------------------- */
+ function render(){
+  if(!strlen($this->body)>0){return FALSE;}
+  // open modal window
+  echo "<!-- modal window ".$this->id." -->\n";
+  echo "<div id='modal_".$this->id."' class='modal hide fade ".$this->class."' role='dialog' aria-hidden='true'>\n";
+  // modal window header
+  echo " <div class='modal-header'>\n";
+  echo "  <button type='button' class='close' data-dismiss='modal' aria-hidden='true'>&times;</button>\n";
+  if(strlen($this->header)>0){echo "  <h4>".$this->header."</h4>\n";}
+  echo " </div>\n";
+  // modal window body
+  echo " <div class='modal-body'>\n".$this->body."\n </div>\n";
+  // modal window footer
+  if(strlen($this->footer)>0){echo " <div class='modal-footer'>\n".$this->footer."\n </div>\n";}
+  // close modal window
+  echo "</div><!-- /modal window -->\n\n";
+  return TRUE;
+ }
+
+}
+
+
+
 
 
 
