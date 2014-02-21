@@ -6,6 +6,7 @@
 /* -------------------------------------------------------------------------- *\
 |* -[ Navigation ]----------------------------------------------------------- *|
 \* -------------------------------------------------------------------------- */
+
 class str_navigation{
 
  private $current_tab;
@@ -136,13 +137,10 @@ class str_navigation{
 }
 
 
-
-
-
-
 /* -------------------------------------------------------------------------- *\
 |* -[ Pagination ]----------------------------------------------------------- *|
 \* -------------------------------------------------------------------------- */
+
 class str_pagination{
 
  protected $url;
@@ -263,14 +261,10 @@ class str_pagination{
 }
 
 
-
-
-
-
-
 /* -------------------------------------------------------------------------- *\
 |* -[ Table ]---------------------------------------------------------------- *|
 \* -------------------------------------------------------------------------- */
+
 class str_table{
 
  private $current_row=0;
@@ -393,9 +387,6 @@ class str_table{
  }
 
 }
-
-
-
 
 
 /* -------------------------------------------------------------------------- *\
@@ -644,15 +635,15 @@ class str_form{
    echo "<div class='control-group'>\n";
    echo " <div class='controls'>\n";
    // show control
-   foreach($this->fc_array as $fc){
+   foreach($this->fc_array as $index=>$fc){
     switch(strtolower($fc->type)){
      // submit
      case "submit":
-      echo "  <input type='submit' name='submit' class='btn btn-primary ".$fc->class."' value='".$fc->label."'>\n";
+      echo "  <input type='submit' name='submit' id='".$this->name."_control_".$index."' class='btn btn-primary ".$fc->class."' value='".$fc->label."'>\n";
       break;
      // reset
      case "reset":
-      echo "  <input type='reset' name='submit' class='btn ".$fc->class."' value='".$fc->label."'>\n";
+      echo "  <input type='reset' name='submit' id='".$this->name."_control_".$index."' class='btn ".$fc->class."' value='".$fc->label."'>\n";
       break;
      // button, link
      case "button":
@@ -661,7 +652,7 @@ class str_form{
       if(strtolower($fc->type)=="button"){echo "class='btn ".$fc->class."'";}
        else{echo "class='".$fc->class."'";}
       if(strlen($fc->confirm)){echo " onClick=\"return confirm('".$fc->confirm."')\"";}
-      echo ">".$fc->label."</a>\n";
+      echo " id='".$this->name."_control_".$index."'>".$fc->label."</a>\n";
       break;
     }
    }
@@ -677,13 +668,10 @@ class str_form{
 }
 
 
-
-
-
-
 /* -------------------------------------------------------------------------- *\
 |* -[ Modal window ]--------------------------------------------------------- *|
 \* -------------------------------------------------------------------------- */
+
 class str_modal{
 
  protected $id;
@@ -760,13 +748,10 @@ class str_modal{
 }
 
 
-
-
-
-
 /* -------------------------------------------------------------------------- *\
 |* -[ Dynamic List ]--------------------------------------------------------- *|
 \* -------------------------------------------------------------------------- */
+
 class str_dl{
 
  protected $class;

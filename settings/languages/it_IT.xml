@@ -20,6 +20,31 @@
  <text key="nav-permissions">Permessi</text>
  <text key="nav-menus">Menu</text>
 
+ <!-- settings_edit.php -->
+ <text key="settings-ff-owner">Azienda</text>
+ <text key="settings-ff-owner_url">Sito web</text>
+ <text key="settings-ff-owner_mail">E-mail</text>
+ <text key="settings-ff-owner_mail_from">Mittente</text>
+ <text key="settings-ff-title">Titolo visualizzato</text>
+ <text key="settings-ff-show_logo">Visualizza logo</text>
+ <text key="settings-ff-show_logo-label">Mostra il logo al posto del titolo</text>
+ <text key="settings-ff-show_logo-label-path">Il logo deve essere nella directory</text>
+ <text key="settings-ff-maintenance">Manutenzione</text>
+ <text key="settings-ff-maintenance-label">Blocca il software per manutenzione</text>
+ <text key="settings-ff-maintenance_description">Messaggio</text>
+ <text key="settings-ff-google_analytics">Google Analytics</text>
+ <text key="settings-ff-piwik_analytics">Piwik Analytics</text>
+ <text key="settings-ff-cron_token">Cron Token</text>
+ <text key="settings-ff-ldap">LDAP</text>
+ <text key="settings-ff-ldap-label">Abilita autenticazione LDAP</text>
+ <text key="settings-ff-ldap_host">Host</text>
+ <text key="settings-ff-ldap_dn">DN</text>
+ <text key="settings-ff-ldap_domain">Domain</text>
+ <text key="settings-ff-ldap_userfield">Userfield</text>
+ <text key="settings-ff-ldap_group">Group</text>
+ <text key="settings-fc-submit">Salva impostazioni</text>
+ <text key="settings-fc-cron">Rigenera Cron Token</text>
+
  <!-- modules_edit.inc.php -->
  <text key="modules-th-module">Modulo</text>
  <text key="modules-th-version">Versione</text>

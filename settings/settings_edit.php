@@ -1,152 +1,61 @@
 <?php
-/* ------------------------------------------------------------------------- *\
-|* -[ Settings - Settings Edit ]-------------------------------------------- *|
-\* ------------------------------------------------------------------------- */
+/* -------------------------------------------------------------------------- *\
+|* -[ Settings - Settings Edit ]--------------------------------------------- *|
+\* -------------------------------------------------------------------------- */
 $checkPermission="settings_edit";
 include("template.inc.php");
 function content(){
+ // reset cron token
+ if($_GET['act']=="reset_cron"){
+  $cron_token=md5(date("Y-m-d H:i:s"));
+ }else{
+  $cron_token=api_getOption("cron_token");
+ }
+ // build form
+ $form=new str_form("submit.php?act=settings_save","post","settings");
+ $form->addField("text","owner",api_text("settings-ff-owner"),api_getOption("owner"),"input-large");
+ $form->addField("text","owner_url",api_text("settings-ff-owner_url"),api_getOption("owner_url"),"input-xlarge");
+ $form->addField("text","owner_mail",api_text("settings-ff-owner_mail"),api_getOption("owner_mail"),"input-xlarge");
+ $form->addField("text","owner_mail_from",api_text("settings-ff-owner_mail_from"),api_getOption("owner_mail_from"),"input-xlarge");
+ $form->addSeparator();
+ $form->addField("text","title",api_text("settings-ff-title"),api_getOption("title"),"input-small");
+ $form->addField("checkbox","show_logo",api_text("settings-ff-show_logo"));
+ if(!file_exists("../uploads/core/logo.png")){
+  $disabled=TRUE;
+  $label=api_text("settings-ff-show_logo-label-path").": ".$GLOBALS['dir']."uploads/core/logo.png";
+ }else{
+  $disabled=FALSE;
+  $label=api_text("settings-ff-show_logo-label")."<br><br>\n";
+  $label.="<img src='".$GLOBALS['dir']."uploads/core/logo.png' alt='Title logo' class='logo'>";
+ }
+ $form->addFieldOption(1,$label,(api_getOption("show_logo"))?TRUE:FALSE,$disabled);
+ $form->addSeparator();
+ $form->addField("checkbox","maintenance",api_text("settings-ff-maintenance"));
+ $form->addFieldOption(1,api_text("settings-ff-maintenance-label"),(api_getOption("maintenance"))?TRUE:FALSE);
+ $form->addField("text","maintenance_description",api_text("settings-ff-maintenance_description"),api_getOption("maintenance_description"),"input-xlarge");
+ $form->addSplit();
+ $form->addField("text","google_analytics",api_text("settings-ff-google_analytics"),api_getOption("google_analytics"),"input-medium");
+ $form->addField("text","piwik_analytics",api_text("settings-ff-piwik_analytics"),api_getOption("piwik_analytics"),"input-medium");
+ $form->addField("text","cron_token",api_text("settings-ff-cron_token"),$cron_token,"input-xlarge");
+ $form->addSeparator();
+ $form->addField("checkbox","ldap",api_text("settings-ff-ldap"));
+ $form->addFieldOption(1,api_text("settings-ff-ldap-label"),(api_getOption("ldap"))?TRUE:FALSE);
+ $form->addField("text","ldap_host",api_text("settings-ff-ldap_host"),api_getOption("ldap_host"),"input-xlarge");
+ $form->addField("text","ldap_dn",api_text("settings-ff-ldap_dn"),api_getOption("ldap_dn"),"input-xlarge");
+ $form->addField("text","ldap_domain",api_text("settings-ff-ldap_domain"),api_getOption("ldap_domain"),"input-xlarge");
+ $form->addField("text","ldap_userfield",api_text("settings-ff-ldap_userfield"),api_getOption("ldap_userfield"),"input-xlarge");
+ $form->addField("text","ldap_group",api_text("settings-ff-ldap_group"),api_getOption("ldap_group"),"input-xlarge");
+ $form->addControl("submit",api_text("settings-fc-submit"));
+ $form->addControl("button",api_text("settings-fc-cron"),NULL,"settings_edit.php?act=reset_cron");
+ // show form
+ $form->render();
 ?>
-
-<form class="form-horizontal" action="submit.php?act=settings_save" method="post">
-
-<div class="row-fluid">
-<div class="span6">
-
- <div class="control-group">
-  <label class="control-label" for="iOwner">Azienda</label>
-  <div class="controls"><input type="text" id="iOwner" class="input-large" name="owner" placeholder="Nome dell'azienda" value="<?php echo api_getOption("owner");?>"></div>
- </div>
-
- <div class="control-group">
-  <label class="control-label" for="iOwnerUrl">Sito web</label>
-  <div class="controls"><input type="text" id="iOwnerUrl" class="input-xlarge" name="owner_url" placeholder="http://www.domain.tdl" value="<?php echo api_getOption("owner_url");?>"></div>
- </div>
-
- <div class="control-group">
-  <label class="control-label" for="iOwnerMail">E-mail</label>
-  <div class="controls"><input type="text" id="iOwnerMail" class="input-xlarge" name="owner_mail" placeholder="Indirizzo e-mail aziendale" value="<?php echo api_getOption("owner_mail");?>"></div>
- </div>
-
- <div class="control-group">
-  <label class="control-label" for="iOwnerMail">Mittente</label>
-  <div class="controls"><input type="text" id="iOwnerMailFrom" class="input-xlarge" name="owner_mail_from" placeholder="Nome visualizzato nel mittente delle e-mail" value="<?php echo api_getOption("owner_mail_from");?>"></div>
- </div>
-
- <hr>
-
- <div class="control-group">
-  <label class="control-label" for="iTitle">Titolo visualizzato</label>
-  <div class="controls"><input type="text" id="iTitle" class="input-small" name="title" placeholder="Coordinator" value="<?php echo api_getOption("title");?>"></div>
- </div>
-
- <div class="control-group">
-  <label class="control-label">Visualizza Logo</label>
-  <div class="controls">
-   <label class="checkbox"><input type="checkbox" name="show_logo"
-   <?php
-    if(api_getOption("show_logo")){echo " checked='checked'";}
-    if(!file_exists("../uploads/core/logo.png")){
-     echo "disabled='disabled'";
-     echo "> Il logo deve essere nel path: ".$GLOBALS['dir']."uploads/core/logo.png";
-    }else{
-     echo "> Mostra il logo al posto del titolo<br><br>\n";
-     echo "<img src='".$GLOBALS['dir']."uploads/core/logo.png' alt='Title logo' class='logo'>";
-    }
-   ?>
-   </label>
-  </div>
- </div>
-
- <hr>
-
- <div class="control-group">
-  <label class="control-label">Manutenzione</label>
-  <div class="controls">
-   <label class="checkbox"><input type="checkbox" name="maintenance"
-   <?php if(api_getOption("maintenance")){echo " checked='checked'";}?>
-   > Blocca il software per manutenzione</label>
-  </div>
- </div>
-
- <div class="control-group">
-  <label class="control-label" for="iMaintenanceDescription">Messaggio</label>
-  <div class="controls"><input type="text" id="iMaintenanceDescription" class="input-xlarge" name="maintenance_description" placeholder="Messaggio di avviso per manutenzione" value="<?php echo api_getOption("maintenance_description");?>"></div>
- </div>
-
-</div><!-- /span6 -->
-<div class="span6">
-
- <div class="control-group">
-  <label class="control-label" for="iGoogleAnalytics">Google Analytics</label>
-  <div class="controls"><input type="text" id="iGoogleAnalytics" class="input-medium" name="google_analytics" placeholder="UA-XXXXXXXX-X" value="<?php echo api_getOption("google_analytics");?>"></div>
- </div>
-
- <div class="control-group">
-  <label class="control-label" for="iGoogleAnalytics">Piwik Analytics</label>
-  <div class="controls"><input type="text" id="iPiwikAnalytics" class="input-medium" name="piwik_analytics" placeholder="url:id" value="<?php echo api_getOption("piwik_analytics");?>"></div>
- </div>
-
- <div class="control-group">
-  <label class="control-label" for="iCronToken">Cron Token</label>
-  <div class="controls ">
-   <div class="input-append">
-    <input type="text" id="iCronToken" class="input-xlarge" name="cron_token" placeholder="" value="<?php echo api_getOption("cron_token");?>">
-    <a class="btn" id="iCronTokenRandomize">Rigenera</a>
-   </div>
-  </div>
- </div>
-
- <hr>
-
- <div class="control-group">
-  <label class="control-label">LDAP</label>
-  <div class="controls">
-   <label class="checkbox"><input type="checkbox" name="ldap"
-    <?php if(api_getOption("ldap")){echo " checked='checked'";} ?>
-    > Abilita autenticazione LDAP
-   </label>
-  </div>
- </div>
-
- <div class="control-group">
-  <label class="control-label" for="ldap_host">Host</label>
-  <div class="controls"><input type="text" id="ldap_host" class="input-large" name="ldap_host" placeholder="domaincontroller" value="<?php echo api_getOption("ldap_host");?>"></div>
- </div>
-
- <div class="control-group">
-  <label class="control-label" for="ldap_dn">DN</label>
-  <div class="controls"><input type="text" id="ldap_dn" class="input-large" name="ldap_dn" placeholder="dc=domain,dc=local" value="<?php echo api_getOption("ldap_dn");?>"></div>
- </div>
-
- <div class="control-group">
-  <label class="control-label" for="ldap_domain">Domain</label>
-  <div class="controls"><input type="text" id="ldap_domain" class="input-large" name="ldap_domain" placeholder="@domain.local" value="<?php echo api_getOption("ldap_domain");?>"></div>
- </div>
-
- <div class="control-group">
-  <label class="control-label" for="ldap_userfield">Userfield</label>
-  <div class="controls"><input type="text" id="ldap_userfield" class="input-large" name="ldap_userfield" value="<?php echo api_getOption("ldap_userfield");?>"></div>
- </div>
-
- <div class="control-group">
-  <label class="control-label" for="ldap_group">Group</label>
-  <div class="controls"><input type="text" id="ldap_group" class="input-large" name="ldap_group" value="<?php echo api_getOption("ldap_group");?>"></div>
- </div>
-
-</div><!-- /span6 -->
-</div><!-- /row-fluid -->
-
- <hr>
-
- <div class="pull-right">
-  <input type="submit" class="btn btn-primary" value="Salva">
-  <input type="reset" class="btn" value="Annulla">
- </div>
-
-</form>
-
 <script type="text/javascript">
  $(document).ready(function(){
+  // disable cron reset if form change
+  $('form').change(function(){
+   $('#settings_control_1').attr("disabled","disabled");
+  });
   // validation
   $('form').validate({
    rules:{
@@ -160,11 +69,5 @@ function content(){
    submitHandler:function(form){form.submit();}
   });
  });
- // randomize a new cron token
- $("#iCronTokenRandomize").click(function(){
-  var randomToken=$.md5($.now());
-  $("#iCronToken").val(randomToken);
- });
 </script>
-
 <?php } ?>
