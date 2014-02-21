@@ -8,15 +8,18 @@
 \* -------------------------------------------------------------------------- */
 class str_navigation{
 
- private $current_tab=0;
+ private $current_tab;
 
  protected $class;
- protected $nt_array=array();
+ protected $nt_array;
 
  /* -[ Construct ]----------------------------------------------------------- */
  // @string $class : navigation css class
  public function __construct($class=NULL){
   $this->class=$class;
+  $this->current_tab=0;
+  $this->nt_array=array();
+  return TRUE;
  }
 
  /* -[ Add Tab ]------------------------------------------------------------- */
@@ -27,15 +30,15 @@ class str_navigation{
  // @boolean $enabled : enable the navigation tab (true) or not
  function addTab($label,$url=NULL,$get=NULL,$class=NULL,$enabled=TRUE){
   if(strlen($label)==0){return FALSE;}
-  $this->current_tab++;
   $nt=new stdClass();
   $nt->label=$label;
   $nt->url=$url;
   $nt->get=$get;
   $nt->class=$class;
   $nt->enabled=$enabled;
-  //return $nt;
+  $this->current_tab++;
   $this->nt_array[$this->current_tab]=$nt;
+  return TRUE;
  }
 
  /* -[ Add Sub Tab ]------------------------------------------------------------- */
@@ -52,11 +55,11 @@ class str_navigation{
   $nt->get=$get;
   $nt->class=$class;
   $nt->enabled=$enabled;
-  //return $nt;
   if(!is_array($this->nt_array[$this->current_tab]->dropdown)){
    $this->nt_array[$this->current_tab]->dropdown=array();
   }
   $this->nt_array[$this->current_tab]->dropdown[]=$nt;
+  return TRUE;
  }
 
  /* -[ Render ]-------------------------------------------------------------- */
@@ -127,6 +130,7 @@ class str_navigation{
   }
   // close navigation
   echo "</ul><!-- /navigation-tabs -->\n\n";
+  return TRUE;
  }
 
 }
@@ -275,8 +279,8 @@ class str_table{
  protected $sortable;
  protected $get;
  protected $class;
- protected $th_array=array();
- protected $tr_array=array();
+ protected $th_array;
+ protected $tr_array;
 
  /* -[ Construct ]----------------------------------------------------------- */
  // @string $unvalued : text to show if no results
@@ -288,6 +292,10 @@ class str_table{
   $this->sortable=$sortable;
   $this->get=$get;
   $this->class=$class;
+  $this->current_row=0;
+  $this->th_array=array();
+  $this->tr_array=array();
+  return TRUE;
  }
 
  /* -[ Add Header ]---------------------------------------------------------- */
@@ -304,6 +312,7 @@ class str_table{
   $th->order=$order;
   $th->colspan=$colspan;
   $this->th_array[]=$th;
+  return TRUE;
  }
 
  /* -[ Add Row ]------------------------------------------------------------- */
@@ -313,6 +322,7 @@ class str_table{
   $this->tr_array[$this->current_row]=new stdClass();
   $this->tr_array[$this->current_row]->class=$class;
   $this->tr_array[$this->current_row]->fields=array();
+  return TRUE;
  }
 
  /* -[ Add Field ]----------------------------------------------------------- */
@@ -324,8 +334,8 @@ class str_table{
   $td->content=$content;
   $td->class=$class;
   $td->colspan=$colspan;
-  //return $td;
   $this->tr_array[$this->current_row]->fields[]=$td;
+  return TRUE;
  }
 
  /* -[ Render ]-------------------------------------------------------------- */
@@ -379,6 +389,7 @@ class str_table{
   echo "</tbody>\n";
   // close table
   echo "</table>\n<!-- /table -->\n\n";
+  return TRUE;
  }
 
 }
@@ -615,6 +626,7 @@ class str_form{
   echo " </div>\n</div>\n\n";
   // close form
   echo "</form><!-- /form-".$this->name." -->\n\n";
+  return TRUE;
  }
 }
 
@@ -711,12 +723,13 @@ class str_modal{
 \* -------------------------------------------------------------------------- */
 class str_dl{
 
- protected $dl_class=NULL;
-
- protected $elements_array=array();
+ protected $class;
+ protected $elements_array;
 
  public function __construct($class=NULL){
-  $this->dl_class=$class;
+  $this->class=$class;
+  $this->elements_array=array();
+  return TRUE;
  }
 
  public function addElement($label,$value,$separator=NULL){
@@ -725,6 +738,7 @@ class str_dl{
   $element->value=$value;
   $element->separator=$separator;
   $this->elements_array[]=$element;
+  return TRUE;
  }
 
  public function render(){
@@ -734,6 +748,7 @@ class str_dl{
    echo $element->separator."\n";
   }
   echo "</dl>\n";
+  return TRUE;
  }
 
 }
