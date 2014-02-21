@@ -8,15 +8,18 @@
 \* -------------------------------------------------------------------------- */
 class str_navigation{
 
- private $current_tab=0;
+ private $current_tab;
 
  protected $class;
- protected $nt_array=array();
+ protected $nt_array;
 
  /* -[ Construct ]----------------------------------------------------------- */
  // @string $class : navigation css class
  public function __construct($class=NULL){
   $this->class=$class;
+  $this->current_tab=-1;
+  $this->nt_array=array();
+  return TRUE;
  }
 
  /* -[ Add Tab ]------------------------------------------------------------- */
@@ -27,15 +30,15 @@ class str_navigation{
  // @boolean $enabled : enable the navigation tab (true) or not
  function addTab($label,$url=NULL,$get=NULL,$class=NULL,$enabled=TRUE){
   if(strlen($label)==0){return FALSE;}
-  $this->current_tab++;
   $nt=new stdClass();
   $nt->label=$label;
   $nt->url=$url;
   $nt->get=$get;
   $nt->class=$class;
   $nt->enabled=$enabled;
-  //return $nt;
+  $this->current_tab++;
   $this->nt_array[$this->current_tab]=$nt;
+  return TRUE;
  }
 
  /* -[ Add Sub Tab ]------------------------------------------------------------- */
@@ -52,11 +55,11 @@ class str_navigation{
   $nt->get=$get;
   $nt->class=$class;
   $nt->enabled=$enabled;
-  //return $nt;
   if(!is_array($this->nt_array[$this->current_tab]->dropdown)){
    $this->nt_array[$this->current_tab]->dropdown=array();
   }
   $this->nt_array[$this->current_tab]->dropdown[]=$nt;
+  return TRUE;
  }
 
  /* -[ Render ]-------------------------------------------------------------- */
@@ -127,6 +130,7 @@ class str_navigation{
   }
   // close navigation
   echo "</ul><!-- /navigation-tabs -->\n\n";
+  return TRUE;
  }
 
 }
@@ -275,8 +279,8 @@ class str_table{
  protected $sortable;
  protected $get;
  protected $class;
- protected $th_array=array();
- protected $tr_array=array();
+ protected $th_array;
+ protected $tr_array;
 
  /* -[ Construct ]----------------------------------------------------------- */
  // @string $unvalued : text to show if no results
@@ -288,6 +292,10 @@ class str_table{
   $this->sortable=$sortable;
   $this->get=$get;
   $this->class=$class;
+  $this->current_row=0;
+  $this->th_array=array();
+  $this->tr_array=array();
+  return TRUE;
  }
 
  /* -[ Add Header ]---------------------------------------------------------- */
@@ -304,6 +312,7 @@ class str_table{
   $th->order=$order;
   $th->colspan=$colspan;
   $this->th_array[]=$th;
+  return TRUE;
  }
 
  /* -[ Add Row ]------------------------------------------------------------- */
@@ -313,6 +322,7 @@ class str_table{
   $this->tr_array[$this->current_row]=new stdClass();
   $this->tr_array[$this->current_row]->class=$class;
   $this->tr_array[$this->current_row]->fields=array();
+  return TRUE;
  }
 
  /* -[ Add Field ]----------------------------------------------------------- */
@@ -324,8 +334,8 @@ class str_table{
   $td->content=$content;
   $td->class=$class;
   $td->colspan=$colspan;
-  //return $td;
   $this->tr_array[$this->current_row]->fields[]=$td;
+  return TRUE;
  }
 
  /* -[ Render ]-------------------------------------------------------------- */
@@ -379,6 +389,7 @@ class str_table{
   echo "</tbody>\n";
   // close table
   echo "</table>\n<!-- /table -->\n\n";
+  return TRUE;
  }
 
 }
@@ -399,6 +410,7 @@ class str_form{
  protected $method;
  protected $name;
  protected $class;
+ protected $splitted;
 
  protected $ff_array;
  protected $fc_array;
@@ -414,12 +426,12 @@ class str_form{
   $this->method=$method;
   $this->name=$name;
   $this->class=$class;
-  $this->current_field=0;
+  $this->splitted=0;
+  $this->current_field=-1;
   $this->ff_array=array();
   $this->fc_array=array();
   return TRUE;
  }
-
 
  /* -[ Add Field ]----------------------------------------------------------- */
  // @string $type : hidden, text, password, checkbox, radio, select, textarea, file
@@ -431,7 +443,7 @@ class str_form{
  // @boolean $disabled : disable input field (true) or not
  // @integer $rows : number of textarea rows
  function addField($type,$name,$label=NULL,$value=NULL,$class=NULL,$placeholder=NULL,$disabled=FALSE,$rows=7){
-  if(!in_array(strtolower($type),array("hidden","text","password","checkbox","radio","select","textarea","file",))){return FALSE;}
+  if(!in_array(strtolower($type),array("hidden","text","password","checkbox","radio","select","textarea","file"))){return FALSE;}
   if(strlen($name)==0){return FALSE;}
   $this->current_field++;
   $ff=new stdClass();
@@ -447,7 +459,6 @@ class str_form{
   $this->ff_array[$this->current_field]=$ff;
   return TRUE;
  }
-
 
  /* -[ Add Field Options ]--------------------------------------------------- */
  // @string $value : option value
@@ -465,7 +476,6 @@ class str_form{
   $this->ff_array[$this->current_field]->options[]=$fo;
   return TRUE;
  }
-
 
  /* -[ Form Control ]-------------------------------------------------------- */
  // @string $type : submit, reset, button, link
@@ -487,17 +497,57 @@ class str_form{
   return TRUE;
  }
 
+ /* -[ Add Separator ]------------------------------------------------------- */
+ // @string $tag : hr, br
+ // @string $class : separator css class
+ function addSeparator($tag="hr",$class=NULL){
+  if(!in_array(strtolower($tag),array("hr","br"))){return FALSE;}
+  $this->current_field++;
+  $ff=new stdClass();
+  $ff->type="separator";
+  $ff->tag=$tag;
+  $ff->class=$class;
+  $ff->options=NULL;
+  $this->ff_array[$this->current_field]=$ff;
+  return TRUE;
+ }
+
+ /* -[ Add Split ]----------------------------------------------------------- */
+ function addSplit(){
+  if($this->splitted==3){return FALSE;}
+  $this->splitted++;
+  $this->current_field++;
+  $ff=new stdClass();
+  $ff->type="split";
+  $this->ff_array[$this->current_field]=$ff;
+  return TRUE;
+ }
 
  /* -[ Render ]-------------------------------------------------------------- */
  function render(){
+  // check splits
+  if($this->splitted>0){
+   // calculate split
+   $span=12/($this->splitted+1);
+  }
   // open form
   echo "<!-- form-".$this->name." -->\n";
   echo "<form name='".$this->name."' action='".$this->action."' method='".$this->method."' class='".$this->class."'>\n\n";
+  // open split
+  if($this->splitted>0){
+   $GLOBALS['html']->split_open();
+   $GLOBALS['html']->split_span($span);
+  }
   // show field
   foreach($this->ff_array as $index=>$ff){
    $options=FALSE;
+   // check for split
+   if($ff->type=="split"){$GLOBALS['html']->split_span($span);continue;}
    // open group
-   echo "<div id='field_".$ff->name."' class='control-group'>\n";
+   if($ff->type<>"separator"){
+    echo "<div id='field_".$ff->name."' class='control-group'>\n";
+   }
+   // show label
    if($ff->label<>NULL){
     echo " <label class='control-label'>".$ff->label."</label>\n";
     echo " <div class='controls'>\n";
@@ -542,6 +592,10 @@ class str_form{
      echo "   <a class='btn' onClick=\"$('input[id=file_".$index."]').click();\">Sfoglia</a>\n";
      echo "  </div>\n";
      break;
+    // separators
+    case "separator":
+     echo "<".$ff->tag." class='".$ff->class."'>\n\n";
+     break;
    }
    // show options
    if($options){
@@ -571,9 +625,10 @@ class str_form{
    }
    // close select
    if(strtolower($ff->type)=="select"){echo "  </select>\n";}
-   // close group
+   // close controls
    if($ff->label<>NULL){echo " </div>\n";}
-   echo "</div>\n\n";
+   // close group
+   if($ff->type<>"separator"){echo "</div>\n\n";}
    // file script
    if(strtolower($ff->type)=="file"){
     echo "<script type='text/javascript'>\n";
@@ -613,8 +668,11 @@ class str_form{
   }
   // close group
   echo " </div>\n</div>\n\n";
+  // close split
+  if($this->splitted>0){$GLOBALS['html']->split_close();}
   // close form
   echo "</form><!-- /form-".$this->name." -->\n\n";
+  return TRUE;
  }
 }
 
@@ -711,12 +769,13 @@ class str_modal{
 \* -------------------------------------------------------------------------- */
 class str_dl{
 
- protected $dl_class=NULL;
-
- protected $elements_array=array();
+ protected $class;
+ protected $elements_array;
 
  public function __construct($class=NULL){
-  $this->dl_class=$class;
+  $this->class=$class;
+  $this->elements_array=array();
+  return TRUE;
  }
 
  public function addElement($label,$value,$separator=NULL){
@@ -725,6 +784,7 @@ class str_dl{
   $element->value=$value;
   $element->separator=$separator;
   $this->elements_array[]=$element;
+  return TRUE;
  }
 
  public function render(){
@@ -734,6 +794,7 @@ class str_dl{
    echo $element->separator."\n";
   }
   echo "</dl>\n";
+  return TRUE;
  }
 
 }
