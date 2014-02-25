@@ -433,7 +433,8 @@ class str_form{
  // @string $placeholder : placeholder message
  // @boolean $disabled : disable input field (true) or not
  // @integer $rows : number of textarea rows
- function addField($type,$name,$label=NULL,$value=NULL,$class=NULL,$placeholder=NULL,$disabled=FALSE,$rows=7){
+ // @string $append : append text
+ function addField($type,$name,$label=NULL,$value=NULL,$class=NULL,$placeholder=NULL,$disabled=FALSE,$rows=7,$append=NULL){
   if(!in_array(strtolower($type),array("hidden","text","password","checkbox","radio","select","textarea","file"))){return FALSE;}
   if(strlen($name)==0){return FALSE;}
   $this->current_field++;
@@ -446,6 +447,22 @@ class str_form{
   $ff->placeholder=$placeholder;
   $ff->disabled=$disabled;
   $ff->rows=$rows;
+  $ff->append=$append;
+  $ff->options=NULL;
+  $this->ff_array[$this->current_field]=$ff;
+  return TRUE;
+ }
+
+ /* -[ Add Custom Field ]---------------------------------------------------- */
+ // @string $label : label for the field
+ // @string $source : source code of controls
+ function addCustomField($label=NULL,$source=NULL){
+  if(strlen($source)==0){return FALSE;}
+  $this->current_field++;
+  $ff=new stdClass();
+  $ff->type="custom";
+  $ff->label=$label;
+  $ff->source=$source;
   $ff->options=NULL;
   $this->ff_array[$this->current_field]=$ff;
   return TRUE;
@@ -457,7 +474,7 @@ class str_form{
  // @boolean $checked : checked or selected field option (true) or not
  // @boolean $disabled : disable field option (true) or not
  function addFieldOption($value,$label,$checked=FALSE,$disabled=FALSE){
-  if(strlen($value)==0 || strlen($label)==0){return FALSE;}
+  if(strlen($label)==0){return FALSE;}
   $fo=new stdClass();
   $fo->value=$value;
   $fo->label=$label;
@@ -535,7 +552,7 @@ class str_form{
    // check for split
    if($ff->type=="split"){$GLOBALS['html']->split_span($span);continue;}
    // open group
-   if($ff->type<>"separator"){
+   if($ff->type<>"separator" && $ff->label<>NULL){
     echo "<div id='field_".$ff->name."' class='control-group'>\n";
    }
    // show label
@@ -543,6 +560,8 @@ class str_form{
     echo " <label class='control-label'>".$ff->label."</label>\n";
     echo " <div class='controls'>\n";
    }
+   // open append div
+   if($ff->append<>NULL){echo "  <div class='input-append'>\n";}
    // show input
    switch(strtolower($ff->type)){
     // hidden, text, password
@@ -587,6 +606,10 @@ class str_form{
     case "separator":
      echo "<".$ff->tag." class='".$ff->class."'>\n\n";
      break;
+    // custom
+    case "custom":
+     echo $ff->source;
+     break;
    }
    // show options
    if($options){
@@ -616,10 +639,12 @@ class str_form{
    }
    // close select
    if(strtolower($ff->type)=="select"){echo "  </select>\n";}
+   // show and close append div
+   if($ff->append<>NULL){echo "  <span class='add-on'>".$ff->append."</span>\n  </div><!-- /input-append -->\n";}
    // close controls
-   if($ff->label<>NULL){echo " </div>\n";}
+   if($ff->label<>NULL){echo " </div><!-- /controls -->\n";}
    // close group
-   if($ff->type<>"separator"){echo "</div>\n\n";}
+   if($ff->type<>"separator" && $ff->label<>NULL){echo "</div><!-- /control-group -->\n\n";}
    // file script
    if(strtolower($ff->type)=="file"){
     echo "<script type='text/javascript'>\n";
@@ -755,31 +780,51 @@ class str_modal{
 class str_dl{
 
  protected $class;
+ protected $separator;
+ protected $splitted;
  protected $elements_array;
 
- public function __construct($class=NULL){
+ /* -[ Contruct ]------------------------------------------------------------ */
+ // @string $separator : default elements separator null, hr, br
+ // @string $class : dynamic list css class
+ public function __construct($separator=NULL,$class=NULL){
+  if(!in_array(strtolower($separator),array(NULL,"hr","br"))){return FALSE;}
   $this->class=$class;
+  $this->separator=$separator;
+  $this->splitted=0;
   $this->elements_array=array();
   return TRUE;
  }
 
- public function addElement($label,$value,$separator=NULL){
+ /* -[ Modal Window Footer ]------------------------------------------------- */
+ // @string $label : label of the dynamic list
+ // @string $label : value of the dynamic list
+ // @string $separator : null, hr, br
+ // @string $class : element css class
+ public function addElement($label,$value,$separator="default",$class=NULL){
+  if(!in_array(strtolower($separator),array(NULL,"default","hr","br"))){return FALSE;}
+  if($separator=="default"){$separator=$this->separator;}
+  if(!strlen($value)>0){$value="&nbsp;";}
   $element=new stdClass();
+  $element->type="element";
   $element->label=$label;
   $element->value=$value;
   $element->separator=$separator;
+  $element->class=$class;
   $this->elements_array[]=$element;
   return TRUE;
  }
 
- public function render(){
-  echo "<dl class=".$this->dl_class.">\n";
+ /* -[ Render ]-------------------------------------------------------------- */
+ public function render($echo=TRUE){
+  $return="\n<!-- dynamic-list -->\n";
+  $return.="<dl class=".$this->class.">\n";
   foreach($this->elements_array as $element){
-   echo " <dt>".$element->label."</dt><dd>".$element->value."</dd>";
-   echo $element->separator."\n";
+   $return.=" <dt>".$element->label."</dt><dd>".$element->value."</dd>";
+   if($element->separator<>NULL){$return.="<".$element->separator.">\n";}else{$return.="\n";}
   }
-  echo "</dl>\n";
-  return TRUE;
+  $return.="</dl><!-- /dynamic-list -->\n";
+  if($echo){echo $return;return TRUE;}else{return $return;}
  }
 
 }
