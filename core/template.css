@@ -57,6 +57,12 @@ dl dt{
  font-weight: normal;
 }
 
+label.control-label{
+ font-size: 0.75em;
+ text-transform: uppercase;
+ font-weight: normal;
+}
+
 .unread{
  font-weight: bold;
 }
@@ -125,3 +131,36 @@ span.id{font-family:"Lucida Console","Monaco",monospace;}
 }
 
 li.search div{margin:0px;}
+
+
+
+
+
+
+
+/* Bootstrap code examples
+-------------------------------------------------- */
+
+.flag-well {
+  position: relative;
+  margin: 0 0 15px 0;
+  padding: 19px 19px 0 19px;
+  border-left: 1px solid #ddd;
+  -webkit-border-top-left-radius: 4px;
+     -moz-border-top-left-radius: 4px;
+          border-top-left-radius: 4px;
+}
+
+.flag-well .title {
+  position: absolute;
+  top: -1px;
+  left: -1px;
+  padding: 3px 7px;
+  font-size: 12px;
+  background-color: #f5f5f5;
+  border: 1px solid #ddd;
+  color: #9da0a4;
+  -webkit-border-radius: 4px 0 4px 0;
+     -moz-border-radius: 4px 0 4px 0;
+          border-radius: 4px 0 4px 0;
+}

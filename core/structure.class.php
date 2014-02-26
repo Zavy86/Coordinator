@@ -11,15 +11,25 @@ class str_navigation{
 
  private $current_tab;
 
+ protected $search;
+ protected $get;
  protected $class;
  protected $nt_array;
 
+ protected $filters;
+
  /* -[ Construct ]----------------------------------------------------------- */
+ // @boolean $search : show search bar
+ // @array $get : additional get parameters for search bar
  // @string $class : navigation css class
- public function __construct($class=NULL){
+ public function __construct($search=FALSE,$get=NULL,$class=NULL){
+  if($get<>NULL && !is_array($get)){$get=array($get);}
+  $this->search=$search;
+  $this->get=$get;
   $this->class=$class;
   $this->current_tab=-1;
   $this->nt_array=array();
+  $this->filters=array();
   return TRUE;
  }
 
@@ -63,11 +73,102 @@ class str_navigation{
   return TRUE;
  }
 
+ /* -[ Add Filter ]---------------------------------------------------------- */
+ // @string $name : name of the filter input
+ // @string $label : label of the filter
+ // @array $values : array of values (value=>label)
+ function addFilter($name,$label,$values){
+  if(strlen($name)==0){return FALSE;}
+  if(!is_array($values)){$values=array($values);}
+  $f=new stdClass();
+  $f->name=$name;
+  $f->label=$label;
+  $f->values=$values;
+  $this->filters[]=$f;
+  return TRUE;
+ }
+
+ /* -[ Filters Textual ]----------------------------------------------------- */
+ // @string $unvalued : text to show if no filters
+ function filtersText($unvalued=NULL){
+  $text=NULL;
+  foreach($this->filters as $filter){
+   if(isset($_GET[$filter->name])){
+    $text_filter=NULL;
+    foreach($_GET[$filter->name] as $g_option){
+     $text_filter.=", ".$filter->values[$g_option]."";
+    }
+    $text.=" <span class='label label-info'>".$filter->label." = ".substr($text_filter,2)."</span>";
+   }
+  }
+  if($text<>NULL){
+   $return="<p><span class='label'>Filters:</span> ".substr($text,1)."</p>\n";
+  }else{
+   if($unvalued<>NULL){$unvalued="<p><span class='label'>Filters:</span> <span class='label label-inverse'>".$unvalued."</span></p>\n";}
+   $return=$unvalued;
+  }
+  return $return;
+ }
+
+ /* -[ Filters Query ]------------------------------------------------------- */
+ // @string $unvalued : query to show if no filters
+ function filtersQuery($unvalued="0"){
+  $query=NULL;
+  foreach($this->filters as $filter){
+   if(isset($_GET[$filter->name])){
+    $query_filter=NULL;
+    foreach($_GET[$filter->name] as $g_option){
+     $query_filter.=" OR ".$filter->name."='".$g_option."'";
+    }
+    $query.=" AND (".substr($query_filter,4).")";
+   }
+  }
+  if($query<>NULL){$return=substr($query,4);}else{$return=$unvalued;}
+  return $return;
+ }
+
  /* -[ Render ]-------------------------------------------------------------- */
   function render(){
   // open navigation
   echo "<!-- navigation-tabs -->\n";
   echo "<ul class='nav nav-tabs ".$this->class."'>\n";
+  // show filters
+  if(count($this->filters)>0){
+   // build filters
+   $modal_filter_body="  <form action=".api_baseName()." method='get' name='filters'>\n";
+   foreach($this->filters as $index=>$filter){
+    $modal_filter_body.="   <p>".$filter->label.": ";
+
+    $modal_filter_body.="<a href='#' onClick='selectToggle(".$index.",true)'>All</a> - ";
+    $modal_filter_body.="<a href='#' onClick='selectToggle(".$index.",false)'>None</a></p>\n";
+
+    $modal_filter_body.="   <select name='".$filter->name."[]' id='filters_input_".$index."' multiple='multiple'>\n";
+    foreach($filter->values as $value=>$label){
+     $modal_filter_body.="    <option value='".$value."'";
+     if(isset($_GET[$filter->name])){
+      foreach($_GET[$filter->name] as $g_option){
+       if($g_option==$value){$modal_filter_body.=" selected='selected'";}
+      }
+     }
+     $modal_filter_body.=">".$label."</option>\n";
+    }
+    $modal_filter_body.="   </select>\n";
+
+   }
+
+   $modal_filter_body.="   <br>\n   <input type='submit' value='Apply'>\n";
+   $modal_filter_body.="  </form>";
+
+   // build filter modal window
+   $modal_filter=new str_modal("filters");
+   $modal_filter->header("Filters");
+   $modal_filter->body($modal_filter_body);
+   // show link
+   echo "\n <!-- filters -->\n";
+   echo " <li class='filters'>\n";
+   echo "  ".$modal_filter->link(api_icon("icon-filter"))."\n";
+   echo " </li><!-- /filters -->\n\n";
+  }
   // show tabs
   if(is_array($this->nt_array)){
    // show field
@@ -128,9 +229,38 @@ class str_navigation{
     }
     echo "</li>\n";
    }
+  }// search bar
+  if($this->search){
+   echo " <!-- search -->\n";
+   echo " <form action='feasibility_list.php' method='get' name='nav-search'>\n";
+   echo "  <li class='search pull-right'>\n";
+   // get params
+   if(count($this->get)>0){
+    $gets=NULL;
+    foreach($this->get as $get){
+     $gets="&".$get."=".$_GET[$get];
+     echo "   <input type='hidden' name='".$get."' value='".$_GET[$get]."'>\n";
+    }
+    $gets=substr($gets,1);
+   }
+   // show input
+   echo "   <div class='input-append'>\n";
+   echo "    <input type='text' name='q' class='input-large' placeholder='Ricerca' value='".$_GET['q']."'>\n";
+   if($_GET['q']<>NULL){echo "    <a class='btn' href='feasibility_list.php?".$gets."'><i class='icon-remove-sign'></i></a>\n";}
+   echo "    <button type='submit' class='btn'><i class='icon-search'></i></button>\n";
+   echo "   </div>\n  </li>\n </form><!-- /search -->\n";
   }
   // close navigation
   echo "</ul><!-- /navigation-tabs -->\n\n";
+  // show filters
+  if(count($this->filters)>0){
+   echo "<script type='text/javascript'>\n";
+   echo " function selectToggle(index,selected){\n";
+   echo "  $('#filters_input_'+index+' option').each(function(){ $(this).attr('selected',selected); });\n";
+   echo " };\n";
+   echo "</script>\n\n";
+   $modal_filter->render();
+  }
   return TRUE;
  }
 
@@ -435,7 +565,7 @@ class str_form{
  // @integer $rows : number of textarea rows
  // @string $append : append text
  function addField($type,$name,$label=NULL,$value=NULL,$class=NULL,$placeholder=NULL,$disabled=FALSE,$rows=7,$append=NULL){
-  if(!in_array(strtolower($type),array("hidden","text","password","checkbox","radio","select","textarea","file"))){return FALSE;}
+  if(!in_array(strtolower($type),array("hidden","text","password","checkbox","radio","select","textarea","file","date","datetime"))){return FALSE;}
   if(strlen($name)==0){return FALSE;}
   $this->current_field++;
   $ff=new stdClass();
@@ -540,7 +670,7 @@ class str_form{
   }
   // open form
   echo "<!-- form-".$this->name." -->\n";
-  echo "<form name='".$this->name."' action='".$this->action."' method='".$this->method."' class='".$this->class."'>\n\n";
+  echo "<form name='".$this->name."' action='".$this->action."' method='".$this->method."' class='".$this->class."' enctype='multipart/form-data'>\n\n";
   // open split
   if($this->splitted>0){
    $GLOBALS['html']->split_open();
@@ -569,7 +699,7 @@ class str_form{
     case "text":
     case "password":
      if(!$ff->label){echo "  ";}
-     echo "  <input type='".$ff->type."' name='".$ff->name."' class='".$ff->class."' placeholder=\"".$ff->placeholder."\" value=\"".$ff->value."\"";
+     echo "  <input type='".$ff->type."' name='".$ff->name."' id='".$this->name."_input_".$index."' class='".$ff->class."' placeholder=\"".$ff->placeholder."\" value=\"".$ff->value."\"";
      if($ff->disabled){echo " disabled='disabled'";}
      echo ">\n";
      if(!$ff->label){echo "\n";}
@@ -583,13 +713,13 @@ class str_form{
     case "select":
      $options=TRUE;
      // open select
-     echo "  <select name='".$ff->name."' class='".$ff->class."'";
+     echo "  <select name='".$ff->name."' id='".$this->name."_input_".$index."' class='".$ff->class."'";
      if($ff->disabled){echo " disabled='disabled'";}
      echo ">\n";
      break;
     // textarea
     case "textarea":
-     echo "  <textarea name='".$ff->name."' rows='".$ff->rows."' class='".$ff->class."' placeholder=\"".$ff->placeholder."\"";
+     echo "  <textarea name='".$ff->name."' id='".$this->name."_input_".$index."' rows='".$ff->rows."' class='".$ff->class."' placeholder=\"".$ff->placeholder."\"";
      if($ff->disabled){echo " disabled='disabled'";}
      echo ">".$ff->value."</textarea>\n";
      break;
@@ -605,6 +735,20 @@ class str_form{
     // separators
     case "separator":
      echo "<".$ff->tag." class='".$ff->class."'>\n\n";
+     break;
+    // date
+    case "date":
+     echo "  <div id='".$this->name."_date_".$index."' class='input-append'>\n";
+     echo "   <input type='text' name='".$ff->name."' id='".$this->name."_input_".$index."' data-format='yyyy-MM-dd' readonly='readonly' class='".$ff->class."' value='".$ff->value."'>\n";
+     echo "   <span class='add-on'><i data-time-icon='icon-time' data-date-icon='icon-calendar'></i></span>\n";
+     echo "  </div>\n";
+     break;
+    // datetime
+    case "datetime":
+     echo "  <div id='".$this->name."_datetime_".$index."' class='input-append'>\n";
+     echo "   <input type='text' name='".$ff->name."' id='".$this->name."_input_".$index."' data-format='yyyy-MM-dd hh:mm' readonly='readonly' class='".$ff->class."' value='".$ff->value."'>\n";
+     echo "   <span class='add-on'><i data-time-icon='icon-time' data-date-icon='icon-calendar'></i></span>\n";
+     echo "  </div>\n";
      break;
     // custom
     case "custom":
@@ -640,7 +784,14 @@ class str_form{
    // close select
    if(strtolower($ff->type)=="select"){echo "  </select>\n";}
    // show and close append div
-   if($ff->append<>NULL){echo "  <span class='add-on'>".$ff->append."</span>\n  </div><!-- /input-append -->\n";}
+   if($ff->append<>NULL){
+    if(substr($ff->append,0,1)<>"<"){
+     echo "  <span class='add-on'>".$ff->append."</span>\n";
+    }else{
+     echo "  ".$ff->append."\n";
+    }
+    echo " </div><!-- /input-append -->\n";
+   }
    // close controls
    if($ff->label<>NULL){echo " </div><!-- /controls -->\n";}
    // close group
@@ -650,6 +801,16 @@ class str_form{
     echo "<script type='text/javascript'>\n";
     echo " $('input[id=file_".$index."]').change(function(){\n";
     echo "  $('#file_".$index."_show').val($(this).val());\n";
+    echo " });\n";
+    echo "</script>\n\n";
+   }
+   // date and datetime script
+   if(strtolower($ff->type)=="date" || strtolower($ff->type)=="datetime"){
+    echo "<script type='text/javascript'>\n";
+    echo " $(document).ready(function(){\n";
+    if(strtolower($ff->type)=="date"){echo "  $('#".$this->name."_date_".$index."').datetimepicker({ pickTime:false });\n";}
+    if(strtolower($ff->type)=="datetime"){echo "  $('#".$this->name."_datetime_".$index."').datetimepicker({ pickSeconds:false });\n";}
+    echo "  $('#".$this->name."_input_".$index."').dblclick(function(){ $(this).val('') });\n";
     echo " });\n";
     echo "</script>\n\n";
    }
@@ -766,7 +927,7 @@ class str_modal{
   // modal window footer
   if(strlen($this->footer)>0){echo " <div class='modal-footer'>\n".$this->footer."\n </div>\n";}
   // close modal window
-  echo "</div><!-- /modal window -->\n\n";
+  echo "</div><!-- /modal window ".$this->id." -->\n\n";
   return TRUE;
  }
 
@@ -818,7 +979,7 @@ class str_dl{
  /* -[ Render ]-------------------------------------------------------------- */
  public function render($echo=TRUE){
   $return="\n<!-- dynamic-list -->\n";
-  $return.="<dl class=".$this->class.">\n";
+  $return.="<dl class='".$this->class."'>\n";
   foreach($this->elements_array as $element){
    $return.=" <dt>".$element->label."</dt><dd>".$element->value."</dd>";
    if($element->separator<>NULL){$return.="<".$element->separator.">\n";}else{$return.="\n";}
@@ -828,4 +989,46 @@ class str_dl{
  }
 
 }
+
+
+/* -------------------------------------------------------------------------- *\
+|* -[ Flag Well ]------------------------------------------------------------ *|
+\* -------------------------------------------------------------------------- */
+
+class str_flagwell{
+
+ protected $title;
+ protected $class;
+ protected $content;
+
+ /* -[ Contruct ]------------------------------------------------------------ */
+ // @string $label : label for the flag well
+ // @string $class : flag well css class
+ public function __construct($title,$class=NULL){
+  if(strlen($title)==0){return FALSE;}
+  $this->title=$title;
+  $this->class=$class;
+  return TRUE;
+ }
+
+ /* -[ Flag Well Content ]--------------------------------------------------- */
+ // @string $content : content of the well
+ public function content($content){
+  if(strlen($content)==0){return FALSE;}
+  $this->content=$content;
+  return TRUE;
+ }
+
+ /* -[ Render ]-------------------------------------------------------------- */
+ public function render($echo=TRUE){
+  $return="\n<!-- flag-well -->\n";
+  $return.="<div class='flag-well ".$this->class."'>\n";
+  $return.=" <span class='title'>".$this->title."</span>\n";
+  $return.=" <div class='flag-well-content'>\n".$this->content."\n </div>\n";
+  $return.="</div><!-- /flag-well -->\n";
+  if($echo){echo $return;return TRUE;}else{return $return;}
+ }
+
+}
+
 ?>
