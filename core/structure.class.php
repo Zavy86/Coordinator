@@ -138,10 +138,8 @@ class str_navigation{
    $modal_filter_body="  <form action=".api_baseName()." method='get' name='filters'>\n";
    foreach($this->filters as $index=>$filter){
     $modal_filter_body.="   <p>".$filter->label.": ";
-
-    $modal_filter_body.="<a href='#' onClick='selectToggle(".$index.",true)'>All</a> - ";
-    $modal_filter_body.="<a href='#' onClick='selectToggle(".$index.",false)'>None</a></p>\n";
-
+    $modal_filter_body.="<a href='#' onClick='selectToggle(".$index.",true)'>".api_text("filters-select-all")."</a> - ";
+    $modal_filter_body.="<a href='#' onClick='selectToggle(".$index.",false)'>".api_text("filters-select-none")."</a></p>\n";
     $modal_filter_body.="   <select name='".$filter->name."[]' id='filters_input_".$index."' multiple='multiple'>\n";
     foreach($filter->values as $value=>$label){
      $modal_filter_body.="    <option value='".$value."'";
@@ -153,15 +151,13 @@ class str_navigation{
      $modal_filter_body.=">".$label."</option>\n";
     }
     $modal_filter_body.="   </select>\n";
-
    }
-
-   $modal_filter_body.="   <br>\n   <input type='submit' value='Apply'>\n";
+   $modal_filter_body.="   <br><br>\n   <input type='submit' class='btn btn-primary' value='".api_text("filters-apply")."'>\n";
+   $modal_filter_body.="   <a href='".api_baseName()."' class='btn'>".api_text("filters-reset")."</a>\n";
    $modal_filter_body.="  </form>";
-
    // build filter modal window
    $modal_filter=new str_modal("filters");
-   $modal_filter->header("Filters");
+   $modal_filter->header(api_text("filters-filters"));
    $modal_filter->body($modal_filter_body);
    // show link
    echo "\n <!-- filters -->\n";
@@ -252,7 +248,7 @@ class str_navigation{
   }
   // close navigation
   echo "</ul><!-- /navigation-tabs -->\n\n";
-  // show filters
+  // filters scripts
   if(count($this->filters)>0){
    echo "<script type='text/javascript'>\n";
    echo " function selectToggle(index,selected){\n";
