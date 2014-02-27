@@ -23,7 +23,10 @@
  <text key="filters-filters">Filtri</text>
  <text key="filters-apply">Applica</text>
  <text key="filters-reset">Resetta</text>
- <text key="filters-select-all">Tutti</text>
- <text key="filters-select-none">Nessuno</text>
+
+ <!-- forms -->
+ <text key="form-select">Seleziona</text>
+ <text key="form-select-all">Tutti</text>
+ <text key="form-select-none">Nessuno</text>
 
 </locale>

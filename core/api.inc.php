@@ -678,9 +678,21 @@ function api_accountGrouprole($idGroup,$idAccount=NULL){
 /* -[ Check if account is in group ]----------------------------------------- */
 // @param $idGroup   : ID of the group
 // @param $idAccount : ID of the account
-function api_checkAccountGroup($idGroup,$idAccount=NULL){
+// @param $subgroups : Check also in subgroups
+function api_checkAccountGroup($idGroup,$idAccount=NULL,$subgroups=FALSE){
  if($idAccount==NULL){$idAccount=$_SESSION['account']->id;}
- if(api_accountGrouprole($idGroup,$idAccount)>0){return TRUE;}else{return FALSE;}
+ if(api_accountGrouprole($idGroup,$idAccount)>0){
+  return TRUE;
+ }else{
+  if($subgroups){
+   // try in subgroups
+   $subgroups=$GLOBALS['db']->query("SELECT * FROM accounts_groups WHERE idGroup='".$idGroup."'");
+   while($subgroup=$GLOBALS['db']->fetchNextObject($subgroups)){
+    if(api_accountGrouprole($subgroup->id)>0){return TRUE;}
+   }
+  }
+  return FALSE;
+ }
 }
 
 

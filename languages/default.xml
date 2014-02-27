@@ -23,7 +23,10 @@
  <text key="filters-filters">Filters</text>
  <text key="filters-apply">Apply</text>
  <text key="filters-reset">Reset</text>
- <text key="filters-select-all">All</text>
- <text key="filters-select-none">None</text>
+
+ <!-- forms -->
+ <text key="form-select">Select</text>
+ <text key="form-select-all">All</text>
+ <text key="form-select-none">None</text>
 
 </locale>

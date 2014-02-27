@@ -37,7 +37,7 @@ class str_navigation{
  // @string $label : label of the tab
  // @string $url : link url
  // @string $get : additional get parameters for link (&key=value)
- // @string $class : input css class
+ // @string $class : tab css class
  // @boolean $enabled : enable the navigation tab (true) or not
  function addTab($label,$url=NULL,$get=NULL,$class=NULL,$enabled=TRUE){
   if(strlen($label)==0){return FALSE;}
@@ -56,7 +56,7 @@ class str_navigation{
  // @string $label : label of the tab
  // @string $url : link url
  // @string $get : additional get parameters for link (&key=value)
- // @string $class : input css class
+ // @string $class : sub tab css class
  // @boolean $enabled : enable the navigation tab (true) or not
  function addSubTab($label,$url=NULL,$get=NULL,$class=NULL,$enabled=TRUE){
   if(strlen($label)==0){return FALSE;}
@@ -74,16 +74,21 @@ class str_navigation{
  }
 
  /* -[ Add Filter ]---------------------------------------------------------- */
+ // @string $type : text, checkbox, radio, select, multiselect, date, datetime
  // @string $name : name of the filter input
  // @string $label : label of the filter
- // @array $values : array of values (value=>label)
- function addFilter($name,$label,$values){
+ // @array $options : array of options (value=>label)
+ // @string $class : filter input css class
+ function addFilter($type,$name,$label,$options=NULL,$class=NULL){
+  if(!in_array(strtolower($type),array("text","checkbox","radio","select","multiselect","date","datetime"))){return FALSE;}
   if(strlen($name)==0){return FALSE;}
-  if(!is_array($values)){$values=array($values);}
+  if($options<>NULL && !is_array($options)){$options=array($options);}
   $f=new stdClass();
+  $f->type=$type;
   $f->name=$name;
   $f->label=$label;
-  $f->values=$values;
+  $f->options=$options;
+  $f->class=$class;
   $this->filters[]=$f;
   return TRUE;
  }
@@ -94,17 +99,31 @@ class str_navigation{
   $text=NULL;
   foreach($this->filters as $filter){
    if(isset($_GET[$filter->name])){
-    $text_filter=NULL;
-    foreach($_GET[$filter->name] as $g_option){
-     $text_filter.=", ".$filter->values[$g_option]."";
+    $value=NULL;
+    // switch filter type
+    switch($filter->type){
+     // multiple filters have array results
+     case "multiselect":
+      $text_filter=NULL;
+      if(count($filter->options)==count($_GET[$filter->name])){
+       $value="Tutti";
+      }else{
+       foreach($_GET[$filter->name] as $g_option){
+        $text_filter.=", ".$filter->options[$g_option];
+       }
+       $value=substr($text_filter,2);
+      }
+      break;
+     default:
+      if($_GET[$filter->name]<>NULL){$value=$_GET[$filter->name];}
     }
-    $text.=" <span class='label label-info'>".$filter->label." = ".substr($text_filter,2)."</span>";
+    if($value<>NULL){$text.=" <span class='label label-info'>".$filter->label." = ".$value."</span>";}
    }
   }
   if($text<>NULL){
-   $return="<p><span class='label'>Filters:</span> ".substr($text,1)."</p>\n";
+   $return="<p><span class='label'>".api_text("filters-filters").":</span> ".substr(str_replace("*","%",$text),1)."</p>\n";
   }else{
-   if($unvalued<>NULL){$unvalued="<p><span class='label'>Filters:</span> <span class='label label-inverse'>".$unvalued."</span></p>\n";}
+   if($unvalued<>NULL){$unvalued="<p><span class='label'>".api_text("filters-filters").":</span> <span class='label label-inverse'>".$unvalued."</span></p>\n";}
    $return=$unvalued;
   }
   return $return;
@@ -115,15 +134,35 @@ class str_navigation{
  function filtersQuery($unvalued="0"){
   $query=NULL;
   foreach($this->filters as $filter){
+   $query_filter=NULL;
    if(isset($_GET[$filter->name])){
-    $query_filter=NULL;
-    foreach($_GET[$filter->name] as $g_option){
-     $query_filter.=" OR ".$filter->name."='".$g_option."'";
+    // switch filter type
+    switch($filter->type){
+     // multiple filters have array results
+     case "multiselect":
+      $multi_filter=NULL;
+      foreach($_GET[$filter->name] as $g_option){
+       $multi_filter.=" OR ".$filter->name."='".$g_option."'";
+      }
+      $query_filter="(".substr($multi_filter,4).")";
+      break;
+     // text filters use like
+     case "text":
+      if($_GET[$filter->name]<>NULL){
+       $query_filter=$filter->name." LIKE '".$_GET[$filter->name]."'";
+      }
+      break;
+     default:
+      if($_GET[$filter->name]<>NULL){
+       $query_filter=$filter->name."='".$_GET[$filter->name]."'";
+      }
     }
-    $query.=" AND (".substr($query_filter,4).")";
+    // make filter query
+    if($query_filter<>NULL){$query.=" AND ".$query_filter;}
    }
   }
-  if($query<>NULL){$return=substr($query,4);}else{$return=$unvalued;}
+  // build complete query
+  if($query<>NULL){$return="(".substr(str_replace("*","%",$query),5).")";}else{$return=$unvalued;}
   return $return;
  }
 
@@ -134,32 +173,31 @@ class str_navigation{
   echo "<ul class='nav nav-tabs ".$this->class."'>\n";
   // show filters
   if(count($this->filters)>0){
-   // build filters
-   $modal_filter_body="  <form action=".api_baseName()." method='get' name='filters'>\n";
-   $modal_filter_body.="   <input type='hidden' name='filtered' value='1'>\n";
-   foreach($this->filters as $index=>$filter){
-    $modal_filter_body.="   <p>".$filter->label.": ";
-    $modal_filter_body.="<a href='#' onClick='selectToggle(".$index.",true)'>".api_text("filters-select-all")."</a> - ";
-    $modal_filter_body.="<a href='#' onClick='selectToggle(".$index.",false)'>".api_text("filters-select-none")."</a></p>\n";
-    $modal_filter_body.="   <select name='".$filter->name."[]' id='filters_input_".$index."' multiple='multiple'>\n";
-    foreach($filter->values as $value=>$label){
-     $modal_filter_body.="    <option value='".$value."'";
-     if(isset($_GET[$filter->name])){
-      foreach($_GET[$filter->name] as $g_option){
-       if($g_option==$value){$modal_filter_body.=" selected='selected'";}
+   // build filter form modal body
+   $modal_filter_body=new str_form(api_baseName(),"get","filters");
+   $modal_filter_body->addField("hidden","filtered",NULL,"1");
+   foreach($this->filters as $filter){
+    if($filter->options<>NULL){
+     $modal_filter_body->addField($filter->type,$filter->name,$filter->label,NULL,$filter->class);
+     foreach($filter->options as $value=>$label){
+      $checked=FALSE;
+      if(is_array($_GET[$filter->name])){
+       foreach($_GET[$filter->name] as $g_option){
+        if($g_option==$value){$checked=TRUE;}
+       }
       }
+      $modal_filter_body->addFieldOption($value,$label,$checked);
      }
-     $modal_filter_body.=">".$label."</option>\n";
+    }else{
+     $modal_filter_body->addField($filter->type,$filter->name,$filter->label,str_replace("*","%",$_GET[$filter->name]),$filter->class);
     }
-    $modal_filter_body.="   </select>\n";
    }
-   $modal_filter_body.="   <br><br>\n   <input type='submit' class='btn btn-primary' value='".api_text("filters-apply")."'>\n";
-   $modal_filter_body.="   <a href='".api_baseName()."' class='btn'>".api_text("filters-reset")."</a>\n";
-   $modal_filter_body.="  </form>";
+   $modal_filter_body->addControl("submit",api_text("filters-apply"));
+   $modal_filter_body->addControl("button",api_text("filters-reset"),NULL,api_baseName());
    // build filter modal window
    $modal_filter=new str_modal("filters");
    $modal_filter->header(api_text("filters-filters"));
-   $modal_filter->body($modal_filter_body);
+   $modal_filter->body($modal_filter_body->render(FALSE));
    // show link
    echo "\n <!-- filters -->\n";
    echo " <li class='filters'>\n";
@@ -552,7 +590,7 @@ class str_form{
  }
 
  /* -[ Add Field ]----------------------------------------------------------- */
- // @string $type : hidden, text, password, checkbox, radio, select, textarea, file
+ // @string $type : hidden, text, password, checkbox, radio, select, multiselect, textarea, file, date, datetime
  // @string $name : name of the form input (spaces not allowed)
  // @string $label : label for the field
  // @string $value : default value
@@ -562,7 +600,7 @@ class str_form{
  // @integer $rows : number of textarea rows
  // @string $append : append text
  function addField($type,$name,$label=NULL,$value=NULL,$class=NULL,$placeholder=NULL,$disabled=FALSE,$rows=7,$append=NULL){
-  if(!in_array(strtolower($type),array("hidden","text","password","checkbox","radio","select","textarea","file","date","datetime"))){return FALSE;}
+  if(!in_array(strtolower($type),array("hidden","text","password","checkbox","radio","select","multiselect","textarea","file","date","datetime"))){return FALSE;}
   if(strlen($name)==0){return FALSE;}
   $this->current_field++;
   $ff=new stdClass();
@@ -659,47 +697,59 @@ class str_form{
  }
 
  /* -[ Render ]-------------------------------------------------------------- */
- function render(){
+ // @boolean $echo : echo result (true) or return
+ function render($echo=TRUE){
+  $return=NULL;
   // check splits
+  $split_open=FALSE;
   if($this->splitted>0){
    // calculate split
    $span=12/($this->splitted+1);
   }
   // open form
-  echo "<!-- form-".$this->name." -->\n";
-  echo "<form name='".$this->name."' action='".$this->action."' method='".$this->method."' class='".$this->class."' enctype='multipart/form-data'>\n\n";
+  $return.="<!-- form-".$this->name." -->\n";
+  $return.="<form name='".$this->name."' action='".$this->action."' method='".$this->method."' class='".$this->class."' enctype='multipart/form-data'>\n\n";
   // open split
   if($this->splitted>0){
-   $GLOBALS['html']->split_open();
-   $GLOBALS['html']->split_span($span);
+   //$GLOBALS['html']->split_open();
+   //$GLOBALS['html']->split_span($span);
+   $return.="<!-- row-fluid -->\n";
+   $return.="<div class='row-fluid'>\n";
+   $split_open=TRUE;
+   $return.=" <div class='span".$span."'>\n\n";
   }
   // show field
   foreach($this->ff_array as $index=>$ff){
    $options=FALSE;
    // check for split
-   if($ff->type=="split"){$GLOBALS['html']->split_span($span);continue;}
+   if($ff->type=="split"){
+    //$GLOBALS['html']->split_span($span);
+    $return.="\n </div><!-- /span".$this->columns." -->\n";
+    $return.=" <div class='span".$span."'>\n\n";
+    continue;
+   }
    // open group
    if($ff->type<>"separator" && $ff->label<>NULL){
-    echo "<div id='field_".$ff->name."' class='control-group'>\n";
+    $return.="<div id='field_".$ff->name."' class='control-group'>\n";
    }
    // show label
    if($ff->label<>NULL){
-    echo " <label class='control-label'>".$ff->label."</label>\n";
-    echo " <div class='controls'>\n";
+    $return.=" <label class='control-label'>".$ff->label."</label>\n";
+    $return.=" <div class='controls'>\n";
    }
    // open append div
-   if($ff->append<>NULL){echo "  <div class='input-append'>\n";}
+   if($ff->append<>NULL){$return.="  <div class='input-append'>\n";}
    // show input
    switch(strtolower($ff->type)){
     // hidden, text, password
     case "hidden":
     case "text":
     case "password":
-     if(!$ff->label){echo "  ";}
-     echo "  <input type='".$ff->type."' name='".$ff->name."' id='".$this->name."_input_".$index."' class='".$ff->class."' placeholder=\"".$ff->placeholder."\" value=\"".$ff->value."\"";
-     if($ff->disabled){echo " disabled='disabled'";}
-     echo ">\n";
-     if(!$ff->label){echo "\n";}
+     if(!$ff->label){$return.="  ";}
+     $return.="  <input type='".$ff->type."' name='".$ff->name."' id='".$this->name."_input_".$index."' class='".$ff->class."' placeholder=\"".$ff->placeholder."\" value=\"".$ff->value."\"";
+     if($ff->disabled){$return.=" disabled='disabled'";}
+     $return.=">\n";
+     if(!$ff->label){$return.="\n";}
      break;
     // checkbox, radio
     case "checkbox":
@@ -710,46 +760,54 @@ class str_form{
     case "select":
      $options=TRUE;
      // open select
-     echo "  <select name='".$ff->name."' id='".$this->name."_input_".$index."' class='".$ff->class."'";
-     if($ff->disabled){echo " disabled='disabled'";}
-     echo ">\n";
+     $return.="  <select name='".$ff->name."' id='".$this->name."_input_".$index."' class='".$ff->class."'";
+     if($ff->disabled){$return.=" disabled='disabled'";}
+     $return.=">\n";
+     break;
+    // multiselect
+    case "multiselect":
+     $options=TRUE;
+     // open multiselect
+     $return.="  <select name='".$ff->name."[]' id='".$this->name."_input_".$index."' class='".$ff->class."' multiple='multiple'";
+     if($ff->disabled){$return.=" disabled='disabled'";}
+     $return.=">\n";
      break;
     // textarea
     case "textarea":
-     echo "  <textarea name='".$ff->name."' id='".$this->name."_input_".$index."' rows='".$ff->rows."' class='".$ff->class."' placeholder=\"".$ff->placeholder."\"";
-     if($ff->disabled){echo " disabled='disabled'";}
-     echo ">".$ff->value."</textarea>\n";
+     $return.="  <textarea name='".$ff->name."' id='".$this->name."_input_".$index."' rows='".$ff->rows."' class='".$ff->class."' placeholder=\"".$ff->placeholder."\"";
+     if($ff->disabled){$return.=" disabled='disabled'";}
+     $return.=">".$ff->value."</textarea>\n";
      break;
     // file
     case "file":
      if($ff->placeholder==NULL){$ff->placeholder="Select a file to upload";}
-     echo "  <input type='file' id='file_".$index."' name='".$ff->name."' style='display:none'>\n";
-     echo "  <div class='input-append'>\n";
-     echo "   <input type='text' id='file_".$index."_show' class='".$ff->class."' placeholder=\"".$ff->placeholder."\" onDblClick=\"$('input[id=file_".$index."]').click();\" readonly>\n";
-     echo "   <a class='btn' onClick=\"$('input[id=file_".$index."]').click();\">Sfoglia</a>\n";
-     echo "  </div>\n";
+     $return.="  <input type='file' id='file_".$index."' name='".$ff->name."' style='display:none'>\n";
+     $return.="  <div class='input-append'>\n";
+     $return.="   <input type='text' id='file_".$index."_show' class='".$ff->class."' placeholder=\"".$ff->placeholder."\" onDblClick=\"$('input[id=file_".$index."]').click();\" readonly>\n";
+     $return.="   <a class='btn' onClick=\"$('input[id=file_".$index."]').click();\">Sfoglia</a>\n";
+     $return.="  </div>\n";
      break;
     // separators
     case "separator":
-     echo "<".$ff->tag." class='".$ff->class."'>\n\n";
+     $return.="<".$ff->tag." class='".$ff->class."'>\n\n";
      break;
     // date
     case "date":
-     echo "  <div id='".$this->name."_date_".$index."' class='input-append'>\n";
-     echo "   <input type='text' name='".$ff->name."' id='".$this->name."_input_".$index."' data-format='yyyy-MM-dd' readonly='readonly' class='".$ff->class."' value='".$ff->value."'>\n";
-     echo "   <span class='add-on'><i data-time-icon='icon-time' data-date-icon='icon-calendar'></i></span>\n";
-     echo "  </div>\n";
+     $return.="  <div id='".$this->name."_date_".$index."' class='input-append'>\n";
+     $return.="   <input type='text' name='".$ff->name."' id='".$this->name."_input_".$index."' data-format='yyyy-MM-dd' readonly='readonly' class='".$ff->class."' value='".$ff->value."'>\n";
+     $return.="   <span class='add-on'><i data-time-icon='icon-time' data-date-icon='icon-calendar'></i></span>\n";
+     $return.="  </div>\n";
      break;
     // datetime
     case "datetime":
-     echo "  <div id='".$this->name."_datetime_".$index."' class='input-append'>\n";
-     echo "   <input type='text' name='".$ff->name."' id='".$this->name."_input_".$index."' data-format='yyyy-MM-dd hh:mm' readonly='readonly' class='".$ff->class."' value='".$ff->value."'>\n";
-     echo "   <span class='add-on'><i data-time-icon='icon-time' data-date-icon='icon-calendar'></i></span>\n";
-     echo "  </div>\n";
+     $return.="  <div id='".$this->name."_datetime_".$index."' class='input-append'>\n";
+     $return.="   <input type='text' name='".$ff->name."' id='".$this->name."_input_".$index."' data-format='yyyy-MM-dd hh:mm' readonly='readonly' class='".$ff->class."' value='".$ff->value."'>\n";
+     $return.="   <span class='add-on'><i data-time-icon='icon-time' data-date-icon='icon-calendar'></i></span>\n";
+     $return.="  </div>\n";
      break;
     // custom
     case "custom":
-     echo $ff->source;
+     $return.=$ff->source;
      break;
    }
    // show options
@@ -762,91 +820,106 @@ class str_form{
       switch(strtolower($ff->type)){
        case "checkbox":
        case "radio":
-        echo "  <label class='".$ff->type." ".$ff->class."'>";
-        echo "<input type='".$ff->type."' name='".$ff->name."' value=\"".$fo->value."\"";
-        if($fo->checked){echo " checked='checked'";}
-        if($fo->disabled){echo " disabled='disabled'";}
-        echo ">".$fo->label."</label>\n";
+        $return.="  <label class='".$ff->type." ".$ff->class."'>";
+        $return.="<input type='".$ff->type."' name='".$ff->name."' value=\"".$fo->value."\"";
+        if($fo->checked){$return.=" checked='checked'";}
+        if($fo->disabled){$return.=" disabled='disabled'";}
+        $return.=">".$fo->label."</label>\n";
         break;
-       // show select option
+       // show select or multiselect option
        case "select":
-        echo "   <option value=\"".$fo->value."\"";
-        if($fo->checked){echo " selected='selected'";}
-        echo ">".$fo->label."</option>\n";
+       case "multiselect":
+        $return.="   <option value=\"".$fo->value."\"";
+        if($fo->checked){$return.=" selected='selected'";}
+        $return.=">".$fo->label."</option>\n";
         break;
       }
      }
     }
    }
    // close select
-   if(strtolower($ff->type)=="select"){echo "  </select>\n";}
+   if(strtolower($ff->type)=="select"){$return.="  </select>\n";}
+   // close multiselect
+   if(strtolower($ff->type)=="multiselect"){
+    $return.="  </select>\n";
+    $return.="  <br>\n ".api_text("form-select");
+    $return.=" <a href='#' onClick='selectToggle(".$index.",true)'>".api_text("form-select-all")."</a>,";
+    $return.=" <a href='#' onClick='selectToggle(".$index.",false)'>".api_text("form-select-none")."</a>\n";
+   }
    // show and close append div
    if($ff->append<>NULL){
     if(substr($ff->append,0,1)<>"<"){
-     echo "  <span class='add-on'>".$ff->append."</span>\n";
+     $return.="  <span class='add-on'>".$ff->append."</span>\n";
     }else{
-     echo "  ".$ff->append."\n";
+     $return.="  ".$ff->append."\n";
     }
-    echo " </div><!-- /input-append -->\n";
+    $return.=" </div><!-- /input-append -->\n";
    }
    // close controls
-   if($ff->label<>NULL){echo " </div><!-- /controls -->\n";}
+   if($ff->label<>NULL){$return.=" </div><!-- /controls -->\n";}
    // close group
-   if($ff->type<>"separator" && $ff->label<>NULL){echo "</div><!-- /control-group -->\n\n";}
+   if($ff->type<>"separator" && $ff->label<>NULL){$return.="</div><!-- /control-group -->\n\n";}
    // file script
    if(strtolower($ff->type)=="file"){
-    echo "<script type='text/javascript'>\n";
-    echo " $('input[id=file_".$index."]').change(function(){\n";
-    echo "  $('#file_".$index."_show').val($(this).val());\n";
-    echo " });\n";
-    echo "</script>\n\n";
+    $return.="<script type='text/javascript'>\n";
+    $return.=" $('input[id=file_".$index."]').change(function(){\n";
+    $return.="  $('#file_".$index."_show').val($(this).val());\n";
+    $return.=" });\n";
+    $return.="</script>\n\n";
    }
    // date and datetime script
    if(strtolower($ff->type)=="date" || strtolower($ff->type)=="datetime"){
-    echo "<script type='text/javascript'>\n";
-    echo " $(document).ready(function(){\n";
-    if(strtolower($ff->type)=="date"){echo "  $('#".$this->name."_date_".$index."').datetimepicker({ pickTime:false });\n";}
-    if(strtolower($ff->type)=="datetime"){echo "  $('#".$this->name."_datetime_".$index."').datetimepicker({ pickSeconds:false });\n";}
-    echo "  $('#".$this->name."_input_".$index."').dblclick(function(){ $(this).val('') });\n";
-    echo " });\n";
-    echo "</script>\n\n";
+    $return.="<script type='text/javascript'>\n";
+    $return.=" $(document).ready(function(){\n";
+    if(strtolower($ff->type)=="date"){$return.="  $('#".$this->name."_date_".$index."').datetimepicker({ pickTime:false });\n";}
+    if(strtolower($ff->type)=="datetime"){$return.="  $('#".$this->name."_datetime_".$index."').datetimepicker({ pickSeconds:false });\n";}
+    $return.="  $('#".$this->name."_input_".$index."').dblclick(function(){ $(this).val('') });\n";
+    $return.=" });\n";
+    $return.="</script>\n\n";
    }
   }
   // show controls
   if(is_array($this->fc_array)){
    // open group
-   echo "<div class='control-group'>\n";
-   echo " <div class='controls'>\n";
+   $return.="<div class='control-group'>\n";
+   $return.=" <div class='controls'>\n";
    // show control
    foreach($this->fc_array as $index=>$fc){
     switch(strtolower($fc->type)){
      // submit
      case "submit":
-      echo "  <input type='submit' name='submit' id='".$this->name."_control_".$index."' class='btn btn-primary ".$fc->class."' value='".$fc->label."'>\n";
+      $return.="  <input type='submit' name='submit' id='".$this->name."_control_".$index."' class='btn btn-primary ".$fc->class."' value='".$fc->label."'>\n";
       break;
      // reset
      case "reset":
-      echo "  <input type='reset' name='submit' id='".$this->name."_control_".$index."' class='btn ".$fc->class."' value='".$fc->label."'>\n";
+      $return.="  <input type='reset' name='submit' id='".$this->name."_control_".$index."' class='btn ".$fc->class."' value='".$fc->label."'>\n";
       break;
      // button, link
      case "button":
      case "link":
-      echo "  <a href='".$fc->url."' ";
-      if(strtolower($fc->type)=="button"){echo "class='btn ".$fc->class."'";}
-       else{echo "class='".$fc->class."'";}
-      if(strlen($fc->confirm)){echo " onClick=\"return confirm('".$fc->confirm."')\"";}
-      echo " id='".$this->name."_control_".$index."'>".$fc->label."</a>\n";
+      $return.="  <a href='".$fc->url."' ";
+      if(strtolower($fc->type)=="button"){$return.="class='btn ".$fc->class."'";}
+       else{$return.="class='".$fc->class."'";}
+      if(strlen($fc->confirm)){$return.=" onClick=\"return confirm('".$fc->confirm."')\"";}
+      $return.=" id='".$this->name."_control_".$index."'>".$fc->label."</a>\n";
       break;
     }
    }
   }
   // close group
-  echo " </div>\n</div>\n\n";
+  $return.=" </div>\n</div>\n\n";
   // close split
-  if($this->splitted>0){$GLOBALS['html']->split_close();}
+  if($this->splitted>0){
+   //$GLOBALS['html']->split_close();
+   if($split_open){
+    $return.="\n </div><!-- /span".$span." -->\n";
+    $split_open=FALSE;
+    $return.="</div><!-- /row-fluid -->\n\n";
+   }
+  }
   // close form
-  echo "</form><!-- /form-".$this->name." -->\n\n";
-  return TRUE;
+  $return.="</form><!-- /form-".$this->name." -->\n\n";
+  if($echo){echo $return;return TRUE;}else{return $return;}
  }
 }
 
@@ -909,6 +982,7 @@ class str_modal{
  }
 
  /* -[ Render ]-------------------------------------------------------------- */
+ // @boolean $echo : echo result (true) or return
  function render(){
   if(!strlen($this->body)>0){return FALSE;}
   // open modal window
@@ -974,6 +1048,7 @@ class str_dl{
  }
 
  /* -[ Render ]-------------------------------------------------------------- */
+ // @boolean $echo : echo result (true) or return
  public function render($echo=TRUE){
   $return="\n<!-- dynamic-list -->\n";
   $return.="<dl class='".$this->class."'>\n";
@@ -1017,6 +1092,7 @@ class str_flagwell{
  }
 
  /* -[ Render ]-------------------------------------------------------------- */
+ // @boolean $echo : echo result (true) or return
  public function render($echo=TRUE){
   $return="\n<!-- flag-well -->\n";
   $return.="<div class='flag-well ".$this->class."'>\n";
