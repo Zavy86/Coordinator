@@ -2,8 +2,10 @@
 
 <locale language="EN">
 
+ <!-- module -->
+ <text key="module-title">REgistro eventi</text>
+
  <!-- template.inc.php -->
- <text key="module-title">Registro eventi</text>
  <text key="nav-allEvents">Tutti gli eventi</text>
  <text key="nav-warningsAndErrors">Avvertimenti ed Errori</text>
  <text key="nav-notices">Notifiche</text>

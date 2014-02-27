@@ -3,10 +3,8 @@
 |* -[ Logs - Template ]------------------------------------------------------ *|
 \* -------------------------------------------------------------------------- */
 include("module.inc.php");
-// include core api functions
 include("../core/api.inc.php");
-// if exist include module api functions
-if(file_exists("api.inc.php")){include("api.inc.php");}
+api_loadModule();
 // show header
 $html->header(api_text("module-title"),$module_name);
 // acquire variables
@@ -54,7 +52,7 @@ while($module=$GLOBALS['db']->fetchNextObject($modules)){
 // show navigation tab
 $nav->render();
 // check permissions before displaying module
-if($checkPermission==NULL){content();}else{if(api_checkPermission("logs",$checkPermission,TRUE)){content();}}
+if($checkPermission==NULL){content();}else{if(api_checkPermission($module_name,$checkPermission,TRUE)){content();}}
 // show footer
 $html->footer();
 ?>

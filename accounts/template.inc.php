@@ -2,9 +2,11 @@
 /* -------------------------------------------------------------------------- *\
 |* -[ Accounts - Template ]-------------------------------------------------- *|
 \* -------------------------------------------------------------------------- */
+include("module.inc.php");
 include("../core/api.inc.php");
+api_loadModule();
 // show header
-$html->header("Accounts",NULL);
+$html->header(api_text("module-title"),NULL);
 // build navigation tab
 $nav=new str_navigation();
 $nav->addTab(api_text("nav-profile"),"index.php");
@@ -18,7 +20,7 @@ $nav->addSubTab(api_text("nav-company"),"companies_edit.php",NULL,NULL,(api_chec
 // show navigation tab
 $nav->render();
 // check permissions before displaying module
-if($checkPermission==NULL){content();}else{if(api_checkPermission("accounts",$checkPermission,TRUE)){content();}}
+if($checkPermission==NULL){content();}else{if(api_checkPermission($module_name,$checkPermission,TRUE)){content();}}
 // show footer
 $html->footer();
 ?>

@@ -3,8 +3,8 @@
 |* -[ Dashboard - Template ]------------------------------------------------ *|
 \* ------------------------------------------------------------------------- */
 include("module.inc.php");
-// include core api functions
 include("../core/api.inc.php");
+api_loadModule();
 // if exist include module api functions
 if(file_exists("api.inc.php")){include("api.inc.php");}
 // show header

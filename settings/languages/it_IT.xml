@@ -2,6 +2,9 @@
 
 <locale language="EN">
 
+ <!-- module -->
+ <text key="module-title">Impostazioni</text>
+
  <!-- alerts -->
  <text key="settingSaved">Le impostazioni sono state salvate correttamente</text>
  <text key="settingError">Si è verificato un errore durante il salvataggio delle impostazioni</text>
@@ -14,7 +17,6 @@
  <text key="menuDeleted">Il menu è stato cancellato</text>
 
  <!-- template.inc.php -->
- <text key="module-title">Impostazioni</text>
  <text key="nav-settings">Impostazioni</text>
  <text key="nav-modules">Moduli</text>
  <text key="nav-permissions">Permessi</text>

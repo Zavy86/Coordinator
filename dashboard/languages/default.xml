@@ -2,12 +2,14 @@
 
 <locale language="IT">
 
+ <!-- module -->
+ <text key="module-title">Dashboard</text>
+
  <!-- alerts -->
  <text key="notificationSend">The notification has been submitted successfully</text>
  <text key="notificationSendError">There was an error while sending the notification</text>
 
  <!-- template.inc.php -->
- <text key="module-title">Dashboard</text>
  <text key="nav-notifications">Notifications</text>
  <text key="nav-archived-notifications">Notifications Archive</text>
  <text key="nav-send-notifications">Send a notification</text>

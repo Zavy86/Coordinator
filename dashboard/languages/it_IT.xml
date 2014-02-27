@@ -2,12 +2,14 @@
 
 <locale language="IT">
 
+ <!-- module -->
+ <text key="module-title">Bacheca</text>
+
  <!-- alerts -->
  <text key="notificationSend">La notifica è stata inoltrata correttamente</text>
  <text key="notificationSendError">Si è verificato un errore durante la compilazione della notifica</text>
 
  <!-- template.inc.php -->
- <text key="module-title">Bacheca</text>
  <text key="nav-notifications">Notifiche</text>
  <text key="nav-archived-notifications">Archivio notifiche</text>
  <text key="nav-send-notifications">Invia una notifica</text>

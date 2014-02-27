@@ -2,8 +2,10 @@
 
 <locale language="EN">
 
- <!-- template.inc.php -->
+ <!-- module -->
  <text key="module-title">Statistiche</text>
+
+ <!-- template.inc.php -->
  <text key="nav-servers">Servers</text>
 
 </locale>
