@@ -67,9 +67,9 @@ if((strpos($_SERVER['HTTP_USER_AGENT'],'Chrome')==false)
 // @param $path : Path of locale if not default
 function api_loadLocaleFile($path=NULL){
  if($path==NULL){$path=".";}
- if($_SESSION['language']<>NULL && file_exists($path."/languages/".strtolower($_SESSION['language']).".xml")){
+ if($_SESSION['language']<>NULL && file_exists($path."/languages/".$_SESSION['language'].".xml")){
   // load choised locale file
-  $xml=simplexml_load_file($path."/languages/".strtolower($_SESSION['language']).".xml");
+  $xml=simplexml_load_file($path."/languages/".$_SESSION['language'].".xml");
  }elseif(file_exists($path."/languages/default.xml")){
   // load deafult locale file
   $xml=simplexml_load_file($path."/languages/default.xml");
