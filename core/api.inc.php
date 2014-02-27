@@ -544,6 +544,18 @@ function api_groupName($idGroup,$description=FALSE){
 }
 
 
+/* -[ Group id by group name ]----------------------------------------------- */
+// @param $groupName : Name of the group
+function api_groupId($groupName){
+ $group=$GLOBALS['db']->queryUniqueObject("SELECT * FROM accounts_groups WHERE name='".$groupName."'");
+ if($group->id){
+  return $group->id;
+ }else{
+  return FALSE;
+ }
+}
+
+
 /* -[ Grouprole name by grouprole id ]--------------------------------------- */
 // @param $idGrouprole : ID of the grouprole
 function api_grouproleName($idGrouprole,$description=FALSE){

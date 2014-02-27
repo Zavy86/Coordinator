@@ -136,6 +136,7 @@ class str_navigation{
   if(count($this->filters)>0){
    // build filters
    $modal_filter_body="  <form action=".api_baseName()." method='get' name='filters'>\n";
+   $modal_filter_body.="   <input type='hidden' name='filtered' value='1'>\n";
    foreach($this->filters as $index=>$filter){
     $modal_filter_body.="   <p>".$filter->label.": ";
     $modal_filter_body.="<a href='#' onClick='selectToggle(".$index.",true)'>".api_text("filters-select-all")."</a> - ";

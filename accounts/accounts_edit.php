@@ -66,6 +66,7 @@ function content(){
   $groups=$GLOBALS['db']->query($query);
   while($group=$GLOBALS['db']->fetchNextObject($groups)){
    $name=$group->name;
+   if($group->idGroup>0){$name=api_groupName($group->idGroup)."&minus;".$name;}
    if($group->description){$name.=" (".$group->description.")";}
    // build group table row
    $table->addRow();
