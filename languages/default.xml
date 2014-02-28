@@ -28,5 +28,7 @@
  <text key="form-select">Select</text>
  <text key="form-select-all">All</text>
  <text key="form-select-none">None</text>
+ <text key="form-range-from">From</text>
+ <text key="form-range-to">To</text>
 
 </locale>

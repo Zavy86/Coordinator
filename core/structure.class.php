@@ -74,13 +74,14 @@ class str_navigation{
  }
 
  /* -[ Add Filter ]---------------------------------------------------------- */
- // @string $type : text, checkbox, radio, select, multiselect, date, datetime
+ // @string $type : text, checkbox, radio, select, multiselect, range, date, datetime, daterange, datetimerange
  // @string $name : name of the filter input
  // @string $label : label of the filter
  // @array $options : array of options (value=>label)
  // @string $class : filter input css class
- function addFilter($type,$name,$label,$options=NULL,$class=NULL){
-  if(!in_array(strtolower($type),array("text","checkbox","radio","select","multiselect","date","datetime"))){return FALSE;}
+ // @string $placeholder : placeholder message
+ function addFilter($type,$name,$label,$options=NULL,$class=NULL,$placeholder=NULL){
+  if(!in_array(strtolower($type),array("text","checkbox","radio","select","multiselect","range","date","datetime","daterange","datetimerange"))){return FALSE;}
   if(strlen($name)==0){return FALSE;}
   if($options<>NULL && !is_array($options)){$options=array($options);}
   $f=new stdClass();
@@ -89,6 +90,7 @@ class str_navigation{
   $f->label=$label;
   $f->options=$options;
   $f->class=$class;
+  $f->placeholder=$placeholder;
   $this->filters[]=$f;
   return TRUE;
  }
@@ -98,30 +100,38 @@ class str_navigation{
  function filtersText($unvalued=NULL){
   $text=NULL;
   foreach($this->filters as $filter){
-   if(isset($_GET[$filter->name])){
-    $value=NULL;
-    // switch filter type
-    switch($filter->type){
-     // multiple filters have array results
-     case "multiselect":
-      $text_filter=NULL;
-      if(count($filter->options)==count($_GET[$filter->name])){
-       $value="Tutti";
-      }else{
+   $value=NULL;
+   // switch filter type
+   switch($filter->type){
+    // multiple filters have array results
+    case "multiselect":
+     $text_filter=NULL;
+     if(count($filter->options)==count($_GET[$filter->name])){
+      $value="Tutti";
+     }else{
+      if(is_array($_GET[$filter->name])){
        foreach($_GET[$filter->name] as $g_option){
         $text_filter.=", ".$filter->options[$g_option];
        }
-       $value=substr($text_filter,2);
       }
-      break;
-     case "select":
-      if($_GET[$filter->name]<>NULL){$value=$filter->options[$_GET[$filter->name]];}
-      break;
-     default:
-      if($_GET[$filter->name]<>NULL){$value=$_GET[$filter->name];}
-    }
-    if($value<>NULL){$text.=" <span class='label label-info'>".$filter->label." = ".$value."</span>";}
+      $value=substr($text_filter,2);
+     }
+     break;
+    // select value is in array
+    case "select":
+     if($_GET[$filter->name]<>NULL){$value=$filter->options[$_GET[$filter->name]];}
+     break;
+    // range values
+    case "range":
+    case "daterange":
+    case "datetimerange":
+     if($_GET[$filter->name."_from"]<>NULL){$value=api_text("form-range-from")." ".$_GET[$filter->name."_from"]." ";}
+     if($_GET[$filter->name."_to"]<>NULL){$value.=api_text("form-range-to")." ".$_GET[$filter->name."_to"];}
+     break;
+    default:
+     if($_GET[$filter->name]<>NULL){$value=$_GET[$filter->name];}
    }
+   if($value<>NULL){$text.=" <span class='label label-info'>".$filter->label." = ".$value."</span>";}
   }
   if($text<>NULL){
    $return="<p><span class='label'>".api_text("filters-filters").":</span> ".substr(str_replace("*","%",$text),1)."</p>\n";
@@ -138,31 +148,41 @@ class str_navigation{
   $query=NULL;
   foreach($this->filters as $filter){
    $query_filter=NULL;
-   if(isset($_GET[$filter->name])){
-    // switch filter type
-    switch($filter->type){
-     // multiple filters have array results
-     case "multiselect":
-      $multi_filter=NULL;
+   // switch filter type
+   switch($filter->type){
+    // multiple filters have array results
+    case "multiselect":
+     $multi_filter=NULL;
+     if(is_array($_GET[$filter->name])){
       foreach($_GET[$filter->name] as $g_option){
        $multi_filter.=" OR ".$filter->name."='".$g_option."'";
       }
-      $query_filter="(".substr($multi_filter,4).")";
-      break;
-     // text filters use like
-     case "text":
-      if($_GET[$filter->name]<>NULL){
-       $query_filter=$filter->name." LIKE '".$_GET[$filter->name]."'";
-      }
-      break;
-     default:
-      if($_GET[$filter->name]<>NULL){
-       $query_filter=$filter->name."='".$_GET[$filter->name]."'";
-      }
-    }
-    // make filter query
-    if($query_filter<>NULL){$query.=" AND ".$query_filter;}
+     }
+     if($multi_filter<>NULL){$query_filter="(".substr($multi_filter,4).")";}
+     break;
+    // range values
+    case "range":
+    case "daterange":
+    case "datetimerange":
+     $query_filter="(";
+     if($_GET[$filter->name."_from"]<>NULL){$query_filter.=$filter->name.">='".$_GET[$filter->name."_from"]."'";}
+     if($query_filter<>"("){$query_filter.=" AND ";}
+     if($_GET[$filter->name."_to"]<>NULL){$query_filter.=$filter->name."<='".$_GET[$filter->name."_to"]."'";}
+     $query_filter.=")";
+     break;
+    // text filters use like
+    case "text":
+     if($_GET[$filter->name]<>NULL){
+      $query_filter=$filter->name." LIKE '".$_GET[$filter->name]."'";
+     }
+     break;
+    default:
+     if($_GET[$filter->name]<>NULL){
+      $query_filter=$filter->name."='".$_GET[$filter->name]."'";
+     }
    }
+   // make filter query
+   if($query_filter<>NULL){$query.=" AND ".$query_filter;}
   }
   // build complete query
   if($query<>NULL){$return="(".substr(str_replace("*","%",$query),5).")";}else{$return=$unvalued;}
@@ -180,8 +200,9 @@ class str_navigation{
    $modal_filter_body=new str_form(api_baseName(),"get","filters");
    $modal_filter_body->addField("hidden","filtered",NULL,"1");
    foreach($this->filters as $filter){
+    // filter with options
     if($filter->options<>NULL){
-     $modal_filter_body->addField($filter->type,$filter->name,$filter->label,NULL,$filter->class);
+     $modal_filter_body->addField($filter->type,$filter->name,$filter->label,NULL,$filter->class,$filter->placeholder);
      foreach($filter->options as $value=>$label){
       $checked=FALSE;
       if(is_array($_GET[$filter->name])){
@@ -194,7 +215,13 @@ class str_navigation{
       $modal_filter_body->addFieldOption($value,$label,$checked);
      }
     }else{
-     $modal_filter_body->addField($filter->type,$filter->name,$filter->label,str_replace("*","%",$_GET[$filter->name]),$filter->class);
+     // range filter
+     if($filter->type=="range" || $filter->type=="daterange" || $filter->type=="datetimerange"){
+      $modal_filter_body->addField($filter->type,$filter->name,$filter->label,array(str_replace("*","%",$_GET[$filter->name."_from"]),str_replace("*","%",$_GET[$filter->name."_to"])),$filter->class,$filter->placeholder);
+     }else{
+      // standard filter
+      $modal_filter_body->addField($filter->type,$filter->name,$filter->label,str_replace("*","%",$_GET[$filter->name]),$filter->class,$filter->placeholder);
+     }
     }
    }
    $modal_filter_body->addControl("submit",api_text("filters-apply"));
@@ -595,7 +622,7 @@ class str_form{
  }
 
  /* -[ Add Field ]----------------------------------------------------------- */
- // @string $type : hidden, text, password, checkbox, radio, select, multiselect, textarea, file, date, datetime
+ // @string $type : hidden, text, password, checkbox, radio, select, multiselect, textarea, file, range, date, datetime, daterange, datetimerange
  // @string $name : name of the form input (spaces not allowed)
  // @string $label : label for the field
  // @string $value : default value
@@ -605,7 +632,7 @@ class str_form{
  // @integer $rows : number of textarea rows
  // @string $append : append text
  function addField($type,$name,$label=NULL,$value=NULL,$class=NULL,$placeholder=NULL,$disabled=FALSE,$rows=7,$append=NULL){
-  if(!in_array(strtolower($type),array("hidden","text","password","checkbox","radio","select","multiselect","textarea","file","date","datetime"))){return FALSE;}
+  if(!in_array(strtolower($type),array("hidden","text","password","checkbox","radio","select","multiselect","textarea","file","range","date","datetime","daterange","datetimerange"))){return FALSE;}
   if(strlen($name)==0){return FALSE;}
   $this->current_field++;
   $ff=new stdClass();
@@ -619,6 +646,12 @@ class str_form{
   $ff->rows=$rows;
   $ff->append=$append;
   $ff->options=NULL;
+  if($type=="range" || $type=="daterange"){
+   if($placeholder<>NULL && !is_array($placeholder)){$ff->placeholder=array($placeholder);}
+   if($ff->placeholder[0]==NULL){$ff->placeholder[0]=api_text("form-range-from");}
+   if($ff->placeholder[1]==NULL){$ff->placeholder[1]=api_text("form-range-to");}
+   if(!is_array($value)){$ff->value=array($value);}
+  }
   $this->ff_array[$this->current_field]=$ff;
   return TRUE;
  }
@@ -792,27 +825,48 @@ class str_form{
      $return.="   <a class='btn' onClick=\"$('input[id=file_".$index."]').click();\">Sfoglia</a>\n";
      $return.="  </div>\n";
      break;
-    // separators
-    case "separator":
-     $return.="<".$ff->tag." class='".$ff->class."'>\n\n";
+    // range
+    case "range":
+      if(!$ff->label){$return.="  ";}
+      $return.="  <input type='text' name='".$ff->name."_from' id='".$this->name."_input_from_".$index."' class='input-small ".$ff->class."' placeholder=\"".$ff->placeholder[0]."\" value=\"".$ff->value[0]."\"";
+      if($ff->disabled){$return.=" disabled='disabled'";}
+      $return.="> &nbsp;\n";
+      $return.="  <input type='text' name='".$ff->name."_to' id='".$this->name."_input_to_".$index."' class='input-small ".$ff->class."' placeholder=\"".$ff->placeholder[1]."\" value=\"".$ff->value[1]."\"";
+      if($ff->disabled){$return.=" disabled='disabled'";}
+      $return.=">\n";
+      if(!$ff->label){$return.="\n";}
      break;
-    // date
+    // date and datetime
     case "date":
-     $return.="  <div id='".$this->name."_date_".$index."' class='input-append'>\n";
-     $return.="   <input type='text' name='".$ff->name."' id='".$this->name."_input_".$index."' data-format='yyyy-MM-dd' readonly='readonly' class='".$ff->class."' value='".$ff->value."'>\n";
+    case "datetime":
+     if($ff->type=="date"){$name="date";$format="yyyy-MM-dd";}
+     if($ff->type=="datetime"){$name="datetime";$format="yyyy-MM-dd hh:mm";}
+     $return.="  <div id='".$this->name."_".$name."_".$index."' class='input-append'>\n";
+     $return.="   <input type='text' name='".$ff->name."' id='".$this->name."_input_".$index."' data-format='".$format."' readonly='readonly' class='".$ff->class."' placeholder=\"".$ff->placeholder."\" value=\"".$ff->value."\">\n";
      $return.="   <span class='add-on'><i data-time-icon='icon-time' data-date-icon='icon-calendar'></i></span>\n";
      $return.="  </div>\n";
      break;
-    // datetime
-    case "datetime":
-     $return.="  <div id='".$this->name."_datetime_".$index."' class='input-append'>\n";
-     $return.="   <input type='text' name='".$ff->name."' id='".$this->name."_input_".$index."' data-format='yyyy-MM-dd hh:mm' readonly='readonly' class='".$ff->class."' value='".$ff->value."'>\n";
+    // daterange and datetimerange
+    case "daterange":
+    case "datetimerange":
+     if($ff->type=="daterange"){$name="daterange";$format="yyyy-MM-dd";$size="input-small";}
+     if($ff->type=="datetimerange"){$name="datetimerange";$format="yyyy-MM-dd hh:mm";$size="input-medium";}
+     $return.="  <div id='".$this->name."_".$name."_from_".$index."' class='input-append'>\n";
+     $return.="   <input type='text' name='".$ff->name."_from' id='".$this->name."_input_from_".$index."' data-format='".$format."' readonly='readonly' class='".$size." ".$ff->class."' placeholder=\"".$ff->placeholder[0]."\" value=\"".$ff->value[0]."\">\n";
+     $return.="   <span class='add-on'><i data-time-icon='icon-time' data-date-icon='icon-calendar'></i></span>\n";
+     $return.="  </div>\n<br><br>\n";
+     $return.="  <div id='".$this->name."_".$name."_to_".$index."' class='input-append'>\n";
+     $return.="   <input type='text' name='".$ff->name."_to' id='".$this->name."_input_to_".$index."' data-format='".$format."' readonly='readonly' class='".$size." ".$ff->class."' placeholder=\"".$ff->placeholder[1]."\" value=\"".$ff->value[1]."\">\n";
      $return.="   <span class='add-on'><i data-time-icon='icon-time' data-date-icon='icon-calendar'></i></span>\n";
      $return.="  </div>\n";
      break;
     // custom
     case "custom":
      $return.=$ff->source;
+     break;
+    // separators
+    case "separator":
+     $return.="<".$ff->tag." class='".$ff->class."'>\n\n";
      break;
    }
    // show options
@@ -872,13 +926,26 @@ class str_form{
     $return.=" });\n";
     $return.="</script>\n\n";
    }
-   // date and datetime script
-   if(strtolower($ff->type)=="date" || strtolower($ff->type)=="datetime"){
+   // date, datetime, daterange and datetimerange script
+   if(strtolower($ff->type)=="date" || strtolower($ff->type)=="datetime" || strtolower($ff->type)=="daterange" || strtolower($ff->type)=="datetimerange"){
     $return.="<script type='text/javascript'>\n";
     $return.=" $(document).ready(function(){\n";
-    if(strtolower($ff->type)=="date"){$return.="  $('#".$this->name."_date_".$index."').datetimepicker({ pickTime:false });\n";}
-    if(strtolower($ff->type)=="datetime"){$return.="  $('#".$this->name."_datetime_".$index."').datetimepicker({ pickSeconds:false });\n";}
-    $return.="  $('#".$this->name."_input_".$index."').dblclick(function(){ $(this).val('') });\n";
+    // date and datetime
+    if(strtolower($ff->type)=="date" || strtolower($ff->type)=="datetime"){
+     if(strtolower($ff->type)=="date"){$name="date";$param="pickTime:false";}
+     if(strtolower($ff->type)=="datetime"){$name="datetime";$param="pickSeconds:false";}
+     $return.="  $('#".$this->name."_".$name."_".$index."').datetimepicker({ ".$param." });\n";
+     $return.="  $('#".$this->name."_input_".$index."').dblclick(function(){ $(this).val('') });\n";
+    }
+    // daterange and datetimerange
+    if(strtolower($ff->type)=="daterange" || strtolower($ff->type)=="datetimerange"){
+     if(strtolower($ff->type)=="daterange"){$name="daterange";$param="pickTime:false";}
+     if(strtolower($ff->type)=="datetimerange"){$name="datetimerange";$param="pickSeconds:false";}
+     $return.="  $('#".$this->name."_".$name."_from_".$index."').datetimepicker({ ".$param." });\n";
+     $return.="  $('#".$this->name."_".$name."_to_".$index."').datetimepicker({ ".$param." });\n";
+     $return.="  $('#".$this->name."_input_from_".$index."').dblclick(function(){ $(this).val('') });\n";
+     $return.="  $('#".$this->name."_input_to_".$index."').dblclick(function(){ $(this).val('') });\n";
+    }
     $return.=" });\n";
     $return.="</script>\n\n";
    }
