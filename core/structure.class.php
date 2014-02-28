@@ -114,6 +114,9 @@ class str_navigation{
        $value=substr($text_filter,2);
       }
       break;
+     case "select":
+      if($_GET[$filter->name]<>NULL){$value=$filter->options[$_GET[$filter->name]];}
+      break;
      default:
       if($_GET[$filter->name]<>NULL){$value=$_GET[$filter->name];}
     }
