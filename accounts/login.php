@@ -15,9 +15,7 @@ $html->header(NULL,NULL,FALSE);
   <input type="password" id="iPassword" class="input-xlarge" name="password" placeholder="Password"><br>
   <input type="submit" class="btn btn-primary" value="Accedi">
   <?php
-   if(api_getOption("ldap")){
-    echo "<span>&nbsp;Accesso gestito da LDAP</span>\n";
-   }else{
+   if(!api_getOption("ldap")){
     echo "<span>&nbsp;<a href='password_retrieve.php'>Non riesci ad accedere?</a></span>\n";
    }
    ?>
