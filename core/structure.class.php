@@ -169,6 +169,7 @@ class str_navigation{
      if($query_filter<>"("){$query_filter.=" AND ";}
      if($_GET[$filter->name."_to"]<>NULL){$query_filter.=$filter->name."<='".$_GET[$filter->name."_to"]."'";}
      $query_filter.=")";
+     if($query_filter=="()"){$query_filter=NULL;}
      break;
     // text filters use like
     case "text":
