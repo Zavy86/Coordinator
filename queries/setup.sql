@@ -29,7 +29,7 @@ CREATE TABLE IF NOT EXISTS `accounts_accounts` (
 -- Dumping data for table `accounts_accounts`
 --
 
-INSERT INTO `accounts_accounts` (`id`, `account`, `password`, `secret`, `name`, `typology`, `idCompany`, `registration`, `lastLogin`, `ldapUsername`) VALUES
+INSERT IGNORE INTO `accounts_accounts` (`id`, `account`, `password`, `secret`, `name`, `typology`, `idCompany`, `registration`, `lastLogin`, `ldapUsername`) VALUES
 ('1', 'root', '63a9f0ea7bb98050796b649e85481845', NULL, 'Administrator', 1, 0, '2009-06-01 10:00:00', NULL, NULL);
 
 -- --------------------------------------------------------
@@ -50,7 +50,7 @@ CREATE TABLE IF NOT EXISTS `accounts_companies` (
 -- Dumping data for table `accounts_companies`
 --
 
-INSERT INTO `accounts_companies` (`id`, `company`, `division`, `name`) VALUES
+INSERT IGNORE INTO `accounts_companies` (`id`, `company`, `division`, `name`) VALUES
 (NULL, 'Default Company', 'Default Division', 'Default Company Inc.');
 
 -- --------------------------------------------------------
@@ -72,7 +72,7 @@ CREATE TABLE IF NOT EXISTS `accounts_groups` (
 -- Dumping data for table `accounts_groups`
 --
 
-INSERT INTO `accounts_groups` (`id`, `name`, `description`) VALUES
+INSERT IGNORE INTO `accounts_groups` (`id`, `name`, `description`) VALUES
 (NULL, 'Deafault', 'Default group');
 
 -- --------------------------------------------------------
@@ -93,7 +93,7 @@ CREATE TABLE IF NOT EXISTS `accounts_grouproles` (
 -- Dumping data for table `accounts_grouproles`
 --
 
-INSERT INTO `accounts_grouproles` (`id`, `name`, `description`) VALUES
+INSERT IGNORE INTO `accounts_grouproles` (`id`, `name`, `description`) VALUES
 (NULL, 'Consulter', 'External read only role'),
 (NULL, 'Redactor', 'External read and write role'),
 (NULL, 'Employee', 'Employee role'),
@@ -179,7 +179,7 @@ CREATE TABLE IF NOT EXISTS `settings_permissions` (
 -- Dumping data for table `settings_permissions`
 --
 
-INSERT INTO `settings_permissions` (`id`, `module`, `action`, `description`, `locked`) VALUES
+INSERT IGNORE INTO `settings_permissions` (`id`, `module`, `action`, `description`, `locked`) VALUES
 (NULL, 'settings', 'settings_edit', 'Manage settings', 1),
 (NULL, 'settings', 'modules_edit', 'Manage modules', 1),
 (NULL, 'settings', 'permissions_edit', 'Manage permissions', 1),
@@ -234,7 +234,7 @@ CREATE TABLE IF NOT EXISTS `settings_menus` (
 -- Dumping data for table `settings_menus`
 --
 
-INSERT INTO `settings_menus` (`id`, `idMenu`, `menu`, `module`, `url`, `position`) VALUES
+INSERT IGNORE INTO `settings_menus` (`id`, `idMenu`, `menu`, `module`, `url`, `position`) VALUES
 (1, 0, 'main', '', '', 0),
 (2, 0, 'user', '', '', 0);
 
@@ -268,15 +268,15 @@ CREATE TABLE IF NOT EXISTS `settings_settings` (
 -- Dumping data for table `settings_settings`
 --
 
-INSERT INTO `settings_settings` (`code`, `value`) VALUES
+INSERT IGNORE INTO `settings_settings` (`code`, `value`) VALUES
 ('cron_token', 'c4312c2a07bf7ded608a4d7cee2228dd'),
 ('google_analytics', ''),
 ('ldap', '0'),
-('ldap_dn', NULL),
-('ldap_domain', NULL),
-('ldap_group', NULL),
-('ldap_host', NULL),
-('ldap_userfield', NULL),
+('ldap_dn',''),
+('ldap_domain',''),
+('ldap_group',''),
+('ldap_host',''),
+('ldap_userfield',''),
 ('maintenance', '0'),
 ('maintenance_description', 'This service is currently undergoing scheduled maintenance. Please try back in 60 minutes. Sorry for the inconvenience.'),
 ('owner', 'Default Company Inc.'),
