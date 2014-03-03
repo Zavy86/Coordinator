@@ -38,16 +38,16 @@ function settings_save(){
  if($_POST['owner_mail_from']<>NULL){$GLOBALS['db']->execute("UPDATE settings_settings SET value='".addslashes($_POST['owner_mail_from'])."' WHERE code='owner_mail_from'");}
  // title and logo
  if($_POST['title']<>NULL){$GLOBALS['db']->execute("UPDATE settings_settings SET value='".addslashes($_POST['title'])."' WHERE code='title'");}
- if($_POST['show_logo']=="on"){$GLOBALS['db']->execute("UPDATE settings_settings SET value='1' WHERE code='show_logo'");}else{$GLOBALS['db']->execute("UPDATE settings_settings SET value='0' WHERE code='show_logo'");}
+ if($_POST['show_logo']){$GLOBALS['db']->execute("UPDATE settings_settings SET value='1' WHERE code='show_logo'");}else{$GLOBALS['db']->execute("UPDATE settings_settings SET value='0' WHERE code='show_logo'");}
  // maintenance
- if($_POST['maintenance']=="on"){$GLOBALS['db']->execute("UPDATE settings_settings SET value='1' WHERE code='maintenance'");}else{$GLOBALS['db']->execute("UPDATE settings_settings SET value='0' WHERE code='maintenance'");}
+ if($_POST['maintenance']){$GLOBALS['db']->execute("UPDATE settings_settings SET value='1' WHERE code='maintenance'");}else{$GLOBALS['db']->execute("UPDATE settings_settings SET value='0' WHERE code='maintenance'");}
  if($_POST['maintenance_description']<>NULL){$GLOBALS['db']->execute("UPDATE settings_settings SET value='".addslashes($_POST['maintenance_description'])."' WHERE code='maintenance_description'");}
  // tokens
  if($_POST['cron_token']<>NULL){$GLOBALS['db']->execute("UPDATE settings_settings SET value='".addslashes($_POST['cron_token'])."' WHERE code='cron_token'");}
  if(isset($_POST['google_analytics'])){$GLOBALS['db']->execute("UPDATE settings_settings SET value='".addslashes($_POST['google_analytics'])."' WHERE code='google_analytics'");}
  if(isset($_POST['piwik_analytics'])){$GLOBALS['db']->execute("UPDATE settings_settings SET value='".addslashes($_POST['piwik_analytics'])."' WHERE code='piwik_analytics'");}
  // ldap
- if($_POST['ldap']=="on"){$GLOBALS['db']->execute("UPDATE settings_settings SET value='1' WHERE code='ldap'");}else{$GLOBALS['db']->execute("UPDATE settings_settings SET value='0' WHERE code='ldap'");}
+ if($_POST['ldap']){$GLOBALS['db']->execute("UPDATE settings_settings SET value='1' WHERE code='ldap'");}else{$GLOBALS['db']->execute("UPDATE settings_settings SET value='0' WHERE code='ldap'");}
  if(isset($_POST['ldap_host'])){$GLOBALS['db']->execute("UPDATE settings_settings SET value='".addslashes($_POST['ldap_host'])."' WHERE code='ldap_host'");}
  if(isset($_POST['ldap_dn'])){$GLOBALS['db']->execute("UPDATE settings_settings SET value='".addslashes($_POST['ldap_dn'])."' WHERE code='ldap_dn'");}
  if(isset($_POST['ldap_domain'])){$GLOBALS['db']->execute("UPDATE settings_settings SET value='".addslashes($_POST['ldap_domain'])."' WHERE code='ldap_domain'");}
