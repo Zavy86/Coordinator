@@ -282,7 +282,7 @@ class str_navigation{
     // check url
     if($dropdown){echo "<a class='dropdown-toggle' data-toggle='dropdown' href='#'";}
      elseif($active || !$nt->enabled){echo "<a href='#'";}
-     else{echo "<a href='".$nt->url.$nt->get."' target='".$ntd->target."'";}
+     else{echo "<a href='".$nt->url.$nt->get."' target='".$nt->target."'";}
     // show label
     echo ">".$nt->label."</a>";
     // dropdown items
