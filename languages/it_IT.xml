@@ -19,4 +19,16 @@
  <text key="core-menu-become-user">Diventa Utente</text>
  <text key="core-menu-logout">Esci</text>
 
+ <!-- filters -->
+ <text key="filters-filters">Filtri</text>
+ <text key="filters-apply">Applica</text>
+ <text key="filters-reset">Resetta</text>
+
+ <!-- forms -->
+ <text key="form-select">Seleziona</text>
+ <text key="form-select-all">Tutti</text>
+ <text key="form-select-none">Nessuno</text>
+ <text key="form-range-from">Da</text>
+ <text key="form-range-to">A</text>
+
 </locale>

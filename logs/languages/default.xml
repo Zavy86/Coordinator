@@ -2,8 +2,10 @@
 
 <locale language="EN">
 
- <!-- template.inc.php -->
+ <!-- module -->
  <text key="module-title">Logs</text>
+
+ <!-- template.inc.php -->
  <text key="nav-allEvents">All events</text>
  <text key="nav-warningsAndErrors">Warnings and Errors</text>
  <text key="nav-notices">Notices</text>

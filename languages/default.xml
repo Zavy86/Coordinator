@@ -19,4 +19,16 @@
  <text key="core-menu-become-user">Become an User</text>
  <text key="core-menu-logout">Logout</text>
 
+ <!-- filters -->
+ <text key="filters-filters">Filters</text>
+ <text key="filters-apply">Apply</text>
+ <text key="filters-reset">Reset</text>
+
+ <!-- forms -->
+ <text key="form-select">Select</text>
+ <text key="form-select-all">All</text>
+ <text key="form-select-none">None</text>
+ <text key="form-range-from">From</text>
+ <text key="form-range-to">To</text>
+
 </locale>

@@ -2,12 +2,14 @@
 
 <locale language="IT">
 
+ <!-- module -->
+ <text key="module-title">Bacheca</text>
+
  <!-- alerts -->
  <text key="notificationSend">La notifica è stata inoltrata correttamente</text>
  <text key="notificationSendError">Si è verificato un errore durante la compilazione della notifica</text>
 
  <!-- template.inc.php -->
- <text key="module-title">Bacheca</text>
  <text key="nav-notifications">Notifiche</text>
  <text key="nav-archived-notifications">Archivio notifiche</text>
  <text key="nav-send-notifications">Invia una notifica</text>
@@ -18,8 +20,8 @@
  <text key="list-th-notification">Notifica</text>
  <text key="list-tr-no-results">Non è presente nessuna nuova notifica..</text>
  <text key="list-m-confirm">Confermi di aver eseguito questa azione?</text>
- <text key="list-m-archive">Archive</text>
- <text key="list-m-archiveAsDone">Archive as done</text>
+ <text key="list-m-archive">Archivia</text>
+ <text key="list-m-archiveAsDone">Archivia come eseguita</text>
 
  <!-- notifications_send.php -->
  <text key="send-ff-typology">Tipologia</text>

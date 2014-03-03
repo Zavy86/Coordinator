@@ -12,10 +12,8 @@ include("../config.inc.php");   // include the configuration file
 include("html.class.php");      // include the html class
 include("structure.class.php"); // include structure classes
 include("db.class.php");        // include the database class
-// load core translation file
+// load core language file
 api_loadLocaleFile("../");
-// load module translation file
-api_loadLocaleFile();
 // build class
 $html=new HTML();
 $db=new DB($db_host,$db_user,$db_pass,$db_name);
@@ -69,9 +67,9 @@ if((strpos($_SERVER['HTTP_USER_AGENT'],'Chrome')==false)
 // @param $path : Path of locale if not default
 function api_loadLocaleFile($path=NULL){
  if($path==NULL){$path=".";}
- if($_SESSION['language']<>NULL && file_exists($path."/languages/".strtolower($_SESSION['language']).".xml")){
+ if($_SESSION['language']<>NULL && file_exists($path."/languages/".$_SESSION['language'].".xml")){
   // load choised locale file
-  $xml=simplexml_load_file($path."/languages/".strtolower($_SESSION['language']).".xml");
+  $xml=simplexml_load_file($path."/languages/".$_SESSION['language'].".xml");
  }elseif(file_exists($path."/languages/default.xml")){
   // load deafult locale file
   $xml=simplexml_load_file($path."/languages/default.xml");
@@ -459,7 +457,7 @@ function api_accountMail($account_id=NULL){
 /* -[ Profile name by account id ]------------------------------------------- */
 // @param $account_id : ID of the account
 function api_accountName($account_id=NULL){
- if($account_id==0){return NULL;};
+ if($account_id===0){return NULL;};
  if($account_id==NULL){$account_id=$_SESSION['account']->id;}
  $account=$GLOBALS['db']->queryUniqueObject("SELECT * FROM accounts_accounts WHERE id='".$account_id."'");
  if($account->name<>NULL){
@@ -542,6 +540,18 @@ function api_groupName($idGroup,$description=FALSE){
   return "[ID ".$group->id."]";
  }else{
   return "[Not found]";
+ }
+}
+
+
+/* -[ Group id by group name ]----------------------------------------------- */
+// @param $groupName : Name of the group
+function api_groupId($groupName){
+ $group=$GLOBALS['db']->queryUniqueObject("SELECT * FROM accounts_groups WHERE name='".$groupName."'");
+ if($group->id){
+  return $group->id;
+ }else{
+  return FALSE;
  }
 }
 
@@ -668,9 +678,21 @@ function api_accountGrouprole($idGroup,$idAccount=NULL){
 /* -[ Check if account is in group ]----------------------------------------- */
 // @param $idGroup   : ID of the group
 // @param $idAccount : ID of the account
-function api_checkAccountGroup($idGroup,$idAccount=NULL){
+// @param $subgroups : Check also in subgroups
+function api_checkAccountGroup($idGroup,$idAccount=NULL,$subgroups=FALSE){
  if($idAccount==NULL){$idAccount=$_SESSION['account']->id;}
- if(api_accountGrouprole($idGroup,$idAccount)>0){return TRUE;}else{return FALSE;}
+ if(api_accountGrouprole($idGroup,$idAccount)>0){
+  return TRUE;
+ }else{
+  if($subgroups){
+   // try in subgroups
+   $subgroups=$GLOBALS['db']->query("SELECT * FROM accounts_groups WHERE idGroup='".$idGroup."'");
+   while($subgroup=$GLOBALS['db']->fetchNextObject($subgroups)){
+    if(api_accountGrouprole($subgroup->id)>0){return TRUE;}
+   }
+  }
+  return FALSE;
+ }
 }
 
 
@@ -1082,6 +1104,31 @@ function api_queryOrder($default=NULL){
  }
 }
 
+/* -[ Include Dependent Module API ]----------------------------------------- */
+// @string $module : module name to be included
+function api_includeModule($module){
+ if(!is_dir("../".$module."/")){die("Module ".$module." not found..");}
+ // include module api
+ if(file_exists("../".$module."/api.inc.php")){include("../".$module."/api.inc.php");}
+ // load module language file
+ api_loadLocaleFile("../".$module."/");
+}
+
+/* -[ Load Module API, Languages and Required Modules ]---------------------- */
+// @array $modules_required : modules name to be included
+function api_loadModule($modules_required=NULL){
+ // include module api
+ if(file_exists("api.inc.php")){include("api.inc.php");}
+ // include required modules
+ if($modules_required<>NULL){
+  if(!is_array($modules_required)){$modules_required=array($modules_required);}
+  foreach($modules_required as $module){
+   api_includeModule($module);
+  }
+ }
+ // load module language file
+ api_loadLocaleFile("./");
+}
 
 
 
