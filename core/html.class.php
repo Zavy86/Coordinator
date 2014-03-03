@@ -60,7 +60,6 @@ public function header($title="",$nav="dashboard",$navbar=TRUE){
 
  <!-- Apple iOS -->
  <meta name="apple-mobile-web-app-capable" content="yes">
- <link rel="shortcut icon" href="../assets/ico/favicon.ico">
  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="<?php echo $GLOBALS['dir']."core/images/logos/logo_144.png";?>">
  <link rel="apple-touch-icon-precomposed" sizes="114x114" href="<?php echo $GLOBALS['dir']."core/images/logos/logo_114.png";?>">
  <link rel="apple-touch-icon-precomposed" sizes="72x72" href="<?php echo $GLOBALS['dir']."core/images/logos/logo_72.png";?>">

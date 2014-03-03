@@ -65,6 +65,7 @@
  <text key="accounts_edit-th-group">Gruppo</text>
  <text key="accounts_edit-th-role">Ruolo</text>
  <text key="accounts_edit-td-groupDelete-confirm">Eliminare questa associazione?</text>
+ <text key="accounts_edit-tr-unvalued">Nessun gruppo assegnato..</text>
 
  <!-- groups_list.php -->
  <text key="groups_list-th-group">Gruppo</text>
