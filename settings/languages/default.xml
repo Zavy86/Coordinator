@@ -57,6 +57,7 @@
  <text key="modules-td-uninstall-confirm">Are you sure you want to uninstall this module?\nAll the tables and their data will be deleted</text>
  <text key="modules-td-remove">Remove</text>
  <text key="modules-td-remove-confirm">Are you sure you want to remove this module?\nThe module directory will be deleted</text>
+ <text key="modules-tr-unvalued">There are no modules to display..</text>
 
  <!-- menu_edit.php -->
  <text key="menus-th-menu">Menu</text>

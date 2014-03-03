@@ -56,7 +56,7 @@ function content(){
   $modules_array[]=$module_obj;
  }
  // build table
- $table=new str_table(api_text("modules-tr-no-results"),TRUE);
+ $table=new str_table(api_text("modules-tr-unvalued"),TRUE);
  $table->addHeader(api_text("modules-th-module"),"nowarp");
  $table->addHeader(api_text("modules-th-version"),"nowarp");
  $table->addHeader(api_text("modules-th-description"),NULL,"100%");
