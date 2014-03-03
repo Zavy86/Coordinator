@@ -39,7 +39,8 @@ class str_navigation{
  // @string $get : additional get parameters for link (&key=value)
  // @string $class : tab css class
  // @boolean $enabled : enable the navigation tab (true) or not
- function addTab($label,$url=NULL,$get=NULL,$class=NULL,$enabled=TRUE){
+ // @string $target : target page _blank, _self, _parent, _top
+ function addTab($label,$url=NULL,$get=NULL,$class=NULL,$enabled=TRUE,$target="_self"){
   if(strlen($label)==0){return FALSE;}
   $nt=new stdClass();
   $nt->label=$label;
@@ -47,6 +48,7 @@ class str_navigation{
   $nt->get=$get;
   $nt->class=$class;
   $nt->enabled=$enabled;
+  $nt->target=$target;
   $this->current_tab++;
   $this->nt_array[$this->current_tab]=$nt;
   return TRUE;
@@ -58,7 +60,8 @@ class str_navigation{
  // @string $get : additional get parameters for link (&key=value)
  // @string $class : sub tab css class
  // @boolean $enabled : enable the navigation tab (true) or not
- function addSubTab($label,$url=NULL,$get=NULL,$class=NULL,$enabled=TRUE){
+ // @string $target : target page _blank, _self, _parent, _top
+ function addSubTab($label,$url=NULL,$get=NULL,$class=NULL,$enabled=TRUE,$target="_self"){
   if(strlen($label)==0){return FALSE;}
   $nt=new stdClass();
   $nt->label=$label;
@@ -66,6 +69,7 @@ class str_navigation{
   $nt->get=$get;
   $nt->class=$class;
   $nt->enabled=$enabled;
+  $nt->target=$target;
   if(!is_array($this->nt_array[$this->current_tab]->dropdown)){
    $this->nt_array[$this->current_tab]->dropdown=array();
   }
@@ -278,7 +282,7 @@ class str_navigation{
     // check url
     if($dropdown){echo "<a class='dropdown-toggle' data-toggle='dropdown' href='#'";}
      elseif($active || !$nt->enabled){echo "<a href='#'";}
-     else{echo "<a href='".$nt->url.$nt->get."'";}
+     else{echo "<a href='".$nt->url.$nt->get."' target='".$nt->target."'";}
     // show label
     echo ">".$nt->label."</a>";
     // dropdown items
@@ -287,7 +291,7 @@ class str_navigation{
      foreach($nt->dropdown as $ntd){
       echo "   <li";
       if($ntd->enabled){
-       echo "><a href='".$ntd->url.$ntd->get."'";
+       echo "><a href='".$ntd->url.$ntd->get."' target='".$ntd->target."'";
       }else{
        echo " class='disabled ".$ntd->class."'><a href='#'";
       }
