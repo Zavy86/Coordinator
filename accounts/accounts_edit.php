@@ -56,7 +56,7 @@ function content(){
  // if edit account show groups
  if($account->id>1){
   // build table
-  $table=new str_table(api_text("list-tr-unvalued"));
+  $table=new str_table(api_text("accounts_edit-tr-unvalued"));
   // table headers
   $table->addHeader(api_text("accounts_edit-th-group"),NULL,"100%");
   $table->addHeader(api_text("accounts_edit-th-role"),"nowarp");
