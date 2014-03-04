@@ -1131,7 +1131,91 @@ function api_loadModule($modules_required=NULL){
 }
 
 
+/* -[ File Upload to Database ]---------------------------------------------- */
+// @string $ :
+//
+// return $file : file object
+// if file is duplicate and $uploadDuplicate are true return file->id with idDuplicate
+// return -1 : error uploading file
+// return -2 : file type doesn't match
+function api_file_upload($input,$table="uploads_uploads",$name=NULL,$label=NULL,$description=NULL,$tags=NULL,$txtContent=FALSE,$types=NULL,$uploadDuplicate=TRUE){
+ // check if a file are uploaded
+ if(intval($input['size'])>0 && $input['error']==UPLOAD_ERR_OK){
+  // get file from input field
+  $file=new stdClass();
+  $file->name=api_clearFileName($input['name']);
+  $file->type=strtolower($input['type']);
+  $file->size=intval($input['size']);
+  $file->hash=md5_file($input['tmp_name']);
+  $file->file=mysql_real_escape_string(file_get_contents($input['tmp_name']));
+  // check metadata
+  if($name<>NULL){$file->name=api_clearFileName($name);}
+  if($label<>NULL){$file->label=$label;}else{$file->label=NULL;}
+  if($description<>NULL){$file->description=$description;}else{$file->description=NULL;}
+  if($tags<>NULL){$file->tags=$tags;}else{$file->tags=NULL;}
+  // check file type
+  if($types<>NULL){
+   if(!is_array($types)){$types=array(strtolower($types));}else{$types=array_map('strtolower',$types);}
+   if(!in_array($file->type,$types)){return -2;}
+  }
+  // import textual file content
+  $file->txtContent=NULL;
+  if($txtContent){
+   switch($file->type){
+    case "text/plain":
+     $file->txtContent=$file->file;
+     break;
 
+   }
+  }
+  // check for duplicated files
+  $file->duplicated=FALSE;
+  $idDuplicate=$GLOBALS['db']->queryUniqueValue("SELECT id FROM ".$table." WHERE size='".$file->size."' AND hash='".$file->hash."'");
+  if($idDuplicate>0){
+   $file->duplicate=TRUE;
+   $file->idDuplicate=$idDuplicate;
+   // abort upload if false
+   if(!$uploadDuplicate){
+    $file->id=$idDuplicate;
+    return $file;
+   }
+  }
+  // upload file in database
+  $query="INSERT INTO ".$table."
+   (name,type,size,hash,file,label,description,tags,txtcontent,addDate,addIdAccount) VALUES
+   ('".$file->name."','".$file->type."','".$file->size."','".$file->hash."','".$file->file."',
+    '".$file->label."','".$file->description."','".$file->tags."','".$file->txtContent."',
+    '".date("Y-m-d H:i:s")."','".$_SESSION['account']->id."')";
+  $GLOBALS['db']->execute($query);
+  // get file id
+  $file->id=$GLOBALS['db']->lastInsertedId();
+  // return metadata
+  $return=$file;
+ }else{
+  // error uploading
+  $return=-1;
+ }
+ return $return;
+}
+
+
+/* -[ File Download from Database ]------------------------------------------ */
+// @integet $idFile : file id
+// @string $table : database table name
+// @string $name : file name if you want to rename
+function api_file_download($idFile,$table="uploads_uploads",$name=NULL){
+ // get file object
+ $file=$GLOBALS['db']->queryUniqueObject("SELECT * FROM ".$table." WHERE id='".$idFile."'");
+ if($file->id>0){
+  if(strlen($name)>0){$file->name=$name;}
+  header("Content-length: ".$file->size);
+  header("Content-type: ".$file->type);
+  header("Content-Disposition: attachment; filename=".$file->name);
+  echo $file->file;
+ }else{
+  echo "Error, file not found";
+ }
+}
 
 
 

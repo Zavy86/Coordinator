@@ -604,6 +604,7 @@ class str_form{
  protected $name;
  protected $class;
  protected $splitted;
+ protected $controlGroup;
 
  protected $ff_array;
  protected $fc_array;
@@ -613,13 +614,15 @@ class str_form{
  // @boolean $method : get, post
  // @string $name : form name
  // @string $class : form css class
- public function __construct($action,$method="get",$name="form",$class="form-horizontal"){
+ // @boolean $controlGroup : show control-group
+ public function __construct($action,$method="get",$name="form",$class="form-horizontal",$controlGroup=TRUE){
   if(strlen($action)==0 || !in_array(strtolower($method),array("get","post"))){return FALSE;}
   $this->action=$action;
   $this->method=$method;
   $this->name=$name;
   $this->class=$class;
   $this->splitted=0;
+  $this->controlGroup=$controlGroup;
   $this->current_field=-1;
   $this->ff_array=array();
   $this->fc_array=array();
@@ -772,11 +775,11 @@ class str_form{
     continue;
    }
    // open group
-   if($ff->type<>"separator" && $ff->label<>NULL){
+   if($ff->type<>"separator" && $ff->label<>NULL && $this->controlGroup){
     $return.="<div id='field_".$ff->name."' class='control-group'>\n";
    }
    // show label
-   if($ff->label<>NULL){
+   if($ff->label<>NULL && $this->controlGroup){
     $return.=" <label class='control-label'>".$ff->label."</label>\n";
     $return.=" <div class='controls'>\n";
    }
@@ -920,9 +923,9 @@ class str_form{
     $return.=" </div><!-- /input-append -->\n";
    }
    // close controls
-   if($ff->label<>NULL){$return.=" </div><!-- /controls -->\n";}
+   if($ff->label<>NULL && $this->controlGroup){$return.=" </div><!-- /controls -->\n";}
    // close group
-   if($ff->type<>"separator" && $ff->label<>NULL){$return.="</div><!-- /control-group -->\n\n";}
+   if($ff->type<>"separator" && $ff->label<>NULL && $this->controlGroup){$return.="</div><!-- /control-group -->\n\n";}
    // file script
    if(strtolower($ff->type)=="file"){
     $return.="<script type='text/javascript'>\n";
@@ -957,9 +960,11 @@ class str_form{
   }
   // show controls
   if(is_array($this->fc_array)){
-   // open group
-   $return.="<div class='control-group'>\n";
-   $return.=" <div class='controls'>\n";
+   if($this->controlGroup){
+    // open group
+    $return.="<div class='control-group'>\n";
+    $return.=" <div class='controls'>\n";
+   }
    // show control
    foreach($this->fc_array as $index=>$fc){
     switch(strtolower($fc->type)){
@@ -984,7 +989,7 @@ class str_form{
    }
   }
   // close group
-  $return.=" </div>\n</div>\n\n";
+  if($this->controlGroup){$return.=" </div>\n</div>\n\n";}
   // close split
   if($this->splitted>0){
    //$GLOBALS['html']->split_close();
