@@ -23,7 +23,7 @@ function content(){
  $pagination=new str_pagination("notifications_notifications",$query_where,"&s=".$status);
  $query_limit=$pagination->queryLimit();
  // query order
- if($status==2){$query_order=api_queryOrder("archived");}else{$query_order=api_queryOrder("archived");}
+ if($status==2){$query_order=api_queryOrder("archived DESC");}else{$query_order=api_queryOrder("created ASC");}
  // query
  $notifications=$GLOBALS['db']->query("SELECT * FROM notifications_notifications WHERE ".$query_where.$query_order.$query_limit);
  while($notification=$GLOBALS['db']->fetchNextObject($notifications)){
