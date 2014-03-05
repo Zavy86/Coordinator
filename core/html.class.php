@@ -148,9 +148,7 @@ public function header($title="",$nav="dashboard",$navbar=TRUE){
       <li class="dropdown">
        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
         <span id="chat_counter">
-        <?php
-         include("../chats/chat_counter.inc.php")
-        ?>
+        <?php include("../chats/chat_counter.inc.php") ?>
         </span>
         <b class="caret"></b>
        </a>
@@ -160,6 +158,18 @@ public function header($title="",$nav="dashboard",$navbar=TRUE){
       </li>
 
       <?php } ?>
+
+      <li class="dropdown">
+       <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+        <span id="notifications_counter">
+        <?php include("../notifications/notifications_counter.inc.php") ?>
+        </span>
+        <b class="caret"></b>
+       </a>
+       <ul class="dropdown-menu" id="notifications_list">
+        <?php include("../notifications/notifications_list.inc.php"); ?>
+       </ul>
+      </li>
 
       <li class="dropdown">
        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
@@ -272,6 +282,16 @@ public function footer($wiki_link=NULL,$copyright=TRUE){
   $(document).ready(function(){
    // active popovers
    $("[data-toggle=popover]").popover({trigger:"hover"});
+   // refresh notifications every 10 minutes
+   var refreshNotificationsCounter=setInterval(function(){
+    $.get("../notifications/notifications_counter.inc.php",function(data){
+     $('#notifications_counter').html(data);
+     if(data.substr(3,1)>0){
+      clearInterval(refreshNotificationsCounter);
+      $('#notifications_list').load("../notifications/notifications_list.inc.php");
+     }
+    });
+   },600000);
    // refresh chats every 10 sec
    var refreshChatCounter=setInterval(function(){
     $.get("../chats/chat_counter.inc.php",function(data){

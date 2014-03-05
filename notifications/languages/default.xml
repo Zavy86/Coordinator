@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<locale language="IT">
+
+ <!-- module -->
+ <text key="module-title">Dashboard</text>
+
+ <!-- alerts -->
+ <text key="notificationSend">The notification has been submitted successfully</text>
+ <text key="notificationSendError">There was an error while sending the notification</text>
+
+ <!-- template.inc.php -->
+ <text key="nav-notifications">Notifications</text>
+ <text key="nav-archived-notifications">Notifications Archive</text>
+ <text key="nav-send-notifications">Send a notification</text>
+
+ <!-- notifications_list.inc.php -->
+ <text key="list-li-notifications">Notifications</text>
+ <text key="list-li-send">Send a notification</text>
+ <text key="list-li-showAll">Show all notifications</text>
+
+ <!-- notifications_list.php -->
+ <text key="list-th-reception-date">Reception date</text>
+ <text key="list-th-archived-date">Archived date</text>
+ <text key="list-th-notification">Notification</text>
+ <text key="list-tr-no-results">There are no new notifications..</text>
+ <text key="list-m-confirm">Confirm that you have done this action?</text>
+ <text key="list-m-archive">Archive</text>
+ <text key="list-m-archiveAsDone">Archive as done</text>
+
+ <!-- notifications_send.php -->
+ <text key="send-ff-typology">Typology</text>
+ <text key="send-fo-notice">Notice</text>
+ <text key="send-fo-action">Action</text>
+ <text key="send-ff-recipient">Recipient</text>
+ <text key="send-fo-user">Single user</text>
+ <text key="send-fo-group">Group of users</text>
+ <text key="send-fo-all">All users</text>
+ <text key="send-ff-user">User</text>
+ <text key="send-ff-user-placeholder">Select a recipient</text>
+ <text key="send-ff-group">Group</text>
+ <text key="send-ff-group-placeholder">Or select a group</text>
+ <text key="send-ff-subject">Subject</text>
+ <text key="send-ff-subject-placeholder">Subject of notification</text>
+ <text key="send-ff-message">Message</text>
+ <text key="send-ff-message-placeholder">Write a message</text>
+ <text key="send-ff-link">Link</text>
+ <text key="send-ff-link-placeholder">If necessary enter here the link</text>
+ <text key="send-fc-submit">Send notification</text>
+ <text key="send-fc-cancel">Cancel</text>
+
+
+</locale>
