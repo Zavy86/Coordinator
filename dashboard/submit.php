@@ -1,14 +1,12 @@
 <?php
-/* ------------------------------------------------------------------------- *\
-|* -[ Dashboard - Submit ]-------------------------------------------------- *|
-\* ------------------------------------------------------------------------- */
+/* -------------------------------------------------------------------------- *\
+|* -[ Dashboard - Submit ]--------------------------------------------------- *|
+\* -------------------------------------------------------------------------- */
 include('../core/api.inc.php');
 $act=$_GET['act'];
 switch($act){
- // notifications
- case "notification_send":notification_send();break;
- case "notification_archive":notification_archive();break;
- case "notification_restore":notification_restore();break;
+ // dashboard
+ case "dashboard_":dashboard_();break;
  // default
  default:
   $alert="?alert=submitFunctionNotFound&alert_class=alert-warning&act=".$act;
@@ -16,8 +14,8 @@ switch($act){
 }
 
 
-/* -[ Notification Send ]---------------------------------------------------- */
-function notification_send(){
+/* -[ Dashboard  ]---------------------------------------------------- */
+function dashboard_(){
  // acquire variables
  $p_to=$_POST['to'];
  $p_idGroup=$_POST['idGroup'];
@@ -40,48 +38,4 @@ function notification_send(){
   $alert="?alert=notificationSendError&alert_class=alert-error";
   header("location: notifications_send.php".$alert);
  }
-}
-
-
-/* -[ Notification Archive ]------------------------------------------------- */
-function notification_archive(){
- $g_id=$_GET['id'];
- if(!isset($g_id)){$g_id=0;}
- // get notification
- $notification=$GLOBALS['db']->queryUniqueObject("SELECT * FROM notifications_notifications WHERE idAction='".$g_id."'");
- // check if exist
- if($notification->idAction==$g_id){
-  // generate query
-  $query="UPDATE notifications_notifications SET
-   idAccountArchived='".$_SESSION['account']->id."',
-   archived='".date('Y-m-d H:i:s')."',
-   status='2'
-   WHERE idAction='".$notification->idAction."'";
-  // execute query
-  $GLOBALS['db']->execute($query);
- }
- // redirect
- header("location: notifications_list.php?s=1");
-}
-
-
-/* -[ Notification Restore ]------------------------------------------------- */
-function notification_restore(){
- $g_id=$_GET['id'];
- if(!isset($g_id)){$g_id=0;}
- // get notification
- $notification=$GLOBALS['db']->queryUniqueObject("SELECT * FROM notifications_notifications WHERE idAction='".$g_id."'");
- // check if exist
- if($notification->idAction==$g_id){
-  // generate query
-  $query="UPDATE notifications_notifications SET
-   idAccountArchived=NULL,
-   archived=NULL,
-   status='1'
-   WHERE idAction='".$notification->idAction."'";
-  // execute query
-  $GLOBALS['db']->execute($query);
- }
- // redirect
- header("location: notifications_list.php?s=2");
 }
