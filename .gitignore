@@ -28,6 +28,8 @@ config.inc.php
 /uploads/accounts/*
 !/uploads/accounts/
 !/uploads/accounts/avatar.jpg
+/tmp/*
+
 
 # Never ignore index.php files
 !index.php
