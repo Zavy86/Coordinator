@@ -11,4 +11,7 @@
  <!-- template.inc.php -->
  <text key="nav-"></text>
 
+ <!-- dashboard.php -->
+ <text key="dashboard-noWidgets">There is no widget configured ..</text>
+
 </locale>

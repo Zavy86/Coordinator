@@ -11,4 +11,8 @@
  <!-- template.inc.php -->
  <text key="nav-"></text>
 
+ <!-- dashboard.php -->
+ <!--<text key="dashboard-noWidgets">Non ci sono widget configurati..</text>-->
+ <text key="dashboard-noWidgets">Benvenuto in Coordinator!</text>
+
 </locale>
