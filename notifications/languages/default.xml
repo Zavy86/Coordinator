@@ -14,6 +14,9 @@
  <text key="nav-archived-notifications">Notifications Archive</text>
  <text key="nav-send-notifications">Send a notification</text>
 
+ <!-- widget.inc.php -->
+ <text key="widget-title">Notifications</text>
+
  <!-- notifications_list.inc.php -->
  <text key="list-li-notifications">Notifications</text>
  <text key="list-li-send">Send a notification</text>
