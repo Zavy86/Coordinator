@@ -194,6 +194,12 @@ function api_getOption($code){
 }
 
 
+/* -[ Get user hostname ]---------------------------------------------------- */
+function api_hostName(){
+ return strtoupper(gethostbyaddr($_SERVER['REMOTE_ADDR']));
+}
+
+
 /* -[ LOG ]------------------------------------------------------------------ */
 function api_log($typology,$module,$log,$link=NULL){
  if(($typology>0 && $typology<4) && strlen($module)>0 && strlen($log)>0){
