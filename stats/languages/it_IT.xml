@@ -8,4 +8,7 @@
  <!-- template.inc.php -->
  <text key="nav-servers">Servers</text>
 
+ <!-- stats_server.php -->
+ <text key="server-configNotFound">Il file di configurazione non è stato trovato.&lt;br&gt;Clona il file di esempio {0}stats/config.inc.php.temp in {0}stats/config.inc.php e configuralo a seconda delle tue necessità.</text>
+
 </locale>

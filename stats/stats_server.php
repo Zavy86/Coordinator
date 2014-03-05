@@ -11,7 +11,11 @@ function content(){
   unset($_SESSION['stats_cpu_timestamp']);
  }
  // include configuration file
- include("config.inc.php");
+ if(file_exists("config.inc.php")){
+  include("config.inc.php");
+ }else{
+  echo api_text("server-configNotFound",$GLOBALS['dir']);
+ }
  // loop servers
  if(count($stats_servers)>0){
   foreach($stats_servers as $index=>$server){
