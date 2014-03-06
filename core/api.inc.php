@@ -379,11 +379,11 @@ function api_sendmail($to_mail,$message,$subject="",$from_mail="",$from_name="")
 /* -[ Check permissions ]---------------------------------------------------- */
 // @param $module : Module to check
 // @param $action : Action to check
-function api_checkPermission($module,$action,$alert=FALSE){
+function api_checkPermission($module,$action,$alert=FALSE,$admin=TRUE){
  // if account is root return always true
  if($_SESSION['account']->id==1){return TRUE;}
  // if account typology is administrator return always true
- if($_SESSION['account']->typology==1){return TRUE;}
+ if($_SESSION['account']->typology==1 && $admin==TRUE){return TRUE;}
  // retrieve the permission id
  $idPermission=$GLOBALS['db']->queryUniqueValue("SELECT id FROM settings_permissions WHERE module='".$module."' AND action='".$action."'");
  // get required groups
