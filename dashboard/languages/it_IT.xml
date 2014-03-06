@@ -6,11 +6,38 @@
  <text key="module-title">Bacheca</text>
 
  <!-- alerts -->
-
- <!-- template.inc.php -->
+ <text key="widgetCreated">The widget has been added</text>
+ <text key="widgetUpdated">The widget has been updated</text>
+ <text key="widgetMoved">The widget has been moved</text>
+ <text key="widgetRemoved">The widget has been removed</text>
+ <text key="widgetError">There was an error with the widget</text>
 
  <!-- dashboard.php -->
- <!--<text key="dashboard-noWidgets">Non ci sono widget configurati..</text>-->
- <text key="dashboard-noWidgets">Benvenuto in Coordinator!</text>
+ <text key="dashboard-welcome">Benvenuto</text>
+ <text key="dashboard-welcome-message">Benvenuto {0} in Coordinator!</text>
+
+ <!-- dashboard_edit.php -->
+ <text key="edit-addWidget">Add Widget</text>
+ <text key="edit-editWidget">Edit Widget</text>
+ <text key="edit-th-span">Span</text>
+ <text key="edit-th-title">Widget</text>
+ <text key="edit-th-module">Module</text>
+ <text key="edit-th-parameters">Parameters</text>
+ <text key="edit-th-refresh">Refresh</text>
+ <text key="edit-ff-widget">Widget</text>
+ <text key="edit-fo-noWidgets">There are no widgets available..</text>
+ <text key="edit-ff-span">Span</text>
+ <text key="edit-ff-parameters">Parameters</text>
+ <text key="edit-ff-parameters-placeholder">&amp;key=value</text>
+ <text key="edit-ff-refresh">Refresh</text>
+ <text key="edit-fo-secs">{0} seconds</text>
+ <text key="edit-fo-min">{0} minute</text>
+ <text key="edit-fo-mins">{0} minutes</text>
+ <text key="edit-fo-hour">{0} hour</text>
+ <text key="edit-fo-hours">{0} hours</text>
+ <text key="edit-fc-submit">Save</text>
+ <text key="edit-fc-cancel">Cancel</text>
+ <text key="edit-fc-remove">Remove</text>
+ <text key="edit-fc-remove-confirm">Remove this widget from your dashboard?</text>
 
 </locale>

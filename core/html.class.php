@@ -191,9 +191,11 @@ public function header($title="",$nav="dashboard",$navbar=TRUE){
          }
         */?>
 
-        <?php if(api_checkPermission("dashboard","notifications_send")){echo "<li><a href=\"".$GLOBALS['dir']."dashboard/notifications_send.php\">Invia una notifica</a></li>";} ?>
         <?php if(api_checkPermission("logs","logs_list")){echo "<li><a href=\"".$GLOBALS['dir']."logs/index.php\">".api_text("core-menu-logs")."</a></li>";} ?>
         <?php //if(api_checkPermission("saprfc","saprfc_list")){echo "<li><a href=\"".$GLOBALS['dir']."saprfc/index.php\">SAP RFC</a></li>";} ?>
+
+        <li><a href="<?php echo $GLOBALS['dir']."dashboard/dashboard_edit.php";?>"><?php echo api_text("core-menu-dashboard-edit"); ?></a></li>
+
         <?php
          if($_SESSION['account']->administrator && $_SESSION['account']->id>1){
           echo "<li class='divider'></li>\n";
