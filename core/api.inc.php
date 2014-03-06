@@ -535,6 +535,7 @@ function api_divisionName($idCompany){
 /* -[ Group name by group id ]----------------------------------------------- */
 // @param $idGroup : ID of the group
 function api_groupName($idGroup,$description=FALSE){
+ if(!$idGroup>0){return FALSE;}
  $group=$GLOBALS['db']->queryUniqueObject("SELECT * FROM accounts_groups WHERE id='".$idGroup."'");
  if($group->name<>NULL){
   $return=$group->name;

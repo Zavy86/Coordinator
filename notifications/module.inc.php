@@ -3,5 +3,6 @@
 |* -[ Notifications - Module Information ]----------------------------------- *|
 \* -------------------------------------------------------------------------- */
 $module_name="notifications";
+$module_title="Notifications";
 $module_core=TRUE;
 ?>
