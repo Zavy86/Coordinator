@@ -222,6 +222,11 @@ public function header($title="",$nav="dashboard",$navbar=TRUE){
  </div><!-- /navbar -->
 
  <?php
+  // show modal notifications windows
+  foreach($modals_notifications_array as $modal){$modal->render();}
+ ?>
+
+ <?php
   if(api_checkPermission("chats","chats_chat")){
    // modal new message
    echo "<div id='modalNew' class='modal hide fade' role='dialog' aria-hidden='true'>\n";
