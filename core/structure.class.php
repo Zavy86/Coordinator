@@ -194,6 +194,58 @@ class str_navigation{
   return $return;
  }
 
+ /* -[ Filters Parameter Query ]--------------------------------------------- */
+ // @string $parameter : parameter id
+ // @string $unvalued : query to show if no filters
+ // @string $field : rename query field
+ function filtersParameterQuery($parameter,$unvalued="0",$field=NULL){
+  foreach($this->filters as $filter_tmp){
+   if($filter_tmp->name==$parameter){
+    $filter=$filter_tmp;
+    break;
+   }
+  }
+  if($field==NULL){$field=$filter->name;}
+  $query_filter=NULL;
+  // switch filter type
+  switch($filter->type){
+   // multiple filters have array results
+   case "multiselect":
+    $multi_filter=NULL;
+    if(is_array($_GET[$filter->name])){
+     foreach($_GET[$filter->name] as $g_option){
+      $multi_filter.=" OR ".$field."='".$g_option."'";
+     }
+    }
+    if($multi_filter<>NULL){$query_filter="(".substr($multi_filter,4).")";}
+    break;
+   // range values
+   case "range":
+   case "daterange":
+   case "datetimerange":
+    $query_filter="(";
+    if($_GET[$filter->name."_from"]<>NULL){$query_filter.=$field.">='".$_GET[$filter->name."_from"]."'";}
+    if($query_filter<>"("){$query_filter.=" AND ";}
+    if($_GET[$filter->name."_to"]<>NULL){$query_filter.=$field."<='".$_GET[$filter->name."_to"]."'";}
+    $query_filter.=")";
+    if($query_filter=="()"){$query_filter=NULL;}
+    break;
+   // text filters use like
+   case "text":
+    if($_GET[$filter->name]<>NULL){
+     $query_filter=$field." LIKE '".$_GET[$filter->name]."'";
+    }
+    break;
+   default:
+    if($_GET[$filter->name]<>NULL){
+     $query_filter=$field."='".$_GET[$filter->name]."'";
+    }
+  }
+  // build complete query
+  if($query_filter<>NULL){$return=str_replace("*","%",$query_filter);}else{$return=$unvalued;}
+  return $return;
+ }
+
  /* -[ Render ]-------------------------------------------------------------- */
   function render(){
   // open navigation
@@ -640,7 +692,7 @@ class str_form{
  // @integer $rows : number of textarea rows
  // @string $append : append text
  function addField($type,$name,$label=NULL,$value=NULL,$class=NULL,$placeholder=NULL,$disabled=FALSE,$rows=7,$append=NULL){
-  if(!in_array(strtolower($type),array("hidden","text","password","checkbox","radio","select","multiselect","textarea","file","range","date","datetime","daterange","datetimerange"))){return FALSE;}
+  if(!in_array(strtolower($type),array("hidden","text","password","checkbox","radio","select","multiselect","textarea","file","slider","range","date","datetime","daterange","datetimerange"))){return FALSE;}
   if(strlen($name)==0){return FALSE;}
   $this->current_field++;
   $ff=new stdClass();
@@ -835,14 +887,22 @@ class str_form{
      break;
     // range
     case "range":
-      if(!$ff->label){$return.="  ";}
-      $return.="  <input type='text' name='".$ff->name."_from' id='".$this->name."_input_from_".$index."' class='input-small ".$ff->class."' placeholder=\"".$ff->placeholder[0]."\" value=\"".$ff->value[0]."\"";
-      if($ff->disabled){$return.=" disabled='disabled'";}
-      $return.="> &nbsp;\n";
-      $return.="  <input type='text' name='".$ff->name."_to' id='".$this->name."_input_to_".$index."' class='input-small ".$ff->class."' placeholder=\"".$ff->placeholder[1]."\" value=\"".$ff->value[1]."\"";
-      if($ff->disabled){$return.=" disabled='disabled'";}
-      $return.=">\n";
-      if(!$ff->label){$return.="\n";}
+     if(!$ff->label){$return.="  ";}
+     $return.="  <input type='text' name='".$ff->name."_from' id='".$this->name."_input_from_".$index."' class='input-small ".$ff->class."' placeholder=\"".$ff->placeholder[0]."\" value=\"".$ff->value[0]."\"";
+     if($ff->disabled){$return.=" disabled='disabled'";}
+     $return.="> &nbsp;\n";
+     $return.="  <input type='text' name='".$ff->name."_to' id='".$this->name."_input_to_".$index."' class='input-small ".$ff->class."' placeholder=\"".$ff->placeholder[1]."\" value=\"".$ff->value[1]."\"";
+     if($ff->disabled){$return.=" disabled='disabled'";}
+     $return.=">\n";
+     if(!$ff->label){$return.="\n";}
+     break;
+    // slider
+    case "slider":
+     if(!$ff->label){$return.="  ";}
+     $return.="  <input type='text' name='".$ff->name."' id='".$this->name."_input_".$index."' value='".$ff->value."' data-slider-min='0' data-slider-max='100' data-slider-value='".$ff->value."' class='".$ff->class."'";
+     if($ff->disabled){$return.=" disabled='disabled'";}
+     $return.=">\n";
+     if(!$ff->label){$return.="\n";}
      break;
     // date and datetime
     case "date":
@@ -957,7 +1017,16 @@ class str_form{
     $return.=" });\n";
     $return.="</script>\n\n";
    }
+   // slider script
+   if(strtolower($ff->type)=="slider"){
+    $return.="<script type='text/javascript'>\n";
+    $return.=" $(document).ready(function(){\n";
+    $return.="  $('input[id=".$this->name."_input_".$index."]').slider();\n";
+    $return.=" });\n";
+    $return.="</script>\n\n";
+   }
   }
+
   // show controls
   if(is_array($this->fc_array)){
    if($this->controlGroup){
