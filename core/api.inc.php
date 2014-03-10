@@ -322,8 +322,8 @@ function api_timestampFormat($timestamp,$time=FALSE,$seconds=FALSE){
 
 /* -[ Timestamp difference ]------------------------------------------------- */
 // @param $timestamp_a : MySql timestamp from
-// @param $timestamp_b   : MySql timestamp to
-// @param $format         : Format to output: Seconds, mInutes, Hours, Days, Weeks, Months, Years
+// @param $timestamp_b : MySql timestamp to
+// @param $format : Format to output: Seconds, mInutes, Hours, Days, Weeks, Months, Years
 function api_timestampDifference($timestamp_a,$timestamp_b,$format="S"){
  if($timestamp_a==NULL || $timestamp_b==NULL){return NULL;}
  $seconds=strtotime($timestamp_b)-strtotime($timestamp_a);
@@ -338,6 +338,20 @@ function api_timestampDifference($timestamp_a,$timestamp_b,$format="S"){
   case "Y":$result=$seconds/31536000;break;
  }
  return number_format($result,2);
+}
+
+
+/* -[ Timestamp difference ]------------------------------------------------- */
+// @param $week : week number (from 1 to 52)
+// @param $year : year in YYYY format
+// return  : Array of date from [0] and date to [1]
+function api_timestampDateFromWeek($week,$year){
+ $day=new DateTime();
+ $day->setISODate($year,$week);
+ $return[0]=$day->format('Y-m-d');
+ $day->modify('+6 days');
+ $return[1]=$day->format('Y-m-d');
+ return $return;
 }
 
 
@@ -449,7 +463,7 @@ function api_checkPermissionShowModule($module,$admin=TRUE){
 /* -[ Profile mail by account id ]------------------------------------------- */
 // @param $account_id : ID of the account
 function api_accountMail($account_id=NULL){
- if($account_id==0){return NULL;};
+ if($account_id==0){return NULL;}
  if($account_id==NULL){$account_id=$_SESSION['account']->id;}
  $account=$GLOBALS['db']->queryUniqueObject("SELECT * FROM accounts_accounts WHERE id='".$account_id."'");
  if($account->account<>NULL){
@@ -463,7 +477,7 @@ function api_accountMail($account_id=NULL){
 /* -[ Profile name by account id ]------------------------------------------- */
 // @param $account_id : ID of the account
 function api_accountName($account_id=NULL){
- if($account_id===0){return NULL;};
+ if($account_id===0){return NULL;}
  if($account_id==NULL){$account_id=$_SESSION['account']->id;}
  $account=$GLOBALS['db']->queryUniqueObject("SELECT * FROM accounts_accounts WHERE id='".$account_id."'");
  if($account->name<>NULL){
