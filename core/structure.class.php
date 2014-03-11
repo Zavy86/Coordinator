@@ -121,6 +121,11 @@ class str_navigation{
       $value=substr($text_filter,2);
      }
      break;
+    // checkbox and radio text value
+    case "checkbox":
+    case "radio":
+     if($_GET[$filter->name]<>NULL){$value=$filter->options[$_GET[$filter->name]];}
+     break;
     // select value is in array
     case "select":
      if($_GET[$filter->name]<>NULL){$value=$filter->options[$_GET[$filter->name]];}

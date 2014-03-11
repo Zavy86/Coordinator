@@ -684,6 +684,27 @@ function api_accountCompany($company_id=NULL){
 }
 
 
+/* -[ Return if an account is member of a group or subgroup ]---------------- */
+// @param $idGroup   : ID of the group
+// @param $idAccount : ID of the account
+// @param $subgroups : Check also in subgroups
+function api_accountGroupMember($idGroup,$idAccount=NULL,$subgroups=TRUE){
+ if($idAccount==NULL){$idAccount=$_SESSION['account']->id;}
+ if($idGroup>0 && $idAccount>0){
+  $grouprole=$GLOBALS['db']->queryUniqueValue("SELECT idGrouprole FROM accounts_groups_join_accounts WHERE idGroup='".$idGroup."' AND idAccount='".$idAccount."'");
+  if($grouprole>0){return TRUE;}
+  if($subgroups){
+   $subgroups=$GLOBALS['db']->query("SELECT * FROM accounts_groups WHERE idGroup='".$idGroup."'");
+   while($subgroup=$GLOBALS['db']->fetchNextObject($subgroups)){
+    $grouprole=$GLOBALS['db']->queryUniqueValue("SELECT idGrouprole FROM accounts_groups_join_accounts WHERE idGroup='".$subgroup->id."' AND idAccount='".$idAccount."'");
+    if($grouprole>0){return TRUE;}
+   }
+  }
+ }
+ return FALSE;
+}
+
+
 /* -[ Return the group role of an account ]---------------------------------- */
 // @param $idGroup   : ID of the group
 // @param $idAccount : ID of the account

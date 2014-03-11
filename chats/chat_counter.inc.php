@@ -1,5 +1,4 @@
 <?php
- //require_once("../core/api.inc.php");
  // initializations
  $chats_unread=0;
  $path="../chats/chats/";
