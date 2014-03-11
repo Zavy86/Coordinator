@@ -67,6 +67,10 @@ label.control-label{
  font-weight: bold;
 }
 
+.bolder{
+ font-weight: bold;
+}
+
 code {white-space:normal;color:#005580;}
 
 .text-left,td.text-left,th.text-left{text-align:left;}

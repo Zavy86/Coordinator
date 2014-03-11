@@ -30,6 +30,7 @@ public function header($title="",$nav="dashboard",$navbar=TRUE){
  <link href="<?php echo $GLOBALS['dir']."core/bootstrap-datetimepicker/css/bootstrap-datetimepicker.min.css";?>" rel="stylesheet">
  <link href="<?php echo $GLOBALS['dir']."core/bootstrap-markdown/css/bootstrap-markdown.min.css";?>" rel="stylesheet">
  <link href="<?php echo $GLOBALS['dir']."core/bootstrap-select2/select2.css";?>" rel="stylesheet">
+ <link href="<?php echo $GLOBALS['dir']."core/bootstrap-slider/css/bootstrap-slider.min.css";?>" rel="stylesheet">
 
  <link href="<?php echo $GLOBALS['dir']."core/shadowbox/shadowbox.css";?>" rel="stylesheet">
 
@@ -223,7 +224,9 @@ public function header($title="",$nav="dashboard",$navbar=TRUE){
 
  <?php
   // show modal notifications windows
-  foreach($modals_notifications_array as $modal){$modal->render();}
+  if(count($modals_notifications_array)>0){
+   foreach($modals_notifications_array as $modal){$modal->render();}
+  }
  ?>
 
  <?php
@@ -283,6 +286,8 @@ public function footer($wiki_link=NULL,$copyright=TRUE){
 
  <script src="<?php echo $GLOBALS['dir']."core/bootstrap-select2/select2.min.js";?>" type="text/javascript"></script>
  <script src="<?php echo $GLOBALS['dir']."core/bootstrap-select2/select2_locale_it.js";?>" type="text/javascript"></script>
+
+ <script src="<?php echo $GLOBALS['dir']."core/bootstrap-slider/js/bootstrap-slider.min.js";?>" type="text/javascript"></script>
 
  <?php if(api_checkPermission("chats","chats_chat")){ ?>
  <script type="text/javascript">
