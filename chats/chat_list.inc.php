@@ -1,5 +1,4 @@
 <?php
- //require_once("../core/api.inc.php");
  // initializations
  $path="../chats/chats/";
  $ul=array();
