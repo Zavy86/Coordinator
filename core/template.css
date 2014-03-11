@@ -75,7 +75,7 @@ code {white-space:normal;color:#005580;}
 
 .text-left,td.text-left,th.text-left{text-align:left;}
 .text-center,td.text-center,th.text-center{text-align:center;}
-.text-right,td.text-right,td.text-right{text-align:right;}
+.text-right,td.text-right,th.text-right{text-align:right;}
 .text-justify,td.text-justify,th.text-justify{text-align:justify;}
 
 
