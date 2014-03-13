@@ -651,57 +651,58 @@ class str_table{
  }
 
  /* -[ Render ]-------------------------------------------------------------- */
- public function render(){
+ // @boolean $echo : echo result (true) or return
+ function render($echo=TRUE){
   // open table
-  echo "<!-- table -->\n";
-  echo "<table class='table table-striped table-hover table-condensed ".$this->class."'>\n";
+  $return="<!-- table -->\n";
+  $return.="<table class='table table-striped table-hover table-condensed ".$this->class."'>\n";
   // open head
   if(is_array($this->th_array)){
-   echo "<thead>\n <tr>\n";
+   $return.="<thead>\n <tr>\n";
    // show headers
    foreach($this->th_array as $th){
-    echo "  <th class='".$th->class."' width='".$th->width."' colspan='".$th->colspan."'>";
+    $return.="  <th class='".$th->class."' width='".$th->width."' colspan='".$th->colspan."'>";
     if($this->sortable && $th->order<>NULL){
      // show order link
      if($th->order==$_GET['of']){if($_GET['om']==1){$order=0;}else{$order=1;}}else{$order=1;}
      // check order
      if($th->order==$_GET['of']){
-      if($_GET['om']==0){echo api_icon("icon-circle-arrow-down","margin-top:-0.5px;")."&nbsp;";}
-      if($_GET['om']==1){echo api_icon("icon-circle-arrow-up","margin-top:-0.5px;")."&nbsp;";}
+      if($_GET['om']==0){$return.=api_icon("icon-circle-arrow-down","margin-top:-0.5px;")."&nbsp;";}
+      if($_GET['om']==1){$return.=api_icon("icon-circle-arrow-up","margin-top:-0.5px;")."&nbsp;";}
      }
-     echo "<a href='".api_baseName()."?of=".$th->order."&om=".$order.$this->get."'>";
+     $return.="<a href='".api_baseName()."?of=".$th->order."&om=".$order.$this->get."'>";
     }
-    echo $th->name;
-    if($this->sortable){echo "</a>";}
-    echo "</th>\n";
+    $return.=$th->name;
+    if($this->sortable){$return.="</a>";}
+    $return.="</th>\n";
    }
-   echo " </tr>\n";
+   $return.=" </tr>\n";
    // close head
-   echo "</thead>\n";
+   $return.="</thead>\n";
   }
   // open body
-  echo "<tbody>\n";
+  $return.="<tbody>\n";
   if(is_array($this->tr_array)){
    foreach($this->tr_array as $tr){
     // show rows
-    echo " <tr class='".$tr->class."'>\n";
+    $return.=" <tr class='".$tr->class."'>\n";
     // show fields
     if(is_array($tr->fields)){
      foreach($tr->fields as $td){
       // show field
-      echo "  <td class='".$td->class."' colspan='".$td->colspan."'>".$td->content."</td>\n";
+      $return.="  <td class='".$td->class."' colspan='".$td->colspan."'>".$td->content."</td>\n";
      }
     }
-    echo " </tr>\n";
+    $return.=" </tr>\n";
    }
   }
   // show no value text
-  if(!count($this->tr_array) && $this->unvalued<>NULL){echo "<tr><td colspan=".count($this->th_array).">".$this->unvalued."</td></tr>\n";}
+  if(!count($this->tr_array) && $this->unvalued<>NULL){$return.="<tr><td colspan=".count($this->th_array).">".$this->unvalued."</td></tr>\n";}
   // close body
-  echo "</tbody>\n";
+  $return.="</tbody>\n";
   // close table
-  echo "</table>\n<!-- /table -->\n\n";
-  return TRUE;
+  $return.="</table>\n<!-- /table -->\n\n";
+  if($echo){echo $return;return TRUE;}else{return $return;}
  }
 
 }
@@ -1090,7 +1091,6 @@ class str_form{
     $return.="</script>\n\n";
    }
   }
-
   // show controls
   if(is_array($this->fc_array)){
    if($this->controlGroup){
@@ -1198,23 +1198,23 @@ class str_modal{
 
  /* -[ Render ]-------------------------------------------------------------- */
  // @boolean $echo : echo result (true) or return
- function render(){
+ function render($echo=TRUE){
   if(!strlen($this->body)>0){return FALSE;}
   // open modal window
-  echo "<!-- modal window ".$this->id." -->\n";
-  echo "<div id='modal_".$this->id."' class='modal hide fade ".$this->class."' role='dialog' aria-hidden='true'>\n";
+  $return="<!-- modal window ".$this->id." -->\n";
+  $return.="<div id='modal_".$this->id."' class='modal hide fade ".$this->class."' role='dialog' aria-hidden='true'>\n";
   // modal window header
-  echo " <div class='modal-header'>\n";
-  echo "  <button type='button' class='close' data-dismiss='modal' aria-hidden='true'>&times;</button>\n";
-  if(strlen($this->header)>0){echo "  <h4>".$this->header."</h4>\n";}
-  echo " </div>\n";
+  $return.=" <div class='modal-header'>\n";
+  $return.="  <button type='button' class='close' data-dismiss='modal' aria-hidden='true'>&times;</button>\n";
+  if(strlen($this->header)>0){$return.="  <h4>".$this->header."</h4>\n";}
+  $return.=" </div>\n";
   // modal window body
-  echo " <div class='modal-body'>\n".$this->body."\n </div>\n";
+  $return.=" <div class='modal-body'>\n".$this->body."\n </div>\n";
   // modal window footer
-  if(strlen($this->footer)>0){echo " <div class='modal-footer'>\n".$this->footer."\n </div>\n";}
+  if(strlen($this->footer)>0){$return.=" <div class='modal-footer'>\n".$this->footer."\n </div>\n";}
   // close modal window
-  echo "</div><!-- /modal window ".$this->id." -->\n\n";
-  return TRUE;
+  $return.="</div><!-- /modal window ".$this->id." -->\n\n";
+  if($echo){echo $return;return TRUE;}else{return $return;}
  }
 
 }
