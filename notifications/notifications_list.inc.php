@@ -24,7 +24,7 @@
   // modal header
   $modal->header(stripslashes($notification->subject));
   // modal body
-  $m_body="<p>Inviata da ".$account." il ".api_timestampFormat($notification->created,TRUE)."</p>\n";
+  $m_body="<p>Inviata da ".$account." il ".api_timestampFormat($notification->created,api_text("datetime"))."</p>\n";
   $m_body.="<p>".nl2br(stripslashes($notification->message))."</p>\n";
   if($notification->link<>NULL){
    if(substr($notification->link,0,7)<>"http://"){
@@ -34,7 +34,7 @@
    }
    $m_body.="<p><a href='".$url."' target='_blank'>".$url."</a></p>\n";
   }
-  if($status==2){$m_body.="<p>Archiviata da ".api_accountName($notification->idAccountArchived)." il ".api_timestampFormat($notification->archived,TRUE)."</p>";}
+  if($status==2){$m_body.="<p>Archiviata da ".api_accountName($notification->idAccountArchived)." il ".api_timestampFormat($notification->archived,api_text("datetime"))."</p>";}
   $modal->body($m_body);
   // build modal footer
   $confirm=NULL;

@@ -46,7 +46,7 @@
   }
   // if time between two message up to 5 min
   if(strtotime($message->timestamp)-strtotime($previous_timestamp)>300){
-   echo "<div class='metadata'>".api_timestampFormat($message->timestamp,TRUE)."</div>";
+   echo "<div class='metadata'>".api_timestampFormat($message->timestamp,api_text("datetime"))."</div>";
   }
   $previous_timestamp=$message->timestamp;
   // show message

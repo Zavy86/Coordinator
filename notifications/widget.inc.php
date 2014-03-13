@@ -33,7 +33,7 @@ while($notification=$GLOBALS['db']->fetchNextObject($notifications)){
  // modal header
  $modal->header(stripslashes($notification->subject));
  // modal body
- $m_body="<p>Inviata da ".$account." il ".api_timestampFormat($notification->created,TRUE)."</p>\n";
+ $m_body="<p>Inviata da ".$account." il ".api_timestampFormat($notification->created,api_text("datetime"))."</p>\n";
  $m_body.="<p>".nl2br(stripslashes($notification->message))."</p>\n";
  if($notification->link<>NULL){
   if(substr($notification->link,0,7)<>"http://"){
@@ -43,7 +43,7 @@ while($notification=$GLOBALS['db']->fetchNextObject($notifications)){
   }
   $m_body.="<p><a href='".$url."' target='_blank'>".$url."</a></p>\n";
  }
- if($g_status==2){$m_body.="<p>Archiviata da ".api_accountName($notification->idAccountArchived)." il ".api_timestampFormat($notification->archived,TRUE)."</p>";}
+ if($g_status==2){$m_body.="<p>Archiviata da ".api_accountName($notification->idAccountArchived)." il ".api_timestampFormat($notification->archived,api_text("datetime"))."</p>";}
  $modal->body($m_body);
  // build modal footer
  $confirm=NULL;
@@ -69,8 +69,8 @@ while($notification=$GLOBALS['db']->fetchNextObject($notifications)){
   case 1:$table->addField(api_icon("icon-info-sign"),NULL);break;
   case 2:$table->addField(api_icon("icon-ok-sign"),NULL);break;
  }
- $table->addField(substr($notification->created,0,16),"nowarp");
- if($g_status==2){$table->addField(substr($notification->archived,0,16),"nowarp");}
+ $table->addField(api_timestampFormat($notification->created,api_text("datetime")),"nowarp");
+ if($g_status==2){$table->addField(api_timestampFormat($notification->archived,api_text("datetime")),"nowarp");}
  $table->addField($modal->link(stripslashes($notification->subject)),"nowarp");
 }
 // show table
