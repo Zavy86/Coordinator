@@ -40,7 +40,8 @@ class str_navigation{
  // @string $class : tab css class
  // @boolean $enabled : enable the navigation tab (true) or not
  // @string $target : target page _blank, _self, _parent, _top
- function addTab($label,$url=NULL,$get=NULL,$class=NULL,$enabled=TRUE,$target="_self"){
+ // @string $confirm : confirmation message to approve if not null
+ function addTab($label,$url=NULL,$get=NULL,$class=NULL,$enabled=TRUE,$target="_self",$confirm=NULL){
   if(strlen($label)==0){return FALSE;}
   $nt=new stdClass();
   $nt->label=$label;
@@ -49,6 +50,7 @@ class str_navigation{
   $nt->class=$class;
   $nt->enabled=$enabled;
   $nt->target=$target;
+  $nt->confirm=$confirm;
   $this->current_tab++;
   $this->nt_array[$this->current_tab]=$nt;
   return TRUE;
@@ -61,7 +63,8 @@ class str_navigation{
  // @string $class : sub tab css class
  // @boolean $enabled : enable the navigation tab (true) or not
  // @string $target : target page _blank, _self, _parent, _top
- function addSubTab($label,$url=NULL,$get=NULL,$class=NULL,$enabled=TRUE,$target="_self"){
+ // @string $confirm : confirmation message to approve if not null
+ function addSubTab($label,$url=NULL,$get=NULL,$class=NULL,$enabled=TRUE,$target="_self",$confirm=NULL){
   if(strlen($label)==0){return FALSE;}
   $nt=new stdClass();
   $nt->label=$label;
@@ -70,6 +73,7 @@ class str_navigation{
   $nt->class=$class;
   $nt->enabled=$enabled;
   $nt->target=$target;
+  $nt->confirm=$confirm;
   if(!is_array($this->nt_array[$this->current_tab]->dropdown)){
    $this->nt_array[$this->current_tab]->dropdown=array();
   }
@@ -147,6 +151,36 @@ class str_navigation{
   }else{
    if($unvalued<>NULL){$unvalued="<p><span class='label'>".api_text("filters-filters").":</span> <span class='label label-inverse'>".$unvalued."</span></p>\n";}
    $return=$unvalued;
+  }
+  return $return;
+ }
+
+ /* -[ Filters Get Format ]-------------------------------------------------- */
+ function filtersGet(){
+  $return=NULL;
+  foreach($this->filters as $filter){
+   $value=NULL;
+   // switch filter type
+   switch($filter->type){
+    // multiple filters have array results
+    case "multiselect":
+     if(is_array($_GET[$filter->name])){
+      foreach($_GET[$filter->name] as $g_option){
+       $value.="&".$filter->name."[]=".$g_option;
+      }
+     }
+     break;
+    // range values
+    case "range":
+    case "daterange":
+    case "datetimerange":
+     if($_GET[$filter->name."_from"]<>NULL){$value="&".$filter->name."_from=".$_GET[$filter->name."_from"];}
+     if($_GET[$filter->name."_to"]<>NULL){$value.="&".$filter->name."_to=".$_GET[$filter->name."_to"];}
+     break;
+    default:
+     if($_GET[$filter->name]<>NULL){$value="&".$filter->name."=".$_GET[$filter->name];}
+   }
+   if($value<>NULL){$return.=$value;}
   }
   return $return;
  }
@@ -340,6 +374,7 @@ class str_navigation{
     if($dropdown){echo "<a class='dropdown-toggle' data-toggle='dropdown' href='#'";}
      elseif($active || !$nt->enabled){echo "<a href='#'";}
      else{echo "<a href='".$nt->url.$nt->get."' target='".$nt->target."'";}
+    if(strlen($nt->confirm)){echo " onClick=\"return confirm('".$nt->confirm."')\"";}
     // show label
     echo ">".$nt->label."</a>";
     // dropdown items
@@ -352,6 +387,7 @@ class str_navigation{
       }else{
        echo " class='disabled ".$ntd->class."'><a href='#'";
       }
+      if(strlen($ntd->confirm)){echo " onClick=\"return confirm('".$ntd->confirm."')\"";}
       echo ">".$ntd->label."</a></li>\n";
      }
      echo "  </ul>\n ";
@@ -361,7 +397,7 @@ class str_navigation{
   }// search bar
   if($this->search){
    echo " <!-- search -->\n";
-   echo " <form action='feasibility_list.php' method='get' name='nav-search'>\n";
+   echo " <form action='".api_baseName()."' method='get' name='nav-search'>\n";
    echo "  <li class='search pull-right'>\n";
    // get params
    if(count($this->get)>0){
@@ -374,9 +410,32 @@ class str_navigation{
    }
    // show input
    echo "   <div class='input-append'>\n";
+   // load filters
+   foreach($this->filters as $filter){
+    // switch filter type
+    switch($filter->type){
+     // multiple filters have array results
+     case "multiselect":
+      if(is_array($_GET[$filter->name])){
+       foreach($_GET[$filter->name] as $g_option){
+        echo "    <input type='hidden' name='".$filter->name."[]' value='".$g_option."'>\n";
+       }
+      }
+      break;
+     // range values
+     case "range":
+     case "daterange":
+     case "datetimerange":
+      if($_GET[$filter->name."_from"]<>NULL){echo "    <input type='hidden' name='".$filter->name."_from' value='".$_GET[$filter->name."_from"]."'>\n";}
+      if($_GET[$filter->name."_to"]<>NULL){echo "    <input type='hidden' name='".$filter->name."_to' value='".$_GET[$filter->name."_to"]."'>\n";}
+      break;
+     default:
+      if($_GET[$filter->name]<>NULL){echo "    <input type='hidden' name='".$filter->name."' value='".$_GET[$filter->name]."'>\n";}
+    }
+   }
    echo "    <input type='text' name='q' class='input-large' placeholder='Ricerca' value='".$_GET['q']."'>\n";
-   if($_GET['q']<>NULL){echo "    <a class='btn' href='feasibility_list.php?".$gets."'><i class='icon-remove-sign'></i></a>\n";}
-   echo "    <button type='submit' class='btn'><i class='icon-search'></i></button>\n";
+   if($_GET['q']<>NULL){echo "    <a class='btn' href='".api_baseName()."?q=".$this->filtersGet()."'><i class='icon-remove-sign'></i></a>\n";}
+   echo "    <button type='submit' name='nav-search-submit' class='btn'><i class='icon-search'></i></button>\n";
    echo "   </div>\n  </li>\n </form><!-- /search -->\n";
   }
   // close navigation
@@ -592,57 +651,58 @@ class str_table{
  }
 
  /* -[ Render ]-------------------------------------------------------------- */
- public function render(){
+ // @boolean $echo : echo result (true) or return
+ function render($echo=TRUE){
   // open table
-  echo "<!-- table -->\n";
-  echo "<table class='table table-striped table-hover table-condensed ".$this->class."'>\n";
+  $return="<!-- table -->\n";
+  $return.="<table class='table table-striped table-hover table-condensed ".$this->class."'>\n";
   // open head
   if(is_array($this->th_array)){
-   echo "<thead>\n <tr>\n";
+   $return.="<thead>\n <tr>\n";
    // show headers
    foreach($this->th_array as $th){
-    echo "  <th class='".$th->class."' width='".$th->width."' colspan='".$th->colspan."'>";
+    $return.="  <th class='".$th->class."' width='".$th->width."' colspan='".$th->colspan."'>";
     if($this->sortable && $th->order<>NULL){
      // show order link
      if($th->order==$_GET['of']){if($_GET['om']==1){$order=0;}else{$order=1;}}else{$order=1;}
      // check order
      if($th->order==$_GET['of']){
-      if($_GET['om']==0){echo api_icon("icon-circle-arrow-down","margin-top:-0.5px;")."&nbsp;";}
-      if($_GET['om']==1){echo api_icon("icon-circle-arrow-up","margin-top:-0.5px;")."&nbsp;";}
+      if($_GET['om']==0){$return.=api_icon("icon-circle-arrow-down","margin-top:-0.5px;")."&nbsp;";}
+      if($_GET['om']==1){$return.=api_icon("icon-circle-arrow-up","margin-top:-0.5px;")."&nbsp;";}
      }
-     echo "<a href='".api_baseName()."?of=".$th->order."&om=".$order.$this->get."'>";
+     $return.="<a href='".api_baseName()."?of=".$th->order."&om=".$order.$this->get."'>";
     }
-    echo $th->name;
-    if($this->sortable){echo "</a>";}
-    echo "</th>\n";
+    $return.=$th->name;
+    if($this->sortable){$return.="</a>";}
+    $return.="</th>\n";
    }
-   echo " </tr>\n";
+   $return.=" </tr>\n";
    // close head
-   echo "</thead>\n";
+   $return.="</thead>\n";
   }
   // open body
-  echo "<tbody>\n";
+  $return.="<tbody>\n";
   if(is_array($this->tr_array)){
    foreach($this->tr_array as $tr){
     // show rows
-    echo " <tr class='".$tr->class."'>\n";
+    $return.=" <tr class='".$tr->class."'>\n";
     // show fields
     if(is_array($tr->fields)){
      foreach($tr->fields as $td){
       // show field
-      echo "  <td class='".$td->class."' colspan='".$td->colspan."'>".$td->content."</td>\n";
+      $return.="  <td class='".$td->class."' colspan='".$td->colspan."'>".$td->content."</td>\n";
      }
     }
-    echo " </tr>\n";
+    $return.=" </tr>\n";
    }
   }
   // show no value text
-  if(!count($this->tr_array) && $this->unvalued<>NULL){echo "<tr><td colspan=".count($this->th_array).">".$this->unvalued."</td></tr>\n";}
+  if(!count($this->tr_array) && $this->unvalued<>NULL){$return.="<tr><td colspan=".count($this->th_array).">".$this->unvalued."</td></tr>\n";}
   // close body
-  echo "</tbody>\n";
+  $return.="</tbody>\n";
   // close table
-  echo "</table>\n<!-- /table -->\n\n";
-  return TRUE;
+  $return.="</table>\n<!-- /table -->\n\n";
+  if($echo){echo $return;return TRUE;}else{return $return;}
  }
 
 }
@@ -1031,7 +1091,6 @@ class str_form{
     $return.="</script>\n\n";
    }
   }
-
   // show controls
   if(is_array($this->fc_array)){
    if($this->controlGroup){
@@ -1044,11 +1103,11 @@ class str_form{
     switch(strtolower($fc->type)){
      // submit
      case "submit":
-      $return.="  <input type='submit' name='submit' id='".$this->name."_control_".$index."' class='btn btn-primary ".$fc->class."' value='".$fc->label."'>\n";
+      $return.="  <input type='submit' name='".$this->name."_submit' id='".$this->name."_control_".$index."' class='btn btn-primary ".$fc->class."' value='".$fc->label."'>\n";
       break;
      // reset
      case "reset":
-      $return.="  <input type='reset' name='submit' id='".$this->name."_control_".$index."' class='btn ".$fc->class."' value='".$fc->label."'>\n";
+      $return.="  <input type='reset' name='".$this->name."_reset' id='".$this->name."_control_".$index."' class='btn ".$fc->class."' value='".$fc->label."'>\n";
       break;
      // button, link
      case "button":
@@ -1139,23 +1198,23 @@ class str_modal{
 
  /* -[ Render ]-------------------------------------------------------------- */
  // @boolean $echo : echo result (true) or return
- function render(){
+ function render($echo=TRUE){
   if(!strlen($this->body)>0){return FALSE;}
   // open modal window
-  echo "<!-- modal window ".$this->id." -->\n";
-  echo "<div id='modal_".$this->id."' class='modal hide fade ".$this->class."' role='dialog' aria-hidden='true'>\n";
+  $return="<!-- modal window ".$this->id." -->\n";
+  $return.="<div id='modal_".$this->id."' class='modal hide fade ".$this->class."' role='dialog' aria-hidden='true'>\n";
   // modal window header
-  echo " <div class='modal-header'>\n";
-  echo "  <button type='button' class='close' data-dismiss='modal' aria-hidden='true'>&times;</button>\n";
-  if(strlen($this->header)>0){echo "  <h4>".$this->header."</h4>\n";}
-  echo " </div>\n";
+  $return.=" <div class='modal-header'>\n";
+  $return.="  <button type='button' class='close' data-dismiss='modal' aria-hidden='true'>&times;</button>\n";
+  if(strlen($this->header)>0){$return.="  <h4>".$this->header."</h4>\n";}
+  $return.=" </div>\n";
   // modal window body
-  echo " <div class='modal-body'>\n".$this->body."\n </div>\n";
+  $return.=" <div class='modal-body'>\n".$this->body."\n </div>\n";
   // modal window footer
-  if(strlen($this->footer)>0){echo " <div class='modal-footer'>\n".$this->footer."\n </div>\n";}
+  if(strlen($this->footer)>0){$return.=" <div class='modal-footer'>\n".$this->footer."\n </div>\n";}
   // close modal window
-  echo "</div><!-- /modal window ".$this->id." -->\n\n";
-  return TRUE;
+  $return.="</div><!-- /modal window ".$this->id." -->\n\n";
+  if($echo){echo $return;return TRUE;}else{return $return;}
  }
 
 }
