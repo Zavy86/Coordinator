@@ -56,7 +56,7 @@ function content(){
   $modal=new str_modal($log->id);
   $modal->header(strip_tags($log_subject));
   $m_body="<dl>\n";
-  $m_body.="<dt>Data</dt><dd>".api_timestampFormat($log->timestamp,TRUE,TRUE)."</dd><br>\n";
+  $m_body.="<dt>Data</dt><dd>".api_timestampFormat($log->timestamp,api_text("timestamp"))."</dd><br>\n";
   if($log->idAccount>0){$m_body.="<dt>Account:</dt><dd>".api_accountName($log->idAccount)."</dd><br>\n";}
   $m_body.="<dt>Indirizzo IP</dt><dd>".$log->ip."</dd><br>\n"; // gethostbyaddr
   if(strlen($log->link)>0){$m_body.="<dt>Link:</dt><dd><a href='".$GLOBALS['dir'].$log->link."' target='_blank'>".$log->link."</a></dd><br>\n";}
@@ -68,7 +68,7 @@ function content(){
   $table->addRow($tr_class);
   // build table fields
   $table->addField(api_icon($td_icon),"nowarp");
-  $table->addField(api_timestampFormat($log->timestamp,TRUE),"nowarp");
+  $table->addField(api_timestampFormat($log->timestamp,api_text("datetime")),"nowarp");
   $table->addField(strtoupper(stripslashes($log->module)));
   $table->addField($modal->link($log_subject));
   $table->addField(api_accountName($log->idAccount),"nowarp");

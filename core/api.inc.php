@@ -308,17 +308,42 @@ function api_folder_icon($size=128,$float=NULL){
 
 /* -[ Timestamp Format ]----------------------------------------------------- */
 // @param $timestamp : MySql timestamp
-// @param $time      : Return date and time
-// @param $seconds   : Return date and time and seconds
-function api_timestampFormat($timestamp,$time=FALSE,$seconds=FALSE){
+// @param $format : datetime format
+function api_timestampFormat($timestamp,$format="Y-m-d H:i"){
  if($timestamp==NULL){return NULL;}
- $d=explode("-",$timestamp);
- $result=substr($d[2],0,2)."-".$d[1]."-".$d[0];
- if($time){$result.=" ".substr($d[2],3,5);}
- if($seconds){$result.=":".substr($d[2],9,2);}
- return $result;
+ $datetime=new DateTime($timestamp);
+ $return=$datetime->format($format);
+ // if language not default
+ if($_SESSION['language']<>"default"){
+  $days=array("Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday");
+  $locale_days=array(api_text("day-monday"),api_text("day-tuesday"),api_text("day-wednesday"),api_text("day-thursday"),api_text("day-friday"),api_text("day-saturday"),api_text("day-sunday"));
+  $months=array("January","February","March","April","May","July","August","September","October","November","December");
+  $locale_months=array(api_text("month-january"),api_text("month-february"),api_text("month-march"),api_text("month-april"),api_text("month-may"),api_text("month-june"),api_text("month-july"),api_text("month-august"),api_text("month-september"),api_text("month-october"),api_text("month-november"),api_text("month-december"));
+  // replace days
+  if(strpos($format,"l")!==FALSE){$return=str_replace($days,$locale_days,$return);}
+  // replace three digit day
+  if(strpos($format,"D")!==FALSE){
+   array_walk($days,"api_timestampFormatThreeDigit");
+   array_walk($locale_days,"api_timestampFormatThreeDigit");
+   $return=str_replace($days,$locale_days,$return);
+  }
+  // replace month
+  if(strpos($format,"F")!==FALSE){$return=str_replace($months,$locale_months,$return);}
+  // replace three digit month
+  if(strpos($format,"M")!==FALSE){
+   array_walk($months,"api_timestampFormatThreeDigit");
+   array_walk($locale_months,"api_timestampFormatThreeDigit");
+   $return=str_replace($months,$locale_months,$return);
+  }
+ }
+ return $return;
 }
 
+/* -[ Timestamp Format Three Digit ]----------------------------------------- */
+// return three digit from string
+function api_timestampFormatThreeDigit(&$string){
+ $string=substr($string,0,3);
+}
 
 /* -[ Timestamp difference ]------------------------------------------------- */
 // @param $timestamp_a : MySql timestamp from
@@ -339,7 +364,6 @@ function api_timestampDifference($timestamp_a,$timestamp_b,$format="S"){
  }
  return number_format($result,2);
 }
-
 
 /* -[ Timestamp difference ]------------------------------------------------- */
 // @param $week : week number (from 1 to 52)
@@ -1259,6 +1283,24 @@ function api_file_download($idFile,$table="uploads_uploads",$name=NULL){
  }
 }
 
+
+/* -[ Link ]----------------------------------------------------------------- */
+// @string $url : url to link
+// @string $label : label for link
+// @string $title : title for link
+// @string $class : url css class
+// @string $style : manual styles tag
+function api_link($url,$label,$title=NULL,$class=NULL,$popup=FALSE,$style=NULL){
+ if($url==NULL){return FALSE;}
+ $return="<a href=\"".$url."\" class='".$class."' style=\"".$style."\"";
+ if($popup){
+  $return.=" data-toggle='popover' data-placement='top' data-content=\"".$title."\"";
+ }elseif($title<>NULL){
+  $return.=" title=\"".$title."\"";
+ }
+ $return.=">".$label."</a>\n";
+ return $return;
+}
 
 
 

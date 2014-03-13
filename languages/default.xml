@@ -2,6 +2,15 @@
 
 <locale language="EN">
 
+ <!-- timestamp -->
+ <text key="date">Y-m-d</text>
+ <text key="date-short">'y-m-d</text>
+ <text key="date-textual">l, F jS Y</text>
+ <text key="datetime">Y-m-d H:i:s</text>
+ <text key="datetime-short">'y-m-d H:i</text>
+ <text key="datetime-textual">l, F jS Y g:i A</text>
+ <text key="timestamp">Y-m-d H:i:s</text>
+
  <!-- alerts -->
  <text key="newLogs">There are new notifications in the events log, &lt;a href='../logs/logs_list.php'&gt;view events&lt;/a&gt;</text>
  <text key="changeBrowser">The browser you are using does not seem to fully support the HTML5 format, we recommend using &lt;a href='http://chrome.google.com' target='_blank'&gt;Google Chrome&lt;/a&gt; or &lt;a href='http://www.apple.com/safari' target='_blank'&gt;Apple Safari&lt;/a&gt;</text>

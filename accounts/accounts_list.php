@@ -43,7 +43,7 @@ function content(){
   $table->addField($typology,"nowarp");
   $table->addField($company,"nowarp");
   $table->addField(stripslashes($account->account),"nowarp");
-  $table->addField(api_timestampFormat($account->lastLogin,TRUE),"nowarp");
+  $table->addField(api_timestampFormat($account->lastLogin,api_text("datetime")),"nowarp");
  }
  // show table
  $table->render();
