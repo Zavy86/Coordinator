@@ -1260,6 +1260,24 @@ function api_file_download($idFile,$table="uploads_uploads",$name=NULL){
 }
 
 
+/* -[ Link ]----------------------------------------------------------------- */
+// @string $url : url to link
+// @string $label : label for link
+// @string $title : title for link
+// @string $class : url css class
+// @string $style : manual styles tag
+function api_link($url,$label,$title=NULL,$class=NULL,$popup=FALSE,$style=NULL){
+ if($url==NULL){return FALSE;}
+ $return="<a href=\"".$url."\" class='".$class."' style=\"".$style."\"";
+ if($popup){
+  $return.=" data-toggle='popover' data-placement='top' data-content=\"".$title."\"";
+ }elseif($title<>NULL){
+  $return.=" title=\"".$title."\"";
+ }
+ $return.=">".$label."</a>\n";
+ return $return;
+}
+
 
 
 /* ---------------------------[ DOCUMENTATE ]-------------------------------- */
