@@ -6,8 +6,6 @@
  <text key="module-title">Accounts</text>
 
  <!-- alerts -->
- <text key="loginFailed">L'account o la password inseriti non sono stati riconosciuti</text>
- <text key="loginDisabled">L'account inserito è stato disabilitato, contatta l'amministratore di sistema per maggiori informazioni</text>
  <text key="accountCreated">L'account {0} è stato creato, seleziona i gruppi a cui assegnarlo</text>
  <text key="accountUpdated">L'account {0} è stato aggiornato</text>
  <text key="accountDeleted">L'account {0} è stato eliminato</text>
@@ -23,8 +21,6 @@
  <text key="companyCreated">La società {0} è stata creata</text>
  <text key="companyUpdated">La società {0} è stata aggiornata</text>
  <text key="companyDeleted">La società {0} è stata eliminata</text>
- <text key="ldapCreated">Il nuovo account è stato creato correttamente, ora puoi eseguire l'accesso</text>
- <text key="ldapCreatedError">Si è verificato un errore durante la creazione dell'account</text>
 
  <!-- template.inc.php -->
  <text key="nav-profile">Profilo personale</text>

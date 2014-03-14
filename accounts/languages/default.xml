@@ -6,8 +6,6 @@
  <text key="module-title">Accounts</text>
 
  <!-- alerts -->
- <text key="loginFailed">The account and password do not match</text>
- <text key="loginDisabled">The account you entered is disabled, contact your system administrator for more information</text>
  <text key="accountCreated">The account {0} has been created, select the groups to which to assign</text>
  <text key="accountUpdated">The account {0} has been updated</text>
  <text key="accountDeleted">The account {0} has been deleted</text>
@@ -23,8 +21,6 @@
  <text key="companyCreated">Company {0} has been created</text>
  <text key="companyUpdated">Company {0} has been updated</text>
  <text key="companyDeleted">Company {0} has been deleted</text>
- <text key="ldapCreated">The new account has been successfully created, you can sign in now</text>
- <text key="ldapCreatedError">There was an error when creating your account</text>
 
  <!-- template.inc.php -->
  <text key="nav-profile">Profile</text>
