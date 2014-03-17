@@ -48,8 +48,10 @@
  <text key="core-menu-settings">Impostazioni</text>
  <text key="core-menu-logs">Registro eventi</text>
  <text key="core-menu-dashboard-edit">Modifica Dashboard</text>
- <text key="core-menu-become-administrator">Diventa Amministratore</text>
- <text key="core-menu-become-user">Diventa Utente</text>
+ <text key="core-menu-becomeAdministrator">Diventa Amministratore</text>
+ <text key="core-menu-becomeUser">Diventa Utente</text>
+ <text key="core-menu-debugEnable">Abilita Debug</text>
+ <text key="core-menu-debugDisable">Disabilita Debug</text>
  <text key="core-menu-logout">Esci</text>
 
  <!-- filters -->

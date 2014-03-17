@@ -13,6 +13,8 @@
  <text key="accountPasswordChanged">Your password has been updated</text>
  <text key="accountSwitched1">From this moment you are working with administrator privileges :)</text>
  <text key="accountSwitched2">From this moment you are working with normal user privileges :(</text>
+ <text key="accountDebug">Debug disabled</text>
+ <text key="accountDebug1">Debug enabled</text>
  <text key="passwordRetrived">Your password reset request has been submitted, you will receive a mail shortly</text>
  <text key="passwordResetted">Your password has been restored</text>
  <text key="groupCreated">Group {0} has been created</text>

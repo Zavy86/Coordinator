@@ -182,7 +182,8 @@ public function header($title="",$nav="dashboard",$navbar=TRUE){
         <?php if(api_checkPermission("stats","stats_server")){echo "<li><a href=\"".$GLOBALS['dir']."stats/index.php\">".api_text("core-menu-statistics")."</a></li>";} ?>
         <?php if(api_checkPermission("settings","settings_edit")||api_checkPermission("settings","permissions_edit")){echo "<li><a href=\"".$GLOBALS['dir']."settings/index.php\">".api_text("core-menu-settings")."</a></li>";} ?>
 
-        <?php/*
+        <?php
+         /*
          if(api_checkPermission("wiki","wiki_view")){
           if($GLOBALS['db']->queryUniqueObject("SELECT * FROM wiki_pages WHERE path='".api_baseModule()."'")){
            echo "<li><a href=\"".$GLOBALS['dir']."wiki/wiki_view.php?page=".api_baseModule()."\">Documentazione</a></li>";
@@ -190,7 +191,8 @@ public function header($title="",$nav="dashboard",$navbar=TRUE){
            echo "<li><a href=\"".$GLOBALS['dir']."wiki/index.php\">Documentazione</a></li>";
           }
          }
-        */?>
+        */
+        ?>
 
         <?php if(api_checkPermission("logs","logs_list")){echo "<li><a href=\"".$GLOBALS['dir']."logs/index.php\">".api_text("core-menu-logs")."</a></li>";} ?>
         <?php //if(api_checkPermission("saprfc","saprfc_list")){echo "<li><a href=\"".$GLOBALS['dir']."saprfc/index.php\">SAP RFC</a></li>";} ?>
@@ -200,10 +202,15 @@ public function header($title="",$nav="dashboard",$navbar=TRUE){
         <?php
          if($_SESSION['account']->administrator && $_SESSION['account']->id>1){
           echo "<li class='divider'></li>\n";
-          if($_SESSION['account']->typology==2){
-           echo "<li><a href='".$GLOBALS['dir']."accounts/submit.php?act=account_switch_to_admin'>".api_text("core-menu-become-administrator")."</a></li>";
+          if($_SESSION['account']->debug){
+           echo "<li><a href='".$GLOBALS['dir']."accounts/submit.php?act=account_debug_disable'>".api_text("core-menu-debugDisable")."</a></li>";
           }else{
-           echo "<li><a href='".$GLOBALS['dir']."accounts/submit.php?act=account_switch_to_user'>".api_text("core-menu-become-user")."</a></li>";
+           echo "<li><a href='".$GLOBALS['dir']."accounts/submit.php?act=account_debug_enable'>".api_text("core-menu-debugEnable")."</a></li>";
+          }
+          if($_SESSION['account']->typology==2){
+           echo "<li><a href='".$GLOBALS['dir']."accounts/submit.php?act=account_switch_to_admin'>".api_text("core-menu-becomeAdministrator")."</a></li>";
+          }else{
+           echo "<li><a href='".$GLOBALS['dir']."accounts/submit.php?act=account_switch_to_user'>".api_text("core-menu-becomeUser")."</a></li>";
           }
          }
         ?>
