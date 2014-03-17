@@ -80,34 +80,35 @@ function content(){
   // add group form
  ?>
  <form class="form-horizontal" action="submit.php?act=account_grouprole_add&id=<?php echo $account->id;?>" method="post" name="accounts_groups">
- <select class="span5" name="idGroup">
-  <option value="0">Aggiungi un gruppo</option>
-  <?php
-   $groups=$GLOBALS['db']->query("SELECT * FROM accounts_groups ORDER BY idGroup,name ASC");
-   while($group=$GLOBALS['db']->fetchNextObject($groups)){
-    if(!api_checkAccountGroup($group->id,$account->id)){
-     $group_name=$group->name;
-     if($group->idGroup>0){$group_name=api_groupName($group->idGroup)."&minus;".$group_name;}
-     echo "<option value='".$group->id."'> ".$group_name;
-     if($group->description){echo " (".$group->description.")";}
+  <select class="span5" name="idGroup">
+   <option value="0">Aggiungi un gruppo</option>
+   <?php
+    $groups=$GLOBALS['db']->query("SELECT * FROM accounts_groups ORDER BY idGroup,name ASC");
+    while($group=$GLOBALS['db']->fetchNextObject($groups)){
+     if(!api_checkAccountGroup($group->id,$account->id)){
+      $group_name=$group->name;
+      if($group->idGroup>0){$group_name=api_groupName($group->idGroup)."&minus;".$group_name;}
+      echo "<option value='".$group->id."'> ".$group_name;
+      if($group->description){echo " (".$group->description.")";}
+      echo "</option>\n";
+     }
+    }
+   ?>
+  </select>
+  <select class="span5" name="idGrouprole">
+   <?php
+    $grouproles=$GLOBALS['db']->query("SELECT * FROM accounts_grouproles ORDER BY id ASC");
+    while($grouprole=$GLOBALS['db']->fetchNextObject($grouproles)){
+     echo "<option value='".$grouprole->id."'";
+     if(api_accountGrouprole($group->id)==$grouprole->id){echo " selected";}
+     echo "> ".$grouprole->name;
+     if($grouprole->description){echo " (".$grouprole->description.")";}
      echo "</option>\n";
     }
-   }
-  ?>
- </select>
- <select class="span5" name="idGrouprole">
-  <?php
-   $grouproles=$GLOBALS['db']->query("SELECT * FROM accounts_grouproles ORDER BY id ASC");
-   while($grouprole=$GLOBALS['db']->fetchNextObject($grouproles)){
-    echo "<option value='".$grouprole->id."'";
-    if(api_accountGrouprole($group->id)==$grouprole->id){echo " selected";}
-    echo "> ".$grouprole->name;
-    if($grouprole->description){echo " (".$grouprole->description.")";}
-    echo "</option>\n";
-   }
-  ?>
- </select>
- <button type="submit" name="account_grouprole_add" class="btn"><i class="icon-plus"></i></button>
+   ?>
+  </select>
+  <input type="submit" name="account_grouprole_add" class="btn" value="Add">
+ </form>
 <?php
  }
  $GLOBALS['html']->split_close();
@@ -115,7 +116,7 @@ function content(){
 <script type="text/javascript">
  $(document).ready(function(){
   // validation
-  $('form').validate({
+  $('form[name=accounts]').validate({
    rules:{
     name:{required:true,minlength:3},
     account:{required:true,email:true}
