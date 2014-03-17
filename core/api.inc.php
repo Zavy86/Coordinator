@@ -501,7 +501,7 @@ function api_accountMail($account_id=NULL){
 /* -[ Profile name by account id ]------------------------------------------- */
 // @param $account_id : ID of the account
 function api_accountName($account_id=NULL){
- if($account_id===0){return NULL;}
+ if($account_id===0 || $account_id==="0"){return NULL;}
  if($account_id==NULL){$account_id=$_SESSION['account']->id;}
  $account=$GLOBALS['db']->queryUniqueObject("SELECT * FROM accounts_accounts WHERE id='".$account_id."'");
  if($account->name<>NULL){
