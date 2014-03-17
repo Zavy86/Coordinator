@@ -31,10 +31,14 @@
  <text key="month-december">Dicembre</text>
 
  <!-- alerts -->
+ <text key="accessDenied"><h4>ACCESSO NEGATO</h4>I permessi del tuo account non sono sufficienti per eseguire l'operazione desiderata</text>
+ <text key="loginFailed">L'account o la password inseriti non sono stati riconosciuti</text>
+ <text key="loginDisabled">L'account inserito è stato disabilitato, contatta l'amministratore di sistema per maggiori informazioni</text>
  <text key="newLogs">Sono presenti delle nuove notifiche nel registro degli eventi, &lt;a href='../logs/logs_list.php'&gt;visualizza eventi&lt;/a&gt;</text>
  <text key="changeBrowser">Il browser utilizzato sembra non supportare completamente il formato HTML5, si consiglia di utilizzare &lt;a href='http://chrome.google.com' target='_blank'&gt;Google Chrome&lt;/a&gt; o &lt;a href='http://www.apple.com/safari' target='_blank'&gt;Apple Safari&lt;/a&gt;</text>
  <text key="submitFunctionNotFound">Attenzione, la funzione richiamata non è stata implementata, contattare l'amministratore per maggiori informazioni</text>
- <text key="accessDenied"><h4>ACCESSO NEGATO</h4>I permessi del tuo account non sono sufficienti per eseguire l'operazione desiderata</text>
+ <text key="ldapCreated">Il nuovo account è stato creato correttamente, ora puoi eseguire l'accesso</text>
+ <text key="ldapCreatedError">Si è verificato un errore durante la creazione dell'account</text>
 
  <!-- html.class.php -->
  <text key="core-menu-dashboard">Bacheca</text>
