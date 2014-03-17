@@ -43,7 +43,7 @@ function content(){
   $module_obj->description=$module_description;
   // check for setup or update
   $module_db=$GLOBALS['db']->queryUniqueObject("SELECT * FROM settings_modules WHERE module='".$module_name."'");
-  if($module_db->module){
+  if($module_db->module<>NULL){
    $module_obj->installed_version=$module_db->version;
    if($module_db->version<>$module_version){
     $module_obj->action="update";
@@ -58,7 +58,7 @@ function content(){
  // build table
  $table=new str_table(api_text("modules-tr-unvalued"),TRUE);
  $table->addHeader(api_text("modules-th-module"),"nowarp");
- $table->addHeader(api_text("modules-th-version"),"nowarp");
+ $table->addHeader(api_text("modules-th-version"),"nowarp text-center");
  $table->addHeader(api_text("modules-th-description"),NULL,"100%");
  $table->addHeader("&nbsp;","nowarp",NULL);
  // loop modules
@@ -72,7 +72,7 @@ function content(){
     break;
    case "update":
     $tr_class="warning";
-    $td="<a href='submit.php?act=module_update&module=".$module->name."'>".api_text("modules-td-update",$module_obj->installed_version)."</a>";
+    $td="<a href='submit.php?act=module_update&module=".$module->name."'>".api_text("modules-td-update",$module->installed_version)."</a>";
     break;
    default:
     $tr_class=NULL;
@@ -82,7 +82,7 @@ function content(){
   $table->addRow($tr_class);
   // build table fields
   $table->addField($module->name,"nowarp");
-  $table->addField($module->version,"nowarp");
+  $table->addField($module->version,"nowarp text-center");
   $table->addField($module->description);
   $table->addField($td,"nowarp");
  }
