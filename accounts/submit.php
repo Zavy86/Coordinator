@@ -16,6 +16,9 @@ switch($act){
  // accounts switch
  case "account_switch_to_admin":account_switch(1);break;
  case "account_switch_to_user":account_switch(2);break;
+ // debug
+ case "account_debug_enable":account_debug(TRUE);break;
+ case "account_debug_disable":account_debug(FALSE);break;
  // password
  case "password_retrieve":password_retrieve();break;
  case "password_reset":password_reset();break;
@@ -304,6 +307,15 @@ function account_switch($typology){
  }
  // redirect
  $alert="?alert=accountSwitched".$typology."&alert_class=alert-success";
+ header("location: index.php".$alert);
+}
+
+/* -[ Account debug toggle ]------------------------------------------------- */
+function account_debug($enable){
+ // enable or disable debug
+ $_SESSION['account']->debug=$enable;
+ // redirect
+ $alert="?alert=accountDebug".$enable."&alert_class=alert-success";
  header("location: index.php".$alert);
 }
 
