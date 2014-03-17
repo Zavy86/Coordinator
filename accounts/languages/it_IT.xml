@@ -13,6 +13,8 @@
  <text key="accountPasswordChanged">La tua password è stata aggiornata</text>
  <text key="accountSwitched1">Da questo momento stai operando con i privilegi di amministratore, ogni porta ti sarà aperta.. :)</text>
  <text key="accountSwitched2">Da questo momento stai operando con i privilegi di un normalissimo utente.. :(</text>
+ <text key="accountDebug">Debug disabilitato</text>
+ <text key="accountDebug1">Debug abilitato</text>
  <text key="passwordRetrived">La tua richiesta di ripristino della password è stata inoltrata, riceverai a breve una mail</text>
  <text key="passwordResetted">Il ripristino della tua password è avvenuto correttamente</text>
  <text key="groupCreated">Il gruppo {0} è stato creato</text>

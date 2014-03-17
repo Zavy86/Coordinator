@@ -29,8 +29,10 @@
  <text key="core-menu-settings">Settings</text>
  <text key="core-menu-logs">Logs registry</text>
  <text key="core-menu-dashboard-edit">Edit Dashboard</text>
- <text key="core-menu-become-administrator">Become an Administrator</text>
- <text key="core-menu-become-user">Become an User</text>
+ <text key="core-menu-becomeAdministrator">Become an Administrator</text>
+ <text key="core-menu-becomeUser">Become an User</text>
+ <text key="core-menu-debugEnable">Enable Debug</text>
+ <text key="core-menu-debugDisable">Disable Debug</text>
  <text key="core-menu-logout">Logout</text>
 
  <!-- filters -->

@@ -19,6 +19,13 @@ $html=new HTML();
 $db=new DB($db_host,$db_user,$db_pass,$db_name);
 
 
+/* -[ Check Debug ]---------------------------------------------------------- */
+if($_SESSION['account']->debug){
+ error_reporting(E_ALL & ~E_NOTICE);
+ ini_set('display_errors',1);
+}
+
+
 /* -[ Check Session or Token ]----------------------------------------------- */
 if($dontCheckSession<>TRUE){$dontCheckSession=FALSE;}
 $g_submit=$_GET['submit'];
