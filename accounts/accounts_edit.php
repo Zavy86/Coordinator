@@ -107,7 +107,7 @@ function content(){
     }
    ?>
   </select>
-  <input type="submit" name="account_grouprole_add" class="btn" value="Add">
+  <input type="submit" name="account_grouprole_add" class="btn" value="+">
  </form>
 <?php
  }
