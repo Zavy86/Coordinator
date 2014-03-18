@@ -1317,10 +1317,11 @@ function api_link($url,$label,$title=NULL,$class=NULL,$popup=FALSE,$style=NULL){
 
 /* -[ Icon ]----------------------------------------------------------------- */
 // @string $icon : bootstrap icon glyphs
+// @string $title : title of icon
 // @string $style : manual styles tag
-function api_icon($icon,$style=NULL){
+function api_icon($icon,$title=NULL,$style=NULL){
  if($icon==NULL){return FALSE;}
- $return="<i class='".$icon."' style='".$style."'></i>";
+ $return="<i class='".$icon."' title='".$title."' style='".$style."'></i>";
  return $return;
 }
 

@@ -667,8 +667,8 @@ class str_table{
      if($th->order==$_GET['of']){if($_GET['om']==1){$order=0;}else{$order=1;}}else{$order=1;}
      // check order
      if($th->order==$_GET['of']){
-      if($_GET['om']==0){$return.=api_icon("icon-circle-arrow-down","margin-top:-0.5px;")."&nbsp;";}
-      if($_GET['om']==1){$return.=api_icon("icon-circle-arrow-up","margin-top:-0.5px;")."&nbsp;";}
+      if($_GET['om']==0){$return.=api_icon("icon-circle-arrow-down",NULL,"margin-top:-0.5px;")."&nbsp;";}
+      if($_GET['om']==1){$return.=api_icon("icon-circle-arrow-up",NULL,"margin-top:-0.5px;")."&nbsp;";}
      }
      $return.="<a href='".api_baseName()."?of=".$th->order."&om=".$order.$this->get."'>";
     }
