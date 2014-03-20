@@ -103,7 +103,7 @@ function api_text($key,$parameters=NULL){
  // if key not found
  if(strlen($text)==0){return "{".$key."}";}
  // replace parameters
- if($parameters<>NULL){
+ if($parameters!==NULL){
   if(is_array($parameters)){
    $count=0;
    foreach($parameters as $parameter){
@@ -578,14 +578,20 @@ function api_divisionName($idCompany){
 
 
 /* -[ Group name by group id ]----------------------------------------------- */
-// @param $idGroup : ID of the group
-function api_groupName($idGroup,$description=FALSE){
+// @integer $idGroup : ID of the group
+// @string $description : show group description
+// @boolean $popup : show description in popup
+function api_groupName($idGroup,$description=FALSE,$popup=FALSE){
  if(!$idGroup>0){return FALSE;}
  $group=$GLOBALS['db']->queryUniqueObject("SELECT * FROM accounts_groups WHERE id='".$idGroup."'");
  if($group->name<>NULL){
-  $return=$group->name;
+  $return=stripslashes($group->name);
   if($description && $group->description<>NULL){
-   $return.=" (".$group->description.")";
+   if($popup){
+    $return="<a data-toggle='popover' data-placement='top' data-content='".stripslashes($group->description)."' style='color:#333333;'>".$return."</a>\n";
+   }else{
+    $return.=" (".stripslashes($group->description).")";
+   }
   }
   return $return;
  }elseif($group->id){

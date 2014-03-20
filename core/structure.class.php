@@ -125,7 +125,7 @@ class str_navigation{
       $value=substr($text_filter,2);
      }
      break;
-    // checkbox and radio text value
+    // checkbox and radio have text value
     case "checkbox":
     case "radio":
      if($_GET[$filter->name]<>NULL){$value=$filter->options[$_GET[$filter->name]];}
@@ -1088,6 +1088,14 @@ class str_form{
     $return.=" $(document).ready(function(){\n";
     $return.="  $('input[id=".$this->name."_input_".$index."]').slider();\n";
     $return.=" });\n";
+    $return.="</script>\n\n";
+   }
+   // multiselect scripts
+   if(strtolower($ff->type)=="multiselect"){
+    $return.="<script type='text/javascript'>\n";
+    $return.=" function selectToggle(index,selected){\n";
+    $return.="  $('#".$this->name."_input_".$index." option').each(function(){ $(this).attr('selected',selected); });\n";
+    $return.=" };\n";
     $return.="</script>\n\n";
    }
   }
