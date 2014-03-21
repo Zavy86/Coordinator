@@ -125,7 +125,7 @@ class str_navigation{
       $value=substr($text_filter,2);
      }
      break;
-    // checkbox and radio text value
+    // checkbox and radio have text value
     case "checkbox":
     case "radio":
      if($_GET[$filter->name]<>NULL){$value=$filter->options[$_GET[$filter->name]];}
@@ -442,11 +442,11 @@ class str_navigation{
   echo "</ul><!-- /navigation-tabs -->\n\n";
   // filters scripts
   if(count($this->filters)>0){
-   echo "<script type='text/javascript'>\n";
+   /*echo "<script type='text/javascript'>\n";
    echo " function selectToggle(index,selected){\n";
    echo "  $('#filters_input_'+index+' option').each(function(){ $(this).attr('selected',selected); });\n";
    echo " };\n";
-   echo "</script>\n\n";
+   echo "</script>\n\n";*/
    $modal_filter->render();
   }
   return TRUE;
@@ -667,8 +667,8 @@ class str_table{
      if($th->order==$_GET['of']){if($_GET['om']==1){$order=0;}else{$order=1;}}else{$order=1;}
      // check order
      if($th->order==$_GET['of']){
-      if($_GET['om']==0){$return.=api_icon("icon-circle-arrow-down","margin-top:-0.5px;")."&nbsp;";}
-      if($_GET['om']==1){$return.=api_icon("icon-circle-arrow-up","margin-top:-0.5px;")."&nbsp;";}
+      if($_GET['om']==0){$return.=api_icon("icon-circle-arrow-down",NULL,"margin-top:-0.5px;")."&nbsp;";}
+      if($_GET['om']==1){$return.=api_icon("icon-circle-arrow-up",NULL,"margin-top:-0.5px;")."&nbsp;";}
      }
      $return.="<a href='".api_baseName()."?of=".$th->order."&om=".$order.$this->get."'>";
     }
@@ -1035,8 +1035,8 @@ class str_form{
    if(strtolower($ff->type)=="multiselect"){
     $return.="  </select>\n";
     $return.="  <br>\n ".api_text("form-select");
-    $return.=" <a href='#' onClick='selectToggle(".$index.",true)'>".api_text("form-select-all")."</a>,";
-    $return.=" <a href='#' onClick='selectToggle(".$index.",false)'>".api_text("form-select-none")."</a>\n";
+    $return.=" <a href='#' onClick='selectToggle(\"".$this->name."_input_".$index."\",true)'>".api_text("form-select-all")."</a>,";
+    $return.=" <a href='#' onClick='selectToggle(\"".$this->name."_input_".$index."\",false)'>".api_text("form-select-none")."</a>\n";
    }
    // show and close append div
    if($ff->append<>NULL){
@@ -1090,7 +1090,17 @@ class str_form{
     $return.=" });\n";
     $return.="</script>\n\n";
    }
+   // multiselect scripts
+   if(strtolower($ff->type)=="multiselect"){
+    //------
+   }
   }
+  // multiselect scripts
+  $return.="<script type='text/javascript'>\n";
+  $return.=" function selectToggle(id,selected){\n";
+  $return.="  $('#'+id+' option').each(function(){ $(this).attr('selected',selected); });\n";
+  $return.=" };\n";
+  $return.="</script>\n\n";
   // show controls
   if(is_array($this->fc_array)){
    if($this->controlGroup){

@@ -189,13 +189,13 @@ function account_save(){
   // set id to last inserted id
   $g_id=$GLOBALS['db']->lastInsertedId();
   // sendmail
-  $message="Benvenuto ".$p_name.",\n";
-  $message.=" è stato attivato un account su Intranet a tuo nome.\n\n";
+  $message="Benvenuto/a ".$p_name.",\n";
+  $message.=" è stato attivato un account su Coordinator a tuo nome.\n\n";
   $message.="Per confermare la tua iscrizione e scegliere una password usa il seguente indirizzo:\n\n";
   $message.="http://".$_SERVER['SERVER_NAME'].$GLOBALS['dir'];
   $message.="accounts/password_reset.php?account=".$p_account."&key=".$secret."\n\n";
   $message.="Ricorda che questo codice è utilizzabile solamente per il tuo primo accesso.";
-  if($g_id>0){api_sendmail($p_account,$message,"Attivazione account personale");}
+  if($g_id>0){api_sendmail($p_account,$message,"Attivazione account Coordinator personale");}
   header("location: accounts_edit.php?id=".$g_id.$alert);
  }
 }
@@ -510,14 +510,14 @@ function ldap_account_create(){
    $log.="LDAP: ".$p_ldapUsername;
    api_log(1,"accounts","LDAP ACCOUNT CREATED\n".$log);
    // sendmail
-   $message="Benvenuto ".$name.",\n";
-   $message.=" è stato attivato un account su Intranet a tuo nome.\n\n";
+   $message="Salve ".$name.",\n";
+   $message.=" è stato attivato un account su Coordinator a tuo nome.\n\n";
    $message.="Per eseguire l'accesso puoi usare il seguente indirizzo:\n\n";
    $message.="http://".$_SERVER['SERVER_NAME'].$GLOBALS['dir']."accounts/login.php\n\n";
    $message.="Inserendo il tuo account e la tua password di sistema.";
-   api_sendmail($p_account,$message,"Attivazione account personale");
+   api_sendmail($p_account,$message,"Attivazione account Coordinator personale");
    // notification
-   $notification_subject="Benvenuto ".$name." su Intranet";
+   $notification_subject="Benvenuto ".$name." su Coordinator";
    $notification_message="Benvenuto ".$name.", il tuo account è stato creato.\n";
    $notification_message.="A breve un amministratore provvederà ad assegnarti ai tuoi gruppi di competenza.";
    api_notification_send($idAccount,1,"accounts",$notification_subject,$notification_message,NULL,0);
