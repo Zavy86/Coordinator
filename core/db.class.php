@@ -51,6 +51,19 @@ class DB{
   }
  }
 
+ // ---[ Convenient method for mysql_fetch_object() ]--------------------------
+ // @param $result : The ressource returned by query()
+ //                  If NULL, the last result returned by query() will be used.
+ // @return : An object representing a data row.
+ function fetchNextArray($result=NULL){
+  if($result==NULL)$result=$this->lastResult;
+  if($result==NULL || mysql_num_rows($result)<1){
+   return NULL;
+  }else{
+   return mysql_fetch_array($result,MYSQL_ASSOC);
+  }
+ }
+
  // ---[ Get the number of rows of a query ]-----------------------------------
  // @param $result : The ressource returned by query()
  //                  If NULL, the last result returned by query() will be used.
@@ -108,7 +121,7 @@ class DB{
  function maxOf($column,$table,$where){
   return $this->queryUniqueValue("SELECT MAX(`$column`) FROM `$table` WHERE $where");
  }
- 
+
  // ---[ Get the maximum value of a column in a table ]------------------------
  // @param $column : The column where to compute the maximum.
  // @param $table : The table where to compute the maximum.
@@ -116,7 +129,7 @@ class DB{
  function maxOfAll($column,$table){
   return $this->queryUniqueValue("SELECT MAX(`$column`) FROM `$table`");
  }
- 
+
  // ---[ Get the count of rows in a table, with a condition ]------------------
  // @param $table : The table where to compute the number of rows.
  // @param $where : The condition before to compute the number or rows.
@@ -124,7 +137,7 @@ class DB{
  function countOf($table,$where){
   return $this->queryUniqueValue("SELECT COUNT(*) FROM `$table` WHERE $where");
  }
- 
+
  // ---[ Get the count of rows in a table ]---
  // @param $table : The table where to compute the number of rows.
  // @return The number of rows (0 or more).
@@ -156,7 +169,7 @@ class DB{
    $this->debugResult($result);
   }
  }
- 
+
  // ---[ Internal function to output a query for debug purpose ]---------------
  // @param $query : The SQL query to debug.
  // @param $reason : The reason why this function is called:
@@ -168,7 +181,7 @@ class DB{
        "<strong style=\"padding: 0 3px; background-color: $color; color: white;\">$reason:</strong> ".
        "<span style=\"font-family: monospace;\">".htmlentities($query)."</span></p>";
   }
-  
+
  // ---[ Internal function to output a table representing a query ]------------
  // @param $result : The resulting table of the query.
  function debugResult($result){

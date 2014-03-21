@@ -103,7 +103,7 @@ function api_text($key,$parameters=NULL){
  // if key not found
  if(strlen($text)==0){return "{".$key."}";}
  // replace parameters
- if($parameters<>NULL){
+ if($parameters!==NULL){
   if(is_array($parameters)){
    $count=0;
    foreach($parameters as $parameter){
@@ -372,7 +372,29 @@ function api_timestampDifference($timestamp_a,$timestamp_b,$format="S"){
  return number_format($result,2);
 }
 
-/* -[ Timestamp difference ]------------------------------------------------- */
+/* -[ Timestamp Difference Format ]------------------------------------------ */
+// @integere $seconds : differences in seconds
+function api_timestampDifferenceFormat($difference,$showSeconds=TRUE){
+ if($difference==NULL){return FALSE;}
+ $return=NULL;
+ $days=intval(intval($difference)/(3600*24));
+ if($days==1){$return.=$days." ".api_text("day").", ";}
+ elseif($days>1){$return.=$days." ".api_text("days").", ";}
+ $hours=(intval($difference)/3600)%24;
+ if($hours==1){$return.=$hours." ".api_text("hour").", ";}
+ elseif($hours>1){$return.=$hours." ".api_text("hours").", ";}
+ $minutes=(intval($difference)/60)%60;
+ if($minutes==1){$return.=$minutes." ".api_text("minute").", ";}
+ elseif($minutes>1){$return.=$minutes." ".api_text("minutes").", ";}
+ if($showSeconds || intval($difference)<60){
+  $seconds=intval($difference)%60;
+  if($seconds==1){$return.=$seconds." ".api_text("second").", ";}
+  elseif($seconds>1){$return.=$seconds." ".api_text("seconds").", ";}
+ }
+ return substr($return,0,-2);
+}
+
+/* -[ Timestamp Dates form Week ]-------------------------------------------- */
 // @param $week : week number (from 1 to 52)
 // @param $year : year in YYYY format
 // return  : Array of date from [0] and date to [1]
@@ -403,7 +425,7 @@ function api_randomString($size=10){
 // @param $subject   : Subject of mail
 // @param $from_mail : Sender mail
 // @param $from_name : Sender name
-function api_sendmail($to_mail,$message,$subject="",$from_mail="",$from_name=""){
+/*function api_sendmail($to_mail,$message,$subject="",$from_mail="",$from_name=""){
  // headers
  if($from_mail==""){$from_mail=api_getOption('owner_mail');}
  if($from_name==""){$from_name=api_getOption('owner_mail_from');}
@@ -416,6 +438,50 @@ function api_sendmail($to_mail,$message,$subject="",$from_mail="",$from_name="")
  if($subject==""){$subject="Intranet - Comunicazione";}
  // message
  $message.="\n\n\n--\nQuesto messaggio è stato generato automaticamente da Coordinator per conto di Intranet, si prega di non rispondere.\n";
+ // sendmail
+ if($to_mail<>""){mail($to_mail,$subject,$message,$headers);}
+}*/
+
+
+/* -[ Sendmail ]------------------------------------------------------------- */
+// @string $to_mail : Recipient mail
+// @string $message : Content of mail
+// @string $subject : Subject of mail
+// @booelan $html : Send mail in HTML format
+// @string $from_mail : Sender mail
+// @string $from_name : Sender name
+function api_sendmail($to_mail,$message,$subject="",$html=FALSE,$from_mail="",$from_name=""){
+ // headers
+ $eol="\n";
+ if($from_mail==""){$from_mail=api_getOption('owner_mail');}
+ if($from_name==""){$from_name=api_getOption('owner_mail_from');}
+ $headers= "MIME-Version: 1.0".$eol;
+ $headers.="Content-type: text/plain; Charset=UTF-8".$eol;
+ $headers.="From: ".$from_name." <".$from_mail.">".$eol;
+ $headers.="Reply-To: ".$from_mail.$eol;
+ $headers.="Return-Path: ".$from_mail.$eol;
+ // subject
+ if($subject==""){$subject="Coordinator - Communication";}
+ // message
+ $message.="\n\n--\nQuesto messaggio è stato generato automaticamente da Coordinator per conto di ".api_getOption('owner').", si prega di non rispondere.\n";
+ // check HTML
+ if($html){
+  $mail_random_hash=md5(date('r',time()));
+  $headers.="MIME-Version: 1.0".$eol;
+  $headers.="Content-Type: multipart/alternative; boundary=\"PHP-alt-".$mail_random_hash."\"".$eol.$eol;
+  $headers.="This is a multi-part message in MIME format".$eol;
+  // message
+  $mail_message=$eol."--PHP-alt-".$mail_random_hash.$eol.
+   "Content-Type: text/plain; charset=utf-8".$eol.
+   "Content-Transfer-Encoding: 7bit".$eol.$eol;
+  $mail_message.=strip_tags($message).$eol;
+  $mail_message.=$eol."--PHP-alt-".$mail_random_hash.$eol.
+   "Content-Type: text/html; charset=utf-8".$eol.
+   "Content-Transfer-Encoding: 7bit".$eol.$eol;
+  $mail_message.=nl2br($message).$eol;
+  $mail_message.=$eol."--PHP-alt-".$mail_random_hash."--".$eol;
+  $message=$mail_message;
+ }
  // sendmail
  if($to_mail<>""){mail($to_mail,$subject,$message,$headers);}
 }
@@ -494,7 +560,7 @@ function api_checkPermissionShowModule($module,$admin=TRUE){
 /* -[ Profile mail by account id ]------------------------------------------- */
 // @param $account_id : ID of the account
 function api_accountMail($account_id=NULL){
- if($account_id==0){return NULL;}
+ if($account_id===0){return NULL;}
  if($account_id==NULL){$account_id=$_SESSION['account']->id;}
  $account=$GLOBALS['db']->queryUniqueObject("SELECT * FROM accounts_accounts WHERE id='".$account_id."'");
  if($account->account<>NULL){
@@ -578,14 +644,20 @@ function api_divisionName($idCompany){
 
 
 /* -[ Group name by group id ]----------------------------------------------- */
-// @param $idGroup : ID of the group
-function api_groupName($idGroup,$description=FALSE){
+// @integer $idGroup : ID of the group
+// @string $description : show group description
+// @boolean $popup : show description in popup
+function api_groupName($idGroup,$description=FALSE,$popup=FALSE){
  if(!$idGroup>0){return FALSE;}
  $group=$GLOBALS['db']->queryUniqueObject("SELECT * FROM accounts_groups WHERE id='".$idGroup."'");
  if($group->name<>NULL){
-  $return=$group->name;
+  $return=stripslashes($group->name);
   if($description && $group->description<>NULL){
-   $return.=" (".$group->description.")";
+   if($popup){
+    $return="<a data-toggle='popover' data-placement='top' data-content='".stripslashes($group->description)."' style='color:#333333;'>".$return."</a>\n";
+   }else{
+    $return.=" (".stripslashes($group->description).")";
+   }
   }
   return $return;
  }elseif($group->id){
@@ -1317,10 +1389,11 @@ function api_link($url,$label,$title=NULL,$class=NULL,$popup=FALSE,$style=NULL){
 
 /* -[ Icon ]----------------------------------------------------------------- */
 // @string $icon : bootstrap icon glyphs
+// @string $title : title of icon
 // @string $style : manual styles tag
-function api_icon($icon,$style=NULL){
+function api_icon($icon,$title=NULL,$style=NULL){
  if($icon==NULL){return FALSE;}
- $return="<i class='".$icon."' style='".$style."'></i>";
+ $return="<i class='".$icon."' title='".$title."' style='".$style."'></i>";
  return $return;
 }
 

@@ -7,7 +7,7 @@ include("../core/api.inc.php");
 $search=$_GET['q'];
 $answer=array();
 // execute the query
-$groups=$GLOBALS['db']->query("SELECT * FROM accounts_groups WHERE name LIKE '%".$search."%' OR description LIKE '%".$search."%' ORDER BY name ASC LIMIT 10");
+$groups=$GLOBALS['db']->query("SELECT * FROM accounts_groups WHERE id='".$search."' OR name LIKE '%".$search."%' OR description LIKE '%".$search."%' ORDER BY name ASC LIMIT 10");
 while($group=$GLOBALS['db']->fetchNextObject($groups)){
  $group_name=stripslashes($group->name);
  if(strlen($group->description)>0){$group_name.=" (".stripslashes($group->description).")";}

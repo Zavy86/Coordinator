@@ -29,6 +29,15 @@
  <text key="month-october">Ottobre</text>
  <text key="month-november">Novembre</text>
  <text key="month-december">Dicembre</text>
+ <text key="second">secondo</text>
+ <text key="seconds">secondi</text>
+ <text key="minute">minuto</text>
+ <text key="minutes">minuti</text>
+ <text key="hour">ora</text>
+ <text key="hours">ore</text>
+ <text key="day">giorno</text>
+ <text key="days">giorni</text>
+
 
  <!-- alerts -->
  <text key="accessDenied"><h4>ACCESSO NEGATO</h4>I permessi del tuo account non sono sufficienti per eseguire l'operazione desiderata</text>

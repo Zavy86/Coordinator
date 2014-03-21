@@ -10,6 +10,14 @@
  <text key="datetime-short">'y-m-d H:i</text>
  <text key="datetime-textual">l, F jS Y g:i A</text>
  <text key="timestamp">Y-m-d H:i:s</text>
+ <text key="second">second</text>
+ <text key="seconds">seconds</text>
+ <text key="minute">minute</text>
+ <text key="minutes">minutes</text>
+ <text key="hour">hour</text>
+ <text key="hours">hours</text>
+ <text key="day">day</text>
+ <text key="days">days</text>
 
  <!-- alerts -->
  <text key="accessDenied"><h4>ACCESS DENIED</h4>The permissions of your account are not sufficient to perform the desired operation</text>
