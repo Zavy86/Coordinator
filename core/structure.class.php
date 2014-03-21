@@ -442,11 +442,11 @@ class str_navigation{
   echo "</ul><!-- /navigation-tabs -->\n\n";
   // filters scripts
   if(count($this->filters)>0){
-   echo "<script type='text/javascript'>\n";
+   /*echo "<script type='text/javascript'>\n";
    echo " function selectToggle(index,selected){\n";
    echo "  $('#filters_input_'+index+' option').each(function(){ $(this).attr('selected',selected); });\n";
    echo " };\n";
-   echo "</script>\n\n";
+   echo "</script>\n\n";*/
    $modal_filter->render();
   }
   return TRUE;
@@ -1035,8 +1035,8 @@ class str_form{
    if(strtolower($ff->type)=="multiselect"){
     $return.="  </select>\n";
     $return.="  <br>\n ".api_text("form-select");
-    $return.=" <a href='#' onClick='selectToggle(".$index.",true)'>".api_text("form-select-all")."</a>,";
-    $return.=" <a href='#' onClick='selectToggle(".$index.",false)'>".api_text("form-select-none")."</a>\n";
+    $return.=" <a href='#' onClick='selectToggle(\"".$this->name."_input_".$index."\",true)'>".api_text("form-select-all")."</a>,";
+    $return.=" <a href='#' onClick='selectToggle(\"".$this->name."_input_".$index."\",false)'>".api_text("form-select-none")."</a>\n";
    }
    // show and close append div
    if($ff->append<>NULL){
@@ -1092,13 +1092,15 @@ class str_form{
    }
    // multiselect scripts
    if(strtolower($ff->type)=="multiselect"){
-    $return.="<script type='text/javascript'>\n";
-    $return.=" function selectToggle(index,selected){\n";
-    $return.="  $('#".$this->name."_input_".$index." option').each(function(){ $(this).attr('selected',selected); });\n";
-    $return.=" };\n";
-    $return.="</script>\n\n";
+    //------
    }
   }
+  // multiselect scripts
+  $return.="<script type='text/javascript'>\n";
+  $return.=" function selectToggle(id,selected){\n";
+  $return.="  $('#'+id+' option').each(function(){ $(this).attr('selected',selected); });\n";
+  $return.=" };\n";
+  $return.="</script>\n\n";
   // show controls
   if(is_array($this->fc_array)){
    if($this->controlGroup){
