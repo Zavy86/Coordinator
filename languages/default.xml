@@ -3,6 +3,8 @@
 <locale language="EN">
 
  <!-- timestamp -->
+ <text key="time">H:i:s</text>
+ <text key="time-short">H:i</text>
  <text key="date">Y-m-d</text>
  <text key="date-short">'y-m-d</text>
  <text key="date-textual">l, F jS Y</text>
