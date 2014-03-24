@@ -54,13 +54,14 @@ class DB{
  // ---[ Convenient method for mysql_fetch_object() ]--------------------------
  // @param $result : The ressource returned by query()
  //                  If NULL, the last result returned by query() will be used.
+ // @param $method : MYSQL_BOTH, MYSQL_NUM, MYSQL_ASSOC
  // @return : An object representing a data row.
- function fetchNextArray($result=NULL){
+ function fetchNextArray($result=NULL,$method=MYSQL_BOTH){
   if($result==NULL)$result=$this->lastResult;
   if($result==NULL || mysql_num_rows($result)<1){
    return NULL;
   }else{
-   return mysql_fetch_array($result,MYSQL_ASSOC);
+   return mysql_fetch_array($result,$method);
   }
  }
 

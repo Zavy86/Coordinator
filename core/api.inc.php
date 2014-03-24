@@ -361,13 +361,13 @@ function api_timestampDifference($timestamp_a,$timestamp_b,$format="S"){
  $seconds=strtotime($timestamp_b)-strtotime($timestamp_a);
  // format result
  switch(strtoupper($format)){
-  case "S":$result=$seconds;break;
   case "I":$result=$seconds/60;break;
   case "H":$result=$seconds/3600;break;
   case "D":$result=$seconds/86400;break;
   case "W":$result=$seconds/604800;break;
   case "M":$result=$seconds/2592000;break;
   case "Y":$result=$seconds/31536000;break;
+  default:$result=$seconds;
  }
  return number_format($result,2);
 }
