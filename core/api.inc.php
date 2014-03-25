@@ -811,12 +811,22 @@ function api_accountGroupMember($idGroup,$idAccount=NULL,$subgroups=TRUE){
 /* -[ Return the group role of an account ]---------------------------------- */
 // @param $idGroup   : ID of the group
 // @param $idAccount : ID of the account
-function api_accountGrouprole($idGroup,$idAccount=NULL){
- if($idAccount==NULL){$idAccount=$_SESSION['account']->id;}
- if($idGroup>0 && $idAccount>0){
-  $grouprole=$GLOBALS['db']->queryUniqueValue("SELECT idGrouprole FROM accounts_groups_join_accounts WHERE idGroup='".$idGroup."' AND idAccount='".$idAccount."'");
+// @param $subgroups : Check also in subgroups
+function api_accountGrouprole($idGroup,$idAccount=NULL,$subgroups=FALSE){
+ if($idAccount===0 || $idAccount==="0"){return NULL;}
+ if($idAccount===NULL){$idAccount=$_SESSION['account']->id;}
+ if(!$idGroup>0 && !$idAccount>0){return FALSE;}
+ $grouprole=$GLOBALS['db']->queryUniqueValue("SELECT idGrouprole FROM accounts_groups_join_accounts WHERE idGroup='".$idGroup."' AND idAccount='".$idAccount."'");
+ if($grouprole>0){
+  return $grouprole;
+ }else{
+  $subgroups=$GLOBALS['db']->query("SELECT * FROM accounts_groups WHERE idGroup='".$idGroup."'");
+  while($subgroup=$GLOBALS['db']->fetchNextObject($subgroups)){
+   $grouprole=$GLOBALS['db']->queryUniqueValue("SELECT idGrouprole FROM accounts_groups_join_accounts WHERE idGroup='".$subgroup->id."' AND idAccount='".$idAccount."'");
+   if($grouprole>0){return $grouprole;}
+  }
  }
- if($grouprole>0){return $grouprole;}else{return FALSE;}
+ return FALSE;
 }
 
 
