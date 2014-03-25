@@ -44,6 +44,7 @@ class str_navigation{
  function addTab($label,$url=NULL,$get=NULL,$class=NULL,$enabled=TRUE,$target="_self",$confirm=NULL){
   if(strlen($label)==0){return FALSE;}
   $nt=new stdClass();
+  $nt->typology="tab";
   $nt->label=$label;
   $nt->url=$url;
   $nt->get=$get;
@@ -67,6 +68,7 @@ class str_navigation{
  function addSubTab($label,$url=NULL,$get=NULL,$class=NULL,$enabled=TRUE,$target="_self",$confirm=NULL){
   if(strlen($label)==0){return FALSE;}
   $nt=new stdClass();
+  $nt->typology="subtab";
   $nt->label=$label;
   $nt->url=$url;
   $nt->get=$get;
@@ -74,6 +76,31 @@ class str_navigation{
   $nt->enabled=$enabled;
   $nt->target=$target;
   $nt->confirm=$confirm;
+  if(!is_array($this->nt_array[$this->current_tab]->dropdown)){
+   $this->nt_array[$this->current_tab]->dropdown=array();
+  }
+  $this->nt_array[$this->current_tab]->dropdown[]=$nt;
+  return TRUE;
+ }
+
+ /* -[ Add SubTab Header ]--------------------------------------------------- */
+ // @string $label : label of the tab
+ function addSubTabHeader($label){
+  if(strlen($label)==0){return FALSE;}
+  $nt=new stdClass();
+  $nt->typology="subtab-header";
+  $nt->label=$label;
+  if(!is_array($this->nt_array[$this->current_tab]->dropdown)){
+   $this->nt_array[$this->current_tab]->dropdown=array();
+  }
+  $this->nt_array[$this->current_tab]->dropdown[]=$nt;
+  return TRUE;
+ }
+
+ /* -[ Add SubTab Divider ]-------------------------------------------------- */
+ function addSubTabDivider(){
+  $nt=new stdClass();
+  $nt->typology="subtab-divider";
   if(!is_array($this->nt_array[$this->current_tab]->dropdown)){
    $this->nt_array[$this->current_tab]->dropdown=array();
   }
@@ -381,6 +408,11 @@ class str_navigation{
     if($dropdown){
      echo "\n  <ul class='dropdown-menu'>\n";
      foreach($nt->dropdown as $ntd){
+      // header
+      if($ntd->typology=="subtab-header"){echo "<li class='nav-header'>".$ntd->label."</li>\n";continue;}
+      // divider
+      if($ntd->typology=="subtab-divider"){echo "<li class='divider'></li>\n";continue;}
+      // subtab
       echo "   <li";
       if($ntd->enabled){
        echo "><a href='".$ntd->url.$ntd->get."' target='".$ntd->target."'";
