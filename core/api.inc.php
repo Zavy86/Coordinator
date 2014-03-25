@@ -820,6 +820,42 @@ function api_accountGrouprole($idGroup,$idAccount=NULL){
 }
 
 
+/* -[ Return account groups and grouproles ]--------------------------------- */
+// @param $idAccount : ID of the account
+// @param $supgroups : Check also in superiors groups
+function api_accountGroups($idAccount=NULL,$supgroups=TRUE){
+ if($idAccount===0 || $idAccount==="0"){return NULL;}
+ if($idAccount===NULL){$idAccount=$_SESSION['account']->id;}
+ $groups_array=array();
+ if($idAccount>0){
+  $groups=$GLOBALS['db']->query("SELECT * FROM accounts_groups_join_accounts JOIN accounts_groups ON accounts_groups_join_accounts.idGroup=accounts_groups.id WHERE idAccount='".$idAccount."' ORDER BY accounts_groups_join_accounts.idGroup ASC");
+  while($group=$GLOBALS['db']->fetchNextObject($groups)){
+   $group_obj=new stdClass();
+   $group_obj->id=$group->id;
+   $group_obj->name=$group->name;
+   $group_obj->description=$group->description;
+   $group_obj->grouprole=$group->idGrouprole;
+   $group_obj->idGroup=$group->idGroup;
+   $supgroup_obj->inherited=FALSE;
+   $groups_array[$group->id]=$group_obj;
+   if($supgroups && $group->idGroup>0){
+    $supgroup=$GLOBALS['db']->queryUniqueObject("SELECT * FROM accounts_groups WHERE id='".$group->idGroup."'");
+    $supgroup_obj=new stdClass();
+    $supgroup_obj->id=$supgroup->id;
+    $supgroup_obj->name=$supgroup->name;
+    $supgroup_obj->description=$supgroup->description;
+    $supgroup_obj->grouprole=$group->idGrouprole;
+    $supgroup_obj->idGroup=0;
+    $supgroup_obj->inherited=TRUE;
+    if($groups_array[$supgroup->id]==NULL){$groups_array[$supgroup->id]=$supgroup_obj;}
+   }
+  }
+  return $groups_array;
+ }
+ return FALSE;
+}
+
+
 /* -[ Check if account is in group ]----------------------------------------- */
 // @param $idGroup   : ID of the group
 // @param $idAccount : ID of the account
