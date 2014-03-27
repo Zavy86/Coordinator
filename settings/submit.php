@@ -174,6 +174,8 @@ function module_uninstall(){
    $GLOBALS['db']->execute("DELETE FROM settings_permissions_join_accounts_groups WHERE idPermission='".$permission->id."'");
   }
   $GLOBALS['db']->execute("DELETE FROM settings_permissions WHERE module='".$module_name."'");
+  // delete module from dashboards
+  $GLOBALS['db']->execute("DELETE FROM settings_dashboards WHERE module='".$module_name."'");
   // delete module from database
   $GLOBALS['db']->execute("DELETE FROM settings_modules WHERE module='".$module_name."'");
   // execute unistall queries by mysql dump
