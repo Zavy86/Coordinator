@@ -557,6 +557,26 @@ function api_checkPermissionShowModule($module,$admin=TRUE){
 }
 
 
+/* -[ Account id by session ]------------------------------------------------ */
+function api_accountId(){
+ return $_SESSION['account']->id;
+}
+
+
+/* -[ Account object by account id ]----------------------------------------- */
+// @param $account_id : ID of the account
+function api_account($account_id=NULL){
+ if($account_id===0){return NULL;}
+ if($account_id==NULL){$account_id=$_SESSION['account']->id;}
+ $account=$GLOBALS['db']->queryUniqueObject("SELECT * FROM accounts_accounts WHERE id='".$account_id."'");
+ if($account->id>0){
+  return $account;
+ }else{
+  return "[Not found]";
+ }
+}
+
+
 /* -[ Profile mail by account id ]------------------------------------------- */
 // @param $account_id : ID of the account
 function api_accountMail($account_id=NULL){
