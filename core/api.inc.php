@@ -663,6 +663,20 @@ function api_divisionName($idCompany){
 }
 
 
+/* -[ Account Main Group ]--------------------------------------------------- */
+// @param $account_id : ID of the account
+function api_accountMainGroup($account_id=NULL){
+ if($account_id===0 || $account_id==="0"){return NULL;}
+ if($account_id==NULL){$account_id=$_SESSION['account']->id;}
+ $group=$GLOBALS['db']->queryUniqueObject("SELECT accounts_groups.*,accounts_groups_join_accounts.idGrouprole FROM accounts_groups_join_accounts JOIN accounts_groups ON accounts_groups_join_accounts.idGroup=accounts_groups.id WHERE accounts_groups_join_accounts.idAccount='".$account_id."' AND main='1'");
+ if($group->id){
+  return $group;
+ }else{
+  return FALSE;
+ }
+}
+
+
 /* -[ Group name by group id ]----------------------------------------------- */
 // @integer $idGroup : ID of the group
 // @string $description : show group description

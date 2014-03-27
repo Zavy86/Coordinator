@@ -58,11 +58,12 @@ function content(){
   // build table
   $table=new str_table(api_text("accounts_edit-tr-unvalued"));
   // table headers
+  $table->addHeader("&nbsp;",NULL,"16");
   $table->addHeader(api_text("accounts_edit-th-group"),NULL,"100%");
   $table->addHeader(api_text("accounts_edit-th-role"),"nowarp");
   $table->addHeader("&nbsp;",NULL,"16");
   // execute query
-  $query="SELECT accounts_groups.*,accounts_groups_join_accounts.idGrouprole FROM accounts_groups_join_accounts JOIN accounts_groups ON accounts_groups_join_accounts.idGroup=accounts_groups.id WHERE accounts_groups_join_accounts.idAccount='".$account->id."'";
+  $query="SELECT accounts_groups.*,accounts_groups_join_accounts.idGrouprole,accounts_groups_join_accounts.main FROM accounts_groups_join_accounts JOIN accounts_groups ON accounts_groups_join_accounts.idGroup=accounts_groups.id WHERE accounts_groups_join_accounts.idAccount='".$account->id."'";
   $groups=$GLOBALS['db']->query($query);
   while($group=$GLOBALS['db']->fetchNextObject($groups)){
    $name=$group->name;
@@ -70,7 +71,14 @@ function content(){
    if($group->description){$name.=" (".$group->description.")";}
    // build group table row
    $table->addRow();
+   // main group
+   if($group->main){
+    $main=api_icon('icon-star',api_text("accounts_edit-td-main"));
+   }else{
+    $main="<a href='submit.php?act=account_grouprole_main&idAccount=".$account->id."&idGroup=".$group->id."' title=\"".api_text("accounts_edit-td-mainMake")."\">".api_icon('icon-star-empty')."</a>";
+   }
    // build table fields
+   $table->addField($main,"text-center");
    $table->addField($name);
    $table->addField(api_grouproleName($group->idGrouprole),"nowarp");
    $table->addField("<a href=\"submit.php?act=account_grouprole_delete&idAccount=".$account->id."&idGroup=".$group->id."\" onClick=\"return confirm('".api_text("accounts_edit-td-groupDelete-confirm")."');\">".api_icon('icon-trash')."</a>","text-center");

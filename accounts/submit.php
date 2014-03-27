@@ -11,6 +11,7 @@ switch($act){
  case "account_save":account_save();break;
  case "account_customize":account_customize();break;
  case "account_grouprole_add":account_grouprole_add();break;
+ case "account_grouprole_main":account_grouprole_main();break;
  case "account_grouprole_delete":account_grouprole_delete();break;
  case "account_delete":account_delete();break;
  // accounts switch
@@ -242,7 +243,7 @@ function account_customize(){
  header("location: index.php".$alert);
 }
 
-/* -[ Account Grouprole Add ]--------------------------------------------------------- */
+/* -[ Account Grouprole Add ]------------------------------------------------ */
 function account_grouprole_add(){
  $g_id=$_GET['id'];
  if(!isset($g_id)){$g_id=0;}
@@ -263,6 +264,27 @@ function account_grouprole_add(){
   $alert="&alert=accountUpdated&alert_class=alert-success&alert_parameters=".$account->name;
  }
  header("location: accounts_edit.php?id=".$g_id.$alert);
+}
+
+/* -[ Account Grouprole Make Main ]------------------------------------------ */
+function account_grouprole_main(){
+ if(!api_checkPermission("accounts","accounts_edit")){api_die("accessDenied");}
+ // acquire variables
+ $g_idAccount=$_GET['idAccount'];
+ if(!isset($g_idAccount)){$g_idAccount=0;}
+ $g_idGroup=$_GET['idGroup'];
+ if(!isset($g_idGroup)){$g_idGroup=0;}
+ // get account
+ $account=$GLOBALS['db']->queryUniqueObject("SELECT * FROM accounts_accounts WHERE id='".$g_idAccount."'");
+ if($account->id>0 && $g_idGroup>0){
+  // remove old main if exist
+  $GLOBALS['db']->execute("UPDATE accounts_groups_join_accounts SET main='0' WHERE idAccount='".$account->id."'");
+  // make grouprole main
+  $GLOBALS['db']->execute("UPDATE accounts_groups_join_accounts SET main='1' WHERE idAccount='".$account->id."' AND idGroup='".$g_idGroup."'");
+  // alert
+  $alert="&alert=accountUpdated&alert_class=alert-success&alert_parameters=".$account->name;
+ }
+ header("location: accounts_edit.php?id=".$account->id.$alert);
 }
 
 /* -[ Account Grouprole Delete ]--------------------------------------------- */
