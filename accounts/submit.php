@@ -485,6 +485,7 @@ function ldap_account_create(){
  $p_account=addslashes(strtolower($_POST['account']));
  $p_firstname=addslashes($_POST['firstname']);
  $p_lastname=addslashes($_POST['lastname']);
+ $p_language=$_POST['language'];
  $p_idCompany=$_POST['idCompany'];
  // set name
  $name=ucfirst(strtolower($p_lastname))." ".ucfirst(strtolower($p_firstname));
@@ -497,8 +498,8 @@ function ldap_account_create(){
     !$GLOBALS['db']->countOf("accounts_accounts","ldapUsername='".$p_ldapUsername."'")){
   // build query
   $query="INSERT INTO accounts_accounts
-   (account,password,name,typology,idCompany,ldapUsername) VALUES
-   ('".$p_account."','".md5(api_randomString(10))."','".$name."','2','".$p_idCompany."','".$p_ldapUsername."')";
+   (account,password,name,typology,language,idCompany,ldapUsername) VALUES
+   ('".$p_account."','".md5(api_randomString(10))."','".$name."','2','".$p_language."','".$p_idCompany."','".$p_ldapUsername."')";
   // execute query
   $GLOBALS['db']->execute($query);
   $idAccount=$GLOBALS['db']->lastInsertedId();
