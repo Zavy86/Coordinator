@@ -62,6 +62,8 @@
  <text key="accounts_edit-fc-delete-confirm">Permanently delete this account?</text>
  <text key="accounts_edit-th-group">Group</text>
  <text key="accounts_edit-th-role">Role</text>
+ <text key="accounts_edit-td-main">Main</text>
+ <text key="accounts_edit-td-mainMake">Make main</text>
  <text key="accounts_edit-td-groupDelete-confirm">Remove this association?</text>
  <text key="accounts_edit-tr-unvalued">No group assigned..</text>
 

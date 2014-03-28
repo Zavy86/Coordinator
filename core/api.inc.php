@@ -631,6 +631,20 @@ function api_accountFirstname($account_id=NULL){
 }
 
 
+/* -[ Account Company object by account id ]--------------------------------- */
+// @param $account_id : ID of the account
+function api_accountCompany($account_id=NULL){
+ if($account_id===0){return NULL;}
+ if($account_id==NULL){$account_id=$_SESSION['account']->id;}
+ $company=$GLOBALS['db']->queryUniqueObject("SELECT accounts_companies.* FROM accounts_companies JOIN accounts_accounts ON accounts_accounts.idCompany=accounts_companies.id WHERE accounts_accounts.id='".$account_id."'");
+ if($company->id>0){
+  return $company;
+ }else{
+  return FALSE;
+ }
+}
+
+
 /* -[ Company name by company id ]------------------------------------------- */
 // @param $idCompany : ID of the company
 function api_companyName($idCompany,$division=TRUE){
@@ -659,6 +673,20 @@ function api_divisionName($idCompany){
   return "[ID ".$company->id."]";
  }else{
   return "[Not found]";
+ }
+}
+
+
+/* -[ Account Main Group ]--------------------------------------------------- */
+// @param $account_id : ID of the account
+function api_accountMainGroup($account_id=NULL){
+ if($account_id===0 || $account_id==="0"){return NULL;}
+ if($account_id==NULL){$account_id=$_SESSION['account']->id;}
+ $group=$GLOBALS['db']->queryUniqueObject("SELECT accounts_groups.*,accounts_groups_join_accounts.idGrouprole FROM accounts_groups_join_accounts JOIN accounts_groups ON accounts_groups_join_accounts.idGroup=accounts_groups.id WHERE accounts_groups_join_accounts.idAccount='".$account_id."' AND main='1'");
+ if($group->id){
+  return $group;
+ }else{
+  return FALSE;
  }
 }
 
@@ -797,7 +825,7 @@ function api_accountAvatar($idAccount=NULL){
 
 /* -[ Company name by company id ]------------------------------------------- */
 // @param $company_id : ID of the company
-function api_accountCompany($company_id=NULL){
+function api_accountCompanyName($company_id=NULL){
  if($company_id){$company=$GLOBALS['db']->queryUniqueObject("SELECT * FROM accounts_companies WHERE id='".$company_id."'");}
  if($company->id>0){
   return stripslashes($company->company)." - ".stripslashes($company->division);
