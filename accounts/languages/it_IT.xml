@@ -62,6 +62,8 @@
  <text key="accounts_edit-fc-delete-confirm">Eliminare definitivamente questo utente?</text>
  <text key="accounts_edit-th-group">Gruppo</text>
  <text key="accounts_edit-th-role">Ruolo</text>
+ <text key="accounts_edit-td-main">Principale</text>
+ <text key="accounts_edit-td-mainMake">Rendi principale</text>
  <text key="accounts_edit-td-groupDelete-confirm">Eliminare questa associazione?</text>
  <text key="accounts_edit-tr-unvalued">Nessun gruppo assegnato..</text>
 
