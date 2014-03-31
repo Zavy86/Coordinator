@@ -322,3 +322,29 @@ INSERT IGNORE INTO `settings_settings` (`code`, `value`) VALUES
 ('version', '1.0.0');
 
 -- --------------------------------------------------------
+
+--
+-- Struttura della tabella `uploads_uploads`
+--
+
+CREATE TABLE IF NOT EXISTS `uploads_uploads` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `type` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `size` int(11) NOT NULL,
+  `hash` varchar(32) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `file` longblob NOT NULL,
+  `label` varchar(50) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `description` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `tags` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL COMMENT 'comma separated tag',
+  `txtContent` text COLLATE utf8_unicode_ci COMMENT 'Textual file content for search queries',
+  `addDate` datetime NOT NULL,
+  `addIdAccount` int(11) NOT NULL DEFAULT '0',
+  `updDate` datetime DEFAULT NULL,
+  `updIdAccount` int(11) unsigned DEFAULT NULL,
+  `del` tinyint(1) unsigned NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id`),
+  KEY `hash` (`hash`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+-- --------------------------------------------------------
