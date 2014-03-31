@@ -63,7 +63,7 @@ function content(){
   $table->addHeader(api_text("accounts_edit-th-role"),"nowarp");
   $table->addHeader("&nbsp;",NULL,"16");
   // execute query
-  $query="SELECT accounts_groups.*,accounts_groups_join_accounts.idGrouprole,accounts_groups_join_accounts.main FROM accounts_groups_join_accounts JOIN accounts_groups ON accounts_groups_join_accounts.idGroup=accounts_groups.id WHERE accounts_groups_join_accounts.idAccount='".$account->id."' ORDER BY accounts_groups_join_accounts.main ASC, accounts_groups.idGroup ASC,accounts_groups.name ASC";
+  $query="SELECT accounts_groups.*,accounts_groups_join_accounts.idGrouprole,accounts_groups_join_accounts.main FROM accounts_groups_join_accounts JOIN accounts_groups ON accounts_groups_join_accounts.idGroup=accounts_groups.id WHERE accounts_groups_join_accounts.idAccount='".$account->id."' ORDER BY accounts_groups_join_accounts.main DESC, accounts_groups.idGroup ASC,accounts_groups.name ASC";
   $groups=$GLOBALS['db']->query($query);
   while($group=$GLOBALS['db']->fetchNextObject($groups)){
    $name=$group->name;

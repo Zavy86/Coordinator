@@ -9,9 +9,10 @@ if(api_basePath()<>$GLOBALS['dir']."cron"){api_die();}
 /* -[ Remove temp files ]---------------------------------------------------- */
 // log of the operation
 $log_level=1;
-$log="CRON - XXX\n";
+$log=NULL;
+/*$log="CRON - XXX\n";
 $log.="Number of MySQL query executed..\n";
-//api_log($log_level,"cron",$log);
+api_log($log_level,"cron",$log);*/
 // show footer
 if($g_submit<>"cron"){
  echo nl2br($log);
