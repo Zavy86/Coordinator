@@ -10,7 +10,8 @@ function content(){
  // build table header
  $table->addHeader("&nbsp;",NULL,"16");
  $table->addHeader(api_text("companies_list-th-company"),"nowarp",NULL,"company");
- $table->addHeader(api_text("companies_list-th-name"),NULL,"100%","name");
+ $table->addHeader(api_text("companies_list-th-name"),NULL,NULL,"name");
+ $table->addHeader(api_text("companies_list-th-fiscal_name"),"nowarp","100%","fiscal_name");
  $table->addHeader(api_text("companies_list-th-members"),"nowarp text-center","32",NULL,2);
  // query order
  $query_order=api_queryOrder("company ASC,division ASC");
@@ -26,7 +27,8 @@ function content(){
   // build table fields
   $table->addField("<a href=\"companies_edit.php?id=".$company->id."\">".api_icon('icon-edit')."</a>","nowarp");
   $table->addField($name,"nowarp");
-  $table->addField(stripslashes($company->name));
+  $table->addField(stripslashes($company->name),"nowarp");
+  $table->addField(stripslashes($company->fiscal_name));
   $table->addField($members_count,"nowarp text-center");
   $table->addField("<a href=\"accounts_list.php?idCompany=".$company->id."\">".api_icon('icon-user')."</a>","nowarp text-center");
  }

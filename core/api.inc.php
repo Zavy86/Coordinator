@@ -645,6 +645,18 @@ function api_accountCompany($account_id=NULL){
 }
 
 
+/* -[ Company by company id ]------------------------------------------------ */
+// @param $idCompany : ID of the company
+function api_company($idCompany){
+ $company=$GLOBALS['db']->queryUniqueObject("SELECT * FROM accounts_companies WHERE id='".$idCompany."'");
+ if($company->id>0){
+  return $company;
+ }else{
+  return FALSE;
+ }
+}
+
+
 /* -[ Company name by company id ]------------------------------------------- */
 // @param $idCompany : ID of the company
 function api_companyName($idCompany,$division=TRUE){

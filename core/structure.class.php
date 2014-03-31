@@ -1019,7 +1019,7 @@ class str_form{
      $return.="  <div id='".$this->name."_".$name."_from_".$index."' class='input-append'>\n";
      $return.="   <input type='text' name='".$ff->name."_from' id='".$this->name."_input_from_".$index."' data-format='".$format."' readonly='readonly' class='".$size." ".$ff->class."' placeholder=\"".$ff->placeholder[0]."\" value=\"".$ff->value[0]."\">\n";
      $return.="   <span class='add-on'><i data-time-icon='icon-time' data-date-icon='icon-calendar'></i></span>\n";
-     $return.="  </div>\n<br><br>\n";
+     $return.="  </div>\n&nbsp;\n";
      $return.="  <div id='".$this->name."_".$name."_to_".$index."' class='input-append'>\n";
      $return.="   <input type='text' name='".$ff->name."_to' id='".$this->name."_input_to_".$index."' data-format='".$format."' readonly='readonly' class='".$size." ".$ff->class."' placeholder=\"".$ff->placeholder[1]."\" value=\"".$ff->value[1]."\">\n";
      $return.="   <span class='add-on'><i data-time-icon='icon-time' data-date-icon='icon-calendar'></i></span>\n";
