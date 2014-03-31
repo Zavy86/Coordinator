@@ -63,7 +63,7 @@ function content(){
   $table->addHeader(api_text("accounts_edit-th-role"),"nowarp");
   $table->addHeader("&nbsp;",NULL,"16");
   // execute query
-  $query="SELECT accounts_groups.*,accounts_groups_join_accounts.idGrouprole,accounts_groups_join_accounts.main FROM accounts_groups_join_accounts JOIN accounts_groups ON accounts_groups_join_accounts.idGroup=accounts_groups.id WHERE accounts_groups_join_accounts.idAccount='".$account->id."'";
+  $query="SELECT accounts_groups.*,accounts_groups_join_accounts.idGrouprole,accounts_groups_join_accounts.main FROM accounts_groups_join_accounts JOIN accounts_groups ON accounts_groups_join_accounts.idGroup=accounts_groups.id WHERE accounts_groups_join_accounts.idAccount='".$account->id."' ORDER BY accounts_groups_join_accounts.main ASC, accounts_groups.idGroup ASC,accounts_groups.name ASC";
   $groups=$GLOBALS['db']->query($query);
   while($group=$GLOBALS['db']->fetchNextObject($groups)){
    $name=$group->name;
@@ -91,7 +91,7 @@ function content(){
   <select class="span5" name="idGroup">
    <option value="0">Aggiungi un gruppo</option>
    <?php
-    $groups=$GLOBALS['db']->query("SELECT * FROM accounts_groups ORDER BY idGroup,name ASC");
+    $groups=$GLOBALS['db']->query("SELECT * FROM accounts_groups ORDER BY idGroup ASC,name ASC");
     while($group=$GLOBALS['db']->fetchNextObject($groups)){
      if(!api_checkAccountGroup($group->id,$account->id)){
       $group_name=$group->name;
