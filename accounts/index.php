@@ -80,12 +80,12 @@ function content(){
   <label class="control-label">Gruppi</label>
   <div class="controls">
   <?php
-   $groups=$GLOBALS['db']->query("SELECT * FROM accounts_groups ORDER BY name ASC");
+   $groups=$GLOBALS['db']->query("SELECT accounts_groups.*,accounts_groups_join_accounts.idGrouprole,accounts_groups_join_accounts.main FROM accounts_groups_join_accounts JOIN accounts_groups ON accounts_groups_join_accounts.idGroup=accounts_groups.id WHERE accounts_groups_join_accounts.idAccount='".api_accountId()."' ORDER BY accounts_groups_join_accounts.main DESC, accounts_groups.idGroup ASC,accounts_groups.name ASC");
    while($group=$GLOBALS['db']->fetchNextObject($groups)){
-    $grouprole=api_accountGrouprole($group->id);
-    if($grouprole>0){
-     echo $group->name." - ".api_grouproleName($grouprole,TRUE)."<br>\n";
-    }
+    if($group->main){echo "<strong>";}
+    echo $group->name;
+    if($group->main){echo "</strong>";}
+    echo " - ".api_grouproleName($group->idGrouprole,TRUE)."<br>\n";
    }
   ?>
   </div>

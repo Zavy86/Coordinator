@@ -88,6 +88,7 @@
  <!-- companies_list.php -->
  <text key="companies_list-th-company">Company</text>
  <text key="companies_list-th-name">Name</text>
+ <text key="companies_list-th-fiscal_name">Fiscal name</text>
  <text key="companies_list-th-members">Members</text>
  <text key="companies_list-tr-unvalued">There is no company..</text>
 
@@ -96,8 +97,23 @@
  <text key="companies_edit-ff-company-placeholder">Company ID</text>
  <text key="companies_edit-ff-division">Division</text>
  <text key="companies_edit-ff-division-placeholder">Division ID</text>
- <text key="companies_edit-ff-name">Name</text>
- <text key="companies_edit-ff-name-placeholder">Legal company name</text>
+ <text key="companies_edit-ff-name">Company name</text>
+ <text key="companies_edit-ff-name-placeholder">Identification name of the company</text>
+ <text key="companies_edit-ff-fiscal_name">Fiscal name</text>
+ <text key="companies_edit-ff-fiscal_name-placeholder">Full company name</text>
+ <text key="companies_edit-ff-fiscal_vat">VAT</text>
+ <text key="companies_edit-ff-fiscal_code">Fiscal code</text>
+ <text key="companies_edit-ff-fiscal_rea">Register of Companies</text>
+ <text key="companies_edit-ff-fiscal_capital">Company Capital</text>
+ <text key="companies_edit-ff-fiscal_currency">Currency</text>
+ <text key="companies_edit-ff-address_address">Address</text>
+ <text key="companies_edit-ff-address_zip">ZIP</text>
+ <text key="companies_edit-ff-address_city">City</text>
+ <text key="companies_edit-ff-address_district">District</text>
+ <text key="companies_edit-ff-address_country">State</text>
+ <text key="companies_edit-ff-phone_office">Phone</text>
+ <text key="companies_edit-ff-phone_mobile">Phone</text>
+ <text key="companies_edit-ff-phone_fax">Fax</text>
  <text key="companies_edit-fc-save">Save</text>
  <text key="companies_edit-fc-cancel">Cancel</text>
  <text key="companies_edit-fc-delete">Delete</text>

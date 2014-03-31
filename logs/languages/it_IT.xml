@@ -3,7 +3,7 @@
 <locale language="IT">
 
  <!-- module -->
- <text key="module-title">REgistro eventi</text>
+ <text key="module-title">Registro eventi</text>
 
  <!-- template.inc.php -->
  <text key="nav-allEvents">Tutti gli eventi</text>

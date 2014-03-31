@@ -220,7 +220,7 @@ function permissions_add_group_grouprole($idPermission,$idGroup,$idGrouprole){
  if($_SESSION['account']->id<>1 && $locked){api_die("accessDenied");}
  // delete previous associations
  if($idGroup==0){
-  $GLOBALS['db']->execute($query="DELETE FROM settings_permissions_join_accounts_groups WHERE idPermission='".$idPermission."' AND idGrouprole='".$idGrouprole."'");
+  $GLOBALS['db']->execute($query="DELETE FROM settings_permissions_join_accounts_groups WHERE idPermission='".$idPermission."' AND (idGrouprole='".$idGrouprole."' OR idGroup='0')");
  }else{
   $GLOBALS['db']->execute($query="DELETE FROM settings_permissions_join_accounts_groups WHERE idPermission='".$idPermission."' AND idGrouprole='".$idGrouprole."' AND (idGroup='0' OR idGroup='".$idGroup."')");
  }

@@ -88,6 +88,7 @@
  <!-- companies_list.php -->
  <text key="companies_list-th-company">Società</text>
  <text key="companies_list-th-name">Nome</text>
+ <text key="companies_list-th-fiscal_name">Ragione Sociale</text>
  <text key="companies_list-th-members">Membri</text>
  <text key="companies_list-tr-unvalued">Non è presente nessuna società..</text>
 
@@ -96,8 +97,23 @@
  <text key="companies_edit-ff-company-placeholder">Identificativo società</text>
  <text key="companies_edit-ff-division">Divisione</text>
  <text key="companies_edit-ff-division-placeholder">Identificativo divisione</text>
- <text key="companies_edit-ff-name">Ragione sociale</text>
- <text key="companies_edit-ff-name-placeholder">Ragione sociale completa</text>
+ <text key="companies_edit-ff-name">Nome società</text>
+ <text key="companies_edit-ff-name-placeholder">Nome identificativo della società</text>
+ <text key="companies_edit-ff-fiscal_name">Ragione sociale</text>
+ <text key="companies_edit-ff-fiscal_name-placeholder">Ragione sociale completa</text>
+ <text key="companies_edit-ff-fiscal_vat">Partita IVA</text>
+ <text key="companies_edit-ff-fiscal_code">Codice Fiscale</text>
+ <text key="companies_edit-ff-fiscal_rea">Iscr. Reg. Imprese - REA</text>
+ <text key="companies_edit-ff-fiscal_capital">Capitale Sociale</text>
+ <text key="companies_edit-ff-fiscal_currency">Valuta</text>
+ <text key="companies_edit-ff-address_address">Indirizzo</text>
+ <text key="companies_edit-ff-address_zip">CAP</text>
+ <text key="companies_edit-ff-address_city">Città</text>
+ <text key="companies_edit-ff-address_district">Provincia</text>
+ <text key="companies_edit-ff-address_country">Stato</text>
+ <text key="companies_edit-ff-phone_office">Telefono</text>
+ <text key="companies_edit-ff-phone_mobile">Telefono</text>
+ <text key="companies_edit-ff-phone_fax">Fax</text>
  <text key="companies_edit-fc-save">Salva</text>
  <text key="companies_edit-fc-cancel">Annulla</text>
  <text key="companies_edit-fc-delete">Elimina</text>
