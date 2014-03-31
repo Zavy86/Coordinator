@@ -3,6 +3,7 @@
 // ---[ PHP class for MySQL database ]------------------------------------------
 
 class DB{
+ var $connector;          // connector of mysql istance
  var $defaultDebug=false; // true if you want ALL queries to be debugged
  var $mtStart;            // Start time in milliseconds
  var $nbQueries;          // Number of executed querys
@@ -13,9 +14,9 @@ class DB{
   $this->mtStart=$this->getMicroTime();
   $this->nbQueries=0;
   $this->lastResult=NULL;
-  mysql_connect($host,$user,$pass) or die('Server connection not possible.');
-  mysql_select_db($name) or die('Database connection not possible.');
-  mysql_query("SET NAMES UTF8");
+  $this->connector=mysql_connect($host,$user,$pass,TRUE) or die('Server connection not possible.');
+  mysql_select_db($name,$this->connector) or die('Database connection not possible.');
+  mysql_query("SET NAMES UTF8",$this->connector);
  }
 
  // ---[ Query the database ]--------------------------------------------------
@@ -24,7 +25,7 @@ class DB{
  // @return : The result of the query, to use with fetchNextObject().
  function query($query,$debug=-1){
   $this->nbQueries++;
-  $this->lastResult=mysql_query($query) or $this->debugAndDie($query);
+  $this->lastResult=mysql_query($query,$this->connector) or $this->debugAndDie($query);
   $this->debug($debug,$query,$this->lastResult);
   return $this->lastResult;
  }
@@ -34,7 +35,7 @@ class DB{
  // @param $debug : If true, it output the query and the resulting table.
  function execute($query,$debug=-1){
   $this->nbQueries++;
-  mysql_query($query) or $this->debugAndDie($query);
+  mysql_query($query,$this->connector) or $this->debugAndDie($query);
   $this->debug($debug, $query);
  }
 
@@ -84,7 +85,7 @@ class DB{
  function queryUniqueObject($query,$debug=-1){
   $query="$query LIMIT 1";
   $this->nbQueries++;
-  $result=mysql_query($query) or $this->debugAndDie($query);
+  $result=mysql_query($query,$this->connector) or $this->debugAndDie($query);
   $this->debug($debug,$query,$result);
   return mysql_fetch_object($result);
  }
@@ -96,7 +97,7 @@ class DB{
  function queryUniqueValue($query,$debug=-1){
   $query="$query LIMIT 1";
   $this->nbQueries++;
-  $result=mysql_query($query) or $this->debugAndDie($query);
+  $result=mysql_query($query,$this->connector) or $this->debugAndDie($query);
   $line=mysql_fetch_row($result);
   $this->debug($debug,$query,$result);
   return $line[0];
@@ -108,7 +109,7 @@ class DB{
  // @return : A value representing a data cell (or NULL if result is empty).
  function queryUniqueValueNoLimit($query,$debug=-1){
   $this->nbQueries++;
-  $result=mysql_query($query) or $this->debugAndDie($query);
+  $result=mysql_query($query,$this->connector) or $this->debugAndDie($query);
   $line=mysql_fetch_row($result);
   $this->debug($debug,$query,$result);
   return $line[0];
@@ -253,7 +254,7 @@ class DB{
  // ---[ Close the connexion with the database server ]------------------------
  // It's usually unneeded since PHP do it automatically at script end.
  function close(){
-  mysql_close();
+  mysql_close($this->connector);
  }
 
  // ---[ Internal method to get the current time ]-----------------------------
