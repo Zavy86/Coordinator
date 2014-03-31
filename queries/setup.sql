@@ -43,6 +43,20 @@ CREATE TABLE IF NOT EXISTS `accounts_companies` (
   `company` varchar(25) COLLATE utf8_unicode_ci DEFAULT NULL,
   `division` varchar(25) COLLATE utf8_unicode_ci NOT NULL,
   `name` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `fiscal_name` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `fiscal_vat` varchar(25) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `fiscal_code` varchar(25) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `fiscal_rea` varchar(25) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `fiscal_capital` int(11) unsigned NOT NULL DEFAULT '0',
+  `fiscal_currency` varchar(3) COLLATE utf8_unicode_ci NOT NULL DEFAULT 'EUR',
+  `address_address` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `address_zip` varchar(5) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `address_city` varchar(50) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `address_district` varchar(10) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `address_country` varchar(25) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `phone_office` varchar(25) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `phone_mobile` varchar(25) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `phone_fax` varchar(25) COLLATE utf8_unicode_ci DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 

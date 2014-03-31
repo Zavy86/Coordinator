@@ -458,20 +458,53 @@ function company_save(){
  $p_company=addslashes($_POST['company']);
  $p_division=addslashes($_POST['division']);
  $p_name=addslashes($_POST['name']);
+ $p_fiscal_name=addslashes($_POST['fiscal_name']);
+ $p_fiscal_vat=addslashes($_POST['fiscal_vat']);
+ $p_fiscal_code=addslashes($_POST['fiscal_code']);
+ $p_fiscal_rea=addslashes($_POST['fiscal_rea']);
+ $p_fiscal_capital=addslashes($_POST['fiscal_capital']);
+ $p_fiscal_currency=addslashes($_POST['fiscal_currency']);
+ $p_address_address=addslashes($_POST['address_address']);
+ $p_address_zip=addslashes($_POST['address_zip']);
+ $p_address_city=addslashes($_POST['address_city']);
+ $p_address_district=addslashes($_POST['address_district']);
+ $p_address_country=addslashes($_POST['address_country']);
+ $p_phone_office=addslashes($_POST['phone_office']);
+ $p_phone_mobile=addslashes($_POST['phone_mobile']);
+ $p_phone_fax=addslashes($_POST['phone_fax']);
  // build query
  if($g_id>0){
   if(!api_checkPermission("accounts","companies_edit")){api_die("accessDenied");}
   $query="UPDATE accounts_companies SET
    company='".$p_company."',
    division='".$p_division."',
-   name='".$p_name."'
+   name='".$p_name."',
+   fiscal_name='".$p_fiscal_name."',
+   fiscal_vat='".$p_fiscal_vat."',
+   fiscal_code='".$p_fiscal_code."',
+   fiscal_rea='".$p_fiscal_rea."',
+   fiscal_capital='".$p_fiscal_capital."',
+   fiscal_currency='".$p_fiscal_currency."',
+   address_address='".$p_address_address."',
+   address_zip='".$p_address_zip."',
+   address_city='".$p_address_city."',
+   address_district='".$p_address_district."',
+   address_country='".$p_address_country."',
+   phone_office='".$p_phone_office."',
+   phone_mobile='".$p_phone_mobile."',
+   phone_fax='".$p_phone_fax."'
    WHERE id='".$g_id."'";
   $alert="?alert=companyUpdated&alert_class=alert-success&alert_parameters=".$p_name;
  }else{
   if(!api_checkPermission("accounts","companies_add")){api_die("accessDenied");}
   $query="INSERT INTO accounts_companies
-   (company,division,name) VALUES
-   ('".$p_company."','".$p_division."','".$p_name."')";
+   (company,division,name,fiscal_name,fiscal_vat,fiscal_code,fiscal_rea,fiscal_capital,
+    fiscal_currency,address_address,address_number,address_zip,address_city,address_district,
+    address_country,phone_office,phone_mobile,phone_fax) VALUES
+   ('".$p_company."','".$p_division."','".$p_name."','".$p_fiscal_name."','".$p_fiscal_vat."',
+    '".$p_fiscal_code."','".$p_fiscal_rea."','".$p_fiscal_capital."','".$p_fiscal_currency."',
+    '".$p_address_address."','".$p_address_zip."','".$p_address_city."','".$p_address_district."',
+    '".$p_address_country."','".$p_phone_office."','".$p_phone_mobile."','".$p_phone_fax."')";
   $alert="?alert=companyCreated&alert_class=alert-success&alert_parameters=".$p_name;
  }
  // execute query
