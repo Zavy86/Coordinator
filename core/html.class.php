@@ -197,6 +197,8 @@ public function header($title="",$nav="dashboard",$navbar=TRUE){
         <?php if(api_checkPermission("logs","logs_list")){echo "<li><a href=\"".$GLOBALS['dir']."logs/index.php\">".api_text("core-menu-logs")."</a></li>";} ?>
         <?php //if(api_checkPermission("saprfc","saprfc_list")){echo "<li><a href=\"".$GLOBALS['dir']."saprfc/index.php\">SAP RFC</a></li>";} ?>
 
+        <?php if(api_checkPermission("database","database_view")){echo "<li><a href=\"".$GLOBALS['dir']."database/index.php\">".api_text("core-menu-database")."</a></li>";} ?>
+
         <li><a href="<?php echo $GLOBALS['dir']."dashboard/dashboard_edit.php";?>"><?php echo api_text("core-menu-dashboard-edit"); ?></a></li>
 
         <?php
