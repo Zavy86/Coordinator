@@ -80,9 +80,12 @@ function content(){
    $current_table->name=$table->TABLE_NAME;
    $current_table->label=preg_replace("/".$g_module."_/","",$table->TABLE_NAME,1);
    $current_table->links=array();
+   // links
+   $linked=FALSE;
    // link out
    $results=$db_schema->query("SELECT * FROM KEY_COLUMN_USAGE WHERE CONSTRAINT_SCHEMA='".$db_name."' AND TABLE_NAME='".$table->TABLE_NAME."' AND REFERENCED_TABLE_NAME<>'NULL'");
    while($result=$db_schema->fetchNextObject($results)){
+    $linked=TRUE;
     $current_table->links[$result->REFERENCED_TABLE_NAME]=$result->REFERENCED_TABLE_NAME;
     // add external table if not exist
     if($_SESSION['nodes'][$result->REFERENCED_TABLE_NAME]==NULL){
@@ -90,10 +93,13 @@ function content(){
      $_SESSION['nodes'][$result->REFERENCED_TABLE_NAME]->label=$result->REFERENCED_TABLE_NAME;
     }
    }
-   /*// link in
-   $results=$db_schema->query("SELECT * FROM KEY_COLUMN_USAGE WHERE CONSTRAINT_SCHEMA='".$db_name."' AND REFERENCED_TABLE_NAME='".$table->TABLE_NAME."'");
-   while($result=$db_schema->fetchNextObject($results)){
-    $module_array[$table->TABLE_NAME][$result->TABLE_NAME]="<";
+   // link in
+   /*$results=$db_schema->query("SELECT * FROM KEY_COLUMN_USAGE WHERE CONSTRAINT_SCHEMA='".$db_name."' AND REFERENCED_TABLE_NAME='".$table->TABLE_NAME."'");
+   while($result=$db_schema->fetchNextObject($results)){$linked=TRUE;}*/
+   /*if(!$linked){
+    $current_table->links=array("module");
+    $_SESSION['nodes']['module']->name="module";
+    $_SESSION['nodes']['module']->label="Unlinked tables";//strtoupper($g_module);
    }*/
    $_SESSION['nodes'][$current_table->name]=$current_table;
   }

@@ -25,7 +25,7 @@ $myPicture = new pImage(640,640);
 //$myPicture->drawRectangle(0,0,639,639,array("R"=>0,"G"=>0,"B"=>0));
 
 /* Set the graph area boundaries*/
-$myPicture->setGraphArea(0,0,640,640);
+$myPicture->setGraphArea(100,100,540,540);
 
 /* Set the default font properties */
 $myPicture->setFontProperties(array("FontName"=>"../core/pchart2/fonts/calibri.ttf","FontSize"=>10,"R"=>0,"G"=>0,"B"=>0));
@@ -40,7 +40,7 @@ $SpringChart = new pSpring();
 //$SpringChart->addNode(0,array("Name"=>"accounts_accounts","Connections"=>"2","Shape"=>NODE_SHAPE_SQUARE,"FreeZone"=>80,"Size"=>10,"NodeType"=>NODE_TYPE_CENTRAL));
 
 // set default node settings
-$SpringChart->setNodeDefaults(array("FreeZone"=>120,"R"=>0,"G"=>136,"B"=>204,"Size"=>3));
+$SpringChart->setNodeDefaults(array("FreeZone"=>100,"R"=>0,"G"=>136,"B"=>204,"Size"=>3));
 $SpringChart->setLinkDefaults(array("R"=>125,"G"=>125,"B"=>125));
 
 // build nodes
@@ -52,7 +52,7 @@ foreach($_SESSION['nodes'] as $node){
 //$SpringChart->linkProperties(0,2,array("R"=>255,"G"=>0,"B"=>0,"Ticks"=>2));
 
 /* Draw the spring chart */
-$Result = $SpringChart->drawSpring($myPicture);
+$Result = $SpringChart->drawSpring($myPicture,array("Algorithm"=>ALGORITHM_CIRCULAR));
 
 /* Output the statistics */
 // print_r($Result);
