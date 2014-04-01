@@ -379,8 +379,6 @@ public function footer($wiki_link=NULL,$copyright=TRUE){
 
 <?php
 
- $GLOBALS['db']->close();
-
 }
 
 
