@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<locale language="IT">
+
+ <!-- module -->
+ <text key="module-title">Database</text>
+
+ <!-- alerts -->
+
+ <!-- template.inc.php -->
+ <text key="nav-view">Coordinator</text>
+ <text key="nav-module">{0}</text>
+
+ <!-- database_view.php -->
+ <text key="view-modules">Modules</text>
+
+</locale>

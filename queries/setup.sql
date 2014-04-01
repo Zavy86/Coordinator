@@ -16,13 +16,14 @@ CREATE TABLE IF NOT EXISTS `accounts_accounts` (
   `name` varchar(25) COLLATE utf8_unicode_ci NOT NULL,
   `typology` tinyint(1) unsigned NOT NULL DEFAULT '0' COMMENT '0 disabled, 1 administrator, 2 user',
   `language` varchar(10) COLLATE utf8_unicode_ci NOT NULL DEFAULT 'default',
-  `idCompany` int(11) unsigned NOT NULL DEFAULT '0',
+  `idCompany` int(11) unsigned DEFAULT NULL,
   `registration` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `lastLogin` datetime DEFAULT NULL,
   `ldapUsername` varchar(25) COLLATE utf8_unicode_ci DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `account` (`account`),
-  UNIQUE KEY `ldapUsername` (`ldapUsername`)
+  UNIQUE KEY `ldapUsername` (`ldapUsername`),
+  KEY `idCompany` (`idCompany`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
@@ -30,7 +31,7 @@ CREATE TABLE IF NOT EXISTS `accounts_accounts` (
 --
 
 INSERT IGNORE INTO `accounts_accounts` (`id`, `account`, `password`, `secret`, `name`, `typology`, `idCompany`, `registration`, `lastLogin`, `ldapUsername`) VALUES
-('1', 'root', '63a9f0ea7bb98050796b649e85481845', NULL, 'Administrator', 1, 0, '2009-06-01 10:00:00', NULL, NULL);
+('1', 'root', '63a9f0ea7bb98050796b649e85481845', NULL, 'Administrator', 1, NULL, '2009-06-01 10:00:00', NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -79,7 +80,8 @@ CREATE TABLE IF NOT EXISTS `accounts_groups` (
   `name` varchar(25) COLLATE utf8_unicode_ci NOT NULL,
   `description` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `group` (`name`)
+  KEY `idGroup` (`idGroup`),
+  KEY `name` (`name`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
@@ -123,9 +125,30 @@ INSERT IGNORE INTO `accounts_grouproles` (`id`, `name`, `description`) VALUES
 CREATE TABLE IF NOT EXISTS `accounts_groups_join_accounts` (
   `idGroup` int(11) unsigned NOT NULL DEFAULT '0',
   `idAccount` int(11) unsigned NOT NULL DEFAULT '0',
-  `idGrouprole` int(11) NOT NULL DEFAULT '1',
-  KEY `idGroup` (`idGroup`)
+  `idGrouprole` int(11) unsigned NOT NULL DEFAULT '1',
+  `main` tinyint(1) unsigned NOT NULL DEFAULT '0',
+  KEY `idGroup` (`idGroup`),
+  KEY `idAccount` (`idAccount`),
+  KEY `idGrouprole` (`idGrouprole`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Constraints for table `accounts_accounts`
+--
+
+ALTER TABLE `accounts_accounts`
+  ADD CONSTRAINT `accounts_accounts_ibfk_1` FOREIGN KEY (`idCompany`) REFERENCES `accounts_companies` (`id`) ON DELETE SET NULL ON UPDATE SET NULL;
+
+--
+-- Constraints for table `accounts_groups_join_accounts`
+--
+
+ALTER TABLE `accounts_groups_join_accounts`
+  ADD CONSTRAINT `accounts_groups_join_accounts_ibfk_1` FOREIGN KEY (`idGroup`) REFERENCES `accounts_groups` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `accounts_groups_join_accounts_ibfk_2` FOREIGN KEY (`idAccount`) REFERENCES `accounts_accounts` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `accounts_groups_join_accounts_ibfk_3` FOREIGN KEY (`idGrouprole`) REFERENCES `accounts_grouproles` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- --------------------------------------------------------
 
@@ -194,61 +217,6 @@ CREATE TABLE IF NOT EXISTS `settings_dashboards` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `settings_permissions`
---
-
-CREATE TABLE IF NOT EXISTS `settings_permissions` (
-  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-  `module` varchar(25) COLLATE utf8_unicode_ci NOT NULL,
-  `action` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
-  `description` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `locked` tinyint(1) unsigned NOT NULL DEFAULT '0',
-  PRIMARY KEY (`id`),
-  KEY `module` (`module`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
-
---
--- Dumping data for table `settings_permissions`
---
-
-INSERT IGNORE INTO `settings_permissions` (`id`, `module`, `action`, `description`, `locked`) VALUES
-(NULL, 'settings', 'settings_edit', 'Manage settings', 1),
-(NULL, 'settings', 'modules_edit', 'Manage modules', 1),
-(NULL, 'settings', 'permissions_edit', 'Manage permissions', 1),
-(NULL, 'settings', 'menus_edit', 'Manage menus', 0),
-(NULL, 'logs', 'logs_list', 'View logs', 0),
-(NULL, 'stats', 'stats_server', 'View server stats', 0),
-(NULL, 'accounts', 'accounts_list', 'View accounts list', 0),
-(NULL, 'accounts', 'accounts_add', 'Add an account', 0),
-(NULL, 'accounts', 'accounts_edit', 'Edit an account', 0),
-(NULL, 'accounts', 'accounts_delete', 'Delete an account', 1),
-(NULL, 'accounts', 'groups_list', 'View groups list', 0),
-(NULL, 'accounts', 'groups_add', 'Add a group', 0),
-(NULL, 'accounts', 'groups_edit', 'Edit group', 0),
-(NULL, 'accounts', 'groups_delete', 'Delete a group', 1),
-(NULL, 'accounts', 'companies_list', 'View company list', 0),
-(NULL, 'accounts', 'companies_add', 'Add a company', 0),
-(NULL, 'accounts', 'companies_edit', 'Edit a company', 0),
-(NULL, 'accounts', 'companies_delete', 'Delete a company', 1),
-(NULL, 'dashboard', 'notifications_send', 'Send notifications', 0),
-(NULL, 'dashboard', 'notifications_send_all', 'Send notifications to all users', 0);
-
--- --------------------------------------------------------
-
---
--- Table structure for table `settings_permissions_join_accounts_groups`
---
-
-CREATE TABLE IF NOT EXISTS `settings_permissions_join_accounts_groups` (
-  `idPermission` int(11) unsigned NOT NULL DEFAULT '0',
-  `idGroup` int(11) unsigned NOT NULL DEFAULT '0',
-  `idGrouprole` int(11) unsigned NOT NULL DEFAULT '0',
-  KEY `idPermission` (`idPermission`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
-
--- --------------------------------------------------------
-
---
 -- Table structure for table `settings_menus`
 --
 
@@ -287,6 +255,62 @@ CREATE TABLE IF NOT EXISTS `settings_modules` (
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `settings_permissions`
+--
+
+CREATE TABLE IF NOT EXISTS `settings_permissions` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `module` varchar(25) COLLATE utf8_unicode_ci NOT NULL,
+  `action` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `description` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `locked` tinyint(1) unsigned NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id`),
+  KEY `module` (`module`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+--
+-- Dumping data for table `settings_permissions`
+--
+
+INSERT IGNORE INTO `settings_permissions` (`id`, `module`, `action`, `description`, `locked`) VALUES
+(NULL, 'settings', 'settings_edit', 'Manage settings', 1),
+(NULL, 'settings', 'modules_edit', 'Manage modules', 1),
+(NULL, 'settings', 'permissions_edit', 'Manage permissions', 1),
+(NULL, 'settings', 'menus_edit', 'Manage menus', 0),
+(NULL, 'logs', 'logs_list', 'View logs', 0),
+(NULL, 'stats', 'stats_server', 'View server stats', 0),
+(NULL, 'accounts', 'accounts_list', 'View accounts list', 0),
+(NULL, 'accounts', 'accounts_add', 'Add an account', 0),
+(NULL, 'accounts', 'accounts_edit', 'Edit an account', 0),
+(NULL, 'accounts', 'accounts_delete', 'Delete an account', 1),
+(NULL, 'accounts', 'groups_list', 'View groups list', 0),
+(NULL, 'accounts', 'groups_add', 'Add a group', 0),
+(NULL, 'accounts', 'groups_edit', 'Edit group', 0),
+(NULL, 'accounts', 'groups_delete', 'Delete a group', 1),
+(NULL, 'accounts', 'companies_list', 'View company list', 0),
+(NULL, 'accounts', 'companies_add', 'Add a company', 0),
+(NULL, 'accounts', 'companies_edit', 'Edit a company', 0),
+(NULL, 'accounts', 'companies_delete', 'Delete a company', 1),
+(NULL, 'dashboard', 'notifications_send', 'Send notifications', 0),
+(NULL, 'dashboard', 'notifications_send_all', 'Send notifications to all users', 0),
+(NULL, 'database', 'database_view', 'View Coordinator database', 0);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `settings_permissions_join_accounts_groups`
+--
+
+CREATE TABLE IF NOT EXISTS `settings_permissions_join_accounts_groups` (
+  `idPermission` int(11) unsigned NOT NULL DEFAULT '0',
+  `idGroup` int(11) unsigned NOT NULL DEFAULT '0',
+  `idGrouprole` int(11) unsigned NOT NULL DEFAULT '0',
+  KEY `idPermission` (`idPermission`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `settings_settings`
 --
 
@@ -320,6 +344,18 @@ INSERT IGNORE INTO `settings_settings` (`code`, `value`) VALUES
 ('temp_token', ''),
 ('title', 'Coordinator'),
 ('version', '1.0.0');
+
+-- --------------------------------------------------------
+
+--
+-- Constraints for dumped tables
+--
+
+--
+-- Constraints for table `settings_permissions_join_accounts_groups`
+--
+ALTER TABLE `settings_permissions_join_accounts_groups`
+  ADD CONSTRAINT `settings_permissions_join_accounts_groups_ibfk_1` FOREIGN KEY (`idPermission`) REFERENCES `settings_permissions` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- --------------------------------------------------------
 
