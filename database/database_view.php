@@ -84,6 +84,11 @@ function content(){
    $results=$db_schema->query("SELECT * FROM KEY_COLUMN_USAGE WHERE CONSTRAINT_SCHEMA='".$db_name."' AND TABLE_NAME='".$table->TABLE_NAME."' AND REFERENCED_TABLE_NAME<>'NULL'");
    while($result=$db_schema->fetchNextObject($results)){
     $current_table->links[$result->REFERENCED_TABLE_NAME]=$result->REFERENCED_TABLE_NAME;
+    // add external table if not exist
+    if($_SESSION['nodes'][$result->REFERENCED_TABLE_NAME]==NULL){
+     $_SESSION['nodes'][$result->REFERENCED_TABLE_NAME]->name=$result->REFERENCED_TABLE_NAME;
+     $_SESSION['nodes'][$result->REFERENCED_TABLE_NAME]->label=$result->REFERENCED_TABLE_NAME;
+    }
    }
    /*// link in
    $results=$db_schema->query("SELECT * FROM KEY_COLUMN_USAGE WHERE CONSTRAINT_SCHEMA='".$db_name."' AND REFERENCED_TABLE_NAME='".$table->TABLE_NAME."'");

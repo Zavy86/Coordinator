@@ -19,11 +19,21 @@ class DB{
   mysql_query("SET NAMES UTF8",$this->connector);
  }
 
+ // ---[ Clear Query ]---------------------------------------------------------
+ // @param $query : The query.
+ // @return : The query cleared
+ function clearQuery($query){
+  $search=array("``","''",'""');
+  $query=str_replace($search,"NULL",$query);
+  return $query;
+ }
+
  // ---[ Query the database ]--------------------------------------------------
  // @param $query : The query.
  // @param $debug : If true, it output the query and the resulting table.
  // @return : The result of the query, to use with fetchNextObject().
  function query($query,$debug=-1){
+  $query=$this->clearQuery($query);
   $this->nbQueries++;
   $this->lastResult=mysql_query($query,$this->connector) or $this->debugAndDie($query);
   $this->debug($debug,$query,$this->lastResult);
@@ -34,6 +44,7 @@ class DB{
  // @param $query : The query.
  // @param $debug : If true, it output the query and the resulting table.
  function execute($query,$debug=-1){
+  $query=$this->clearQuery($query);
   $this->nbQueries++;
   mysql_query($query,$this->connector) or $this->debugAndDie($query);
   $this->debug($debug, $query);
@@ -83,6 +94,7 @@ class DB{
  // @param $debug : If true, it output the query and the resulting row.
  // @return : An object representing a data row (or NULL if result is empty).
  function queryUniqueObject($query,$debug=-1){
+  $query=$this->clearQuery($query);
   $query="$query LIMIT 1";
   $this->nbQueries++;
   $result=mysql_query($query,$this->connector) or $this->debugAndDie($query);
@@ -95,6 +107,7 @@ class DB{
  // @param $debug : If true, it output the query and the resulting value.
  // @return : A value representing a data cell (or NULL if result is empty).
  function queryUniqueValue($query,$debug=-1){
+  $query=$this->clearQuery($query);
   $query="$query LIMIT 1";
   $this->nbQueries++;
   $result=mysql_query($query,$this->connector) or $this->debugAndDie($query);
@@ -108,6 +121,7 @@ class DB{
  // @param $debug : If true, it output the query and the resulting value.
  // @return : A value representing a data cell (or NULL if result is empty).
  function queryUniqueValueNoLimit($query,$debug=-1){
+  $query=$this->clearQuery($query);
   $this->nbQueries++;
   $result=mysql_query($query,$this->connector) or $this->debugAndDie($query);
   $line=mysql_fetch_row($result);
