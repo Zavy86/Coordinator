@@ -71,29 +71,6 @@ INSERT IGNORE INTO `accounts_companies` (`id`, `company`, `division`, `name`) VA
 -- --------------------------------------------------------
 
 --
--- Table structure for table `accounts_groups`
---
-
-CREATE TABLE IF NOT EXISTS `accounts_groups` (
-  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-  `idGroup` int(11) unsigned NOT NULL DEFAULT '0',
-  `name` varchar(25) COLLATE utf8_unicode_ci NOT NULL,
-  `description` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  KEY `idGroup` (`idGroup`),
-  KEY `name` (`name`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
-
---
--- Dumping data for table `accounts_groups`
---
-
-INSERT IGNORE INTO `accounts_groups` (`id`, `name`, `description`) VALUES
-(NULL, 'Deafault', 'Default group');
-
--- --------------------------------------------------------
-
---
 -- Table structure for table `accounts_grouproles`
 --
 
@@ -115,6 +92,29 @@ INSERT IGNORE INTO `accounts_grouproles` (`id`, `name`, `description`) VALUES
 (NULL, 'Employee', 'Employee role'),
 (NULL, 'Leader', 'Leader role'),
 (NULL, 'Manager', 'Manager role');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `accounts_groups`
+--
+
+CREATE TABLE IF NOT EXISTS `accounts_groups` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `idGroup` int(11) unsigned NOT NULL DEFAULT '0',
+  `name` varchar(25) COLLATE utf8_unicode_ci NOT NULL,
+  `description` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `name` (`name`),
+  KEY `idGroup` (`idGroup`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+--
+-- Dumping data for table `accounts_groups`
+--
+
+INSERT IGNORE INTO `accounts_groups` (`id`, `name`, `description`) VALUES
+(NULL, 'Deafault', 'Default group');
 
 -- --------------------------------------------------------
 
