@@ -114,6 +114,7 @@
  <text key="companies_edit-ff-phone_office">Telefono</text>
  <text key="companies_edit-ff-phone_mobile">Telefono</text>
  <text key="companies_edit-ff-phone_fax">Fax</text>
+ <text key="companies_edit-ff-mail">Mail</text>
  <text key="companies_edit-fc-save">Salva</text>
  <text key="companies_edit-fc-cancel">Annulla</text>
  <text key="companies_edit-fc-delete">Elimina</text>
