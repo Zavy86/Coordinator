@@ -32,6 +32,7 @@ function content(){
  $form->addField("text","phone_office",api_text("companies_edit-ff-phone_office"),stripslashes($company->phone_office),"input-large");
  $form->addField("text","phone_mobile",api_text("companies_edit-ff-phone_mobile"),stripslashes($company->phone_mobile),"input-large");
  $form->addField("text","phone_fax",api_text("companies_edit-ff-phone_fax"),stripslashes($company->phone_fax),"input-large");
+ $form->addField("text","mail",api_text("companies_edit-ff-mail"),stripslashes($company->mail),"input-large");
  $form->addControl("submit",api_text("companies_edit-fc-save"));
  $form->addControl("button",api_text("companies_edit-fc-cancel"),NULL,"companies_list.php");
  if($company->id>0 && api_checkPermission("accounts","companies_delete")){
