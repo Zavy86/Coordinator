@@ -58,6 +58,7 @@ CREATE TABLE IF NOT EXISTS `accounts_companies` (
   `phone_office` varchar(25) COLLATE utf8_unicode_ci DEFAULT NULL,
   `phone_mobile` varchar(25) COLLATE utf8_unicode_ci DEFAULT NULL,
   `phone_fax` varchar(25) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `mail` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
