@@ -23,6 +23,7 @@ class DB{
  // @param $query : The query.
  // @return : The query cleared
  function clearQuery($query){
+  if(stripos($query,"select")!==FALSE){return $query;}
   $search=array("``","''",'""');
   $query=str_replace($search,"DEFAULT",$query);
   return $query;
