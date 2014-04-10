@@ -24,7 +24,7 @@ class DB{
  // @return : The query cleared
  function clearQuery($query){
   $search=array("``","''",'""');
-  $query=str_replace($search,"NULL",$query);
+  $query=str_replace($search,"DEFAULT",$query);
   return $query;
  }
 
