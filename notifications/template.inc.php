@@ -10,7 +10,7 @@ $html->header(api_text("module-title"),$module_name);
 // build navigation tab
 $nav=new str_navigation((api_baseName()=="notifications_list.php")?TRUE:FALSE,"s");
 $nav->addTab(api_text("nav-notifications"),"notifications_list.php?s=1");
-$nav->addTab(api_text("nav-archived-notifications"),"notifications_list.php?s=2");
+$nav->addTab(api_text("nav-archived-notifications"),"notifications_list.php?s=3");
 if(api_checkPermission("notifications","notifications_send")){
  $nav->addTab(api_text("nav-send-notifications"),"notifications_send.php");
 }

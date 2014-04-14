@@ -1483,12 +1483,6 @@ function api_link($url,$label,$title=NULL,$class=NULL,$popup=FALSE,$style=NULL){
 }
 
 
-
-
-
-
-
-
 // @string $string : string in format {text_key|parameter1|parameter2|...|$parameterN}
 function api_textParse($string){
  if(substr($string,0,1)<>"{"){return $string;}
@@ -1505,8 +1499,6 @@ function api_textParse($string){
  // return text object
  return $text;
 }
-
-
 
 
 /* -[ LOG ]------------------------------------------------------------------ */
@@ -1629,15 +1621,6 @@ function api_notification($idAccount,$module,$action,$subject,$message,$link=NUL
  if($GLOBALS['db']->lastInsertedId()>0){return $hash;}
  else{return FALSE;}
 }
-
-
-
-
-
-
-
-
-
 
 
 

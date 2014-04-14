@@ -52,7 +52,7 @@ function notification_archive(){
  // check if exist
  if($notification->id>0){
   // generate query
-  $query="UPDATE logs_notifications SET status='2' WHERE id='".$notification->id."'";
+  $query="UPDATE logs_notifications SET status='3' WHERE id='".$notification->id."'";
   // execute query
   $GLOBALS['db']->execute($query);
  }
@@ -74,7 +74,7 @@ function notification_restore(){
   $GLOBALS['db']->execute($query);
  }
  // redirect
- exit(header("location: notifications_list.php?s=2"));
+ exit(header("location: notifications_list.php?s=3"));
 }
 
 /* -[ Notification Subscriptions ]------------------------------------------- */

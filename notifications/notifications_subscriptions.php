@@ -14,6 +14,7 @@ function content(){
  $triggers=$GLOBALS['db']->query("SELECT * FROM logs_triggers ORDER BY module ASC");
  while($trigger=$GLOBALS['db']->fetchNextObject($triggers)){
   if($trigger->module<>$current_module){
+   if(!api_checkPermissionShowModule($trigger->module,FALSE)){continue;}
    $current_module=$trigger->module;
    // load module language file
    api_loadLocaleFile("../".$trigger->module."/");
