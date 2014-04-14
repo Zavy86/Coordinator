@@ -102,7 +102,19 @@ function api_text($key,$parameters=NULL){
  // get text by key from locale array
  $text=$GLOBALS['locale'][$key];
  // if key not found
- if(strlen($text)==0){return "{".$key."}";}
+ if(strlen($text)==0){
+  $parameters_txt=NULL;
+  if($parameters!==NULL){
+   if(is_array($parameters)){
+    $count=0;
+    foreach($parameters as $parameter){
+     $parameters_txt.="|".$parameter;
+    }
+   }
+  }
+  $text="{".$key.$parameters_txt."}";
+  return $text;
+ }
  // replace parameters
  if($parameters!==NULL){
   if(is_array($parameters)){
@@ -1494,8 +1506,10 @@ function api_textParse($string){
  $text->key=$explode[0];
  // remove text key from array
  unset($explode[0]);
- // set parameters arrat
+ // set parameters array
  $text->parameters=$explode;
+ // set text parsed
+ $text->parsed=TRUE;
  // return text object
  return $text;
 }

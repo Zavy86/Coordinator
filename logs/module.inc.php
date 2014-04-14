@@ -3,5 +3,6 @@
 |* -[ Logs - Module Information ]-------------------------------------------- *|
 \* -------------------------------------------------------------------------- */
 $module_name="logs";
+$module_title="Logs and Notifications";
 $module_core=TRUE;
 ?>

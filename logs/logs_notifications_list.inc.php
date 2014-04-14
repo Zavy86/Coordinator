@@ -1,17 +1,17 @@
 <?php
 /* -------------------------------------------------------------------------- *\
-|* -[ Notifications - Including List ]--------------------------------------- *|
+|* -[ Logs - Including List ]------------------------------------------------ *|
 \* -------------------------------------------------------------------------- */
  require_once("../core/api.inc.php");
- api_loadLocaleFile("../notifications/");
+ api_loadLocaleFile("../logs/");
  // definitions
  $notifications_array=array();
  $modals_notifications_array=array();
  // notifications header
- echo "<li class='nav-header'>".api_text("list-li-notifications")."</li>\n";
+ echo "<li class='nav-header'>".api_text("notifications_list-li-notifications")."</li>\n";
  // check permission to send notifications
- if(api_checkPermission("notifications","notifications_send")){
-  echo "<li><a href='../notifications/notifications_send.php'>".api_text("list-li-send")."</a></li>\n";
+ if(api_checkPermission("logs","sendnotifications")){
+  echo "<li><a href='../logs/logs_sendnotifications.php'>".api_text("notifications_list-li-send")."</a></li>\n";
   echo "<li class='divider'></li>\n";
  }
  // query notifications
@@ -24,7 +24,7 @@
   // modal header
   $modal->header(stripslashes($notification->subject));
   // modal body
-  $m_body="<p>".api_text("list-m-timestamp",api_timestampFormat($notification->timestamp,api_text("datetime")))."</p>\n";
+  $m_body="<p>".api_text("notifications_list-m-timestamp",api_timestampFormat($notification->timestamp,api_text("datetime")))."</p>\n";
   $m_body.="<hr>\n<p>".nl2br(stripslashes($notification->message))."</p>\n";
   if($notification->link<>NULL){
    if(substr($notification->link,0,7)<>"http://"){
@@ -39,12 +39,12 @@
   $confirm=NULL;
   if($notification->status==1){
    $action="notification_archive";
-   $button=api_text("list-m-archive");
+   $button=api_text("notifications_list-m-archive");
   }elseif($notification->status==2){
    $action="notification_restore";
    $button="Ripristina";
   }
-  $m_footer="<a class='btn' href='../notifications/submit.php?act=".$action."&id=".$notification->id."'>".$button."</a>";
+  $m_footer="<a class='btn' href='../logs/submit.php?act=".$action."&id=".$notification->id."'>".$button."</a>";
   $modal->footer($m_footer);
   $modals_notifications_array[]=$modal;
   // show notification
@@ -52,6 +52,6 @@
  }
  // show second divider
  if(count($notifications_array)>0){echo "<li class='divider'></li>\n";}
- echo "<li><a href='../notifications/notifications_list.php?s=1'>".api_text("list-li-showAll")."</a></li>\n";
- echo "<li><a href='../notifications/notifications_subscriptions.php'>".api_text("list-li-subscribe")."</a></li>\n";
+ echo "<li><a href='../logs/logs_notifications_list.php?s=1'>".api_text("notifications_list-li-showAll")."</a></li>\n";
+ echo "<li><a href='../logs/logs_subscriptions.php'>".api_text("notifications_list-li-subscribe")."</a></li>\n";
 ?>

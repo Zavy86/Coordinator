@@ -1,6 +1,6 @@
 <?php
 /* -------------------------------------------------------------------------- *\
-|* -[ Notifications - List ]------------------------------------------------- *|
+|* -[ Logs - List ]---------------------------------------------------------- *|
 \* -------------------------------------------------------------------------- */
 // refresh dashboard every 5 min
 header("Refresh:300;url=".$_SERVER["PHP_SELF"]);
@@ -13,10 +13,10 @@ function content(){
  // definitions
  $modals_array=array();
  // build table
- $table=new str_table(api_text("list-tr-no-results"),TRUE,"&s=".$g_status);
+ $table=new str_table(api_text("notifications_list-tr-no-results"),TRUE,"&s=".$g_status);
  $table->addHeader("&nbsp;",NULL,"16",NULL);
- $table->addHeader(api_text("list-th-timestamp"),"nowarp",NULL,"timestamp");
- $table->addHeader(api_text("list-th-notification"),NULL,"100%","subject");
+ $table->addHeader(api_text("notifications_list-th-timestamp"),"nowarp",NULL,"timestamp");
+ $table->addHeader(api_text("notifications_list-th-notification"),NULL,"100%","subject");
  // build query
  $query_where="status='".$g_status."' AND idAccount='".$_SESSION['account']->id."'";
  // build search query
@@ -42,7 +42,7 @@ function content(){
   // modal header
   $modal->header(stripslashes($notification->subject));
   // modal body
-  $m_body="<p>".api_text("list-m-timestamp",api_timestampFormat($notification->timestamp,api_text("datetime")))."</p>\n";
+  $m_body="<p>".api_text("notifications_list-m-timestamp",api_timestampFormat($notification->timestamp,api_text("datetime")))."</p>\n";
   $m_body.="<hr>\n<p>".nl2br(stripslashes($notification->message))."</p>\n";
   if($notification->link<>NULL){
    if(substr($notification->link,0,7)<>"http://"){
@@ -56,7 +56,7 @@ function content(){
   // build modal footer
   $confirm=NULL;if($notification->status==1){
    $action="notification_archive";
-   $button=api_text("list-m-archive");
+   $button=api_text("notifications_list-m-archive");
   }elseif($notification->status==2){
    $action="notification_restore";
    $button="Ripristina";

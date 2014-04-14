@@ -163,12 +163,12 @@ public function header($title="",$nav="dashboard",$navbar=TRUE){
       <li class="dropdown">
        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
         <span id="notifications_counter">
-        <?php include("../notifications/notifications_counter.inc.php") ?>
+        <?php include("../logs/logs_notifications_counter.inc.php") ?>
         </span>
         <b class="caret"></b>
        </a>
        <ul class="dropdown-menu" id="notifications_list">
-        <?php include("../notifications/notifications_list.inc.php"); ?>
+        <?php include("../logs/logs_notifications_list.inc.php"); ?>
        </ul>
       </li>
 
@@ -194,7 +194,7 @@ public function header($title="",$nav="dashboard",$navbar=TRUE){
         */
         ?>
 
-        <?php if(api_checkPermission("logs","logs_list")){echo "<li><a href=\"".$GLOBALS['dir']."logs/index.php\">".api_text("core-menu-logs")."</a></li>";} ?>
+        <?php if(api_checkPermission("logs","logs_list")){echo "<li><a href=\"".$GLOBALS['dir']."logs/logs_list.php\">".api_text("core-menu-logs")."</a></li>";} ?>
         <?php //if(api_checkPermission("saprfc","saprfc_list")){echo "<li><a href=\"".$GLOBALS['dir']."saprfc/index.php\">SAP RFC</a></li>";} ?>
 
         <?php if(api_checkPermission("database","database_view")){echo "<li><a href=\"".$GLOBALS['dir']."database/index.php\">".api_text("core-menu-database")."</a></li>";} ?>

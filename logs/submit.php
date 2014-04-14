@@ -1,6 +1,6 @@
 <?php
 /* -------------------------------------------------------------------------- *\
-|* -[ Notifications - Submit ]----------------------------------------------- *|
+|* -[ Logs - Submit ]-------------------------------------------------------- *|
 \* -------------------------------------------------------------------------- */
 include('../core/api.inc.php');
 $act=$_GET['act'];
@@ -35,11 +35,11 @@ function notification_send(){
   }
   // redirect
   $alert="?alert=notificationSend&alert_class=alert-success";
-  header("location: notifications_list.php".$alert);
+  header("location: logs_notifications_list.php".$alert);
  }else{
   // redirect
   $alert="?alert=notificationSendError&alert_class=alert-error";
-  header("location: notifications_send.php".$alert);
+  header("location: logs_sendnotifications.php".$alert);
  }
 }
 
@@ -57,7 +57,7 @@ function notification_archive(){
   $GLOBALS['db']->execute($query);
  }
  // redirect
- exit(header("location: notifications_list.php?s=1"));
+ exit(header("location: logs_notifications_list.php?s=1"));
 }
 
 /* -[ Notification Restore ]------------------------------------------------- */
@@ -74,7 +74,7 @@ function notification_restore(){
   $GLOBALS['db']->execute($query);
  }
  // redirect
- exit(header("location: notifications_list.php?s=3"));
+ exit(header("location: logs_notifications_list.php?s=3"));
 }
 
 /* -[ Notification Subscriptions ]------------------------------------------- */
@@ -95,5 +95,5 @@ function notification_subscriptions(){
   $GLOBALS['db']->execute($query);
  }
  // redirect
- exit(header("location: notifications_subscriptions.php"));
+ exit(header("location: logs_subscriptions.php"));
 }

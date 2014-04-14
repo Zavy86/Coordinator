@@ -209,7 +209,7 @@ class str_navigation{
    }
    if($value<>NULL){$return.=$value;}
   }
-  return $return;
+  return "&filtered=1".$return;
  }
 
  /* -[ Filters Query ]------------------------------------------------------- */

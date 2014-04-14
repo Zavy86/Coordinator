@@ -1,6 +1,6 @@
 <?php
 /* -------------------------------------------------------------------------- *\
-|* -[ Notifications - List ]------------------------------------------------- *|
+|* -[ Logs - List ]---------------------------------------------------------- *|
 \* -------------------------------------------------------------------------- */
 // refresh dashboard every 5 min
 header("Refresh:300;url=".$_SERVER["PHP_SELF"]);
@@ -9,9 +9,10 @@ function content(){
  // definitions
  $current_module=NULL;
  // build form
- $form=new str_form("submit.php?act=notification_subscriptions","POST","notifications_subscriptions");
+ $form=new str_form("submit.php?act=notification_subscriptions","POST","subscriptions");
  // query
- $triggers=$GLOBALS['db']->query("SELECT * FROM logs_triggers ORDER BY module ASC");
+ //$triggers=$GLOBALS['db']->query("SELECT * FROM logs_triggers ORDER BY module ASC");
+ $triggers=$GLOBALS['db']->query("SELECT * FROM logs_triggers GROUP BY `trigger` ORDER BY module ASC,id ASC");
  while($trigger=$GLOBALS['db']->fetchNextObject($triggers)){
   if($trigger->module<>$current_module){
    if(!api_checkPermissionShowModule($trigger->module,FALSE)){continue;}
@@ -24,9 +25,9 @@ function content(){
   $subscription=$GLOBALS['db']->queryUniqueObject("SELECT * FROM logs_subscriptions WHERE `trigger`='".$trigger->trigger."' AND idAccount='".api_accountId()."'");
   // make notification title
   if(api_text($trigger->trigger."-description")<>"{".$trigger->trigger."-description}"){
-   $notification_title=api_text($trigger->trigger)." ".api_link("#",api_icon("icon-comment"),api_text($trigger->trigger."-description"),NULL,TRUE);
+   $notification_title=api_text($trigger->trigger."-label")." ".api_link("#",api_icon("icon-comment"),api_text($trigger->trigger."-description"),NULL,TRUE);
   }else{
-   $notification_title=api_text($trigger->trigger);
+   $notification_title=api_text($trigger->trigger."-label");
   }
   // show subscription options
   $form->addField("radio","notification_".$trigger->trigger,$notification_title,NULL,"inline");
