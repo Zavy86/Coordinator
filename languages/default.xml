@@ -31,6 +31,10 @@
  <text key="changeBrowser">The browser you are using does not seem to fully support the HTML5 format, we recommend using &lt;a href='http://chrome.google.com' target='_blank'&gt;Google Chrome&lt;/a&gt; or &lt;a href='http://www.apple.com/safari' target='_blank'&gt;Apple Safari&lt;/a&gt;</text>
  <text key="submitFunctionNotFound">Warning, the callback function has not been implemented, contact the administrator for more information</text>
 
+ <!-- logs -->
+ <text key="logs-subject">Notification {0} - {1}</text>
+ <text key="logs-message">Messagge: {0}</text>
+
  <!-- html.class.php -->
  <text key="core-menu-dashboard">Dashboard</text>
  <text key="core-menu-admin">Other modules</text>

@@ -63,6 +63,7 @@ function content(){
   //echo "<center><img src='".$GLOBALS['dir']."core/images/gifs/loader.gif' id='widget_".$widget->id."_loader' style='display:none'></center>";
   // set get parameter to widgets parameters
   $_GET=$widget->parameters_array;
+  $_GET['span']=$widget->span;
   // include widget
   include("../".$widget->module."/widget.inc.php");
   // close widget span

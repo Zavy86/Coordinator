@@ -1,6 +1,6 @@
 <?php
 /* -------------------------------------------------------------------------- *\
-|* -[ Notifications - Submit ]----------------------------------------------- *|
+|* -[ Logs - Submit ]-------------------------------------------------------- *|
 \* -------------------------------------------------------------------------- */
 include('../core/api.inc.php');
 $act=$_GET['act'];
@@ -9,6 +9,7 @@ switch($act){
  case "notification_send":notification_send();break;
  case "notification_archive":notification_archive();break;
  case "notification_restore":notification_restore();break;
+ case "notification_subscriptions":notification_subscriptions();break;
  // default
  default:
   $alert="?alert=submitFunctionNotFound&alert_class=alert-warning&act=".$act;
@@ -34,11 +35,11 @@ function notification_send(){
   }
   // redirect
   $alert="?alert=notificationSend&alert_class=alert-success";
-  header("location: notifications_list.php".$alert);
+  header("location: logs_notifications_list.php".$alert);
  }else{
   // redirect
   $alert="?alert=notificationSendError&alert_class=alert-error";
-  header("location: notifications_send.php".$alert);
+  header("location: logs_sendnotifications.php".$alert);
  }
 }
 
@@ -47,20 +48,16 @@ function notification_archive(){
  $g_id=$_GET['id'];
  if(!isset($g_id)){$g_id=0;}
  // get notification
- $notification=$GLOBALS['db']->queryUniqueObject("SELECT * FROM notifications_notifications WHERE idAction='".$g_id."'");
+ $notification=$GLOBALS['db']->queryUniqueObject("SELECT * FROM logs_notifications WHERE id='".$g_id."'");
  // check if exist
- if($notification->idAction==$g_id){
+ if($notification->id>0){
   // generate query
-  $query="UPDATE notifications_notifications SET
-   idAccountArchived='".$_SESSION['account']->id."',
-   archived='".date('Y-m-d H:i:s')."',
-   status='2'
-   WHERE idAction='".$notification->idAction."'";
+  $query="UPDATE logs_notifications SET status='3' WHERE id='".$notification->id."'";
   // execute query
   $GLOBALS['db']->execute($query);
  }
  // redirect
- header("location: notifications_list.php?s=1");
+ exit(header("location: logs_notifications_list.php?s=1"));
 }
 
 /* -[ Notification Restore ]------------------------------------------------- */
@@ -68,18 +65,35 @@ function notification_restore(){
  $g_id=$_GET['id'];
  if(!isset($g_id)){$g_id=0;}
  // get notification
- $notification=$GLOBALS['db']->queryUniqueObject("SELECT * FROM notifications_notifications WHERE idAction='".$g_id."'");
+ $notification=$GLOBALS['db']->queryUniqueObject("SELECT * FROM logs_notifications WHERE id='".$g_id."'");
  // check if exist
- if($notification->idAction==$g_id){
+ if($notification->id>0){
   // generate query
-  $query="UPDATE notifications_notifications SET
-   idAccountArchived=NULL,
-   archived=NULL,
-   status='1'
-   WHERE idAction='".$notification->idAction."'";
+  $query="UPDATE logs_notifications SET status='1' WHERE id='".$notification->id."'";
   // execute query
   $GLOBALS['db']->execute($query);
  }
  // redirect
- header("location: notifications_list.php?s=2");
+ exit(header("location: logs_notifications_list.php?s=3"));
+}
+
+/* -[ Notification Subscriptions ]------------------------------------------- */
+function notification_subscriptions(){
+ // remove all subscriptions
+ $GLOBALS['db']->execute("DELETE FROM logs_subscriptions WHERE idAccount='".api_accountId()."'");
+ // parse triggers
+ $triggers=$GLOBALS['db']->query("SELECT * FROM logs_triggers ORDER BY module ASC");
+ while($trigger=$GLOBALS['db']->fetchNextObject($triggers)){
+  // get notification typology
+  $notification=$_POST["notification_".$trigger->trigger];
+  // subscribe trigger
+  switch($notification){
+   case 1:$query="INSERT INTO logs_subscriptions VALUES ('".api_accountId()."','".$trigger->trigger."','0')";break;
+   case 2:$query="INSERT INTO logs_subscriptions VALUES ('".api_accountId()."','".$trigger->trigger."','1')";break;
+   default:$query=NULL;
+  }
+  $GLOBALS['db']->execute($query);
+ }
+ // redirect
+ exit(header("location: logs_subscriptions.php"));
 }

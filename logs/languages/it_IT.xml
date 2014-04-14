@@ -3,22 +3,72 @@
 <locale language="IT">
 
  <!-- module -->
- <text key="module-title">Registro eventi</text>
+ <text key="module-title">Registro Eventi</text>
+
+ <!-- alerts -->
+ <text key="notificationSend">La notifica è stata inoltrata correttamente</text>
+ <text key="notificationSendError">Si è verificato un errore durante la compilazione della notifica</text>
+
+ <!-- filters -->
+ <text key="filter-typologies">Tipologie</text>
+ <text key="filter-notices">Notifiche</text>
+ <text key="filter-warnings">Avvisi</text>
+ <text key="filter-errors">Errori</text>
+ <text key="filter-modules">Moduli</text>
 
  <!-- template.inc.php -->
- <text key="nav-allEvents">Tutti gli eventi</text>
- <text key="nav-warningsAndErrors">Avvertimenti ed Errori</text>
- <text key="nav-notices">Notifiche</text>
- <text key="nav-warnings">Avvertimenti</text>
- <text key="nav-errors">Errori</text>
- <text key="nav-lastDays">Ultimi {0} giorni</text>
- <text key="nav-allModules">Tutti i moduli</text>
- <text key="nav-module">Modulo {0}</text>
+ <text key="nav-logs">Registro Eventi</text>
+ <text key="nav-notifications">Notifiche</text>
+ <text key="nav-archived-notifications">Archivio notifiche</text>
+ <text key="nav-send-notifications">Invia una notifica</text>
+ <text key="nav-subscriptions">Iscrizioni</text>
 
  <!-- logs_list.php -->
- <text key="list-th-date">Data</text>
+ <text key="list-th-timestamp">Data</text>
  <text key="list-th-module">Modulo</text>
+ <text key="list-th-action">Azione</text>
  <text key="list-th-log">Log (Seleziona per maggiori dettagli)</text>
  <text key="list-th-account">Account</text>
+ <text key="list-tr-unvalued">Non è presente nessun evento..</text>
+
+ <!-- logs_notifications_list.inc.php -->
+ <text key="notifications_list-li-notifications">Notifiche</text>
+ <text key="notifications_list-li-send">Invia una notifica</text>
+ <text key="notifications_list-li-showAll">Visualizza tutte le notifiche</text>
+ <text key="notifications_list-li-subscribe">Gestisci le iscrizioni</text>
+
+ <!-- logs_notifications_list.php -->
+ <text key="notifications_list-th-timestamp">Data</text>
+ <text key="notifications_list-th-notification">Notifica</text>
+ <text key="notifications_list-tr-no-results">Non è presente nessuna nuova notifica..</text>
+ <text key="notifications_list-m-timestamp">Ricevuta il {0}</text>
+ <text key="notifications_list-m-archive">Archivia</text>
+
+ <!-- logs_notifications_send.php -->
+ <text key="notifications_send-ff-typology">Tipologia</text>
+ <text key="notifications_send-fo-notice">Notifica</text>
+ <text key="notifications_send-fo-action">Azione</text>
+ <text key="notifications_send-ff-recipient">Destinatario</text>
+ <text key="notifications_send-fo-user">Singolo utente</text>
+ <text key="notifications_send-fo-group">Gruppo di utenti</text>
+ <text key="notifications_send-fo-all">Tutti gli utenti</text>
+ <text key="notifications_send-ff-user">Utente</text>
+ <text key="notifications_send-ff-user-placeholder">Seleziona un destinatario</text>
+ <text key="notifications_send-ff-group">Gruppo</text>
+ <text key="notifications_send-ff-group-placeholder">Seleziona un gruppo</text>
+ <text key="notifications_send-ff-subject">Oggetto</text>
+ <text key="notifications_send-ff-subject-placeholder">Oggetto della notifica</text>
+ <text key="notifications_send-ff-message">Messaggio</text>
+ <text key="notifications_send-ff-message-placeholder">Scrivi un messaggio</text>
+ <text key="notifications_send-ff-link">Link</text>
+ <text key="notifications_send-ff-link-placeholder">Inserisci qui un eventuale link</text>
+ <text key="notifications_send-fc-submit">Invia notifica</text>
+ <text key="notifications_send-fc-cancel">Annulla</text>
+
+ <!-- logs_notifications_subscriptions.php -->
+ <text key="subscriptions-fo-none">Nessuna</text>
+ <text key="subscriptions-fo-notification">Notifica</text>
+ <text key="subscriptions-fo-mail">Notifica + Mail</text>
+ <text key="subscriptions-fc-submit">Aggiorna iscrizioni</text>
 
 </locale>

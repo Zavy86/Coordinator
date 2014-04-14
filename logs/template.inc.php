@@ -7,50 +7,33 @@ include("../core/api.inc.php");
 api_loadModule();
 // show header
 $html->header(api_text("module-title"),$module_name);
-// acquire variables
-$g_interval=$_GET['i'];
-if(!isset($g_interval)){$g_interval=7;}
-$g_typology=$_GET['t'];
-if(!isset($g_typology)){$g_typology=0;}
-$g_module=$_GET['m'];
-if(!isset($g_module)){$g_module=NULL;}
 // build navigation tab
-$nav=new str_navigation();
-// switch typology label
-switch($g_typology){
- case -1:$label=api_text("nav-warningsAndErrors");break;
- case 1:$label=api_text("nav-notices");break;
- case 2:$label=api_text("nav-warnings");break;
- case 3:$label=api_text("nav-errors");break;
- default:$label=api_text("nav-allEvents");break;
+$navigation=new str_navigation((api_baseName()=="logs_list.php"||api_baseName()=="logs_notifications_list.php")?TRUE:FALSE,"s");
+if(api_checkPermission($module_name,"logs_list")){
+ $navigation->addTab(api_text("nav-logs"),"logs_list.php");
 }
-// build typology tab
-$nav->addTab($label);
-$nav->addSubTab(api_text("nav-allEvents"),"logs_list.php?t=0","&i=".$g_interval);
-$nav->addSubTab(api_text("nav-warningsAndErrors"),"logs_list.php?t=-1","&i=".$g_interval);
-$nav->addSubTab(api_text("nav-notices"),"logs_list.php?t=1","&i=".$g_interval);
-$nav->addSubTab(api_text("nav-warnings"),"logs_list.php?t=2","&i=".$g_interval);
-$nav->addSubTab(api_text("nav-errors"),"logs_list.php?t=3","&i=".$g_interval);
-// build interval tab
-$label=api_text("nav-lastDays",$g_interval);
-$nav->addTab($label);
-$nav->addSubTab(api_text("nav-lastDays",3),"logs_list.php?i=3","&t=".$g_typology);
-$nav->addSubTab(api_text("nav-lastDays",7),"logs_list.php?i=7","&t=".$g_typology);
-$nav->addSubTab(api_text("nav-lastDays",30),"logs_list.php?i=30","&t=".$g_typology);
-$nav->addSubTab(api_text("nav-lastDays",90),"logs_list.php?i=90","&t=".$g_typology);
-$nav->addSubTab(api_text("nav-lastDays",365),"logs_list.php?i=365","&t=".$g_typology);
-// build modules tab
-if($g_module<>NULL){$label=api_text("nav-module",strtoupper($g_module));}
- else{$label=api_text("nav-allModules");}
-$nav->addTab($label);
-$nav->addSubTab(api_text("nav-allModules"),"logs_list.php","?t=".$g_typology."&i=".$g_interval);
-// get modules in the interval
-$modules=$GLOBALS['db']->query("SELECT DISTINCT module FROM logs_logs WHERE timestamp BETWEEN CURDATE()- INTERVAL ".($g_interval-1)." DAY AND NOW() ORDER BY module ASC");
-while($module=$GLOBALS['db']->fetchNextObject($modules)){
- $nav->addSubTab(strtoupper($module->module),"logs_list.php?m=".$module->module,"&t=".$g_typology."&i=".$g_interval);
+$navigation->addTab(api_text("nav-notifications"),"logs_notifications_list.php?s=1");
+$navigation->addTab(api_text("nav-archived-notifications"),"logs_notifications_list.php?s=3");
+if(api_checkPermission($module_name,"notifications_send")){
+ $navigation->addTab(api_text("nav-send-notifications"),"logs_notifications_send.php");
+}
+$navigation->addTab(api_text("nav-subscriptions"),"logs_subscriptions.php");
+// filters
+if(api_baseName()=="logs_list.php"){
+ $navigation->addFilter("multiselect","typology",api_text("filter-typologies"),array(1=>api_text("filter-notices"),2=>api_text("filter-warnings"),3=>api_text("filter-errors")));
+ $modules_array=array();
+ $modules=$GLOBALS['db']->query("SELECT DISTINCT(module) FROM logs_logs ORDER BY module ASC");
+ while($module=$GLOBALS['db']->fetchNextObject($modules)){
+  $modules_array[$module->module]=$module->module;
+ }
+ $navigation->addFilter("multiselect","module",api_text("filter-modules"),$modules_array,"input-xlarge");
+ // if not filtered load default filters
+ if($_GET['filtered']<>1){
+  $_GET['typology']=array(2,3);
+ }
 }
 // show navigation tab
-$nav->render();
+$navigation->render();
 // check permissions before displaying module
 if($checkPermission==NULL){content();}else{if(api_checkPermission($module_name,$checkPermission,TRUE)){content();}}
 // show footer

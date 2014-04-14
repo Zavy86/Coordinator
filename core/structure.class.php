@@ -209,7 +209,7 @@ class str_navigation{
    }
    if($value<>NULL){$return.=$value;}
   }
-  return $return;
+  return "&filtered=1".$return;
  }
 
  /* -[ Filters Query ]------------------------------------------------------- */
@@ -865,6 +865,21 @@ class str_form{
   return TRUE;
  }
 
+ /* -[ Add Title ]----------------------------------------------------------- */
+ // @string $title : title to show
+ // @string $class : separator css class
+ function addTitle($title,$class=NULL){
+  if($title==NULL){return FALSE;}
+  $this->current_field++;
+  $ff=new stdClass();
+  $ff->type="title";
+  $ff->title=$title;
+  $ff->class=$class;
+  $ff->options=NULL;
+  $this->ff_array[$this->current_field]=$ff;
+  return TRUE;
+ }
+
  /* -[ Add Separator ]------------------------------------------------------- */
  // @string $tag : hr, br
  // @string $class : separator css class
@@ -924,7 +939,7 @@ class str_form{
     continue;
    }
    // open group
-   if($ff->type<>"separator" && $ff->label<>NULL && $this->controlGroup){
+   if($ff->type<>"separator" && $ff->type<>"title" && $ff->label<>NULL && $this->controlGroup){
     $return.="<div id='field_".$ff->name."' class='control-group'>\n";
    }
    // show label
@@ -1032,6 +1047,10 @@ class str_form{
     // separators
     case "separator":
      $return.="<".$ff->tag." class='".$ff->class."'>\n\n";
+     break;
+    // title
+    case "title":
+     $return.="<h5 class='".$ff->class."'>".$ff->title."</h5>\n\n";
      break;
    }
    // show options

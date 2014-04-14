@@ -51,6 +51,10 @@
  <text key="ldapCreated">Il nuovo account è stato creato correttamente, ora puoi eseguire l'accesso</text>
  <text key="ldapCreatedError">Si è verificato un errore durante la creazione dell'account</text>
 
+ <!-- logs -->
+ <text key="logs-subject">Notifica {0} - {1}</text>
+ <text key="logs-message">Messaggio: {0}</text>
+
  <!-- html.class.php -->
  <text key="core-menu-dashboard">Bacheca</text>
  <text key="core-menu-admin">Altri moduli</text>

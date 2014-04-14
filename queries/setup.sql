@@ -161,41 +161,84 @@ CREATE TABLE IF NOT EXISTS `logs_logs` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `typology` tinyint(1) unsigned NOT NULL DEFAULT '1' COMMENT '1 notice, 2 warning, 3 error',
   `timestamp` datetime NOT NULL,
-  `module` varchar(25) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `log` text COLLATE utf8_unicode_ci NOT NULL,
+  `module` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `action` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `event` text COLLATE utf8_unicode_ci,
   `link` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `idAccount` int(11) unsigned NOT NULL DEFAULT '0',
+  `idAccount` int(11) unsigned DEFAULT NULL,
   `ip` varchar(15) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `new` tinyint(1) NOT NULL DEFAULT '1' COMMENT '0 false, 1 true',
   PRIMARY KEY (`id`),
-  KEY `timestamp` (`timestamp`)
+  KEY `typology` (`typology`),
+  KEY `timestamp` (`timestamp`),
+  KEY `module` (`module`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=9 ;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `logs_notifications`
+--
+
+CREATE TABLE IF NOT EXISTS `logs_notifications` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `idAccount` int(11) unsigned NOT NULL,
+  `timestamp` datetime NOT NULL,
+  `module` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `action` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `subject` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `message` text COLLATE utf8_unicode_ci,
+  `link` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `hash` varchar(32) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `status` tinyint(1) NOT NULL DEFAULT '1' COMMENT '1 received, 2 readed, 3 archived',
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `notifications_notifications`
+-- Table structure for table `logs_subscriptions`
 --
 
-CREATE TABLE IF NOT EXISTS `notifications_notifications` (
+CREATE TABLE IF NOT EXISTS `logs_subscriptions` (
+  `idAccount` int(11) unsigned NOT NULL,
+  `trigger` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `mail` tinyint(1) NOT NULL DEFAULT '0',
+  KEY `idAccount` (`idAccount`),
+  KEY `trigger` (`trigger`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `logs_triggers`
+--
+
+CREATE TABLE IF NOT EXISTS `logs_triggers` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-  `idAction` varchar(32) COLLATE utf8_unicode_ci NOT NULL,
-  `idAccountTo` int(11) unsigned NOT NULL,
-  `idAccountFrom` int(11) unsigned NOT NULL DEFAULT '1',
-  `idAccountArchived` int(11) DEFAULT NULL,
-  `typology` tinyint(1) unsigned NOT NULL COMMENT '1 notification, 2 action',
-  `module` varchar(25) COLLATE utf8_unicode_ci NOT NULL,
-  `subject` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
-  `message` text COLLATE utf8_unicode_ci NOT NULL,
-  `link` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `created` datetime NOT NULL,
-  `archived` datetime DEFAULT NULL,
-  `status` tinyint(1) NOT NULL DEFAULT '1' COMMENT '1 created, 2 archived',
+  `trigger` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `module` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `action` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `condition` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
   PRIMARY KEY (`id`),
-  KEY `idAccountTo` (`idAccountTo`),
-  KEY `typology` (`typology`),
-  KEY `status` (`status`)
+  KEY `trigger` (`trigger`),
+  KEY `module` (`module`),
+  KEY `action` (`action`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Constraints for dumped tables
+--
+
+--
+-- Constraints for table `logs_subscriptions`
+--
+
+ALTER TABLE `logs_subscriptions`
+  ADD CONSTRAINT `logs_subscriptions_ibfk_1` FOREIGN KEY (`idAccount`) REFERENCES `accounts_accounts` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `logs_subscriptions_ibfk_2` FOREIGN KEY (`trigger`) REFERENCES `logs_triggers` (`trigger`) ON DELETE CASCADE ON UPDATE CASCADE;
+
 
 -- --------------------------------------------------------
 
