@@ -1511,10 +1511,10 @@ define("API_LOG_ERROR",3);
 // @string $module : module name
 // @string $action : module action
 // @string $event : event to log
-// @integer $id : item id
+// @integer $key : item id or key
 // @string $link : link to the event item
 // @return : object with notification #subject and #message
-function api_log($typology,$module,$action,$event,$id=NULL,$link=NULL){
+function api_log($typology,$module,$action,$event,$key=NULL,$link=NULL){
  if($typology<1 || $typology>3 || $module==NULL || $action==NULL){return FALSE;}
  // definitions
  $log=new stdClass();
@@ -1522,15 +1522,15 @@ function api_log($typology,$module,$action,$event,$id=NULL,$link=NULL){
  $event=addslashes($event);
  // build log query
  $query="INSERT INTO logs_logs
-  (typology,timestamp,module,action,event,link,idAccount,ip) VALUES
-  ('".$typology."','".date("Y-m-d H:i:s")."','".$module."','".$action."','".$event."',
-   '".$link."','".$_SESSION['account']->id."','".$_SERVER['REMOTE_ADDR']."')";
+  (typology,timestamp,module,action,`key`,event,link,idAccount,ip) VALUES
+  ('".$typology."','".date("Y-m-d H:i:s")."','".$module."','".$action."','".$key."',
+   '".$event."','".$link."','".$_SESSION['account']->id."','".$_SERVER['REMOTE_ADDR']."')";
  // execute query
  $GLOBALS['db']->execute($query);
  // acquire log id
  $q_idLog=$GLOBALS['db']->lastInsertedId();
  // execute notification triggers
- $notifications=api_logNotificationTriggers($module,$action,$event,$id,$link);
+ $notifications=api_logNotificationTriggers($module,$action,$event,$key,$link);
  // build return object
  $log->id=$q_idLog;
  $log->notifications=$notifications;
