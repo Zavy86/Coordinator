@@ -52,12 +52,12 @@ if($g_submit=="cron"){
 
 
 /* -[ Check new logs ]------------------------------------------------------- */
-if(api_baseName()<>"logs_list.php"&&$_SESSION['account']->administrator){
+/*if(api_baseName()<>"logs_list.php"&&$_SESSION['account']->administrator){
  if($GLOBALS['db']->countOf("logs_logs","new='1' AND typology>'1'")>0){
   $GLOBALS['alert']->alert="newLogs";
   $GLOBALS['alert']->class="alert-info";
  }
-}
+}*/
 
 
 /* -[ Check browser ]-------------------------------------------------------- */
@@ -72,11 +72,12 @@ if((strpos($_SERVER['HTTP_USER_AGENT'],'Chrome')==false)
 
 /* -[ Load Locale Files ]---------------------------------------------------- */
 // @param $path : Path of locale if not default
-function api_loadLocaleFile($path=NULL){
- if($path==NULL){$path=".";}
- if($_SESSION['language']<>NULL && file_exists($path."/languages/".$_SESSION['language'].".xml")){
+function api_loadLocaleFile($path=NULL,$language=NULL){
+ if($path===NULL){$path=".";}
+ if($language===NULL){$language=$_SESSION['language'];}
+ if($language<>NULL && file_exists($path."/languages/".$language.".xml")){
   // load choised locale file
-  $xml=simplexml_load_file($path."/languages/".$_SESSION['language'].".xml");
+  $xml=simplexml_load_file($path."/languages/".$language.".xml");
  }elseif(file_exists($path."/languages/default.xml")){
   // load deafult locale file
   $xml=simplexml_load_file($path."/languages/default.xml");
@@ -204,26 +205,6 @@ function api_getOption($code){
 /* -[ Get user hostname ]---------------------------------------------------- */
 function api_hostName(){
  return strtoupper(gethostbyaddr($_SERVER['REMOTE_ADDR']));
-}
-
-
-/* -[ LOG ]------------------------------------------------------------------ */
-function api_log($typology,$module,$log,$link=NULL){
- if(($typology>0 && $typology<4) && strlen($module)>0 && strlen($log)>0){
-  $query="INSERT INTO logs_logs (typology,timestamp,module,log,link,idAccount,ip)
-   VALUES ('".$typology."','".date("Y-m-d H:i:s")."','".$module."','".$log."','".$link."','".$_SESSION['account']->id."','".$_SERVER['REMOTE_ADDR']."')";
-  $GLOBALS['db']->execute($query);
-  if($typology==3){
-   $notification_subject="Si è verificato un errore nel modulo ".$module;
-   $notification_message="Il registro degli eventi ha segnalato un errore grave.\n";
-   $notification_message.="Si consiglia di verificare urgentemente.\n";
-   $notification_link="logs/logs_list.php?i=7&t=-1";
-   api_notification_administrators(2,"logs",$notification_subject,$notification_message,$notification_link,0);
-  }
-  return TRUE;
- }else{
-  return FALSE;
- }
 }
 
 
@@ -483,7 +464,7 @@ function api_sendmail($to_mail,$message,$subject="",$html=FALSE,$from_mail="",$f
   $message=$mail_message;
  }
  // sendmail
- if($to_mail<>""){mail($to_mail,$subject,$message,$headers);}
+ if($to_mail<>""){return mail($to_mail,$subject,$message,$headers);}
 }
 
 
@@ -641,6 +622,20 @@ function api_accountCompany($account_id=NULL){
   return $company;
  }else{
   return FALSE;
+ }
+}
+
+
+/* -[ Profile language by account id ]--------------------------------------- */
+// @param $account_id : ID of the account
+function api_accountLanguage($account_id=NULL){
+ if($account_id===0){return NULL;}
+ if($account_id==NULL){$account_id=$_SESSION['account']->id;}
+ $language=$GLOBALS['db']->queryUniqueValue("SELECT language FROM accounts_accounts WHERE id='".$account_id."'");
+ if($language<>NULL){
+  return $language;
+ }else{
+  return "default";
  }
 }
 
@@ -1486,6 +1481,163 @@ function api_link($url,$label,$title=NULL,$class=NULL,$popup=FALSE,$style=NULL){
  $return.=">".$label."</a>\n";
  return $return;
 }
+
+
+
+
+
+
+
+
+// @string $string : string in format {text_key|parameter1|parameter2|...|$parameterN}
+function api_textParse($string){
+ if(substr($string,0,1)<>"{"){return $string;}
+ // definitions
+ $text=new stdClass();
+ // split string into key and parameters
+ $explode=explode("|",substr($string,1,-1));
+ // set text key
+ $text->key=$explode[0];
+ // remove text key from array
+ unset($explode[0]);
+ // set parameters arrat
+ $text->parameters=$explode;
+ // return text object
+ return $text;
+}
+
+
+
+
+/* -[ LOG ]------------------------------------------------------------------ */
+// Log an event
+// &define typologies
+define("API_LOG_NOTICE",1);
+define("API_LOG_WARNING",2);
+define("API_LOG_ERROR",3);
+// @integer $typology : notification typology (use defined constant)
+// @string $module : module name
+// @string $action : module action
+// @string $event : event to log
+// @integer $id : item id
+// @string $link : link to the event item
+// @return : object with notification #subject and #message
+function api_log($typology,$module,$action,$event,$id=NULL,$link=NULL){
+ if($typology<1 || $typology>3 || $module==NULL || $action==NULL){return FALSE;}
+ // definitions
+ $log=new stdClass();
+ // clean variables
+ $event=addslashes($event);
+ // build log query
+ $query="INSERT INTO logs_logs
+  (typology,timestamp,module,action,event,link,idAccount,ip) VALUES
+  ('".$typology."','".date("Y-m-d H:i:s")."','".$module."','".$action."','".$event."',
+   '".$link."','".$_SESSION['account']->id."','".$_SERVER['REMOTE_ADDR']."')";
+ // execute query
+ $GLOBALS['db']->execute($query);
+ // acquire log id
+ $q_idLog=$GLOBALS['db']->lastInsertedId();
+ // execute notification triggers
+ $notifications=api_logNotificationTriggers($module,$action,$event,$id,$link);
+ // build return object
+ $log->id=$q_idLog;
+ $log->notifications=$notifications;
+ return $log;
+}
+
+
+/* -[ Log Notification Triggers ]-------------------------------------------- */
+// @string $module : module name
+// @string $action : module action
+// @string $log : event to notificate
+// @integer $id : item id
+// @string $link : link to the event item
+function api_logNotificationTriggers($module,$action,$event,$id,$link){
+ if($module==NULL || $action==NULL){return FALSE;}
+ // definitions
+ $notifications_array=array();
+ // retrieve trigger by module actions
+ $triggers=$GLOBALS['db']->query("SELECT * FROM logs_triggers WHERE module='".$module."' AND action='".$action."'");
+ while($trigger=$GLOBALS['db']->fetchNextObject($triggers)){
+  // retrieve subscriptions by trigger
+  $subscriptions=$GLOBALS['db']->query("SELECT * FROM logs_subscriptions WHERE `trigger`='".$trigger->trigger."'");
+  while($subscription=$GLOBALS['db']->fetchNextObject($subscriptions)){
+   // definitions
+   $notification=new stdClass();
+   $notification->idAccount=$subscription->idAccount;
+   $notification->trigger=$subscription->trigger;
+   $notification->link=$link;
+   $notification->sent=FALSE;
+   $notification->mail=FALSE;
+   // check condition
+   if($trigger->condition){
+    $send=FALSE;
+    // include logs conditions
+    require_once("../".$module."/logs.inc.php");
+    // call condition function
+    if(call_user_func_array($trigger->condition,array($subscription->idAccount,$id))){$send=TRUE;}
+   }else{
+    $send=TRUE;
+   }
+   // send notification
+   if($send){
+    // samples
+    // event: {logs_workflows_ticketCreated|00024-00028|parametro2}
+    // trigger->name: logs-ticketDisponible
+    // load recipient language file
+    api_loadLocaleFile("../".$module."/",api_accountLanguage($subscription->idAccount));
+    $notification->subject=api_text($trigger->trigger."-subject",api_textParse($event)->parameters);
+    $notification->message=api_text($trigger->trigger."-message",api_textParse($event)->parameters);
+    // send and acquire notification hash
+    $notification->hash=api_notification($subscription->idAccount,$module,$action,$notification->subject,$notification->message,$notification->link);
+    // send mail
+    if($subscription->mail){
+     $notification->mail=TRUE;
+     if(substr($link,0,4)<>"http"){$mail_link="http://".$_SERVER['SERVER_NAME'].$GLOBALS['dir'].$link;}
+     else{$mail_link=$link;}
+     $mail_message=$notification->message."<br>\n"."Link: <a href='".$mail_link."'>".$mail_link."</a>";
+     $notification->mail_sent=api_sendmail(api_accountMail($subscription->idAccount),$mail_message,$notification->subject,TRUE);
+    }
+    // build notifications array
+    $notifications_array[]=$notification;
+    // reload user language file
+    api_loadLocaleFile("../".$module."/",api_accountLanguage());
+   }
+  }
+ }
+ // return notifications array
+ return $notifications_array;
+}
+
+
+/* -[ Send notification ]---------------------------------------------------- */
+// #integer $idAccount : account id of notification recipient
+// @string $module : module name
+// @string $action : module action
+// @string $subject : log subject
+// @string $message : log message
+// @string $link : log link
+// @string $hash : md5 log hash
+function api_notification($idAccount,$module,$action,$subject,$message,$link=NULL,$hash=NULL){
+ if($idAccount<2 || $module==NULL || $subject==NULL || $message==NULL){return FALSE;}
+ if($hash===NULL){$hash=md5(date('YdmHsi').api_randomString());}
+ $query="INSERT INTO logs_notifications
+  (hash,idAccount,timestamp,module,action,subject,message,link,status) VALUES
+  ('".$hash."','".$idAccount."','".date("Y-m-d H:i:s")."','".$module."','".$action."',
+   '".addslashes($subject)."','".addslashes($message)."','".$link."','1')";
+ $GLOBALS['db']->execute($query);
+ if($GLOBALS['db']->lastInsertedId()>0){return $hash;}
+ else{return FALSE;}
+}
+
+
+
+
+
+
+
+
+
 
 
 

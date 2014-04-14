@@ -26,7 +26,7 @@ function content(){
  // sorting
  $query_order=api_queryOrder("timestamp DESC");
  // build table
- $table=new str_table(api_text("groups_list-tr-unvalued"),TRUE,"&i=".$g_interval."&t=".$g_typology."&m=".$g_module);
+ $table=new str_table(api_text("list-tr-unvalued"),TRUE,"&i=".$g_interval."&t=".$g_typology."&m=".$g_module);
  $table->addHeader("&nbsp;",NULL,"16");
  $table->addHeader(api_text("list-th-date"),"nowarp",NULL,"timestamp");
  $table->addHeader(api_text("list-th-module"),"nowarp",NULL,"module");
@@ -49,8 +49,8 @@ function content(){
    case 3:if($g_typology<1){$tr_class="error";}$td_icon="icon-remove-sign";break;
   }
   // make subject
-  if(($strpos=strpos($log->log,"\n"))==0){$strpos=50;}
-  $log_subject=str_ireplace("<br>"," ",substr($log->log,0,$strpos));
+  if(($strpos=strpos($log->event,"\n"))==0){$strpos=50;}
+  $log_subject=str_ireplace("<br>"," ",substr($log->event,0,$strpos));
   if($log->new){$log_subject="<span class='unread'>".$log_subject."</span>";}
   // build modal window
   $modal=new str_modal($log->id);
@@ -60,7 +60,7 @@ function content(){
   if($log->idAccount>0){$m_body.="<dt>Account:</dt><dd>".api_accountName($log->idAccount)."</dd><br>\n";}
   $m_body.="<dt>Indirizzo IP</dt><dd>".$log->ip."</dd><br>\n"; // gethostbyaddr
   if(strlen($log->link)>0){$m_body.="<dt>Link:</dt><dd><a href='".$GLOBALS['dir'].$log->link."' target='_blank'>".$log->link."</a></dd><br>\n";}
-  $m_body.="<dt>Log</dt><dd>".nl2br($log->log)."</dd>\n";
+  $m_body.="<dt>Log</dt><dd>".nl2br($log->event)."</dd>\n";
   $m_body.="</dl>";
   $modal->body($m_body);
   $modals_array[]=$modal;

@@ -7,71 +7,69 @@ header("Refresh:300;url=".$_SERVER["PHP_SELF"]);
 include("template.inc.php");
 function content(){
  // acquire variables
- $status=$_GET['s'];
- if(!$status){$status=1;}
+ $g_status=$_GET['s'];
+ if(!$g_status){$g_status=1;}
+ $g_search=$_GET['q'];
  // definitions
  $modals_array=array();
  // build table
- $table=new str_table(api_text("list-tr-no-results"),TRUE,"&s=".$status);
+ $table=new str_table(api_text("list-tr-no-results"),TRUE,"&s=".$g_status);
  $table->addHeader("&nbsp;",NULL,"16",NULL);
- $table->addHeader(api_text("list-th-reception-date"),"nowarp",NULL,"created");
- if($status==2){$table->addHeader(api_text("list-th-archived-date"),"nowarp",NULL,"archived");}
+ $table->addHeader(api_text("list-th-timestamp"),"nowarp",NULL,"timestamp");
  $table->addHeader(api_text("list-th-notification"),NULL,"100%","subject");
  // build query
- $query_where="status='".$status."' AND idAccountTo='".$_SESSION['account']->id."'";
+ $query_where="status='".$g_status."' AND idAccount='".$_SESSION['account']->id."'";
+ // build search query
+ if(strlen($g_search)>0){
+  $query_where.=" AND (";
+  $query_where.=" module LIKE '%".$g_search."%'";
+  $query_where.=" OR action LIKE '%".$g_search."%'";
+  $query_where.=" OR subject LIKE '%".$g_search."%'";
+  $query_where.=" OR message LIKE '%".$g_search."%'";
+  if(strlen($g_search)==10){$query_where.=" OR timestamp LIKE '".$g_search."%'";}
+  $query_where.=" )";
+ }
  // pagination
- $pagination=new str_pagination("notifications_notifications",$query_where,"&s=".$status);
+ $pagination=new str_pagination("logs_notifications",$query_where,"&s=".$g_status);
  $query_limit=$pagination->queryLimit();
  // query order
- if($status==2){$query_order=api_queryOrder("archived DESC");}else{$query_order=api_queryOrder("created ASC");}
+ $query_order=api_queryOrder("timestamp ASC");
  // query
- $notifications=$GLOBALS['db']->query("SELECT * FROM notifications_notifications WHERE ".$query_where.$query_order.$query_limit);
+ $notifications=$GLOBALS['db']->query("SELECT * FROM logs_notifications WHERE ".$query_where.$query_order.$query_limit);
  while($notification=$GLOBALS['db']->fetchNextObject($notifications)){
   // build modal
   $modal=new str_modal($notification->id);
   // modal header
   $modal->header(stripslashes($notification->subject));
   // modal body
-  $m_body="<p>Inviata da ".$account." il ".api_timestampFormat($notification->created,api_text("datetime"))."</p>\n";
-  $m_body.="<p>".nl2br(stripslashes($notification->message))."</p>\n";
+  $m_body="<p>".api_text("list-m-timestamp",api_timestampFormat($notification->timestamp,api_text("datetime")))."</p>\n";
+  $m_body.="<hr>\n<p>".nl2br(stripslashes($notification->message))."</p>\n";
   if($notification->link<>NULL){
    if(substr($notification->link,0,7)<>"http://"){
     $url="http://".$_SERVER['SERVER_NAME'].$GLOBALS['dir'].$notification->link;
    }else{
     $url=$notification->link;
    }
-   $m_body.="<p><a href='".$url."' target='_blank'>".$url."</a></p>\n";
+   $m_body.="<hr>\n<p><a href='".$url."' target='_blank'>".$url."</a></p>\n";
   }
-  if($status==2){$m_body.="<p>Archiviata da ".api_accountName($notification->idAccountArchived)." il ".api_timestampFormat($notification->archived,api_text("datetime"))."</p>";}
   $modal->body($m_body);
   // build modal footer
-  $confirm=NULL;
-  if($notification->status==1){
+  $confirm=NULL;if($notification->status==1){
    $action="notification_archive";
-   if($notification->typology==2){
-    $confirm="onClick=\"return confirm('".api_text("list-m-confirm")."')\"";
-    //Archiviando questa notifica segnalerai di aver eseguito l\'azione richiesta. Confermi di aver eseguito l\'azione?
-    $button=api_text("list-m-archiveAsDone");
-   }else{
-    $button=api_text("list-m-archive");
-   }
+   $button=api_text("list-m-archive");
   }elseif($notification->status==2){
    $action="notification_restore";
    $button="Ripristina";
   }
-  $m_footer="<a class='btn' href='submit.php?act=".$action."&id=".$notification->idAction."'".$confirm.">".$button."</a>";
+  $m_footer="<a class='btn' href='submit.php?act=".$action."&id=".$notification->id."'".$confirm.">".$button."</a>";
   $modal->footer($m_footer);
   $modals_array[]=$modal;
   // build table row
   $table->addRow();
   // build table fields
-  switch($notification->typology){
-   case 1:$table->addField(api_icon("icon-info-sign"),NULL);break;
-   case 2:$table->addField(api_icon("icon-ok-sign"),NULL);break;
-  }
-  $table->addField(api_timestampFormat($notification->created,api_text("datetime")),"nowarp");
-  if($status==2){$table->addField(api_timestampFormat($notification->archived,api_text("datetime")),"nowarp");}
-  $table->addField($modal->link(stripslashes($notification->subject)),"nowarp");
+  $table->addField($modal->link(api_icon("icon-search")));
+  $table->addField(api_timestampFormat($notification->timestamp,api_text("datetime")),"nowarp");
+  $table->addField(stripslashes($notification->subject),"nowarp");
  }
  // show table
  $table->render();

@@ -13,6 +13,7 @@
  <text key="nav-notifications">Notifications</text>
  <text key="nav-archived-notifications">Notifications Archive</text>
  <text key="nav-send-notifications">Send a notification</text>
+ <text key="nav-subscriptions">Subscriptions</text>
 
  <!-- widget.inc.php -->
  <text key="widget-title">Notifications</text>
@@ -21,15 +22,14 @@
  <text key="list-li-notifications">Notifications</text>
  <text key="list-li-send">Send a notification</text>
  <text key="list-li-showAll">Show all notifications</text>
+ <text key="list-li-subscribe">Manage subscriptions</text>
 
  <!-- notifications_list.php -->
- <text key="list-th-reception-date">Reception date</text>
- <text key="list-th-archived-date">Archived date</text>
+ <text key="list-th-timestamp">Reception date</text>
  <text key="list-th-notification">Notification</text>
  <text key="list-tr-no-results">There are no new notifications..</text>
- <text key="list-m-confirm">Confirm that you have done this action?</text>
+ <text key="list-m-timestamp">Ricevuta il {0}</text>
  <text key="list-m-archive">Archive</text>
- <text key="list-m-archiveAsDone">Archive as done</text>
 
  <!-- notifications_send.php -->
  <text key="send-ff-typology">Typology</text>
@@ -51,6 +51,12 @@
  <text key="send-ff-link-placeholder">If necessary enter here the link</text>
  <text key="send-fc-submit">Send notification</text>
  <text key="send-fc-cancel">Cancel</text>
+
+ <!-- notifications_subscriptions.php -->
+ <text key="subscriptions-fo-none">None</text>
+ <text key="subscriptions-fo-notification">Notification</text>
+ <text key="subscriptions-fo-mail">Notification + Mail</text>
+ <text key="subscriptions-fc-submit">Update subscriptions</text>
 
 
 </locale>

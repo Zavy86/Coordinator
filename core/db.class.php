@@ -34,6 +34,7 @@ class DB{
  // @param $debug : If true, it output the query and the resulting table.
  // @return : The result of the query, to use with fetchNextObject().
  function query($query,$debug=-1){
+  if($query==NULL){return FALSE;}
   $query=$this->clearQuery($query);
   $this->nbQueries++;
   $this->lastResult=mysql_query($query,$this->connector) or $this->debugAndDie($query);
@@ -45,6 +46,7 @@ class DB{
  // @param $query : The query.
  // @param $debug : If true, it output the query and the resulting table.
  function execute($query,$debug=-1){
+  if($query==NULL){return FALSE;}
   $query=$this->clearQuery($query);
   $this->nbQueries++;
   mysql_query($query,$this->connector) or $this->debugAndDie($query);

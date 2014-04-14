@@ -20,5 +20,6 @@
  <text key="list-th-module">Modulo</text>
  <text key="list-th-log">Log (Seleziona per maggiori dettagli)</text>
  <text key="list-th-account">Account</text>
+ <text key="list-tr-unvalued">Non è presente nessun evento..</text>
 
 </locale>
