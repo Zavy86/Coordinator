@@ -165,6 +165,8 @@ function module_uninstall(){
   // include module informations
   include($module_path."module.inc.php");
   if($module_create_menu){
+   // delete module from logs triggers
+   $GLOBALS['db']->execute("DELETE FROM logs_triggers WHERE module='".$module_name."'");
    // delete module from menus
    $GLOBALS['db']->execute("DELETE FROM settings_menus WHERE module='".$module_name."'");
   }
