@@ -38,7 +38,7 @@ function content(){
    }
   }
   $form->addField("select","idCompany",api_text("accounts_edit-ff-company"),NULL,"input-large");
-  $form->addFieldOption(0,api_text("accounts_edit-fo-CompanyNotAssigned"));
+  $form->addFieldOption('',api_text("accounts_edit-fo-CompanyNotAssigned"));
   $companies=$GLOBALS['db']->query("SELECT * FROM accounts_companies ORDER BY company ASC,division ASC");
   while($company=$GLOBALS['db']->fetchNextObject($companies)){
    $form->addFieldOption($company->id,$company->company." - ".$company->division,($company->id==$account->idCompany)?TRUE:FALSE);

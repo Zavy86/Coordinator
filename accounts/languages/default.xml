@@ -24,6 +24,27 @@
  <text key="companyUpdated">Company {0} has been updated</text>
  <text key="companyDeleted">Company {0} has been deleted</text>
 
+ <!-- alerts -->
+ <text key="logs_accounts_loginSuccess">User {0} has logged</text>
+ <text key="logs_accounts_loginFailed">User {0} has supplied wrong credentials for access</text>
+ <text key="logs_accounts_loginError">User {0} has supplied wrong credentials for access</text>
+ <text key="logs_accounts_loginDisabled">User access {0} has been blocked</text>
+ <text key="logs_accounts_accountCreated">The account {0} has been created</text>
+ <text key="logs_accounts_accountUpdated">The account {0} has been updated</text>
+ <text key="logs_accounts_accountCustomized">User {0} has customized his profile</text>
+ <text key="logs_accounts_accountGrouproleAdded">The account {0} has been added to the group {1}</text>
+ <text key="logs_accounts_accountGrouproleRemoved">The account {0} has been removed to the group {1}</text>
+ <text key="logs_accounts_accountSwitchToAdmin">The account {0} became administrator</text>
+ <text key="logs_accounts_accountSwitchToUser">The account {0} became user {1}/text>
+ <text key="logs_accounts_accountPasswordRetrieve">The account {0} has requested the reset of their password</text>
+ <text key="logs_accounts_accountPasswordResetted">The account password for {0} has been reset</text>
+ <text key="logs_accounts_groupCreated">The group {0} has been created&#xA;{1}</text>
+ <text key="logs_accounts_groupUpdated">The group {0} has been updated&#xA;{1}</text>
+ <text key="logs_accounts_groupDeleted">The group {0} has been deleted&#xA;{1}</text>
+ <text key="logs_accounts_companyCreated">The company {0} - {1} {2} has been created</text>
+ <text key="logs_accounts_companyUpdated">The company {0} - {1} {2} has been updated</text>
+ <text key="logs_accounts_accountCreatedLDAP">The account {0} has been created by LDAP&#xA;{1}&#xA;{2}</text>
+
  <!-- template.inc.php -->
  <text key="nav-profile">Profile</text>
  <text key="nav-accounts">Accounts</text>
