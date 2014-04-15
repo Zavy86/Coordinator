@@ -24,6 +24,27 @@
  <text key="companyUpdated">La società {0} è stata aggiornata</text>
  <text key="companyDeleted">La società {0} è stata eliminata</text>
 
+ <!-- alerts -->
+ <text key="logs_accounts_loginSuccess">L'utente {0} ha eseguito l'accesso</text>
+ <text key="logs_accounts_loginFailed">L'utente {0} ha fornito le credenziali errate per l'accesso</text>
+ <text key="logs_accounts_loginError">L'utente {0} ha fornito le credenziali errate per l'accesso</text>
+ <text key="logs_accounts_loginDisabled">L'accesso dell'utente {0} è stato bloccato</text>
+ <text key="logs_accounts_accountCreated">L'account {0} è stato creato</text>
+ <text key="logs_accounts_accountUpdated">L'account {0} è stato aggiornato</text>
+ <text key="logs_accounts_accountCustomized">L'utente {0} ha personalizzato il proprio profilo</text>
+ <text key="logs_accounts_accountGrouproleAdded">L'account {0} è stato aggiunto al gruppo {1}</text>
+ <text key="logs_accounts_accountGrouproleRemoved">L'account {0} è stato rimosso al gruppo {1}</text>
+ <text key="logs_accounts_accountSwitchToAdmin">L'account {0} si è trasformato in amministratore</text>
+ <text key="logs_accounts_accountSwitchToUser">L'account {0} si è trasformato in utente</text>
+ <text key="logs_accounts_accountPasswordRetrieve">L'account {0} ha richiesto il reset della propria password</text>
+ <text key="logs_accounts_accountPasswordResetted">La password dell'account {0} è stata resettata</text>
+ <text key="logs_accounts_groupCreated">Il gruppo {0} è stato creato&#xA;{1}</text>
+ <text key="logs_accounts_groupUpdated">Il gruppo {0} è stato aggiornato&#xA;{1}</text>
+ <text key="logs_accounts_groupDeleted">Il gruppo {0} è stato eliminato&#xA;{1}</text>
+ <text key="logs_accounts_companyCreated">La società {0}-{1} {2} è stata creata</text>
+ <text key="logs_accounts_companyUpdated">La società {0}-{1} {2} è stata aggiornata</text>
+ <text key="logs_accounts_accountCreatedLDAP">L'account {0} è stato creato tramite LDAP&#xA;{1}&#xA;{2}</text>
+
  <!-- template.inc.php -->
  <text key="nav-profile">Profilo personale</text>
  <text key="nav-accounts">Utenti</text>
