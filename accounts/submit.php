@@ -55,9 +55,11 @@ function account_login(){
     // account exist
     if($account->typology==0){
      // account disabled
-     api_log(2,"accounts","LOGIN FAILED - ACCOUNT DISABLED\nThe account ".$p_account." is disabled");
+     // log and notifications
+     api_log(API_LOG_ERROR,"accounts","loginDisabled",
+      "{logs_accounts_loginDisabled|".$p_account."}");
      $alert="?alert=loginDisabled&alert_class=alert-warning";
-     header("location: login.php".$alert);
+     exit(header("location: login.php".$alert));
     }else{
      // check maintenance
      if($account->typology<>1 && api_getOption("maintenance")){
@@ -72,9 +74,12 @@ function account_login(){
      $_SESSION['language']=$account->language;
      if($account->typology==1){$_SESSION['account']->typology=2;$_SESSION['account']->administrator=TRUE;}
      // update lastLogin
-     $GLOBALS['db']->execute("UPDATE accounts_accounts SET lastLogin='".date('Y-m-d H:i:s')."' WHERE id='".$account->id."'");
+     $GLOBALS['db']->execute("UPDATE accounts_accounts SET password='".md5($p_password)."',lastLogin='".date('Y-m-d H:i:s')."' WHERE id='".$account->id."'");
+     // log and notifications
+     api_log(API_LOG_NOTICE,"accounts","loginSuccess",
+      "{logs_accounts_loginSuccess|".$p_account."}");
      // redirect
-     header("location: ../index.php");
+     exit(header("location: ../index.php"));
     }
    }else{
     // account does not exist
@@ -82,9 +87,12 @@ function account_login(){
    }
   }else{
    // ldap authentication failed
-   api_log(1,"accounts","LOGIN FAILED - WRONG PASSWORD\nWrong password inserted for account: ".$p_account);
+   // log and notifications
+   api_log(API_LOG_NOTICE,"accounts","loginFailed",
+    "{logs_accounts_loginFailed|".$p_account."}");
+   // redirect
    $alert="?alert=loginFailed&alert_class=alert-error";
-   header("location: login.php".$alert);
+   exit(header("location: login.php".$alert));
   }
  }else{
  // [ LDAP END ]----------------------------------------------------------------
@@ -105,24 +113,33 @@ function account_login(){
   if($account->typology==1){$_SESSION['account']->typology=2;$_SESSION['account']->administrator=TRUE;}
   // update lastLogin
   $GLOBALS['db']->execute("UPDATE accounts_accounts SET lastLogin='".date('Y-m-d H:i:s')."' WHERE id='".$account->id."'");
+  // log and notifications
+  api_log(API_LOG_NOTICE,"accounts","loginSuccess",
+   "{logs_accounts_loginSuccess|".$p_account."}");
   // redirect
-  header("location: ../index.php");
+  exit(header("location: ../index.php"));
  }else{
   // login failed
   $account=$GLOBALS['db']->queryUniqueObject("SELECT * FROM accounts_accounts WHERE account='".$p_account."'");
   if($account->id){
    if($account->typology==0){
-    api_log(3,"accounts","LOGIN FAILED - ACCOUNT DISABLED\nThe account ".$p_account." is disabled");
+    // log and notifications
+    api_log(API_LOG_ERROR,"accounts","loginDisabled",
+     "{logs_accounts_loginDisabled|".$p_account."}");
     $alert="?alert=loginDisabled&alert_class=alert-warning";
    }else{
-    api_log(2,"accounts","LOGIN FAILED - WRONG PASSWORD\nWrong password inserted for account: ".$p_account);
+    // log and notifications
+    api_log(API_LOG_WARNING,"accounts","loginFailed",
+     "{logs_accounts_loginFailed|".$p_account."}");
     $alert="?alert=loginFailed&alert_class=alert-error";
    }
   }else{
-   api_log(3,"accounts","LOGIN FAILED - ACCOUNT DOES NOT EXIST\nThe account ".$p_account." does not exist");
-   $alert="?alert=loginFailed&alert_class=alert-error";
+   // log and notifications
+   api_log(API_LOG_ERROR,"accounts","loginError",
+    "{logs_accounts_loginError|".$p_account."}");
+   $alert="?alert=loginError&alert_class=alert-error";
   }
-  header("location: login.php".$alert);
+  exit(header("location: login.php".$alert));
  }
  }
 }
@@ -156,6 +173,9 @@ function account_save(){
    WHERE id='".$g_id."'";
   // execute query
   $GLOBALS['db']->execute($query);
+  // log and notifications
+  api_log(API_LOG_NOTICE,"accounts","accountUpdated",
+   "{logs_accounts_accountUpdated|".$p_account."}");
   // Grouprole
   // acquire variables
   $p_idGroup=$_POST['idGroup'];
@@ -172,11 +192,11 @@ function account_save(){
    // execute query
    $GLOBALS['db']->execute($query);
    // redirect
-   header("location: accounts_edit.php?id=".$g_id);
+   exit(header("location: accounts_edit.php?id=".$g_id));
   }else{
    // redirect
    $alert="?alert=accountUpdated&alert_class=alert-success&alert_parameters=".$p_name;
-   header("location: accounts_list.php".$alert);
+   exit(header("location: accounts_list.php".$alert));
   }
  }else{
   if(!api_checkPermission("accounts","accounts_add")){api_die("accessDenied");}
@@ -186,9 +206,14 @@ function account_save(){
    ('".$p_account."','".md5(api_randomString(10))."','".$secret."','".$p_name."','".$p_typology."','".$p_idCompany."')";
   // execute query
   $GLOBALS['db']->execute($query);
-  $alert="&alert=accountCreated&alert_class=alert-success&alert_parameters=".$p_name;
   // set id to last inserted id
   $g_id=$GLOBALS['db']->lastInsertedId();
+  // log and notifications
+  api_log(API_LOG_NOTICE,"accounts","accountCreated",
+   "{logs_accounts_accountCreated|".$p_account."}");
+
+  // <<<<<<<<<<<------------ RIFARE MULTILINGUA
+
   // sendmail
   $message="Benvenuto/a ".$p_name.",\n";
   $message.=" è stato attivato un account su Coordinator a tuo nome.\n\n";
@@ -197,7 +222,10 @@ function account_save(){
   $message.="accounts/password_reset.php?account=".$p_account."&key=".$secret."\n\n";
   $message.="Ricorda che questo codice è utilizzabile solamente per il tuo primo accesso.";
   if($g_id>0){api_sendmail($p_account,$message,"Attivazione account Coordinator personale");}
-  header("location: accounts_edit.php?id=".$g_id.$alert);
+
+  // redirect
+  $alert="&alert=accountCreated&alert_class=alert-success&alert_parameters=".$p_name;
+  exit(header("location: accounts_edit.php?id=".$g_id.$alert));
  }
 }
 
@@ -239,8 +267,11 @@ function account_customize(){
    }
   }
  }
+ // log and notifications
+ api_log(API_LOG_NOTICE,"accounts","accountCustomized",
+  "{logs_accounts_accountCustomized|".api_accountName()."}");
  // redirect
- header("location: index.php".$alert);
+ exit(header("location: index.php".$alert));
 }
 
 /* -[ Account Grouprole Add ]------------------------------------------------ */
@@ -260,10 +291,13 @@ function account_grouprole_add(){
    ('".$p_idGroup."','".$g_id."','".$p_idGrouprole."')";
   // execute query
   $GLOBALS['db']->execute($query);
+  // log and notifications
+  api_log(API_LOG_NOTICE,"accounts","accountGrouproleAdded",
+   "{logs_accounts_accountGrouproleAdded|".api_accountName($g_id)."|".api_groupName($p_idGroup)."|".api_groupName($p_idGrouprole)."}");
   // alert
   $alert="&alert=accountUpdated&alert_class=alert-success&alert_parameters=".$account->name;
  }
- header("location: accounts_edit.php?id=".$g_id.$alert);
+ exit(header("location: accounts_edit.php?id=".$g_id.$alert));
 }
 
 /* -[ Account Grouprole Make Main ]------------------------------------------ */
@@ -281,6 +315,9 @@ function account_grouprole_main(){
   $GLOBALS['db']->execute("UPDATE accounts_groups_join_accounts SET main='0' WHERE idAccount='".$account->id."'");
   // make grouprole main
   $GLOBALS['db']->execute("UPDATE accounts_groups_join_accounts SET main='1' WHERE idAccount='".$account->id."' AND idGroup='".$g_idGroup."'");
+  // log and notifications
+  api_log(API_LOG_NOTICE,"accounts","accountGrouproleMain",
+   "{logs_accounts_accountGrouproleMain|".api_accountName($g_idAccount)."|".api_groupName($g_idGroup)."}");
   // alert
   $alert="&alert=accountUpdated&alert_class=alert-success&alert_parameters=".$account->name;
  }
@@ -298,6 +335,9 @@ function account_grouprole_delete(){
  if($g_idAccount>0 && $g_idGroup>0){
   // delete grouprole account
   $GLOBALS['db']->execute("DELETE FROM accounts_groups_join_accounts WHERE idAccount='".$g_idAccount."' AND idGroup='".$g_idGroup."'");
+  // log and notifications
+  api_log(API_LOG_NOTICE,"accounts","accountGrouproleRemoved",
+   "{logs_accounts_accountGrouproleRemoved|".api_accountName($g_idAccount)."|".api_groupName($g_idGroup)."}");
  }
  // redirect
  if($g_from=="members"){header("location: groups_members.php?idGroup=".$g_idGroup);}
@@ -312,24 +352,35 @@ function account_delete(){
  $account=$GLOBALS['db']->queryUniqueObject("SELECT * FROM accounts_accounts WHERE id='".$g_id."'");
  if($account->id>0){
   die("Function disabled for security reason");
+  /*
   // delete account
-  //$GLOBALS['db']->execute("DELETE FROM accounts_accounts WHERE id='".$account->id."'");
+  $GLOBALS['db']->execute("DELETE FROM accounts_accounts WHERE id='".$account->id."'");
   // delete groups
-  //$GLOBALS['db']->execute("DELETE FROM accounts_groups_join_accounts WHERE idAccount='".$account->id."'");
+  $GLOBALS['db']->execute("DELETE FROM accounts_groups_join_accounts WHERE idAccount='".$account->id."'");
+  // log and notifications
+  api_log(API_LOG_NOTICE,"accounts","accountGrouproleRemoved",
+   "{logs_accounts_accountGrouproleRemoved|".api_accountName($g_idAccount)."|".api_groupName($g_idGroup)."}");
+  */
  }
  // redirect
  $alert="?alert=accountDeleted&alert_class=alert&alert_parameters=".$account->name;
- header("location: accounts_list.php".$alert);
+ exit(header("location: accounts_list.php".$alert));
 }
 
 /* -[ Account administrators can switch to different typology ]-------------- */
 function account_switch($typology){
+ // check if user is administrator
  if($_SESSION['account']->administrator){
   $_SESSION['account']->typology=$typology;
+  if($typology==1){$to="Admin";}elseif($typology==2){$to="User";}
+  // log and notifications
+  api_log(API_LOG_NOTICE,"accounts","accountSwitchTo".$to,
+   "{logs_accounts_accountSwitchTo".$to."|".api_accountName()."}");
+  // alert
+  $alert="?alert=accountSwitched".$typology."&alert_class=alert-success";
  }
  // redirect
- $alert="?alert=accountSwitched".$typology."&alert_class=alert-success";
- header("location: index.php".$alert);
+ exit(header("location: index.php".$alert));
 }
 
 /* -[ Account debug toggle ]------------------------------------------------- */
@@ -338,7 +389,7 @@ function account_debug($enable){
  $_SESSION['account']->debug=$enable;
  // redirect
  $alert="?alert=accountDebug".$enable."&alert_class=alert-success";
- header("location: index.php".$alert);
+ exit(header("location: index.php".$alert));
 }
 
 
@@ -357,18 +408,21 @@ function password_retrieve(){
    WHERE id='".$account->id."'";
   // execute query
   $GLOBALS['db']->execute($query);
+  // log and notifications
+  api_log(API_LOG_NOTICE,"accounts","accountPasswordRetrieve",
+   "{logs_accounts_accountPasswordRetrieve|".$p_account."}");
   $alert="?alert=passwordRetrived&alert_class=alert-success";
   // sendmail
-  $message="Ciao ".$account->name.",\n";
-  $message.=" abbiamo ricevuto la tua richiesta di ripristino della password.\n\n";
-  $message.="Per procedere con la scelta di una nuova password usa il seguente indirizzo:\n\n";
+  $message="Salve ".$account->name.",\n";
+  $message.=" abbiamo ricevuto la sua richiesta di ripristino della password.\n\n";
+  $message.="Per procedere con la scelta di una nuova password usi il seguente indirizzo:\n\n";
   $message.="http://".$_SERVER['SERVER_NAME'].$GLOBALS['dir'];
   $message.="accounts/password_reset.php?account=".$account->account."&key=".$secret."\n\n";
-  $message.="Ricorda che questo codice è utilizzabile solamente per questa specifica sessione.";
+  $message.="Si ricordi che questo codice è utilizzabile solamente per questa specifica sessione.";
   api_sendmail($p_account,$message,"Richiesta di ripristino della password");
  }
  // redirect
- header("location: index.php".$alert);
+ exit(eader("location: index.php".$alert));
 }
 
 /* -[ Password Reset ]------------------------------------------------------- */
@@ -391,14 +445,17 @@ function password_reset(){
    WHERE id='".$account->id."'";
   // execute query
   $GLOBALS['db']->execute($query);
+  // log and notifications
+  api_log(API_LOG_NOTICE,"accounts","accountPasswordResetted",
+   "{logs_accounts_accountPasswordResetted|".$p_account."}");
   $alert="?alert=passwordResetted&alert_class=alert-success";
   // sendmail
-  $message="Ciao ".$account->name.",\n";
-  $message.=" il ripristino della tua password è avvenuto correttamente.";
+  $message="Salve ".$account->name.",\n";
+  $message.=" il ripristino della sua password è avvenuto correttamente.";
   api_sendmail($p_account,$message,"Notifica di ripristino della password");
  }
  // redirect
- header("location: index.php".$alert);
+ exit(header("location: index.php".$alert));
 }
 
 
@@ -418,18 +475,26 @@ function group_save(){
    name='".$p_name."',
    description='".$p_description."'
    WHERE id='".$g_id."'";
+  // log and notifications
+  api_log(API_LOG_NOTICE,"accounts","groupUpdated",
+   "{logs_accounts_groupUpdated|".$p_name."|".$p_description."}");
+  // alert
   $alert="?alert=groupUpdated&alert_class=alert-success&alert_parameters=".$p_name;
  }else{
   if(!api_checkPermission("accounts","groups_add")){api_die("accessDenied");}
   $query="INSERT INTO accounts_groups
    (idGroup,name,description) VALUES
    ('".$p_idGroup."','".$p_name."','".$p_description."')";
+  // log and notifications
+  api_log(API_LOG_NOTICE,"accounts","groupCreated",
+   "{logs_accounts_groupCreated|".$p_name."|".$p_description."}");
+  // alert
   $alert="?alert=groupCreated&alert_class=alert-success&alert_parameters=".$p_name;
  }
  // execute query
  $GLOBALS['db']->execute($query);
  // redirect
- header("location: groups_list.php".$alert);
+ exit(header("location: groups_list.php".$alert));
 }
 
 /* -[ Group Delete ]--------------------------------------------------------- */
@@ -443,10 +508,13 @@ function group_delete(){
   $GLOBALS['db']->execute("DELETE FROM accounts_groups WHERE id='".$group->id."'");
   // delete group links
   $GLOBALS['db']->execute("DELETE FROM accounts_groups_join_accounts WHERE idGroup='".$group->id."'");
+  // log and notifications
+  api_log(API_LOG_WARNING,"accounts","groupDeleted",
+   "{logs_accounts_groupDeleted|".$group->name."|".$group->description."}");
  }
  // redirect
  $alert="?alert=groupDeleted&alert_class=alert&alert_parameters=".$group->name;
- header("location: groups_list.php".$alert);
+ exit(header("location: groups_list.php".$alert));
 }
 
 
@@ -496,24 +564,32 @@ function company_save(){
    phone_fax='".$p_phone_fax."',
    mail='".$p_mail."'
    WHERE id='".$g_id."'";
+  // log and notifications
+  api_log(API_LOG_NOTICE,"accounts","companyUpdated",
+   "{logs_accounts_companyUpdated|".$p_company."|".$p_division."|".$p_name."}");
+  // alert
   $alert="?alert=companyUpdated&alert_class=alert-success&alert_parameters=".$p_name;
  }else{
   if(!api_checkPermission("accounts","companies_add")){api_die("accessDenied");}
   $query="INSERT INTO accounts_companies
    (company,division,name,fiscal_name,fiscal_vat,fiscal_code,fiscal_rea,fiscal_capital,
-    fiscal_currency,address_address,address_number,address_zip,address_city,address_district,
-    address_country,phone_office,phone_mobile,phone_fax,mail) VALUES
+    fiscal_currency,address_address,address_zip,address_city,address_district,address_country,
+    phone_office,phone_mobile,phone_fax,mail) VALUES
    ('".$p_company."','".$p_division."','".$p_name."','".$p_fiscal_name."','".$p_fiscal_vat."',
     '".$p_fiscal_code."','".$p_fiscal_rea."','".$p_fiscal_capital."','".$p_fiscal_currency."',
     '".$p_address_address."','".$p_address_zip."','".$p_address_city."','".$p_address_district."',
     '".$p_address_country."','".$p_phone_office."','".$p_phone_mobile."','".$p_phone_fax."',
     '".$p_mail."')";
+  // log and notifications
+  api_log(API_LOG_NOTICE,"accounts","companyCreated",
+   "{logs_accounts_companyCreated|".$p_company."|".$p_division."|".$p_name."}");
+  // alert
   $alert="?alert=companyCreated&alert_class=alert-success&alert_parameters=".$p_name;
  }
  // execute query
  $GLOBALS['db']->execute($query);
  // redirect
- header("location: companies_list.php".$alert);
+ exit(header("location: companies_list.php".$alert));
 }
 
 /* -[ Company Delete ]--------------------------------------------------------- */
@@ -524,10 +600,15 @@ function company_delete(){
  $company=$GLOBALS['db']->queryUniqueObject("SELECT * FROM accounts_companies WHERE id='".$g_id."'");
  if($company->id>0){
   die("Function disabled for security reason");
+  /*
   // count if accounts_divisions==0
   // count if accounts_accounts==0
   // delete company
-  //$GLOBALS['db']->execute("DELETE FROM accounts_companies WHERE id='".$company->id."'");
+  $GLOBALS['db']->execute("DELETE FROM accounts_companies WHERE id='".$company->id."'");
+  // log and notifications
+  api_log(API_LOG_WARNING,"accounts","companyDeleted",
+   "{logs_accounts_companyDeleted|".$company->company."|".$company->division."|".$company->name."}");
+  */
  }
  // redirect
  $alert="?alert=companyDeleted&alert_class=alert&alert_parameters=".$company->name;
@@ -560,14 +641,20 @@ function ldap_account_create(){
    ('".$p_account."','".md5(api_randomString(10))."','".$name."','2','".$p_language."','".$p_idCompany."','".$p_ldapUsername."')";
   // execute query
   $GLOBALS['db']->execute($query);
+  // retrieve last inserted id
   $idAccount=$GLOBALS['db']->lastInsertedId();
+  // log and notifications
+  api_log(API_LOG_NOTICE,"accounts","accountCreatedLDAP",
+   "{logs_accounts_accountCreatedLDAP|".$p_account."|".$p_ldapUsername."|".$name."}");
   if($idAccount>0){
    // log
    $log="Name: ".$name."\n";
    $log.="Account: ".$p_account."\n";
    $log.="Company: ".api_companyName($p_idCompany)."\n";
    $log.="LDAP: ".$p_ldapUsername;
-   api_log(1,"accounts","LDAP ACCOUNT CREATED\n".$log);
+
+   // <<<<<<<<<<<<------------ rifare multilingua
+
    // sendmail
    $message="Salve ".$name.",\n";
    $message.=" è stato attivato un account su Coordinator a tuo nome.\n\n";
