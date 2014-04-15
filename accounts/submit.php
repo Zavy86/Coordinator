@@ -73,7 +73,7 @@ function account_login(){
      // update session language
      $_SESSION['language']=$account->language;
      if($account->typology==1){$_SESSION['account']->typology=2;$_SESSION['account']->administrator=TRUE;}
-     // update lastLogin
+     // update lastLogin and domain password
      $GLOBALS['db']->execute("UPDATE accounts_accounts SET password='".md5($p_password)."',lastLogin='".date('Y-m-d H:i:s')."' WHERE id='".$account->id."'");
      // log and notifications
      api_log(API_LOG_NOTICE,"accounts","loginSuccess",
@@ -83,7 +83,7 @@ function account_login(){
     }
    }else{
     // account does not exist
-    header("location: request_account_ldap.php?account=".$p_account);
+    exit(header("location: request_account_ldap.php?account=".$p_account));
    }
   }else{
    // ldap authentication failed
