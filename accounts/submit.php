@@ -57,7 +57,7 @@ function account_login(){
      // account disabled
      // log and notifications
      api_log(API_LOG_ERROR,"accounts","loginDisabled",
-      "{logs_accounts_loginDisabled|".$p_account."}");
+      "{logs_accounts_loginDisabled|".$p_account."}",$account->id);
      $alert="?alert=loginDisabled&alert_class=alert-warning";
      exit(header("location: login.php".$alert));
     }else{
@@ -77,7 +77,7 @@ function account_login(){
      $GLOBALS['db']->execute("UPDATE accounts_accounts SET password='".md5($p_password)."',lastLogin='".date('Y-m-d H:i:s')."' WHERE id='".$account->id."'");
      // log and notifications
      api_log(API_LOG_NOTICE,"accounts","loginSuccess",
-      "{logs_accounts_loginSuccess|".$p_account."}");
+      "{logs_accounts_loginSuccess|".$p_account."}",$account->id);
      // redirect
      exit(header("location: ../index.php"));
     }
@@ -115,7 +115,7 @@ function account_login(){
   $GLOBALS['db']->execute("UPDATE accounts_accounts SET lastLogin='".date('Y-m-d H:i:s')."' WHERE id='".$account->id."'");
   // log and notifications
   api_log(API_LOG_NOTICE,"accounts","loginSuccess",
-   "{logs_accounts_loginSuccess|".$p_account."}");
+   "{logs_accounts_loginSuccess|".$p_account."}",$account->id);
   // redirect
   exit(header("location: ../index.php"));
  }else{
@@ -125,12 +125,12 @@ function account_login(){
    if($account->typology==0){
     // log and notifications
     api_log(API_LOG_ERROR,"accounts","loginDisabled",
-     "{logs_accounts_loginDisabled|".$p_account."}");
+     "{logs_accounts_loginDisabled|".$p_account."}",$account->id);
     $alert="?alert=loginDisabled&alert_class=alert-warning";
    }else{
     // log and notifications
     api_log(API_LOG_WARNING,"accounts","loginFailed",
-     "{logs_accounts_loginFailed|".$p_account."}");
+     "{logs_accounts_loginFailed|".$p_account."}",$account->id);
     $alert="?alert=loginFailed&alert_class=alert-error";
    }
   }else{
