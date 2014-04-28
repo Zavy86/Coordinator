@@ -163,6 +163,7 @@ CREATE TABLE IF NOT EXISTS `logs_logs` (
   `timestamp` datetime NOT NULL,
   `module` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `action` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `key` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
   `event` text COLLATE utf8_unicode_ci,
   `link` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
   `idAccount` int(11) unsigned DEFAULT NULL,

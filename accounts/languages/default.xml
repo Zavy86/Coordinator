@@ -24,7 +24,7 @@
  <text key="companyUpdated">Company {0} has been updated</text>
  <text key="companyDeleted">Company {0} has been deleted</text>
 
- <!-- alerts -->
+ <!-- logs -->
  <text key="logs_accounts_loginSuccess">User {0} has logged</text>
  <text key="logs_accounts_loginFailed">User {0} has supplied wrong credentials for access</text>
  <text key="logs_accounts_loginError">User {0} has supplied wrong credentials for access</text>
