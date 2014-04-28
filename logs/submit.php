@@ -82,7 +82,7 @@ function notification_subscriptions(){
  // remove all subscriptions
  $GLOBALS['db']->execute("DELETE FROM logs_subscriptions WHERE idAccount='".api_accountId()."'");
  // parse triggers
- $triggers=$GLOBALS['db']->query("SELECT * FROM logs_triggers ORDER BY module ASC");
+ $triggers=$GLOBALS['db']->query("SELECT * FROM logs_triggers GROUP BY `trigger` ORDER BY module ASC");
  while($trigger=$GLOBALS['db']->fetchNextObject($triggers)){
   // get notification typology
   $notification=$_POST["notification_".$trigger->trigger];
