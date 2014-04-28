@@ -24,7 +24,7 @@
  <text key="companyUpdated">La società {0} è stata aggiornata</text>
  <text key="companyDeleted">La società {0} è stata eliminata</text>
 
- <!-- alerts -->
+ <!-- logs -->
  <text key="logs_accounts_loginSuccess">L'utente {0} ha eseguito l'accesso</text>
  <text key="logs_accounts_loginFailed">L'utente {0} ha fornito le credenziali errate per l'accesso</text>
  <text key="logs_accounts_loginError">L'utente {0} ha fornito le credenziali errate per l'accesso</text>

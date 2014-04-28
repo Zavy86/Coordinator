@@ -18,7 +18,7 @@ file_put_contents("../tmp/index.php","<?php header(\"location: ../index.php\"); 
 // log operation
 $log.="Number of file and folder removed: ".($count-2)."\n";
 if($count-2>0){
- api_log($log_level,"cron",$log);
+ api_log($log_level,"cron","cron",$log);
 }
 // show footer
 if($g_submit<>"cron"){
