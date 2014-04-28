@@ -67,7 +67,7 @@ if($handle=opendir($path)){
  closedir($handle);
 }
 // if delete generate log
-if($wlog){api_log($log_level,"cron",$log);}else{$log.="Nothing to delete..\n";}
+if($wlog){api_log($log_level,"cron","cronChats",$log);}else{$log.="Nothing to delete..\n";}
 // show footer
 if($g_submit<>"cron"){
  echo nl2br($log)."<br>";
