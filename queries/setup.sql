@@ -393,6 +393,15 @@ INSERT IGNORE INTO `settings_settings` (`code`, `value`) VALUES
 -- --------------------------------------------------------
 
 --
+-- Dumping data for table `logs_triggers`
+--
+
+INSERT INTO `logs_triggers` (`id`, `trigger`, `module`, `action`, `condition`) VALUES
+(NULL, 'logs_accounts_accountCreated', 'accounts', 'accountCreatedLDAP', NULL);
+
+-- --------------------------------------------------------
+
+--
 -- Constraints for dumped tables
 --
 

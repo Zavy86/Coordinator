@@ -15,7 +15,7 @@ function content(){
  $pagination=new str_pagination("logs_logs",$query_where,$GLOBALS['navigation']->filtersGet());
  $query_limit=$pagination->queryLimit();
  // sorting
- $query_order=api_queryOrder("timestamp DESC");
+ $query_order=api_queryOrder("timestamp DESC,id DESC");
  // build table
  $table=new str_table(api_text("list-tr-unvalued"),TRUE);
  $table->addHeader("&nbsp;",NULL,"16");
