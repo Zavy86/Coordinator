@@ -24,7 +24,8 @@ public function header($title="",$nav="dashboard",$navbar=TRUE){
 
  <!-- Stylesheet -->
  <link href="<?php echo $GLOBALS['dir']."core/bootstrap/css/bootstrap.min.css";?>" rel="stylesheet">
- <link href="<?php echo $GLOBALS['dir']."core/bootstrap/css/bootstrap-responsive.min.css";?>" rel="stylesheet">
+ <link href="<?php echo $GLOBALS['dir']."core/bootstrap/css/bootstrap-custom.css";?>" rel="stylesheet">
+ <link href="<?php echo $GLOBALS['dir']."core/bootstrap/css/bootstrap-responsive.css";?>" rel="stylesheet">
  <link href="<?php echo $GLOBALS['dir']."core/template.css";?>" rel="stylesheet">
 
  <link href="<?php echo $GLOBALS['dir']."core/bootstrap-datetimepicker/css/bootstrap-datetimepicker.min.css";?>" rel="stylesheet">
