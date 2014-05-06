@@ -1059,9 +1059,16 @@ class str_form{
     if(is_array($ff->options)){
      // show option
      foreach($ff->options as $fo){
-      // show checkbox or radio option
       switch(strtolower($ff->type)){
+       // show checkbox option
        case "checkbox":
+        $return.="  <label class='".$ff->type." ".$ff->class."'>";
+        $return.="<input type='".$ff->type."' name='".$ff->name."[]' value=\"".$fo->value."\"";
+        if($fo->checked){$return.=" checked='checked'";}
+        if($fo->disabled){$return.=" disabled='disabled'";}
+        $return.=">".$fo->label."</label>\n";
+        break;
+       // show radio option
        case "radio":
         $return.="  <label class='".$ff->type." ".$ff->class."'>";
         $return.="<input type='".$ff->type."' name='".$ff->name."' value=\"".$fo->value."\"";
