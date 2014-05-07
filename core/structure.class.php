@@ -1063,7 +1063,7 @@ class str_form{
        // show checkbox option
        case "checkbox":
         $return.="  <label class='".$ff->type." ".$ff->class."'>";
-        $return.="<input type='".$ff->type."' name='".$ff->name."[]' value=\"".$fo->value."\"";
+        $return.="<input type='".$ff->type."' name='".$ff->name."' value=\"".$fo->value."\"";
         if($fo->checked){$return.=" checked='checked'";}
         if($fo->disabled){$return.=" disabled='disabled'";}
         $return.=">".$fo->label."</label>\n";
