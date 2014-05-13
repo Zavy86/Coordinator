@@ -33,6 +33,7 @@
  <text key="logs_accounts_accountUpdated">The account {0} has been updated</text>
  <text key="logs_accounts_accountCustomized">User {0} has customized his profile</text>
  <text key="logs_accounts_accountGrouproleAdded">The account {0} has been added to the group {1}</text>
+ <text key="logs_accounts_accountGrouproleMain">The default group for the account {0} is now {1}</text>
  <text key="logs_accounts_accountGrouproleRemoved">The account {0} has been removed to the group {1}</text>
  <text key="logs_accounts_accountSwitchToAdmin">The account {0} became administrator</text>
  <text key="logs_accounts_accountSwitchToUser">The account {0} became user {1}/text>
@@ -43,12 +44,12 @@
  <text key="logs_accounts_groupDeleted">The group {0} has been deleted&#xA;{1}</text>
  <text key="logs_accounts_companyCreated">The company {0} - {1} {2} has been created</text>
  <text key="logs_accounts_companyUpdated">The company {0} - {1} {2} has been updated</text>
- <text key="logs_accounts_accountCreatedLDAP">The account {0} has been created by LDAP&#xA;{1}&#xA;{2}</text>
+ <text key="logs_accounts_accountCreatedLDAP">The account {0} has been created by LDAP&#xA;&#xA;Name: {2}&#xA; LDAP username: {1}</text>
  <!-- accountCreated -->
  <text key="logs_accounts_accountCreated-label">New user account created</text>
  <text key="logs_accounts_accountCreated-description">When it is created a new user account</text>
  <text key="logs_accounts_accountCreated-subject">Account - New user account {2} created</text>
- <text key="logs_accounts_accountCreated-message">It was created a new user account:&#xA;&#xA;Name {2}&#xA;Account {0}</text>
+ <text key="logs_accounts_accountCreated-message">It was created a new user account:&#xA;&#xA;Name: {2}&#xA;Account: {0}</text>
 
  <!-- template.inc.php -->
  <text key="nav-profile">Profile</text>
