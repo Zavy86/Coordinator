@@ -666,13 +666,13 @@ function ldap_account_create(){
    $notification_subject="Benvenuto ".$name." su Coordinator";
    $notification_message="Benvenuto ".$name.", il tuo account è stato creato.\n";
    $notification_message.="A breve un amministratore provvederà ad assegnarti ai tuoi gruppi di competenza.";
-   api_notification_send($idAccount,1,"accounts",$notification_subject,$notification_message,NULL,0);
+   //api_notification_send($idAccount,1,"accounts",$notification_subject,$notification_message,NULL,0);
    // notification to administrators
    $notification_subject="Nuovo account attivato - ".$name;
    $notification_message=$name." ha creato l'account ".$p_account." eseguendo l'accesso tramite l'utente ".$p_ldapUsername.".\n";
    $notification_message.="&Egrave; necessario assegnare i gruppi al suo account.";
    $notification_link="accounts/accounts_edit.php?id=".$idAccount;
-   api_notification_administrators(2,"accounts",$notification_subject,$notification_message,$notification_link,0);
+   //api_notification_administrators(2,"accounts",$notification_subject,$notification_message,$notification_link,0);
    $alert="?alert=ldapCreated&alert_class=alert-success";
    exit(header("location: login.php".$alert));
   }
