@@ -33,6 +33,7 @@
  <text key="logs_accounts_accountUpdated">L'account {0} è stato aggiornato</text>
  <text key="logs_accounts_accountCustomized">L'utente {0} ha personalizzato il proprio profilo</text>
  <text key="logs_accounts_accountGrouproleAdded">L'account {0} è stato aggiunto al gruppo {1}</text>
+ <text key="logs_accounts_accountGrouproleMain">Il gruppo predefinito per l'account {0} è ora {1}</text>
  <text key="logs_accounts_accountGrouproleRemoved">L'account {0} è stato rimosso al gruppo {1}</text>
  <text key="logs_accounts_accountSwitchToAdmin">L'account {0} si è trasformato in amministratore</text>
  <text key="logs_accounts_accountSwitchToUser">L'account {0} si è trasformato in utente</text>
@@ -43,12 +44,12 @@
  <text key="logs_accounts_groupDeleted">Il gruppo {0} è stato eliminato&#xA;{1}</text>
  <text key="logs_accounts_companyCreated">La società {0}-{1} {2} è stata creata</text>
  <text key="logs_accounts_companyUpdated">La società {0}-{1} {2} è stata aggiornata</text>
- <text key="logs_accounts_accountCreatedLDAP">L'account {0} è stato creato tramite LDAP&#xA;{1}&#xA;{2}</text>
+ <text key="logs_accounts_accountCreatedLDAP">L'account {0} è stato creato tramite LDAP&#xA;&#xA;Nome: {2}&#xA;Nome utente LDAP: {1}</text>
  <!-- accountCreated -->
  <text key="logs_accounts_accountCreated-label">Nuovo account utente creato</text>
  <text key="logs_accounts_accountCreated-description">Quando viene creato un nuovo account utente</text>
  <text key="logs_accounts_accountCreated-subject">Account - Nuovo account utente {2} creato</text>
- <text key="logs_accounts_accountCreated-message">E' stato creato un nuovo account utente:&#xA;&#xA;Nome {2}&#xA;Account {0}</text>
+ <text key="logs_accounts_accountCreated-message">E' stato creato un nuovo account utente:&#xA;&#xA;Nome: {2}&#xA;Account: {0}</text>
 
  <!-- template.inc.php -->
  <text key="nav-profile">Profilo personale</text>
