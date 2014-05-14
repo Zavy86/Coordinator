@@ -2,6 +2,10 @@
 
 <locale language="IT">
 
+ <!-- adverb -->
+ <text key="yes">si</text>
+ <text key="no">no</text>
+
  <!-- timestamp -->
  <text key="time">H:i:s</text>
  <text key="time-short">H:i</text>
