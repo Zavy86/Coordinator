@@ -1336,7 +1336,7 @@ class str_dl{
   $return="\n<!-- dynamic-list -->\n";
   $return.="<dl class='".$this->class."'>\n";
   foreach($this->elements_array as $element){
-   $return.=" <dt>".$element->label."</dt><dd class='".$this->class."'>".$element->value."</dd>";
+   $return.=" <dt>".$element->label."</dt><dd class='".$element->class."'>".$element->value."</dd>";
    if($element->separator<>NULL){$return.="<".$element->separator.">\n";}else{$return.="\n";}
   }
   $return.="</dl><!-- /dynamic-list -->\n";
