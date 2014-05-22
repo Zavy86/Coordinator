@@ -173,9 +173,20 @@ public function header($title="",$nav="dashboard",$navbar=TRUE){
        </ul>
       </li>
 
+      <?php
+       // show support link in menu bar
+       // require module workflows -> https://github.com/Zavy86/Coordinator-Workflows
+       if(file_exists("../workflows/module.inc.php")){
+        echo "<li";
+        if(api_baseName()=="workflows_search.php"||api_baseName()=="workflows_add.php"){echo " class=\"active\"";}
+        echo "><a href='".$GLOBALS['dir']."workflows/workflows_search.php?idCategory=1' title='".ucfirst(api_text("support"))."'>";
+        echo "<img src='".$GLOBALS['dir']."core/images/icons/support.png' style='margin-top:-2px'></a></li>";
+       }
+      ?>
+
       <li class="dropdown">
        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-        <img src="<?php echo api_accountAvatar();?>" class="img-rounded" style="width:22px;margin:-6px 0 0 0;padding:0;"> <b class="caret"></b>
+        <img src="<?php echo api_accountAvatar();?>" class="img-rounded" style="width:22px;margin-top:-4px;padding:0;"> <b class="caret"></b>
        </a>
        <ul class="dropdown-menu">
         <li class="nav-header"><?php echo $_SESSION['account']->name;?></li>
