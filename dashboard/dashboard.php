@@ -60,7 +60,7 @@ function content(){
   $split_span=$split_span+$widget->span;
   echo "\n <div class='span".$widget->span."' id='widget_".$widget->id."'>\n";
   // set hidden loader
-  //echo "<center><img src='".$GLOBALS['dir']."core/images/gifs/loader.gif' id='widget_".$widget->id."_loader' style='display:none'></center>";
+  //echo "<center><img src='".$GLOBALS['dir']."core/images/icons/loader.gif' id='widget_".$widget->id."_loader' style='display:none'></center>";
   // set get parameter to widgets parameters
   $_GET=$widget->parameters_array;
   $_GET['span']=$widget->span;
@@ -86,7 +86,7 @@ function content(){
  foreach($widgets_array as $widget){
   if($widget->refresh>0){
    echo "  var refreshWidget_".$widget->id."=setInterval(function(){\n";
-   echo "   $('#widget_".$widget->id."').css('background','url(".$GLOBALS['dir']."core/images/gifs/loader.gif) no-repeat top center');\n";
+   echo "   $('#widget_".$widget->id."').css('background','url(".$GLOBALS['dir']."core/images/icons/loader.gif) no-repeat top center');\n";
    echo "   $('#widget_".$widget->id."').load('../".$widget->module."/widget.inc.php?refresh=1".$widget->parameters."',function(){\n";
    echo "    $('#widget_".$widget->id."').css('background-image','none');\n";
    echo "   });\n";

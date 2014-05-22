@@ -2,9 +2,10 @@
 
 <locale language="EN">
 
- <!-- adverb -->
+ <!-- generals -->
  <text key="yes">yes</text>
  <text key="no">no</text>
+ <text key="support">support</text>
 
  <!-- timestamp -->
  <text key="time">H:i:s</text>
