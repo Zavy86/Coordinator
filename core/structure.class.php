@@ -1093,8 +1093,8 @@ class str_form{
    if(strtolower($ff->type)=="multiselect"){
     $return.="  </select>\n";
     $return.="  <br>\n ".api_text("form-select");
-    $return.=" <a href='#' onClick='selectToggle(\"".$this->name."_input_".$index."\",true)'>".api_text("form-select-all")."</a>,";
-    $return.=" <a href='#' onClick='selectToggle(\"".$this->name."_input_".$index."\",false)'>".api_text("form-select-none")."</a>\n";
+    $return.=" <a href='#' onClick='".$this->name."_selectToggle(\"".$this->name."_input_".$index."\",true)'>".api_text("form-select-all")."</a>,";
+    $return.=" <a href='#' onClick='".$this->name."_selectToggle(\"".$this->name."_input_".$index."\",false)'>".api_text("form-select-none")."</a>\n";
    }
    // show and close append div
    if($ff->append<>NULL){
@@ -1155,7 +1155,7 @@ class str_form{
   }
   // multiselect scripts
   $return.="<script type='text/javascript'>\n";
-  $return.=" function selectToggle(id,selected){\n";
+  $return.=" function ".$this->name."_selectToggle(id,selected){\n";
   $return.="  $('#'+id+' option').each(function(){ $(this).attr('selected',selected); });\n";
   $return.=" };\n";
   $return.="</script>\n\n";

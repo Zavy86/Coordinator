@@ -6,6 +6,7 @@
  <text key="yes">si</text>
  <text key="no">no</text>
  <text key="support">supporto</text>
+ <text key="undefined">non definito</text>
 
  <!-- timestamp -->
  <text key="time">H:i:s</text>
