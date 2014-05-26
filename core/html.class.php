@@ -425,18 +425,18 @@ public function footer($wiki_link=NULL,$copyright=TRUE){
  function split_span($columns,$class=NULL){
   if($columns<1 && $columns>12){return FALSE;}
   if($this->split_open){
-   echo "\n </div><!-- /span".$this->columns." -->\n";
+   echo "\n </div><!-- /span".$this->split_columns." -->\n";
   }else{
    $this->split_open=TRUE;
-   $this->columns=$columns;
   }
+  $this->split_columns=$columns;
   echo " <div class='span".$columns." ".$class."'>\n\n";
  }
 
  /* -[ Close ]--------------------------------------------------------------- */
  function split_close(){
   if($this->split_open){
-   echo "\n </div><!-- /span".$this->columns." -->\n";
+   echo "\n </div><!-- /span".$this->split_columns." -->\n";
    $this->split_open=FALSE;
   }
   echo "</div><!-- /row-fluid -->\n\n";

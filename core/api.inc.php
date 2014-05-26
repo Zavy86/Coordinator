@@ -168,13 +168,13 @@ function api_alert(){
   // auto close if alert-success
   if($class=="alert-success"){
    echo "<script type=\"text/javascript\">\n";
-   echo "window.setTimeout(function(){\$('#alert-message').alert('close');},5000);\n";
+   echo "window.setTimeout(function(){\$('#alert-message').alert('close');},10000);\n";
    echo "</script>\n";
   }
   // auto close if alert-info
   if($class=="alert-info"){
    echo "<script type=\"text/javascript\">\n";
-   echo "window.setTimeout(function(){\$('#alert-message').alert('close');},10000);\n";
+   echo "window.setTimeout(function(){\$('#alert-message').alert('close');},20000);\n";
    echo "</script>\n";
   }
  }
@@ -1461,17 +1461,33 @@ function api_file_upload($input,$table="uploads_uploads",$name=NULL,$label=NULL,
 // @integet $idFile : file id
 // @string $table : database table name
 // @string $name : file name if you want to rename
-function api_file_download($idFile,$table="uploads_uploads",$name=NULL){
+function api_file_download($idFile,$table="uploads_uploads",$name=NULL,$force=TRUE){
  // get file object
  $file=$GLOBALS['db']->queryUniqueObject("SELECT * FROM ".$table." WHERE id='".$idFile."'");
  if($file->id>0){
   if(strlen($name)>0){$file->name=$name;}
   header("Content-length: ".$file->size);
   header("Content-type: ".$file->type);
-  header("Content-Disposition: attachment; filename=".$file->name);
+  if($force){$dispositions="attachment; ";}
+  header("Content-Disposition: ".$dispositions."filename=".$file->name);
   echo $file->file;
  }else{
   echo "Error, file not found";
+ }
+}
+
+
+/* -[ File Delete from Database ]-------------------------------------------- */
+// @integet $idFile : file id
+// @string $table : database table name
+function api_file_delete($idFile,$table="uploads_uploads"){
+ // get file object
+ $file=$GLOBALS['db']->queryUniqueObject("SELECT * FROM ".$table." WHERE id='".$idFile."'");
+ if($file->id>0){
+  $GLOBALS['db']->execute("DELETE FROM ".$table." WHERE id='".$idFile."'");
+  return TRUE;
+ }else{
+  return "[File not found]";
  }
 }
 
@@ -1617,7 +1633,7 @@ function api_logNotificationTriggers($module,$action,$event,$id,$link){
 
 
 /* -[ Send notification ]---------------------------------------------------- */
-// #integer $idAccount : account id of notification recipient
+// @integer $idAccount : account id of notification recipient
 // @string $module : module name
 // @string $action : module action
 // @string $subject : log subject
@@ -1636,6 +1652,18 @@ function api_notification($idAccount,$module,$action,$subject,$message,$link=NUL
  else{return FALSE;}
 }
 
+/* -[ Log history ]---------------------------------------------------- */
+// @string $module : module name
+// @integer $key : id of the object
+function api_logHistory($module,$key){
+ if($module==NULL || $key==NULL){return FALSE;}
+ // definitions
+ $history_array=array();
+ // retrieve trigger by module actions
+ $logs=$GLOBALS['db']->query("SELECT * FROM logs_logs WHERE module='".$module."' AND `key`='".$key."' ORDER BY timestamp DESC");
+ while($event=$GLOBALS['db']->fetchNextObject($logs)){$history_array[]=$event;}
+ return $history_array;
+}
 
 
 /* ---------------------------[ DOCUMENTATE ]-------------------------------- */
