@@ -1476,6 +1476,21 @@ function api_file_download($idFile,$table="uploads_uploads",$name=NULL){
 }
 
 
+/* -[ File Delete from Database ]-------------------------------------------- */
+// @integet $idFile : file id
+// @string $table : database table name
+function api_file_delete($idFile,$table="uploads_uploads"){
+ // get file object
+ $file=$GLOBALS['db']->queryUniqueObject("SELECT * FROM ".$table." WHERE id='".$idFile."'");
+ if($file->id>0){
+  $GLOBALS['db']->execute("DELETE FROM ".$table." WHERE id='".$idFile."'");
+  return TRUE;
+ }else{
+  return "[File not found]";
+ }
+}
+
+
 /* -[ Link ]----------------------------------------------------------------- */
 // @string $url : url to link
 // @string $label : label for link
@@ -1617,7 +1632,7 @@ function api_logNotificationTriggers($module,$action,$event,$id,$link){
 
 
 /* -[ Send notification ]---------------------------------------------------- */
-// #integer $idAccount : account id of notification recipient
+// @integer $idAccount : account id of notification recipient
 // @string $module : module name
 // @string $action : module action
 // @string $subject : log subject
@@ -1636,6 +1651,18 @@ function api_notification($idAccount,$module,$action,$subject,$message,$link=NUL
  else{return FALSE;}
 }
 
+/* -[ Log history ]---------------------------------------------------- */
+// @string $module : module name
+// @integer $key : id of the object
+function api_logHistory($module,$key){
+ if($module==NULL || $key==NULL){return FALSE;}
+ // definitions
+ $history_array=array();
+ // retrieve trigger by module actions
+ $logs=$GLOBALS['db']->query("SELECT * FROM logs_logs WHERE module='".$module."' AND `key`='".$key."' ORDER BY timestamp DESC");
+ while($event=$GLOBALS['db']->fetchNextObject($logs)){$history_array[]=$event;}
+ return $history_array;
+}
 
 
 /* ---------------------------[ DOCUMENTATE ]-------------------------------- */
