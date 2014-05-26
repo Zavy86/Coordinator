@@ -8,6 +8,7 @@
  <!-- alerts -->
  <text key="notificationSend">La notifica è stata inoltrata correttamente</text>
  <text key="notificationSendError">Si è verificato un errore durante la compilazione della notifica</text>
+ <text key="notificationUpdated">Le iscrizioni alle notifiche sono state aggiornate</text>
 
  <!-- filters -->
  <text key="filter-typologies">Tipologie</text>

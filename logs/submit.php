@@ -95,5 +95,6 @@ function notification_subscriptions(){
   $GLOBALS['db']->execute($query);
  }
  // redirect
- exit(header("location: logs_subscriptions.php"));
+ $alert="?alert=notificationUpdated&alert_class=alert-success";
+ exit(header("location: logs_subscriptions.php".$alert));
 }
