@@ -168,13 +168,13 @@ function api_alert(){
   // auto close if alert-success
   if($class=="alert-success"){
    echo "<script type=\"text/javascript\">\n";
-   echo "window.setTimeout(function(){\$('#alert-message').alert('close');},5000);\n";
+   echo "window.setTimeout(function(){\$('#alert-message').alert('close');},10000);\n";
    echo "</script>\n";
   }
   // auto close if alert-info
   if($class=="alert-info"){
    echo "<script type=\"text/javascript\">\n";
-   echo "window.setTimeout(function(){\$('#alert-message').alert('close');},10000);\n";
+   echo "window.setTimeout(function(){\$('#alert-message').alert('close');},20000);\n";
    echo "</script>\n";
   }
  }
