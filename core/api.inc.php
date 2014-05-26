@@ -1461,14 +1461,15 @@ function api_file_upload($input,$table="uploads_uploads",$name=NULL,$label=NULL,
 // @integet $idFile : file id
 // @string $table : database table name
 // @string $name : file name if you want to rename
-function api_file_download($idFile,$table="uploads_uploads",$name=NULL){
+function api_file_download($idFile,$table="uploads_uploads",$name=NULL,$force=TRUE){
  // get file object
  $file=$GLOBALS['db']->queryUniqueObject("SELECT * FROM ".$table." WHERE id='".$idFile."'");
  if($file->id>0){
   if(strlen($name)>0){$file->name=$name;}
   header("Content-length: ".$file->size);
   header("Content-type: ".$file->type);
-  header("Content-Disposition: attachment; filename=".$file->name);
+  if($force){$dispositions="attachment; ";}
+  header("Content-Disposition: ".$dispositions."filename=".$file->name);
   echo $file->file;
  }else{
   echo "Error, file not found";
