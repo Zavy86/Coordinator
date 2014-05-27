@@ -45,7 +45,8 @@ public function header($title="",$nav="dashboard",$navbar=TRUE){
 
  <script src="<?php echo $GLOBALS['dir']."core/shadowbox/shadowbox.js";?>" type="text/javascript"></script>
  <script type="text/javascript">
-  Shadowbox.init({onClose:function(){ window.location.reload();}}); // eseguire reload solo se chiudo la chat
+  Shadowbox.init();
+  //Shadowbox.init({onClose:function(){ window.location.reload();}}); // eseguire reload solo se chiudo la chat
  </script>
 
  <!-- IE6-8 support of HTML5 elements -->
