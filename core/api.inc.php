@@ -483,11 +483,14 @@ function api_sendmail($to_mail,$message,$subject="",$html=FALSE,$from_mail="",$f
 /* -[ Check permissions ]---------------------------------------------------- */
 // @param $module : Module to check
 // @param $action : Action to check
-function api_checkPermission($module,$action,$alert=FALSE,$admin=TRUE){
- // if account is root return always true
- if($_SESSION['account']->id==1){return TRUE;}
+// @param $idAccount : ID of the account
+function api_checkPermission($module,$action,$alert=FALSE,$admin=TRUE,$idAccount=NULL){
+ if($idAccount===0 || $idAccount==="0"){return NULL;}
+ if($idAccount===NULL){$idAccount=$_SESSION['account']->id;}
+  // if account is root return always true
+ if($idAccount==1){return TRUE;}
  // if account typology is administrator return always true
- if($_SESSION['account']->typology==1 && $admin==TRUE){return TRUE;}
+ if(api_account($idAccount)->typology==1 && $admin==TRUE){return TRUE;}
  // retrieve the permission id
  $idPermission=$GLOBALS['db']->queryUniqueValue("SELECT id FROM settings_permissions WHERE module='".$module."' AND action='".$action."'");
  // get required groups
@@ -496,14 +499,14 @@ function api_checkPermission($module,$action,$alert=FALSE,$admin=TRUE){
   if($required->idGroup==0){
    $groups=$GLOBALS['db']->query("SELECT * FROM accounts_groups");
    while($group=$GLOBALS['db']->fetchNextObject($groups)){
-    if(api_accountGrouprole($group->id)>=$required->idGrouprole){return TRUE;}
+    if(api_accountGrouprole($group->id,$idAccount)>=$required->idGrouprole){return TRUE;}
    }
   }else{
-   if(api_accountGrouprole($required->idGroup)>=$required->idGrouprole){return TRUE;}
+   if(api_accountGrouprole($required->idGroup,$idAccount)>=$required->idGrouprole){return TRUE;}
    // try in subgroups
    $subgroups=$GLOBALS['db']->query("SELECT * FROM accounts_groups WHERE idGroup='".$required->idGroup."'");
    while($subgroup=$GLOBALS['db']->fetchNextObject($subgroups)){
-    if(api_accountGrouprole($subgroup->id)>=$required->idGrouprole){return TRUE;}
+    if(api_accountGrouprole($subgroup->id,$idAccount)>=$required->idGrouprole){return TRUE;}
    }
   }
  }
