@@ -490,7 +490,7 @@ function api_checkPermission($module,$action,$alert=FALSE,$admin=TRUE,$idAccount
   // if account is root return always true
  if($idAccount==1){return TRUE;}
  // if account typology is administrator return always true
- if(api_account($idAccount)->typology==1 && $admin==TRUE){return TRUE;}
+ if($admin==TRUE && $idAccount==$_SESSION['account']->id && $_SESSION['account']->typology==1){return TRUE;}
  // retrieve the permission id
  $idPermission=$GLOBALS['db']->queryUniqueValue("SELECT id FROM settings_permissions WHERE module='".$module."' AND action='".$action."'");
  // get required groups
