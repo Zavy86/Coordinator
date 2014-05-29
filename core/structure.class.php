@@ -504,10 +504,10 @@ class str_pagination{
  protected $class_li_disabled;
 
  /* -[ Construct ]----------------------------------------------------------- */
- // @string $table
- // @string $where
+ // @string $table : the table name
+ // @string $where : the query condition
  // @string $get : url of the page
- // @integet $limit
+ // @integet $limit : number of items for page
  // @string $class : pagination css class
  // @string $class_ul : pagination ul css class
  // @string $class_li : pagination ul li css class
