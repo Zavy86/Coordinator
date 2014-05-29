@@ -15,6 +15,7 @@
  <text key="filter-notices">Notices</text>
  <text key="filter-warnings">Warnings</text>
  <text key="filter-errors">Errors</text>
+ <text key="filter-date">Date</text>
  <text key="filter-module">Modules</text>
 
  <!-- template.inc.php -->

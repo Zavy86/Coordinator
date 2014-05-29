@@ -21,6 +21,7 @@ $navigation->addTab(api_text("nav-subscriptions"),"logs_subscriptions.php");
 // filters
 if(api_baseName()=="logs_list.php"){
  $navigation->addFilter("multiselect","typology",api_text("filter-typologies"),array(1=>api_text("filter-notices"),2=>api_text("filter-warnings"),3=>api_text("filter-errors")));
+ $navigation->addFilter("daterange","timestamp",api_text("filter-date"));
  $modules_array=array();
  $modules=$GLOBALS['db']->query("SELECT DISTINCT(module) FROM logs_logs ORDER BY module ASC");
  while($module=$GLOBALS['db']->fetchNextObject($modules)){
@@ -29,6 +30,8 @@ if(api_baseName()=="logs_list.php"){
  $navigation->addFilter("multiselect","module",api_text("filter-modules"),$modules_array,"input-xlarge");
  // if not filtered load default filters
  if($_GET['filtered']<>1){
+  $_GET['timestamp_from']=date("Y-m-d",strtotime("-7 days"));
+  $_GET['timestamp_to']=date("Y-m-d");
   $_GET['typology']=array(2,3);
  }
 }
