@@ -138,7 +138,7 @@ class DB{
  // @param $where : The condition before to compute the maximum.
  // @return : The maximum value (or NULL if result is empty).
  function maxOf($column,$table,$where){
-  return $this->queryUniqueValue("SELECT MAX(`$column`) FROM `$table` WHERE $where");
+  return $this->queryUniqueValue("SELECT MAX(`$column`) FROM $table WHERE $where");
  }
 
  // ---[ Get the maximum value of a column in a table ]------------------------
@@ -146,7 +146,7 @@ class DB{
  // @param $table : The table where to compute the maximum.
  // @return : The maximum value (or NULL if result is empty).
  function maxOfAll($column,$table){
-  return $this->queryUniqueValue("SELECT MAX(`$column`) FROM `$table`");
+  return $this->queryUniqueValue("SELECT MAX(`$column`) FROM $table");
  }
 
  // ---[ Get the count of rows in a table, with a condition ]------------------
@@ -154,14 +154,14 @@ class DB{
  // @param $where : The condition before to compute the number or rows.
  // @return : The number of rows (0 or more).
  function countOf($table,$where){
-  return $this->queryUniqueValue("SELECT COUNT(*) FROM `$table` WHERE $where");
+  return $this->queryUniqueValue("SELECT COUNT(*) FROM $table WHERE $where");
  }
 
  // ---[ Get the count of rows in a table ]---
  // @param $table : The table where to compute the number of rows.
  // @return The number of rows (0 or more).
  function countOfAll($table){
-  return $this->queryUniqueValue("SELECT COUNT(*) FROM `$table`");
+  return $this->queryUniqueValue("SELECT COUNT(*) FROM $table");
  }
 
  // ---[ Internal function to debug when MySQL encountered an error ]----------
