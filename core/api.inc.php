@@ -1137,30 +1137,31 @@ function api_avatarResize($source,$output,$width=125,$height=125){
 
 /* -[ Parse CSV file ]------------------------------------------------------- */
 // @param $csvfile : File CSV
-function api_parse_csv_file($csvfile) {
- $csv=Array();
- $rowcount=0;
- if(($handle=fopen($csvfile,"r"))!==FALSE){
+function api_parse_csv_file($csv_file,$csv_delimiter=',',$csv_enclosure='"'){
+ // definitions
+ $csv_rows=array();
+ $csv_error=FALSE;
+ // open csv handle
+ if(($handle=fopen($csv_file,"r"))!==FALSE){
+  // get max lines
   $max_line_length=defined('MAX_LINE_LENGTH')?MAX_LINE_LENGTH:100000;
+  // get haders
   $header=fgetcsv($handle,$max_line_length);
-  $header_colcount=count($header);
-  while(($row=fgetcsv($handle,$max_line_length))!==FALSE){
-   $row_colcount=count($row);
-   if($row_colcount==$header_colcount){
-    $entry=array_combine($header,$row);
-    $csv[]=$entry;
-   }else{
-    error_log("CSV Reader: Invalid number of columns at line ".($rowcount+2)." (row ".($rowcount+1)."). Expected: ".$header_colcount." Got: ".$row_colcount);
-    return null;
-   }
-   $rowcount++;
+  // get rows
+  while(($csv_row=fgetcsv($handle,$max_line_length,$csv_delimiter,$csv_enclosure))!==FALSE){
+   if(count($csv_row)==count($header)){
+    // add entry to row array
+    $entry=array_combine($header,$csv_row);
+    $csv_rows[]=$entry;
+   }else{$csv_error=TRUE;}
   }
+  // close handles
   fclose($handle);
- }else{
-  echo "CSV Reader: Could not read CSV ".$csvfile;
-  return null;
- }
- return $csv;
+ }else{$csv_error=TRUE;}
+ // show error
+ if($csv_error){echo "<p>There was an error parsing the file..<p>\n";return FALSE;}
+ // return csv rows
+ return $csv_rows;
 }
 
 

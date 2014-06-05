@@ -788,7 +788,8 @@ class str_form{
  // @boolean $disabled : disable input field (true) or not
  // @integer $rows : number of textarea rows
  // @string $append : append text
- function addField($type,$name,$label=NULL,$value=NULL,$class=NULL,$placeholder=NULL,$disabled=FALSE,$rows=7,$append=NULL){
+ // @boolean $readonly : readonly input field (true) or not
+ function addField($type,$name,$label=NULL,$value=NULL,$class=NULL,$placeholder=NULL,$disabled=FALSE,$rows=7,$append=NULL,$readonly=NULL){
   if(!in_array(strtolower($type),array("hidden","text","password","checkbox","radio","select","multiselect","textarea","file","slider","range","date","datetime","daterange","datetimerange"))){return FALSE;}
   if(strlen($name)==0){return FALSE;}
   $this->current_field++;
@@ -803,6 +804,7 @@ class str_form{
   $ff->rows=$rows;
   $ff->append=$append;
   $ff->options=NULL;
+  $ff->readonly=$readonly;
   if($type=="range" || $type=="daterange"){
    if($placeholder<>NULL && !is_array($placeholder)){$ff->placeholder=array($placeholder);}
    if($ff->placeholder[0]==NULL){$ff->placeholder[0]=api_text("form-range-from");}
@@ -958,6 +960,7 @@ class str_form{
      if(!$ff->label){$return.="  ";}
      $return.="  <input type='".$ff->type."' name='".$ff->name."' id='".$this->name."_input_".$index."' class='".$ff->class."' placeholder=\"".$ff->placeholder."\" value=\"".$ff->value."\"";
      if($ff->disabled){$return.=" disabled='disabled'";}
+     if($ff->readonly){$return.=" readonly='readonly'";}
      $return.=">\n";
      if(!$ff->label){$return.="\n";}
      break;
@@ -972,6 +975,7 @@ class str_form{
      // open select
      $return.="  <select name='".$ff->name."' id='".$this->name."_input_".$index."' class='".$ff->class."'";
      if($ff->disabled){$return.=" disabled='disabled'";}
+     if($ff->readonly){$return.=" readonly='readonly'";}
      $return.=">\n";
      break;
     // multiselect
@@ -980,12 +984,14 @@ class str_form{
      // open multiselect
      $return.="  <select name='".$ff->name."[]' id='".$this->name."_input_".$index."' class='".$ff->class."' multiple='multiple'";
      if($ff->disabled){$return.=" disabled='disabled'";}
+     if($ff->readonly){$return.=" readonly='readonly'";}
      $return.=">\n";
      break;
     // textarea
     case "textarea":
      $return.="  <textarea name='".$ff->name."' id='".$this->name."_input_".$index."' rows='".$ff->rows."' class='".$ff->class."' placeholder=\"".$ff->placeholder."\"";
      if($ff->disabled){$return.=" disabled='disabled'";}
+     if($ff->readonly){$return.=" readonly='readonly'";}
      $return.=">".$ff->value."</textarea>\n";
      break;
     // file
@@ -1002,9 +1008,11 @@ class str_form{
      if(!$ff->label){$return.="  ";}
      $return.="  <input type='text' name='".$ff->name."_from' id='".$this->name."_input_from_".$index."' class='input-small ".$ff->class."' placeholder=\"".$ff->placeholder[0]."\" value=\"".$ff->value[0]."\"";
      if($ff->disabled){$return.=" disabled='disabled'";}
+     if($ff->readonly){$return.=" readonly='readonly'";}
      $return.="> &nbsp;\n";
      $return.="  <input type='text' name='".$ff->name."_to' id='".$this->name."_input_to_".$index."' class='input-small ".$ff->class."' placeholder=\"".$ff->placeholder[1]."\" value=\"".$ff->value[1]."\"";
      if($ff->disabled){$return.=" disabled='disabled'";}
+     if($ff->readonly){$return.=" readonly='readonly'";}
      $return.=">\n";
      if(!$ff->label){$return.="\n";}
      break;
@@ -1013,6 +1021,7 @@ class str_form{
      if(!$ff->label){$return.="  ";}
      $return.="  <input type='text' name='".$ff->name."' id='".$this->name."_input_".$index."' value='".$ff->value."' data-slider-min='0' data-slider-max='100' data-slider-value='".$ff->value."' class='".$ff->class."'";
      if($ff->disabled){$return.=" disabled='disabled'";}
+     if($ff->readonly){$return.=" readonly='readonly'";}
      $return.=">\n";
      if(!$ff->label){$return.="\n";}
      break;
