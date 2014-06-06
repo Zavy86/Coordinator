@@ -331,16 +331,18 @@ public function footer($wiki_link=NULL,$copyright=TRUE){
     });
    },600000);
    // refresh chats every 10 sec
+   var chat_popup=1;
    var refreshChatCounter=setInterval(function(){
     $.get("../chats/chat_counter.inc.php",function(data){
      $('#chat_counter').html(data);
      if(data.substr(3,1)>0){
-      clearInterval(refreshChatCounter);
-      alert("Hai ricevuto un nuovo messaggio via Chat");
+      //clearInterval(refreshChatCounter);
       $('#chat_list').load("../chats/chat_list.inc.php",function(){
        Shadowbox.clearCache();
        Shadowbox.setup();
       });
+      if(chat_popup===1){alert("Hai ricevuto un nuovo messaggio via Chat");}
+      chat_popup=0;
      }
     });
    },10000);

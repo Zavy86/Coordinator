@@ -31,7 +31,7 @@ if(api_baseName()=="logs_list.php"){
  // if not filtered load default filters
  if($_GET['filtered']<>1){
   $_GET['timestamp_from']=date("Y-m-d",strtotime("-7 days"));
-  $_GET['timestamp_to']=date("Y-m-d");
+  $_GET['timestamp_to']=date("Y-m-d",strtotime("+1 days"));
   $_GET['typology']=array(2,3);
  }
 }
