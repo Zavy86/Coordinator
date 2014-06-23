@@ -319,6 +319,12 @@ class str_navigation{
   echo "<ul class='nav nav-tabs ".$this->class."'>\n";
   // show filters
   if(count($this->filters)>0){
+   // reset session filters
+   if($_GET['resetFilters']){unset($_SESSION['filters'][api_baseName()]);}
+   // store session filters
+   if($_GET['filtered']){$_SESSION['filters'][api_baseName()]=$_GET;}
+   // load session filters if exist
+   if(isset($_SESSION['filters'][api_baseName()])){$_GET=array_merge($_GET,$_SESSION['filters'][api_baseName()]);}
    // build filter form modal body
    $modal_filter_body=new str_form(api_baseName(),"get","filters");
    $modal_filter_body->addField("hidden","filtered",NULL,"1");
@@ -348,7 +354,7 @@ class str_navigation{
     }
    }
    $modal_filter_body->addControl("submit",api_text("filters-apply"));
-   $modal_filter_body->addControl("button",api_text("filters-reset"),NULL,api_baseName());
+   $modal_filter_body->addControl("button",api_text("filters-reset"),NULL,api_baseName()."?resetFilters=1");
    // build filter modal window
    $modal_filter=new str_modal("filters");
    $modal_filter->header(api_text("filters-filters"));
