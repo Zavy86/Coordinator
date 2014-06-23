@@ -33,7 +33,7 @@ function content(){
  $pagination=new str_pagination("logs_notifications",$query_where,"&s=".$g_status);
  $query_limit=$pagination->queryLimit();
  // query order
- $query_order=api_queryOrder("timestamp ASC");
+ $query_order=api_queryOrder("timestamp DESC");
  // query
  $notifications=$GLOBALS['db']->query("SELECT * FROM logs_notifications WHERE ".$query_where.$query_order.$query_limit);
  while($notification=$GLOBALS['db']->fetchNextObject($notifications)){
