@@ -53,5 +53,6 @@
  // show second divider
  if(count($notifications_array)>0){echo "<li class='divider'></li>\n";}
  echo "<li><a href='../logs/logs_notifications_list.php?s=1'>".api_text("notifications_list-li-showAll")."</a></li>\n";
+ if(count($notifications_array)>0){echo "<li><a href='../logs/submit.php?act=notification_archiveAll' onClick=\"return confirm('".api_text("notifications_list-li-archiveAll-confirm")."')\">".api_text("notifications_list-li-archiveAll")."</a></li>\n";}
  echo "<li><a href='../logs/logs_subscriptions.php'>".api_text("notifications_list-li-subscribe")."</a></li>\n";
 ?>
