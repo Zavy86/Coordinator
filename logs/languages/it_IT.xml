@@ -37,6 +37,8 @@
  <text key="notifications_list-li-notifications">Notifiche</text>
  <text key="notifications_list-li-send">Invia una notifica</text>
  <text key="notifications_list-li-showAll">Visualizza tutte le notifiche</text>
+ <text key="notifications_list-li-archiveAll">Archivia tutte le notifiche</text>
+ <text key="notifications_list-li-archiveAll-confirm">Confermi di voler archiviare tutte le notifiche?</text>
  <text key="notifications_list-li-subscribe">Gestisci le iscrizioni</text>
 
  <!-- logs_notifications_list.php -->

@@ -37,6 +37,8 @@
  <text key="notifications_list-li-notifications">Notifications</text>
  <text key="notifications_list-li-send">Send notification</text>
  <text key="notifications_list-li-showAll">Show all notifications</text>
+ <text key="notifications_list-li-archiveAll">Archive all notifications</text>
+ <text key="notifications_list-li-archiveAll-confirm">Confirm tyhat you want to archive all notifications?</text>
  <text key="notifications_list-li-subscribe">Manage subscriptions</text>
 
  <!-- logs_notifications_list.php -->

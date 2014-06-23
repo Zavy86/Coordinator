@@ -8,6 +8,7 @@ switch($act){
  // notifications
  case "notification_send":notification_send();break;
  case "notification_archive":notification_archive();break;
+ case "notification_archiveAll":notification_archiveAll();break;
  case "notification_restore":notification_restore();break;
  case "notification_subscriptions":notification_subscriptions();break;
  // default
@@ -58,6 +59,14 @@ function notification_archive(){
  }
  // redirect
  exit(header("location: logs_notifications_list.php?s=1"));
+}
+
+/* -[ Notification Archive All ]--------------------------------------------- */
+function notification_archiveAll(){
+ // archive all user notifications
+ $GLOBALS['db']->execute("UPDATE logs_notifications SET status='3' WHERE idAccount='".api_accountId()."'");
+ // redirect
+ exit(header("location: logs_notifications_list.php?s=3"));
 }
 
 /* -[ Notification Restore ]------------------------------------------------- */
