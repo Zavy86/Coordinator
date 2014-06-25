@@ -903,13 +903,31 @@ class str_form{
   return TRUE;
  }
 
+ /* -[ Open Split ]---------------------------------------------------------- */
+ function splitOpen(){
+  $this->current_field++;
+  $ff=new stdClass();
+  $ff->type="splitOpen";
+  $this->ff_array[$this->current_field]=$ff;
+  return TRUE;
+ }
+
  /* -[ Add Split ]----------------------------------------------------------- */
- function addSplit(){
+ function splitSpan(){
   if($this->splitted==3){return FALSE;}
   $this->splitted++;
   $this->current_field++;
   $ff=new stdClass();
-  $ff->type="split";
+  $ff->type="splitSpan";
+  $this->ff_array[$this->current_field]=$ff;
+  return TRUE;
+ }
+
+ /* -[ Close Split ]--------------------------------------------------------- */
+ function splitClose(){
+  $this->current_field++;
+  $ff=new stdClass();
+  $ff->type="splitClose";
   $this->ff_array[$this->current_field]=$ff;
   return TRUE;
  }
@@ -927,6 +945,7 @@ class str_form{
   // open form
   $return.="<!-- form-".$this->name." -->\n";
   $return.="<form name='".$this->name."' action='".$this->action."' method='".$this->method."' class='".$this->class."' enctype='multipart/form-data'>\n\n";
+  /*
   // open split
   if($this->splitted>0){
    //$GLOBALS['html']->split_open();
@@ -935,15 +954,32 @@ class str_form{
    $return.="<div class='row-fluid'>\n";
    $split_open=TRUE;
    $return.=" <div class='span".$span."'>\n\n";
-  }
+  }*/
   // show field
   foreach($this->ff_array as $index=>$ff){
    $options=FALSE;
-   // check for split
-   if($ff->type=="split"){
-    //$GLOBALS['html']->split_span($span);
-    $return.="\n </div><!-- /span".$this->columns." -->\n";
+   // check for splitOpen
+   if($ff->type=="splitOpen"){
+    $split_open=TRUE;
+    $return.="<!-- row-fluid -->\n";
+    $return.="<div class='row-fluid'>\n";
     $return.=" <div class='span".$span."'>\n\n";
+   }
+   // check for splitSpan
+   if($ff->type=="splitSpan"){
+    //$GLOBALS['html']->split_span($span);
+    $return.=" </div><!-- /span".$this->columns." -->\n";
+    $return.=" <div class='span".$span."'>\n\n";
+    continue;
+   }
+   // check for splitClose
+   if($ff->type=="splitClose"){
+    //$GLOBALS['html']->split_close();
+    if($split_open){
+     $split_open=FALSE;
+     $return.=" </div><!-- /span".$span." -->\n";
+     $return.="</div><!-- /row-fluid -->\n\n";
+    }
     continue;
    }
    // open group
@@ -1207,14 +1243,14 @@ class str_form{
   // close group
   if($this->controlGroup){$return.=" </div>\n</div>\n\n";}
   // close split
-  if($this->splitted>0){
+  /*if($this->splitted>0){
    //$GLOBALS['html']->split_close();
    if($split_open){
     $return.="\n </div><!-- /span".$span." -->\n";
     $split_open=FALSE;
     $return.="</div><!-- /row-fluid -->\n\n";
    }
-  }
+  }*/
   // close form
   $return.="</form><!-- /form-".$this->name." -->\n\n";
   if($echo){echo $return;return TRUE;}else{return $return;}
