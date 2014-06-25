@@ -481,8 +481,8 @@ class str_navigation{
   // filters scripts
   if(count($this->filters)>0){
    /*echo "<script type='text/javascript'>\n";
-   echo " function selectToggle(index,selected){\n";
-   echo "  $('#filters_input_'+index+' option').each(function(){ $(this).attr('selected',selected); });\n";
+   echo " function selectToggle(name,selected){\n";
+   echo "  $('#filters_input_'+name+' option').each(function(){ $(this).attr('selected',selected); });\n";
    echo " };\n";
    echo "</script>\n\n";*/
    $modal_filter->render();
@@ -1000,7 +1000,7 @@ class str_form{
     case "text":
     case "password":
      if(!$ff->label){$return.="  ";}
-     $return.="  <input type='".$ff->type."' name='".$ff->name."' id='".$this->name."_input_".$index."' class='".$ff->class."' placeholder=\"".$ff->placeholder."\" value=\"".$ff->value."\"";
+     $return.="  <input type='".$ff->type."' name='".$ff->name."' id='".$this->name."_input_".$ff->name."' class='".$ff->class."' placeholder=\"".$ff->placeholder."\" value=\"".$ff->value."\"";
      if($ff->disabled){$return.=" disabled='disabled'";}
      if($ff->readonly){$return.=" readonly='readonly'";}
      $return.=">\n";
@@ -1015,7 +1015,7 @@ class str_form{
     case "select":
      $options=TRUE;
      // open select
-     $return.="  <select name='".$ff->name."' id='".$this->name."_input_".$index."' class='".$ff->class."'";
+     $return.="  <select name='".$ff->name."' id='".$this->name."_input_".$ff->name."' class='".$ff->class."'";
      if($ff->disabled){$return.=" disabled='disabled'";}
      if($ff->readonly){$return.=" readonly='readonly'";}
      $return.=">\n";
@@ -1024,14 +1024,14 @@ class str_form{
     case "multiselect":
      $options=TRUE;
      // open multiselect
-     $return.="  <select name='".$ff->name."[]' id='".$this->name."_input_".$index."' class='".$ff->class."' multiple='multiple'";
+     $return.="  <select name='".$ff->name."[]' id='".$this->name."_input_".$ff->name."' class='".$ff->class."' multiple='multiple'";
      if($ff->disabled){$return.=" disabled='disabled'";}
      if($ff->readonly){$return.=" readonly='readonly'";}
      $return.=">\n";
      break;
     // textarea
     case "textarea":
-     $return.="  <textarea name='".$ff->name."' id='".$this->name."_input_".$index."' rows='".$ff->rows."' class='".$ff->class."' placeholder=\"".$ff->placeholder."\"";
+     $return.="  <textarea name='".$ff->name."' id='".$this->name."_input_".$ff->name."' rows='".$ff->rows."' class='".$ff->class."' placeholder=\"".$ff->placeholder."\"";
      if($ff->disabled){$return.=" disabled='disabled'";}
      if($ff->readonly){$return.=" readonly='readonly'";}
      $return.=">".$ff->value."</textarea>\n";
@@ -1048,11 +1048,11 @@ class str_form{
     // range
     case "range":
      if(!$ff->label){$return.="  ";}
-     $return.="  <input type='text' name='".$ff->name."_from' id='".$this->name."_input_from_".$index."' class='input-small ".$ff->class."' placeholder=\"".$ff->placeholder[0]."\" value=\"".$ff->value[0]."\"";
+     $return.="  <input type='text' name='".$ff->name."_from' id='".$this->name."_input_".$ff->name."'_from class='input-small ".$ff->class."' placeholder=\"".$ff->placeholder[0]."\" value=\"".$ff->value[0]."\"";
      if($ff->disabled){$return.=" disabled='disabled'";}
      if($ff->readonly){$return.=" readonly='readonly'";}
      $return.="> &nbsp;\n";
-     $return.="  <input type='text' name='".$ff->name."_to' id='".$this->name."_input_to_".$index."' class='input-small ".$ff->class."' placeholder=\"".$ff->placeholder[1]."\" value=\"".$ff->value[1]."\"";
+     $return.="  <input type='text' name='".$ff->name."_to' id='".$this->name."_input_".$ff->name."'_to class='input-small ".$ff->class."' placeholder=\"".$ff->placeholder[1]."\" value=\"".$ff->value[1]."\"";
      if($ff->disabled){$return.=" disabled='disabled'";}
      if($ff->readonly){$return.=" readonly='readonly'";}
      $return.=">\n";
@@ -1061,7 +1061,7 @@ class str_form{
     // slider
     case "slider":
      if(!$ff->label){$return.="  ";}
-     $return.="  <input type='text' name='".$ff->name."' id='".$this->name."_input_".$index."' value='".$ff->value."' data-slider-min='0' data-slider-max='100' data-slider-value='".$ff->value."' class='".$ff->class."'";
+     $return.="  <input type='text' name='".$ff->name."' id='".$this->name."_input_".$ff->name."' value='".$ff->value."' data-slider-min='0' data-slider-max='100' data-slider-value='".$ff->value."' class='".$ff->class."'";
      if($ff->disabled){$return.=" disabled='disabled'";}
      if($ff->readonly){$return.=" readonly='readonly'";}
      $return.=">\n";
@@ -1073,7 +1073,7 @@ class str_form{
      if($ff->type=="date"){$name="date";$format="yyyy-MM-dd";}
      if($ff->type=="datetime"){$name="datetime";$format="yyyy-MM-dd hh:mm";}
      $return.="  <div id='".$this->name."_".$name."_".$index."' class='input-append'>\n";
-     $return.="   <input type='text' name='".$ff->name."' id='".$this->name."_input_".$index."' data-format='".$format."' readonly='readonly' class='".$ff->class."' placeholder=\"".$ff->placeholder."\" value=\"".$ff->value."\">\n";
+     $return.="   <input type='text' name='".$ff->name."' id='".$this->name."_input_".$ff->name."' data-format='".$format."' readonly='readonly' class='".$ff->class."' placeholder=\"".$ff->placeholder."\" value=\"".$ff->value."\">\n";
      $return.="   <span class='add-on'><i data-time-icon='icon-time' data-date-icon='icon-calendar'></i></span>\n";
      $return.="  </div>\n";
      break;
@@ -1083,11 +1083,11 @@ class str_form{
      if($ff->type=="daterange"){$name="daterange";$format="yyyy-MM-dd";$size="input-small";}
      if($ff->type=="datetimerange"){$name="datetimerange";$format="yyyy-MM-dd hh:mm";$size="input-medium";}
      $return.="  <div id='".$this->name."_".$name."_from_".$index."' class='input-append'>\n";
-     $return.="   <input type='text' name='".$ff->name."_from' id='".$this->name."_input_from_".$index."' data-format='".$format."' readonly='readonly' class='".$size." ".$ff->class."' placeholder=\"".$ff->placeholder[0]."\" value=\"".$ff->value[0]."\">\n";
+     $return.="   <input type='text' name='".$ff->name."_from' id='".$this->name."_input_".$ff->name."_from' data-format='".$format."' readonly='readonly' class='".$size." ".$ff->class."' placeholder=\"".$ff->placeholder[0]."\" value=\"".$ff->value[0]."\">\n";
      $return.="   <span class='add-on'><i data-time-icon='icon-time' data-date-icon='icon-calendar'></i></span>\n";
      $return.="  </div>\n&nbsp;\n";
      $return.="  <div id='".$this->name."_".$name."_to_".$index."' class='input-append'>\n";
-     $return.="   <input type='text' name='".$ff->name."_to' id='".$this->name."_input_to_".$index."' data-format='".$format."' readonly='readonly' class='".$size." ".$ff->class."' placeholder=\"".$ff->placeholder[1]."\" value=\"".$ff->value[1]."\">\n";
+     $return.="   <input type='text' name='".$ff->name."_to' id='".$this->name."_input_".$ff->name."_to' data-format='".$format."' readonly='readonly' class='".$size." ".$ff->class."' placeholder=\"".$ff->placeholder[1]."\" value=\"".$ff->value[1]."\">\n";
      $return.="   <span class='add-on'><i data-time-icon='icon-time' data-date-icon='icon-calendar'></i></span>\n";
      $return.="  </div>\n";
      break;
@@ -1144,8 +1144,8 @@ class str_form{
    if(strtolower($ff->type)=="multiselect"){
     $return.="  </select>\n";
     $return.="  <br>\n ".api_text("form-select");
-    $return.=" <a href='#' onClick='".$this->name."_selectToggle(\"".$this->name."_input_".$index."\",true)'>".api_text("form-select-all")."</a>,";
-    $return.=" <a href='#' onClick='".$this->name."_selectToggle(\"".$this->name."_input_".$index."\",false)'>".api_text("form-select-none")."</a>\n";
+    $return.=" <a href='#' onClick='".$this->name."_selectToggle(\"".$this->name."_input_".$ff->name."\",true)'>".api_text("form-select-all")."</a>,";
+    $return.=" <a href='#' onClick='".$this->name."_selectToggle(\"".$this->name."_input_".$ff->name."\",false)'>".api_text("form-select-none")."</a>\n";
    }
    // show and close append div
    if($ff->append<>NULL){
@@ -1177,7 +1177,7 @@ class str_form{
      if(strtolower($ff->type)=="date"){$name="date";$param="pickTime:false";}
      if(strtolower($ff->type)=="datetime"){$name="datetime";$param="pickSeconds:false";}
      $return.="  $('#".$this->name."_".$name."_".$index."').datetimepicker({ ".$param." });\n";
-     $return.="  $('#".$this->name."_input_".$index."').dblclick(function(){ $(this).val('') });\n";
+     $return.="  $('#".$this->name."_input_".$ff->name."').dblclick(function(){ $(this).val('') });\n";
     }
     // daterange and datetimerange
     if(strtolower($ff->type)=="daterange" || strtolower($ff->type)=="datetimerange"){
@@ -1185,8 +1185,8 @@ class str_form{
      if(strtolower($ff->type)=="datetimerange"){$name="datetimerange";$param="pickSeconds:false";}
      $return.="  $('#".$this->name."_".$name."_from_".$index."').datetimepicker({ ".$param." });\n";
      $return.="  $('#".$this->name."_".$name."_to_".$index."').datetimepicker({ ".$param." });\n";
-     $return.="  $('#".$this->name."_input_from_".$index."').dblclick(function(){ $(this).val('') });\n";
-     $return.="  $('#".$this->name."_input_to_".$index."').dblclick(function(){ $(this).val('') });\n";
+     $return.="  $('#".$this->name."_input_".$ff->name."_from').dblclick(function(){ $(this).val('') });\n";
+     $return.="  $('#".$this->name."_input_".$ff->name."_to').dblclick(function(){ $(this).val('') });\n";
     }
     $return.=" });\n";
     $return.="</script>\n\n";
@@ -1195,7 +1195,7 @@ class str_form{
    if(strtolower($ff->type)=="slider"){
     $return.="<script type='text/javascript'>\n";
     $return.=" $(document).ready(function(){\n";
-    $return.="  $('input[id=".$this->name."_input_".$index."]').slider();\n";
+    $return.="  $('input[id=".$this->name."_input_".$ff->name."]').slider();\n";
     $return.=" });\n";
     $return.="</script>\n\n";
    }
@@ -1206,8 +1206,8 @@ class str_form{
   }
   // multiselect scripts
   $return.="<script type='text/javascript'>\n";
-  $return.=" function ".$this->name."_selectToggle(id,selected){\n";
-  $return.="  $('#'+id+' option').each(function(){ $(this).attr('selected',selected); });\n";
+  $return.=" function ".$this->name."_selectToggle(name,selected){\n";
+  $return.="  $('#'+name+' option').each(function(){ $(this).attr('selected',selected); });\n";
   $return.=" };\n";
   $return.="</script>\n\n";
   // show controls
