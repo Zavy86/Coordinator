@@ -13,6 +13,7 @@ function content(){
  // split window
  $GLOBALS['html']->split_open();
  $GLOBALS['html']->split_span(6);
+ echo "<dl class='dl-horizontal'>\n<dt>".api_text("accounts_edit-ff-avatar")."</dt>\n</dd>\n&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src='".api_accountAvatar($account->id)."?".rand(0,999)."' class='img-polaroid' width='125'>\n</dd>\n</dl>\n";
  // build form
  $form=new str_form("submit.php?act=account_save&id=".$account->id,"post","accounts");
  $form->addField("text","name",api_text("accounts_edit-ff-name"),stripslashes($account->name),"input-large",api_text("accounts_edit-ff-name-placeholder"));
