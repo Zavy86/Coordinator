@@ -33,6 +33,7 @@ public function header($title="",$nav="dashboard",$navbar=TRUE){
  <link href="<?php echo $GLOBALS['dir']."core/bootstrap-select2/select2.css";?>" rel="stylesheet">
  <link href="<?php echo $GLOBALS['dir']."core/bootstrap-slider/css/bootstrap-slider.min.css";?>" rel="stylesheet">
  <link href="<?php echo $GLOBALS['dir']."core/bootstrap-wysihtml5/css/bootstrap-wysihtml5.css";?>" rel="stylesheet">
+ <link href="<?php echo $GLOBALS['dir']."core/bootstrap-tagsinput/css/bootstrap-tagsinput.css";?>" rel="stylesheet">
 
  <link href="<?php echo $GLOBALS['dir']."core/shadowbox/shadowbox.css";?>" rel="stylesheet">
 
@@ -303,16 +304,12 @@ public function footer($wiki_link=NULL,$copyright=TRUE){
 
  <!-- Javascript -->
  <script src="<?php echo $GLOBALS['dir']."core/bootstrap/js/bootstrap.min.js";?>" type="text/javascript"></script>
-
  <script src="<?php echo $GLOBALS['dir']."core/bootstrap-datetimepicker/js/bootstrap-datetimepicker.min.js";?>" type="text/javascript"></script>
-
  <script src="<?php echo $GLOBALS['dir']."core/bootstrap-markdown/js/bootstrap-markdown.js";?>" type="text/javascript"></script>
-
  <script src="<?php echo $GLOBALS['dir']."core/bootstrap-select2/select2.min.js";?>" type="text/javascript"></script>
  <script src="<?php echo $GLOBALS['dir']."core/bootstrap-select2/select2_locale_it.js";?>" type="text/javascript"></script>
-
  <script src="<?php echo $GLOBALS['dir']."core/bootstrap-wysihtml5/js/bootstrap-wysihtml5.min.js";?>" type="text/javascript"></script>
-
+ <script src="<?php echo $GLOBALS['dir']."core/bootstrap-tagsinput/js/bootstrap-tagsinput.min.js";?>" type="text/javascript"></script>
  <script src="<?php echo $GLOBALS['dir']."core/bootstrap-slider/js/bootstrap-slider.min.js";?>" type="text/javascript"></script>
 
  <?php if(api_checkPermission("chats","chats_chat")){ ?>
