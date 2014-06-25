@@ -72,6 +72,7 @@
  <text key="accounts_list-tr-unvalued">Non è presente nessun account..</text>
 
  <!-- accounts_edit.php -->
+ <text key="accounts_edit-ff-avatar">Avatar</text>
  <text key="accounts_edit-ff-name">Nome</text>
  <text key="accounts_edit-ff-name-placeholder">Cognome e Nome</text>
  <text key="accounts_edit-ff-account">Account</text>

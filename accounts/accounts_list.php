@@ -14,6 +14,7 @@ function content(){
  $table=new str_table(api_text("list-tr-unvalued"),TRUE);
  // build table header
  $table->addHeader("&nbsp;",NULL,"16");
+ $table->addHeader("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;",NULL,"16");
  $table->addHeader(api_text("accounts_list-th-name"),"nowarp",NULL,"name");
  $table->addHeader(api_text("accounts_list-th-typology"),"nowarp",NULL,"typology");
  $table->addHeader(api_text("accounts_list-th-company"),"nowarp",NULL,"idCompany");
@@ -39,6 +40,7 @@ function content(){
   $table->addRow();
   // build table fields
   $table->addField("<a href=\"accounts_edit.php?id=".$account->id."\">".api_icon('icon-edit')."</a>","nowarp");
+  $table->addField("<img src='".api_accountAvatar($account->id)."?".rand(0,999)."' style='width:16px;height:16px;'>");
   $table->addField(stripslashes($account->name),"nowarp");
   $table->addField($typology,"nowarp");
   $table->addField($company,"nowarp");
