@@ -13,6 +13,7 @@ function content(){
  }
  // build form
  $form=new str_form("submit.php?act=settings_save","post","settings");
+ $form->splitOpen();
  $form->addField("text","owner",api_text("settings-ff-owner"),api_getOption("owner"),"input-large");
  $form->addField("text","owner_url",api_text("settings-ff-owner_url"),api_getOption("owner_url"),"input-xlarge");
  $form->addField("text","owner_mail",api_text("settings-ff-owner_mail"),api_getOption("owner_mail"),"input-xlarge");
@@ -33,7 +34,7 @@ function content(){
  $form->addField("checkbox","maintenance",api_text("settings-ff-maintenance"));
  $form->addFieldOption(1,api_text("settings-ff-maintenance-label"),(api_getOption("maintenance"))?TRUE:FALSE);
  $form->addField("text","maintenance_description",api_text("settings-ff-maintenance_description"),api_getOption("maintenance_description"),"input-xlarge");
- $form->addSplit();
+ $form->splitSpan();
  $form->addField("text","google_analytics",api_text("settings-ff-google_analytics"),api_getOption("google_analytics"),"input-medium");
  $form->addField("text","piwik_analytics",api_text("settings-ff-piwik_analytics"),api_getOption("piwik_analytics"),"input-medium");
  $form->addField("text","cron_token",api_text("settings-ff-cron_token"),$cron_token,"input-xlarge");
@@ -45,6 +46,7 @@ function content(){
  $form->addField("text","ldap_domain",api_text("settings-ff-ldap_domain"),api_getOption("ldap_domain"),"input-xlarge");
  $form->addField("text","ldap_userfield",api_text("settings-ff-ldap_userfield"),api_getOption("ldap_userfield"),"input-xlarge");
  $form->addField("text","ldap_group",api_text("settings-ff-ldap_group"),api_getOption("ldap_group"),"input-xlarge");
+ $form->splitClose();
  $form->addControl("submit",api_text("settings-fc-submit"));
  $form->addControl("button",api_text("settings-fc-cron"),NULL,"settings_edit.php?act=reset_cron");
  // show form

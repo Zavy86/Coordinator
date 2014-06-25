@@ -12,6 +12,7 @@ function content(){
  $company=$GLOBALS['db']->queryUniqueObject("SELECT * FROM accounts_companies WHERE id='".$g_id."'");
  // build form
  $form=new str_form("submit.php?act=company_save&id=".$company->id,"post","companies");
+ $form->splitOpen();
  $form->addField("text","company",api_text("companies_edit-ff-company"),stripslashes($company->company),"input-medium",api_text("companies_edit-ff-company-placeholder"));
  $form->addField("text","division",api_text("companies_edit-ff-division"),stripslashes($company->division),"input-medium",api_text("companies_edit-ff-division-placeholder"));
  $form->addField("text","name",api_text("companies_edit-ff-name"),stripslashes($company->name),"input-xlarge",api_text("companies_edit-ff-name-placeholder"));
@@ -22,7 +23,7 @@ function content(){
  $form->addField("text","fiscal_rea",api_text("companies_edit-ff-fiscal_rea"),stripslashes($company->fiscal_rea),"input-medium");
  $form->addField("text","fiscal_capital",api_text("companies_edit-ff-fiscal_capital"),stripslashes($company->fiscal_capital),"input-small");
  $form->addField("text","fiscal_currency",api_text("companies_edit-ff-fiscal_currency"),stripslashes($company->fiscal_currency),"input-mini");
- $form->addSplit();
+ $form->splitSpan();
  $form->addField("text","address_address",api_text("companies_edit-ff-address_address"),stripslashes($company->address_address),"input-xlarge");
  $form->addField("text","address_zip",api_text("companies_edit-ff-address_zip"),stripslashes($company->address_zip),"input-mini");
  $form->addField("text","address_city",api_text("companies_edit-ff-address_city"),stripslashes($company->address_city),"input-xlarge");
@@ -33,6 +34,7 @@ function content(){
  $form->addField("text","phone_mobile",api_text("companies_edit-ff-phone_mobile"),stripslashes($company->phone_mobile),"input-large");
  $form->addField("text","phone_fax",api_text("companies_edit-ff-phone_fax"),stripslashes($company->phone_fax),"input-large");
  $form->addField("text","mail",api_text("companies_edit-ff-mail"),stripslashes($company->mail),"input-large");
+ $form->splitClose();
  $form->addControl("submit",api_text("companies_edit-fc-save"));
  $form->addControl("button",api_text("companies_edit-fc-cancel"),NULL,"companies_list.php");
  if($company->id>0 && api_checkPermission("accounts","companies_delete")){
