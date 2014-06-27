@@ -6,7 +6,9 @@
  <text key="yes">yes</text>
  <text key="no">no</text>
  <text key="support">support</text>
+ <text key="any">any</text>
  <text key="undefined">undefined</text>
+ <text key="noresults">no results found..</text>
 
  <!-- timestamp -->
  <text key="time">H:i:s</text>

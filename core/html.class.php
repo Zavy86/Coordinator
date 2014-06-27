@@ -38,13 +38,16 @@ public function header($title="",$nav="dashboard",$navbar=TRUE){
  <link href="<?php echo $GLOBALS['dir']."core/shadowbox/shadowbox.css";?>" rel="stylesheet">
 
  <!-- Javascript -->
- <script src="<?php echo $GLOBALS['dir']."core/jquery/jquery-1.8.0.min.js";?>" type="text/javascript"></script>
+ <!--<script src="<?php echo $GLOBALS['dir']."core/jquery/jquery-1.8.0.min.js";?>" type="text/javascript"></script> -->
+ <script src="<?php echo $GLOBALS['dir']."core/jquery/jquery-1.11.1.min.js";?>" type="text/javascript"></script>
  <script src="<?php echo $GLOBALS['dir']."core/jquery/jquery.validate-1.11.1.min.js";?>" type="text/javascript"></script>
  <script src="<?php echo $GLOBALS['dir']."core/jquery/jquery.validate-1.11.1.am.js";?>" type="text/javascript"></script>
  <script src="<?php echo $GLOBALS['dir']."core/jquery/jquery.validate-1.11.1.it.js";?>" type="text/javascript"></script><script src="<?php echo $GLOBALS['dir']."core/jquery/jquery.md5-1.0.0.js";?>" type="text/javascript"></script>
  <script src="<?php echo $GLOBALS['dir']."core/jquery/jquery.markdown.js";?>" type="text/javascript"></script>
  <script src="<?php echo $GLOBALS['dir']."core/jquery/jquery.to-markdown.js";?>" type="text/javascript"></script>
  <script src="<?php echo $GLOBALS['dir']."core/jquery/jquery.wysihtml5-0.3.0.min.js";?>" type="text/javascript"></script>
+ <script src="<?php echo $GLOBALS['dir']."core/jquery/jquery.chained-0.9.10.min.js";?>" type="text/javascript"></script><script src="<?php echo $GLOBALS['dir']."core/jquery/jquery.chained-0.9.10.min.js";?>" type="text/javascript"></script>
+ <script src="<?php echo $GLOBALS['dir']."core/jquery/jquery.chained.remote-0.9.10.min.js";?>" type="text/javascript"></script>
 
  <script src="<?php echo $GLOBALS['dir']."core/shadowbox/shadowbox.js";?>" type="text/javascript"></script>
  <script type="text/javascript">

@@ -1501,8 +1501,11 @@ function api_file_delete($idFile,$table="uploads_uploads"){
 // @string $label : label for link
 // @string $title : title for link
 // @string $class : url css class
+// @booelan $popup : show popup label
+// @string $confirm : show confirm alert
 // @string $style : manual styles tag
-function api_link($url,$label,$title=NULL,$class=NULL,$popup=FALSE,$style=NULL){
+// @string $target : target window
+function api_link($url,$label,$title=NULL,$class=NULL,$popup=FALSE,$confirm=NULL,$style=NULL,$target="_self"){
  if($url==NULL){return FALSE;}
  $return="<a href=\"".$url."\" class='".$class."' style=\"".$style."\"";
  if($popup){
@@ -1510,7 +1513,10 @@ function api_link($url,$label,$title=NULL,$class=NULL,$popup=FALSE,$style=NULL){
  }elseif($title<>NULL){
   $return.=" title=\"".$title."\"";
  }
- $return.=">".$label."</a>\n";
+ if(strlen($confirm)>0){
+  $return.=" onClick=\"return confirm('".addslashes($confirm)."')\"";
+ }
+ $return.=" target='".$target."'>".$label."</a>\n";
  return $return;
 }
 
