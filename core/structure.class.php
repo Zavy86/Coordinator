@@ -1286,9 +1286,10 @@ class str_modal{
  /* -[ Modal Window Link ]--------------------------------------------------- */
  // @string $label : label of the link
  // @string $class : modal link css class
- function link($label,$class=NULL){
+ // @string $style : style css
+ function link($label,$class=NULL,$style=NULL){
   if(strlen($label)==0){return FALSE;}
-  return "<a href='#modal_".$this->id."' data-toggle='modal' class='".$class."' id='modal-link_".$this->id."'>".$label."</a>";
+  return "<a href='#modal_".$this->id."' data-toggle='modal' class='".$class."' id='modal-link_".$this->id."' style='".$style."'>".$label."</a>";
  }
 
  /* -[ Modal Window Header ]------------------------------------------------- */

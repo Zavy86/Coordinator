@@ -5,6 +5,7 @@
  <!-- generals -->
  <text key="yes">yes</text>
  <text key="no">no</text>
+ <text key="notfound">not found</text>
  <text key="support">support</text>
  <text key="any">any</text>
  <text key="undefined">undefined</text>

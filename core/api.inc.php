@@ -1461,6 +1461,21 @@ function api_file_upload($input,$table="uploads_uploads",$name=NULL,$label=NULL,
 }
 
 
+/* -[ File object from Database ]-------------------------------------------- */
+// @integet $idFile : file id
+// @string $table : database table name
+// @string $name : file name if you want to rename
+function api_file($idFile,$table="uploads_uploads"){
+ // get file object
+ $file=$GLOBALS['db']->queryUniqueObject("SELECT * FROM ".$table." WHERE id='".$idFile."'");
+ if($file->id>0){
+  return $file;
+ }else{
+  return FALSE;
+ }
+}
+
+
 /* -[ File Download from Database ]------------------------------------------ */
 // @integet $idFile : file id
 // @string $table : database table name
