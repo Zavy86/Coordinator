@@ -5,8 +5,11 @@
  <!-- generals -->
  <text key="yes">si</text>
  <text key="no">no</text>
+ <text key="notfound">non trovato</text>
  <text key="support">supporto</text>
+ <text key="any">qualunque</text>
  <text key="undefined">non definito</text>
+ <text key="noresults">nessun risultato trovato..</text>
 
  <!-- timestamp -->
  <text key="time">H:i:s</text>
