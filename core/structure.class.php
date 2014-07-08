@@ -1348,7 +1348,6 @@ class str_dl{
 
  protected $class;
  protected $separator;
- protected $splitted;
  protected $elements_array;
 
  /* -[ Contruct ]------------------------------------------------------------ */
@@ -1358,12 +1357,11 @@ class str_dl{
   if(!in_array(strtolower($separator),array(NULL,"hr","br"))){return FALSE;}
   $this->class=$class;
   $this->separator=$separator;
-  $this->splitted=0;
   $this->elements_array=array();
   return TRUE;
  }
 
- /* -[ Modal Window Footer ]------------------------------------------------- */
+ /* -[ Add Element ]--------------------------------------------------------- */
  // @string $label : label of the dynamic list
  // @string $label : value of the dynamic list
  // @string $separator : null, hr, br
@@ -1434,6 +1432,131 @@ class str_flagwell{
   $return.=" <span class='title'>".$this->title."</span>\n";
   $return.=" <div class='flag-well-content'>\n".$this->content."\n </div>\n";
   $return.="</div><!-- /flag-well -->\n";
+  if($echo){echo $return;return TRUE;}else{return $return;}
+ }
+
+}
+
+
+/* -------------------------------------------------------------------------- *\
+|* -[ Accordion ]-------------------------------------------------------- *|
+\* -------------------------------------------------------------------------- */
+
+class str_accordion{
+
+ protected $id;
+ protected $class;
+ protected $elements_array;
+
+ /* -[ Contruct ]------------------------------------------------------------ */
+ // @string $separator : default elements separator null, hr, br
+ // @string $class : dynamic list css class
+ public function __construct($class=NULL){
+  $this->id="accordion_".rand(10000,99999);
+  $this->class=$class;
+  $this->elements_array=array();
+  return TRUE;
+ }
+
+ /* -[ Add Element ]--------------------------------------------------------- */
+ // @string $label : label of the dynamic list
+ // @string $content : value of the dynamic list
+ // @string $open : default open if true, close if false
+ // @string $class : element css class
+ public function addElement($label,$content,$open=FALSE,$class=NULL,$subLabel=NULL){
+  if(!$content){$content="&nbsp;";}
+  $element=new stdClass();
+  $element->label=$label;
+  $element->subLabel=$subLabel;
+  $element->content=$content;
+  $element->open=$open;
+  $element->class=$class;
+  $this->elements_array[]=$element;
+  return TRUE;
+ }
+
+ /* -[ Render ]-------------------------------------------------------------- */
+ // @boolean $echo : echo result (true) or return
+ public function render($echo=TRUE){
+
+  $return="\n<!-- accordion -->\n";
+  $return.="<div class='accordion ".$this->class."' id='".$this->id."'>\n";
+
+  foreach($this->elements_array as $index=>$element){
+
+   if($element->open){$openClass="in ";}else{$openClass=NULL;}
+
+   $return.=" <div class='accordion-group'>\n";
+   $return.="  <div class='accordion-heading'>\n";
+   $return.="   <a href='#accordion_collapse_".$index."' class='accordion-toggle' data-toggle='collapse' data-parent='".$this->id."'>".$element->label."</a>\n";
+
+   //if($element->subLabel){$return.="<p class='accordion-toggle'>".$element->subLabel."</p>\n";}
+   if($element->subLabel){$return.=$element->subLabel;}
+
+   $return.="  </div>\n";
+   $return.="  <div id='accordion_collapse_".$index."' class='accordion-body collapse ".$openClass.$element->class."'>\n";
+   $return.="   <div class='accordion-inner'>\n\n";
+   $return.=$element->content;
+   $return.="\n\n   </div>\n";
+   $return.="  </div>\n";
+   $return.=" </div>\n";
+
+  }
+  $return.="</div><!-- /accordion -->\n\n";
+  if($echo){echo $return;return TRUE;}else{return $return;}
+ }
+
+}
+
+
+/* -------------------------------------------------------------------------- *\
+|* -[ Page Splitted ]-------------------------------------------------------- *|
+\* -------------------------------------------------------------------------- */
+
+class str_splitted{
+
+ protected $class;
+ protected $columns;
+ protected $spans_array;
+
+ /* -[ Contruct ]------------------------------------------------------------ */
+  // @string $class : dynamic list css class
+ public function __construct($class=NULL){
+  $this->class=$class;
+  $this->columns=0;
+  $this->spans_array=array();
+  return TRUE;
+ }
+
+ /* -[ Add Split ]----------------------------------------------------------- */
+ function addSpan($columns,$content){
+  if(!$columns || !$content){return FALSE;}
+  if($this->columns+$columns>12){return FALSE;}
+  $this->columns+=$columns;
+  $span=new stdClass();
+  $span->content=$content;
+  $span->columns=$columns;
+  $this->spans_array[]=$span;
+  return TRUE;
+ }
+
+ /* -[ Render ]-------------------------------------------------------------- */
+ // @boolean $echo : echo result (true) or return
+ public function render($echo=TRUE){
+  $splitSpan=0;
+  $return.="<!-- row-fluid -->\n";
+  $return.="<div class='row-fluid'>\n";
+
+  foreach($this->spans_array as $index=>$span){
+   if($index){$return.="\n </div><!-- /span".$splitSpan." -->\n";}
+   $splitSpan=$span->columns;
+   $return.=" <div class='span".$span->columns."'>\n\n";
+   $return.=$span->content;
+  }
+
+  $return.="\n </div><!-- /span".$splitSpan." -->\n";
+  $return.="</div><!-- /row-fluid -->\n\n";
+
   if($echo){echo $return;return TRUE;}else{return $return;}
  }
 

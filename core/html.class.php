@@ -312,6 +312,7 @@ public function footer($wiki_link=NULL,$copyright=TRUE){
  <script src="<?php echo $GLOBALS['dir']."core/bootstrap-select2/select2.min.js";?>" type="text/javascript"></script>
  <script src="<?php echo $GLOBALS['dir']."core/bootstrap-select2/select2_locale_it.js";?>" type="text/javascript"></script>
  <script src="<?php echo $GLOBALS['dir']."core/bootstrap-wysihtml5/js/bootstrap-wysihtml5.min.js";?>" type="text/javascript"></script>
+ <script src="<?php echo $GLOBALS['dir']."core/bootstrap-wysihtml5/js/bootstrap-wysihtml5.it-IT.js";?>" type="text/javascript"></script>
  <script src="<?php echo $GLOBALS['dir']."core/bootstrap-tagsinput/js/bootstrap-tagsinput.min.js";?>" type="text/javascript"></script>
  <script src="<?php echo $GLOBALS['dir']."core/bootstrap-slider/js/bootstrap-slider.min.js";?>" type="text/javascript"></script>
 
