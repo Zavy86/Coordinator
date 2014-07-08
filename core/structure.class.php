@@ -944,7 +944,7 @@ class str_form{
   }
   // open form
   $return.="<!-- form-".$this->name." -->\n";
-  $return.="<form name='".$this->name."' action='".$this->action."' method='".$this->method."' class='".$this->class."' enctype='multipart/form-data'>\n\n";
+  $return.="<form action='".$this->action."' method='".$this->method."' name='".$this->name."' id='form_".$this->name."' class='".$this->class."' enctype='multipart/form-data'>\n\n";
   /*
   // open split
   if($this->splitted>0){
@@ -1222,11 +1222,11 @@ class str_form{
     switch(strtolower($fc->type)){
      // submit
      case "submit":
-      $return.="  <input type='submit' name='".$this->name."_submit' id='".$this->name."_control_".$index."' class='btn btn-primary ".$fc->class."' value='".$fc->label."'>\n";
+      $return.="  <input type='submit' name='".$this->name."_submit' id='".$this->name."_control_submit' class='btn btn-primary ".$fc->class."' value=\"".$fc->label."\">\n";
       break;
      // reset
      case "reset":
-      $return.="  <input type='reset' name='".$this->name."_reset' id='".$this->name."_control_".$index."' class='btn ".$fc->class."' value='".$fc->label."'>\n";
+      $return.="  <input type='reset' name='".$this->name."_reset' id='".$this->name."_control_reset' class='btn ".$fc->class."' value=\"".$fc->label."\">\n";
       break;
      // button, link
      case "button":
