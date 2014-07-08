@@ -40,9 +40,9 @@ public function header($title="",$nav="dashboard",$navbar=TRUE){
  <!-- Javascript -->
  <!--<script src="<?php echo $GLOBALS['dir']."core/jquery/jquery-1.8.0.min.js";?>" type="text/javascript"></script> -->
  <script src="<?php echo $GLOBALS['dir']."core/jquery/jquery-1.11.1.min.js";?>" type="text/javascript"></script>
- <script src="<?php echo $GLOBALS['dir']."core/jquery/jquery.validate-1.11.1.min.js";?>" type="text/javascript"></script>
- <script src="<?php echo $GLOBALS['dir']."core/jquery/jquery.validate-1.11.1.am.js";?>" type="text/javascript"></script>
- <script src="<?php echo $GLOBALS['dir']."core/jquery/jquery.validate-1.11.1.it.js";?>" type="text/javascript"></script><script src="<?php echo $GLOBALS['dir']."core/jquery/jquery.md5-1.0.0.js";?>" type="text/javascript"></script>
+ <script src="<?php echo $GLOBALS['dir']."core/jquery/jquery.validate-1.13.0.min.js";?>" type="text/javascript"></script>
+ <script src="<?php echo $GLOBALS['dir']."core/jquery/jquery.validate-1.13.0.am.js";?>" type="text/javascript"></script>
+ <script src="<?php echo $GLOBALS['dir']."core/jquery/jquery.validate-1.13.0.it.js";?>" type="text/javascript"></script><script src="<?php echo $GLOBALS['dir']."core/jquery/jquery.md5-1.0.0.js";?>" type="text/javascript"></script>
  <script src="<?php echo $GLOBALS['dir']."core/jquery/jquery.markdown.js";?>" type="text/javascript"></script>
  <script src="<?php echo $GLOBALS['dir']."core/jquery/jquery.to-markdown.js";?>" type="text/javascript"></script>
  <script src="<?php echo $GLOBALS['dir']."core/jquery/jquery.wysihtml5-0.3.0.min.js";?>" type="text/javascript"></script>
