@@ -44,6 +44,9 @@
  <text key="logs-subject">Notification {0} - {1}</text>
  <text key="logs-message">Messagge: {0}</text>
 
+ <!-- chats -->
+ <text key="chats-lastAccess">Last access: {0}</text>
+
  <!-- html.class.php -->
  <text key="core-menu-dashboard">Dashboard</text>
  <text key="core-menu-admin">Other modules</text>

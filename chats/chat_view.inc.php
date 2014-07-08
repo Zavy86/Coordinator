@@ -13,6 +13,7 @@
 <body>
 <div>
 <?php
+ if($_SESSION['account']->administrator){echo "<center><small>".api_text("chats-lastAccess",api_timestampFormat(api_account($g_idAccount)->lastLogin,api_text("datetime")))."</small></center>";}
  // generate file path
  if($_SESSION['account']->id<$g_idAccount){
   $file_path="chats/".str_pad($_SESSION['account']->id,11,"0",STR_PAD_LEFT)."-".str_pad($g_idAccount,11,"0",STR_PAD_LEFT).".xml";
