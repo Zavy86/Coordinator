@@ -75,7 +75,7 @@ class str_navigation{
   $nt->class=$class;
   $nt->enabled=$enabled;
   $nt->target=$target;
-  $nt->confirm=$confirm;
+  $nt->confirm=addslashes($confirm);
   if(!is_array($this->nt_array[$this->current_tab]->dropdown)){
    $this->nt_array[$this->current_tab]->dropdown=array();
   }

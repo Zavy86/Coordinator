@@ -12,7 +12,7 @@
 </head>
 <body>
  <form action='submit.php?act=chat_send&account=<?php echo $g_idAccountTo;?>' method='post'>
-  <input type='text' name='message' style='width:325px;' placeholder='Scrivi un messaggio e premi invio' autofocus>
+  <input type='text' name='message' style='width:325px;' placeholder='Scrivi un messaggio e premi invio' autocomplete='off' autofocus>
  </form>
 </body>
 </html>
