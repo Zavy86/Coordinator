@@ -867,7 +867,7 @@ class str_form{
   $fc->label=$label;
   $fc->class=$class;
   $fc->url=$url;
-  $fc->confirm=$confirm;
+  $fc->confirm=addslashes($confirm);
   $fc->disabled=$disabled;
   $this->fc_array[]=$fc;
   return TRUE;
