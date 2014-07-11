@@ -1707,7 +1707,7 @@ function api_logHistoryParse($timestamp,$account,$status_from=NULL,$status_to=NU
  if(!$timestamp||!$account){return FALSE;}
  $return="<div id='history'>\n";
  $return.=" <div id='history_status'>\n";
- $return.="  <small>".api_timestampFormat($timestamp,api_text("datetime-short"))." - ".api_accountName($account)."</small><br>\n";
+ $return.="  <small>".api_timestampFormat($timestamp,api_text("datetime"))." - ".api_accountName($account)."</small><br>\n";
  if($status_from){$return.="  <strong><small>".$status_from."</small>";}
  if($status_to){$return.=" &rarr; <small>".$status_to."</small></strong>\n";}
  $return.=" </div>\n";
