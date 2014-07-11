@@ -1677,22 +1677,44 @@ function api_notification($idAccount,$module,$action,$subject,$message,$link=NUL
  else{return FALSE;}
 }
 
-/* -[ Log history ]---------------------------------------------------- */
+/* -[ Log History ]---------------------------------------------------- */
 // @string $module : module name
 // @integer $key : id of the object
-function api_logHistory($module,$key){
+function api_logHistory($module,$key,$only=NULL,$exclude=NULL){
  if($module==NULL || $key==NULL){return FALSE;}
+ if($only!==NULL){if(!is_array($only)){$only=array($only);}}
+ if($exclude!==NULL){if(!is_array($exclude)){$exclude=array($exclude);}}
  // definitions
  $history_array=array();
  // retrieve trigger by module actions
  $logs=$GLOBALS['db']->query("SELECT * FROM logs_logs WHERE module='".$module."' AND `key`='".$key."' ORDER BY timestamp DESC");
- while($event=$GLOBALS['db']->fetchNextObject($logs)){$history_array[]=$event;}
+ while($event=$GLOBALS['db']->fetchNextObject($logs)){
+  if($only!==NULL){
+   if(in_array($event->action,$only)){$history_array[]=$event;}
+  }elseif($exclude!==NULL){
+   if(!in_array($event->action,$only)){$history_array[]=$event;}
+  }else{
+   $history_array[]=$event;
+  }
+ }
  return $history_array;
 }
 
-
-/* ---------------------------[ DOCUMENTATE ]-------------------------------- */
-
+/* -[ Log History Parse ]---------------------------------------------------- */
+// @string $module : module name
+// @integer $key : id of the object
+function api_logHistoryParse($timestamp,$account,$status_from=NULL,$status_to=NULL,$note=NULL){
+ if(!$timestamp||!$account){return FALSE;}
+ $return="<div id='history'>\n";
+ $return.=" <div id='history_status'>\n";
+ $return.="  <small>".api_timestampFormat($timestamp,api_text("datetime"))." - ".api_accountName($account)."</small><br>\n";
+ if($status_from){$return.="  <strong><small>".$status_from."</small>";}
+ if($status_to){$return.=" &rarr; <small>".$status_to."</small></strong>\n";}
+ $return.=" </div>\n";
+ if($note){$return.=" <div id='history_note'><small>".$note."</small></div>\n";}
+ $return.="</div>\n";
+ return $return;
+}
 
 
 /* -[ Icon ]----------------------------------------------------------------- */

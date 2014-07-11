@@ -75,7 +75,7 @@ class str_navigation{
   $nt->class=$class;
   $nt->enabled=$enabled;
   $nt->target=$target;
-  $nt->confirm=$confirm;
+  $nt->confirm=addslashes($confirm);
   if(!is_array($this->nt_array[$this->current_tab]->dropdown)){
    $this->nt_array[$this->current_tab]->dropdown=array();
   }
@@ -407,7 +407,7 @@ class str_navigation{
     if($dropdown){echo "<a class='dropdown-toggle' data-toggle='dropdown' href='#'";}
      elseif($active || !$nt->enabled){echo "<a href='#'";}
      else{echo "<a href='".$nt->url.$nt->get."' target='".$nt->target."'";}
-    if(strlen($nt->confirm)){echo " onClick=\"return confirm('".$nt->confirm."')\"";}
+    if(strlen($nt->confirm)&&$nt->enabled){echo " onClick=\"return confirm('".$nt->confirm."')\"";}
     // show label
     echo ">".$nt->label."</a>";
     // dropdown items
@@ -425,7 +425,7 @@ class str_navigation{
       }else{
        echo " class='disabled ".$ntd->class."'><a href='#'";
       }
-      if(strlen($ntd->confirm)){echo " onClick=\"return confirm('".$ntd->confirm."')\"";}
+      if(strlen($ntd->confirm)&&$ntd->enabled){echo " onClick=\"return confirm('".$ntd->confirm."')\"";}
       echo ">".$ntd->label."</a></li>\n";
      }
      echo "  </ul>\n ";
@@ -480,11 +480,6 @@ class str_navigation{
   echo "</ul><!-- /navigation-tabs -->\n\n";
   // filters scripts
   if(count($this->filters)>0){
-   /*echo "<script type='text/javascript'>\n";
-   echo " function selectToggle(name,selected){\n";
-   echo "  $('#filters_input_'+name+' option').each(function(){ $(this).attr('selected',selected); });\n";
-   echo " };\n";
-   echo "</script>\n\n";*/
    $modal_filter->render();
   }
   return TRUE;
@@ -867,7 +862,7 @@ class str_form{
   $fc->label=$label;
   $fc->class=$class;
   $fc->url=$url;
-  $fc->confirm=$confirm;
+  $fc->confirm=addslashes($confirm);
   $fc->disabled=$disabled;
   $this->fc_array[]=$fc;
   return TRUE;

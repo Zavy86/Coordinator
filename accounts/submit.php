@@ -34,7 +34,7 @@ switch($act){
  // default
  default:
   $alert="?alert=submitFunctionNotFound&alert_class=alert-warning&act=".$act;
-  header("location: index.php".$alert);
+  exit(header("location: index.php".$alert));
 }
 
 
