@@ -1717,10 +1717,13 @@ function api_logHistoryParse($timestamp,$account,$status_from=NULL,$status_to=NU
 }
 
 
-/* -[ Icon ]----------------------------------------------------------------- */
-// @string $icon : bootstrap icon glyphs
-// @string $title : title of icon
-// @string $style : manual styles tag
+/**
+ * Return a Glyphicons icon html tag
+ *
+ * @param string $icon bootstrap icon glyphs
+ * @param string $title title of icon
+ * @param string $style manual styles tag
+ */
 function api_icon($icon,$title=NULL,$style=NULL){
  if($icon==NULL){return FALSE;}
  $return="<i class='".$icon."' title='".$title."' style='".$style."'></i>";
