@@ -16,6 +16,7 @@
  <text key="time-short">H:i</text>
  <text key="date">d-m-Y</text>
  <text key="date-short">d-m-'y</text>
+ <text key="date-noday">m-Y</text>
  <text key="date-textual">l, j F Y</text>
  <text key="datetime">d-m-Y H:i</text>
  <text key="datetime-short">d-m-y H:i</text>
