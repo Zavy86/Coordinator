@@ -36,7 +36,7 @@
  <text key="logs_accounts_accountGrouproleMain">The default group for the account {0} is now {1}</text>
  <text key="logs_accounts_accountGrouproleRemoved">The account {0} has been removed to the group {1}</text>
  <text key="logs_accounts_accountSwitchToAdmin">The account {0} became administrator</text>
- <text key="logs_accounts_accountSwitchToUser">The account {0} became user {1}/text>
+ <text key="logs_accounts_accountSwitchToUser">The account {0} became user {1}</text>
  <text key="logs_accounts_accountPasswordRetrieve">The account {0} has requested the reset of their password</text>
  <text key="logs_accounts_accountPasswordResetted">The account password for {0} has been reset</text>
  <text key="logs_accounts_groupCreated">The group {0} has been created&#xA;{1}</text>
