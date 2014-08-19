@@ -413,30 +413,6 @@ function api_randomString($size=10){
 
 
 /* -[ Sendmail ]------------------------------------------------------------- */
-// @param $to_mail   : Recipient mail
-// @param $message   : Content of mail
-// @param $subject   : Subject of mail
-// @param $from_mail : Sender mail
-// @param $from_name : Sender name
-/*function api_sendmail($to_mail,$message,$subject="",$from_mail="",$from_name=""){
- // headers
- if($from_mail==""){$from_mail=api_getOption('owner_mail');}
- if($from_name==""){$from_name=api_getOption('owner_mail_from');}
- $headers= "MIME-Version: 1.0\r\n";
- $headers.="Content-type: text/plain; Charset=UTF-8\r\n";
- $headers.="From: ".$from_name." <".$from_mail.">\r\n";
- $headers.="Reply-To: ".$from_mail."\r\n";
- $headers.="Return-Path: ".$from_mail."\r\n";
- // subject
- if($subject==""){$subject="Intranet - Comunicazione";}
- // message
- $message.="\n\n\n--\nQuesto messaggio è stato generato automaticamente da Coordinator per conto di Intranet, si prega di non rispondere.\n";
- // sendmail
- if($to_mail<>""){mail($to_mail,$subject,$message,$headers);}
-}*/
-
-
-/* -[ Sendmail ]------------------------------------------------------------- */
 // @string $to_mail : Recipient mail
 // @string $message : Content of mail
 // @string $subject : Subject of mail
@@ -444,6 +420,7 @@ function api_randomString($size=10){
 // @string $from_mail : Sender mail
 // @string $from_name : Sender name
 function api_sendmail($to_mail,$message,$subject="",$html=FALSE,$from_mail="",$from_name=""){
+ if($to_mail==NULL){return FALSE;}
  // headers
  $eol="\n";
  if($from_mail==""){$from_mail=api_getOption('owner_mail');}
@@ -475,8 +452,22 @@ function api_sendmail($to_mail,$message,$subject="",$html=FALSE,$from_mail="",$f
   $mail_message.=$eol."--PHP-alt-".$mail_random_hash."--".$eol;
   $message=$mail_message;
  }
- // sendmail
- if($to_mail<>""){return mail($to_mail,$subject,$message,$headers);}
+ // check for asynchronous sendmail
+ if(api_getOption("sendmail_asynchronous")){
+  // insert mail into database
+  $query="INSERT INTO sendmail_mails
+   (`to`,`subject`,`message`,`headers`,`addDate`,`addIdAccount`) VALUES
+   ('".$to_mail."','".addslashes($subject)."','".addslashes($message)."',
+    '".addslashes($headers)."','".date('Y-m-d H:m:s')."','".api_accountId()."')";
+  // execute query
+  $GLOBALS['db']->execute($query);
+  // set id to last inserted id
+  $q_id=$GLOBALS['db']->lastInsertedId();
+  if($q_id>0){return TRUE;}else{return FALSE;}
+ }else{
+  // sendmail
+  return mail($to_mail,$subject,$message,$headers);
+ }
 }
 
 

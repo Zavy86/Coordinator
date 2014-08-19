@@ -385,6 +385,7 @@ INSERT IGNORE INTO `settings_settings` (`code`, `value`) VALUES
 ('owner_mail_from', 'Default Company'),
 ('owner_url', 'http://www.defaultcompany.com'),
 ('piwik_analytics', ''),
+('sendmail_asynchronous', '0'),
 ('show_logo', '0'),
 ('temp_token', ''),
 ('title', 'Coordinator'),

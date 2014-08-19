@@ -27,6 +27,8 @@
  <text key="settings-ff-owner_url">Sito web</text>
  <text key="settings-ff-owner_mail">E-mail</text>
  <text key="settings-ff-owner_mail_from">Mittente</text>
+ <text key="settings-ff-sendmail">Modalità invio</text>
+ <text key="settings-ff-sendmail-label">Invio mail asincrono (è richiesto Cron)</text>
  <text key="settings-ff-title">Titolo visualizzato</text>
  <text key="settings-ff-show_logo">Visualizza logo</text>
  <text key="settings-ff-show_logo-label">Mostra il logo al posto del titolo</text>

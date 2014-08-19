@@ -27,6 +27,8 @@
  <text key="settings-ff-owner_url">Website</text>
  <text key="settings-ff-owner_mail">E-mail</text>
  <text key="settings-ff-owner_mail_from">Sender</text>
+ <text key="settings-ff-sendmail">Send mode</text>
+ <text key="settings-ff-sendmail-label">Asynchronous mail sending (Cron is required)</text>
  <text key="settings-ff-title">Title displayed</text>
  <text key="settings-ff-show_logo">Dispaly logo</text>
  <text key="settings-ff-show_logo-label">Display logo instead of title</text>
