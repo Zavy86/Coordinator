@@ -138,7 +138,7 @@ public function header($title="",$nav="dashboard",$navbar=TRUE){
        // show admin menu shortcut
        if($_SESSION['account']->typology==1 && count($admin_menu_array)>0){
         echo "<li class='dropdown'><a href='#' class='dropdown-toggle' data-toggle='dropdown'>";
-        echo api_text("core-menu-admin")." <b class='caret'></b></a>\n";
+        echo api_icon('icon-th')." <b class='caret'></b></a>\n";
          echo "<ul class='dropdown-menu'>\n";
          foreach($admin_menu_array as $menu){
           echo "<li><a href='".$GLOBALS['dir'].$menu->module."/".$menu->url."'>".stripslashes($menu->menu)."</a></li>";
