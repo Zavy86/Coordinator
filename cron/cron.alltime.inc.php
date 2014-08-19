@@ -26,7 +26,7 @@ if($count){
    $GLOBALS['db']->execute("UPDATE sendmail_mails SET status='".$status."',sendDate='".date("Y-m-d H:i:s")."' WHERE id='".$mail->id."'");
    // log event
    api_log(API_LOG_ERROR,"cron","cronSendmailFailed",
-    "{logs_cron_sendmailFailed|".$mail->to."|".$mail->subject."|".$error['type']."|".$error['message']."}",$mail->id);
+    "{logs_cron_sendmailFailed|".stripslashes($mail->to)."|".stripslashes($mail->subject)."|".$error['type']."|".$error['message']."}",$mail->id);
   }
  }
  // log event
