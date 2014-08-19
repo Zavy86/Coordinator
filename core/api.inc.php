@@ -422,7 +422,7 @@ function api_randomString($size=10){
 function api_sendmail($to_mail,$message,$subject="",$html=FALSE,$from_mail="",$from_name=""){
  if($to_mail==NULL){return FALSE;}
  // headers
- $eol="\r\n";
+ $eol="\n";
  if($from_mail==""){$from_mail=api_getOption('owner_mail');}
  if($from_name==""){$from_name=api_getOption('owner_mail_from');}
  $headers= "MIME-Version: 1.0".$eol;
