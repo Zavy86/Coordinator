@@ -8,6 +8,7 @@ $g_submit=$_GET['submit'];
 // check if submit from web form or cron
 if($g_submit<>"cron"){$html->header("CRON");}
 // initialization
+$cron_alltime_path=array();
 $cron_daily_path=array();
 $cron_weekly_path=array();
 // search and include daily crons
@@ -16,6 +17,7 @@ if($handle_dir=opendir("../")){
   if($entry_dir<>"." && $entry_dir<>".." && is_dir("../".$entry_dir)){
    if($handle_cron=opendir("../".$entry_dir)){
     while(FALSE!==($entry_cron=readdir($handle_cron))){
+     if($entry_cron=="cron.alltime.inc.php"){$cron_alltime_path[]="../".$entry_dir."/".$entry_cron;}
      if($entry_cron=="cron.daily.inc.php"){$cron_daily_path[]="../".$entry_dir."/".$entry_cron;}
      if($entry_cron=="cron.weekly.inc.php"){$cron_weekly_path[]="../".$entry_dir."/".$entry_cron;}
     }
@@ -25,12 +27,33 @@ if($handle_dir=opendir("../")){
  }
  closedir($handle_dir);
 }
+// include all-time cron
+//--
+$executed=NULL;
+foreach($cron_alltime_path as $daily_path){$executed.=$daily_path."\n";}
+mail("manuel.zavatta@cogne.com",$_SERVER['SERVER_NAME']." executing all-time cron",$executed);
+//--
+foreach($cron_alltime_path as $alltime_path){
+ if(file_exists($alltime_path)){include $alltime_path;}
+}
 // include daily cron
-foreach($cron_daily_path as $daily_path){
- if(file_exists($daily_path)){include $daily_path;}
+if(date("H")==0){
+ //--
+ $executed=NULL;
+ foreach($cron_daily_path as $daily_path){$executed.=$daily_path."\n";}
+ mail("manuel.zavatta@cogne.com",$_SERVER['SERVER_NAME']." executing daily cron",$executed);
+ //--
+ foreach($cron_daily_path as $daily_path){
+  if(file_exists($daily_path)){include $daily_path;}
+ }
 }
 // include weekly cron on sunday
 if(date("w")==0){
+ //--
+ $executed=NULL;
+ foreach($cron_weekly_path as $daily_path){$executed.=$daily_path."\n";}
+ mail("manuel.zavatta@cogne.com",$_SERVER['SERVER_NAME']." executing weekly cron",$executed);
+ //--
  foreach($cron_weekly_path as $weekly_path){
   if(file_exists($weekly_path)){include $weekly_path;}
  }

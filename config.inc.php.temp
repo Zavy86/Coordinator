@@ -9,4 +9,8 @@ $db_user="username";
 $db_pass="password";
 $db_name="database";
 
+/* -[ Cron ]------------------------------------------------------------------*/
+// To ebable cron add this line in the root crontab
+// */5  *  *  *  0  wget "http://HOSTNAME/DIR/cron/index.php?submit=cron&token=CRONTOKEN" -qO- | cat /dev/null
+
 ?>
