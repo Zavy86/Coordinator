@@ -7,11 +7,11 @@ if(api_basePath()<>$GLOBALS['dir']."cron"){api_die();}
 
 /* -[ Sendmail Asynchronous ]------------------------------------------------ */
 $log="CRON - SENDMAIL\n";
-$count=$GLOBALS['db']->countOf("sendmail_mails","status<>'1'");
+$count=$GLOBALS['db']->countOf("logs_mails","status<>'1'");
 $count_sended=0;
 $count_failed=0;
 if($count){
- $mails=$GLOBALS['db']->query("SELECT * FROM sendmail_mails WHERE status<>'1'");
+ $mails=$GLOBALS['db']->query("SELECT * FROM logs_mails WHERE status<>'1'");
  while($mail=$GLOBALS['db']->fetchNextObject($mails)){
   // send mail
   $sendmail=mail(stripslashes($mail->to),stripslashes($mail->subject),stripslashes($mail->message),stripslashes($mail->headers));
@@ -19,11 +19,11 @@ if($count){
   // check
   if($sendmail){
    $count_sended++;
-   $GLOBALS['db']->execute("UPDATE sendmail_mails SET status='1',sendDate='".date("Y-m-d H:i:s")."' WHERE id='".$mail->id."'");
+   $GLOBALS['db']->execute("UPDATE logs_mails SET status='1',sendDate='".date("Y-m-d H:i:s")."' WHERE id='".$mail->id."'");
   }else{
    $count_failed++;
    if($mail->status==0){$status=2;}else{$status=$mail->status+1;}
-   $GLOBALS['db']->execute("UPDATE sendmail_mails SET status='".$status."',sendDate='".date("Y-m-d H:i:s")."' WHERE id='".$mail->id."'");
+   $GLOBALS['db']->execute("UPDATE logs_mails SET status='".$status."',sendDate='".date("Y-m-d H:i:s")."' WHERE id='".$mail->id."'");
    // log event
    api_log(API_LOG_ERROR,"cron","cronSendmailFailed",
     "{logs_cron_sendmailFailed|".stripslashes($mail->to)."|".stripslashes($mail->subject)."|".$error['type']."|".$error['message']."}",$mail->id);

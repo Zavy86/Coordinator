@@ -455,7 +455,7 @@ function api_sendmail($to_mail,$message,$subject="",$html=FALSE,$from_mail="",$f
  // check for asynchronous sendmail
  if(api_getOption("sendmail_asynchronous")){
   // insert mail into database
-  $query="INSERT INTO sendmail_mails
+  $query="INSERT INTO logs_mails
    (`to`,`subject`,`message`,`headers`,`addDate`,`addIdAccount`) VALUES
    ('".$to_mail."','".addslashes($subject)."','".addslashes($message)."',
     '".addslashes($headers)."','".date('Y-m-d H:m:s')."','".api_accountId()."')";
