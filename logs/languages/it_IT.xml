@@ -20,6 +20,7 @@
 
  <!-- template.inc.php -->
  <text key="nav-logs">Registro Eventi</text>
+ <text key="nav-mails">Registro Mail</text>
  <text key="nav-notifications">Notifiche</text>
  <text key="nav-archived-notifications">Archivio notifiche</text>
  <text key="nav-send-notifications">Invia una notifica</text>
@@ -74,5 +75,15 @@
  <text key="subscriptions-fo-notification">Notifica</text>
  <text key="subscriptions-fo-mail">Notifica + Mail</text>
  <text key="subscriptions-fc-submit">Aggiorna iscrizioni</text>
+
+ <!-- logs_mails_list.php -->
+ <text key="mails_list-th-timestamp">Data</text>
+ <text key="mails_list-th-recipient">Destinatario</text>
+ <text key="mails_list-th-subject">Oggetto</text>
+ <text key="mails_list-th-sended">Inviata</text>
+ <text key="mails_list-tr-no-results">Non è presente nessuna mail..</text>
+ <text key="mails_list-m-failed">L'invio di questa mail è fallito {0} volte</text>
+ <text key="mails_list-m-delete">Elimina</text>
+ <text key="mails_list-m-delete-confirm">Confermi l'eliminazione di questa mail non inviata</text>
 
 </locale>

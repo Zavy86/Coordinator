@@ -20,6 +20,7 @@
 
  <!-- template.inc.php -->
  <text key="nav-logs">Events log</text>
+ <text key="nav-mails">Mails log</text>
  <text key="nav-notifications">Notifications</text>
  <text key="nav-archived-notifications">Notifications archive</text>
  <text key="nav-send-notifications">Send notification</text>
@@ -74,5 +75,15 @@
  <text key="subscriptions-fo-notification">Notification</text>
  <text key="subscriptions-fo-mail">Notification + Mail</text>
  <text key="subscriptions-fc-submit">Update subscriptions</text>
+
+ <!-- logs_mails_list.php -->
+ <text key="mails_list-th-timestamp">Timestamp</text>
+ <text key="mails_list-th-recipient">Recipient</text>
+ <text key="mails_list-th-subject">Subject</text>
+ <text key="mails_list-th-sended">Sended</text>
+ <text key="mails_list-tr-no-results">There is no mail..</text>
+ <text key="mails_list-m-failed">The sending of this message is failed {0} times</text>
+ <text key="mails_list-m-delete">Delete</text>
+ <text key="mails_list-m-delete-confirm">Confirm the deletion of this unsent mail?</text>
 
 </locale>
