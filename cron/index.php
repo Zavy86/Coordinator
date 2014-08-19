@@ -28,11 +28,6 @@ if($handle_dir=opendir("../")){
  closedir($handle_dir);
 }
 // include all-time cron
-//--
-$executed=NULL;
-foreach($cron_alltime_path as $daily_path){$executed.=$daily_path."\n";}
-mail("manuel.zavatta@cogne.com",$_SERVER['SERVER_NAME']." executing all-time cron",$executed);
-//--
 foreach($cron_alltime_path as $alltime_path){
  if(file_exists($alltime_path)){include $alltime_path;}
 }
@@ -48,7 +43,7 @@ if(date("H")==0){
  }
 }
 // include weekly cron on sunday
-if(date("w")==0){
+if(date("w")==0 && date("H")==0){
  //--
  $executed=NULL;
  foreach($cron_weekly_path as $daily_path){$executed.=$daily_path."\n";}

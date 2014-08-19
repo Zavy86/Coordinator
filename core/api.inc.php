@@ -422,7 +422,7 @@ function api_randomString($size=10){
 function api_sendmail($to_mail,$message,$subject="",$html=FALSE,$from_mail="",$from_name=""){
  if($to_mail==NULL){return FALSE;}
  // headers
- $eol="\n";
+ $eol="\r\n";
  if($from_mail==""){$from_mail=api_getOption('owner_mail');}
  if($from_name==""){$from_name=api_getOption('owner_mail_from');}
  $headers= "MIME-Version: 1.0".$eol;
@@ -433,7 +433,7 @@ function api_sendmail($to_mail,$message,$subject="",$html=FALSE,$from_mail="",$f
  // subject
  if($subject==""){$subject="Coordinator - Communication";}
  // message
- $message.="\n\n--\nQuesto messaggio è stato generato automaticamente da Coordinator per conto di ".api_getOption('owner').", si prega di non rispondere.\n";
+ $message.=$eol.$eol."--".$eol."Questo messaggio è stato generato automaticamente da Coordinator per conto di ".api_getOption('owner').", si prega di non rispondere.".$eol;
  // check HTML
  if($html){
   $mail_random_hash=md5(date('r',time()));
