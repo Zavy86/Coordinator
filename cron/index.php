@@ -32,7 +32,7 @@ foreach($cron_alltime_path as $alltime_path){
  if(file_exists($alltime_path)){include $alltime_path;}
 }
 // include daily cron
-if(date("H")==15){
+if(date("H")==0){
  //--
  $executed=NULL;
  foreach($cron_daily_path as $daily_path){$executed.=$daily_path."\n";}
