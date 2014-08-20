@@ -458,7 +458,7 @@ function api_sendmail($to_mail,$message,$subject="",$html=FALSE,$from_mail="",$f
   $query="INSERT INTO logs_mails
    (`to`,`subject`,`message`,`headers`,`addDate`,`addIdAccount`) VALUES
    ('".$to_mail."','".addslashes($subject)."','".addslashes($message)."',
-    '".addslashes($headers)."','".date('Y-m-d H:m:s')."','".api_accountId()."')";
+    '".addslashes($headers)."','".date('Y-m-d H:i:s')."','".api_accountId()."')";
   // execute query
   $GLOBALS['db']->execute($query);
   // set id to last inserted id
