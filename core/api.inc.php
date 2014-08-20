@@ -229,45 +229,47 @@ function api_updateTempToken(){
 
 
 /* -[ Send notification ]---------------------------------------------------- */
-function api_notification_send($idAccountTo,$typology,$module,$subject,$message,$link=NULL,$idAccountFrom=NULL,$idAction=NULL){
- if($idAccountTo>1 && ($typology>0 && $typology<3) && strlen($module)>0 && strlen($subject)>0 && strlen($message)>0){
-  if($idAccountFrom===NULL){$idAccountFrom=$_SESSION['account']->id;}
-  if($idAction===NULL){$idAction=md5(date('YdmHsi').api_randomString());}
-  $query="INSERT INTO notifications_notifications (idAction,idAccountTo,idAccountFrom,typology,module,subject,message,link,created,status)
-   VALUES ('".$idAction."','".$idAccountTo."','".$idAccountFrom."','".$typology."','".$module."','".addslashes($subject)."','".addslashes($message)."','".$link."','".date("Y-m-d H:i:s")."','1')";
-  $GLOBALS['db']->execute($query);
-  return $idAction;
- }else{
-  return FALSE;
- }
+function api_notification_send($idAccount,$module,$action,$subject,$message,$link=NULL,$hash=NULL){
+ if($idAccount==NULL || strlen($module)==0 || strlen($subject)==0 || strlen($message)==0){return FALSE;}
+ // make random hash if not exist
+ if($hash==NULL){$hash=md5(date('YdmHsi').api_randomString());}
+ // build query
+ $query="INSERT INTO logs_notifications
+  (idAccount,timestamp,module,action,subject,message,link,hash,status) VALUES
+  ('".$idAccount."','".date("Y-m-d H:i:s")."','".$module."','".$action."',
+   '".addslashes($subject)."','".addslashes($message)."','".$link."','".$hash."','1')";
+ // execute query
+ $GLOBALS['db']->execute($query);
+ // set id to last inserted id
+ $q_id=$GLOBALS['db']->lastInsertedId();
+ // return hash or false
+ if($q_id>0){return $hash;}
+ else{return FALSE;}
 }
-
 
 /* -[ Send notification to all accounts ]------------------------------------ */
-function api_notification_all($typology,$module,$subject,$message,$link=NULL,$idAccountFrom=NULL){
- if($typology==2){$idAction=md5(date('YdmHsi').api_randomString());}
+function api_notification_all($module,$action,$subject,$message,$link=NULL){
+ $hash=md5(date('YdmHsi').api_randomString());
  $accounts=$GLOBALS['db']->query("SELECT * FROM accounts_accounts");
  while($account=$GLOBALS['db']->fetchNextObject($accounts)){
-  api_notification_send($account->id,$typology,$module,$subject,$message,$link,$idAccountFrom,$idAction);
+  api_notification_send($account->id,$module,$action,$subject,$message,$link,$hash);
  }
- return $idAction;
+ return $hash;
 }
-
 
 /* -[ Send notification to administrators ]---------------------------------- */
-function api_notification_administrators($typology,$module,$subject,$message,$link=NULL,$idAccountFrom=NULL){
- if($typology==2){$idAction=md5(date('YdmHsi').api_randomString());}
+function api_notification_administrators($module,$action,$subject,$message,$link=NULL){
+ $hash=md5(date('YdmHsi').api_randomString());
  $accounts=$GLOBALS['db']->query("SELECT * FROM accounts_accounts WHERE typology='1'");
  while($account=$GLOBALS['db']->fetchNextObject($accounts)){
-  api_notification_send($account->id,$typology,$module,$subject,$message,$link,$idAccountFrom,$idAction);
+  api_notification_send($account->id,$module,$action,$subject,$message,$link,$hash);
  }
- return $idAction;
+ return $hash;
 }
 
-
 /* -[ Send notification to group members ]----------------------------------- */
-function api_notification_group($idGroup,$idGrouprole,$typology,$module,$subject,$message,$link=NULL,$idAccountFrom=NULL){
- if($typology==2){$idAction=md5(date('YdmHsi').api_randomString());}
+function api_notification_group($idGroup,$idGrouprole,$module,$action,$subject,$message,$link=NULL){
+ $hash=md5(date('YdmHsi').api_randomString());
  $groups="idGroup='".$idGroup."'";
  // check for subgroups
  $subgroups=$GLOBALS['db']->query("SELECT * FROM accounts_groups WHERE idGroup='".$idGroup."'");
@@ -275,9 +277,9 @@ function api_notification_group($idGroup,$idGrouprole,$typology,$module,$subject
  // get accounts in groups
  $accounts=$GLOBALS['db']->query("SELECT distinct(idAccount) FROM accounts_groups_join_accounts WHERE (".$groups.") AND idGrouprole>='".$idGrouprole."'");
  while($account=$GLOBALS['db']->fetchNextObject($accounts)){
-  api_notification_send($account->idAccount,$typology,$module,$subject,$message,$link,$idAccountFrom,$idAction);
+  api_notification_send($account->idAccount,$module,$action,$subject,$message,$link,$hash);
  }
- return $idAction;
+ return $hash;
 }
 
 
