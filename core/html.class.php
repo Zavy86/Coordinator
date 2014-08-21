@@ -321,7 +321,7 @@ public function footer($wiki_link=NULL,$copyright=TRUE){
   $(document).ready(function(){
    // active popovers
    $("[data-toggle=popover]").popover({trigger:"hover"});
-   // refresh notifications every 10 minutes
+   // refresh notifications every 1 minutes
    var refreshNotificationsCounter=setInterval(function(){
     $.get("../notifications/notifications_counter.inc.php",function(data){
      $('#notifications_counter').html(data);
@@ -330,7 +330,7 @@ public function footer($wiki_link=NULL,$copyright=TRUE){
       $('#notifications_list').load("../notifications/notifications_list.inc.php");
      }
     });
-   },600000);
+   },60000);
    // refresh chats every 10 sec
    var chat_popup=1;
    var refreshChatCounter=setInterval(function(){
