@@ -33,22 +33,12 @@ foreach($cron_alltime_path as $alltime_path){
 }
 // include daily cron
 if(date("H")==0 && (int)date("i")<5){
- //--
- $executed=NULL;
- foreach($cron_daily_path as $daily_path){$executed.=$daily_path."\n";}
- mail("manuel.zavatta@cogne.com",$_SERVER['SERVER_NAME']." executing daily cron",$executed);
- //--
  foreach($cron_daily_path as $daily_path){
   if(file_exists($daily_path)){include $daily_path;}
  }
 }
 // include weekly cron on sunday
 if(date("w")==0 && date("H")==0 && (int)date("i")<5){
- //--
- $executed=NULL;
- foreach($cron_weekly_path as $daily_path){$executed.=$daily_path."\n";}
- mail("manuel.zavatta@cogne.com",$_SERVER['SERVER_NAME']." executing weekly cron",$executed);
- //--
  foreach($cron_weekly_path as $weekly_path){
   if(file_exists($weekly_path)){include $weekly_path;}
  }
