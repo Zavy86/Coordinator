@@ -202,8 +202,9 @@ function account_save(){
   if(!api_checkPermission("accounts","accounts_add")){api_die("accessDenied");}
   $secret=api_randomString(32);
   $query="INSERT INTO accounts_accounts
-   (account,password,secret,name,typology,idCompany) VALUES
-   ('".$p_account."','".md5(api_randomString(10))."','".$secret."','".$p_name."','".$p_typology."','".$p_idCompany."')";
+   (account,password,secret,name,typology,language,idCompany) VALUES
+   ('".$p_account."','".md5(api_randomString(10))."','".$secret."','".$p_name."',
+    '".$p_typology."','".$p_language."','".$p_idCompany."')";
   // execute query
   $GLOBALS['db']->execute($query);
   // set id to last inserted id
