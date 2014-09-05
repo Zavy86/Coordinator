@@ -98,7 +98,7 @@ if($ldap){
    while($company=$GLOBALS['db']->fetchNextObject($companies)){
     echo "<option value='".$company->id."'";
     if($account->idCompany==$company->id){echo " selected";}
-    echo "> ".$company->company." - ".$company->division;
+    echo "> ".$company->company." - ".$company->division." &rarr; ".$company->name;
     echo "</option>\n";
    }
   ?>
