@@ -1478,10 +1478,14 @@ function api_file_download($idFile,$table="uploads_uploads",$name=NULL,$force=TR
  $file=$GLOBALS['db']->queryUniqueObject("SELECT * FROM ".$table." WHERE id='".$idFile."'");
  if($file->id>0){
   if(strlen($name)>0){$file->name=$name;}
-  header("Content-length: ".$file->size);
+  header("Pragma: no-cache");
+  header("Cache-Control: no-cache, must-revalidate");
+  header('Content-Transfer-Encoding: binary');
+  header("Content-length: ".strlen($file->file));
   header("Content-type: ".$file->type);
   if($force){$dispositions="attachment; ";}
   header("Content-Disposition: ".$dispositions."filename=".$file->name);
+  ob_end_clean();
   echo $file->file;
  }else{
   echo "Error, file not found";
