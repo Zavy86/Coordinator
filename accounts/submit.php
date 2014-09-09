@@ -194,8 +194,8 @@ function account_interpret_stop(){
  session_destroy();
  session_start();
  $account->password=NULL;
- $_SESSION['account']->administrator=TRUE;
  $_SESSION['account']=$account;
+ $_SESSION['account']->administrator=TRUE;
  // update session language
  $_SESSION['language']=$account->language;
  // log
