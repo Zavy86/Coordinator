@@ -9,6 +9,7 @@
  <text key="accountCreated">The account {0} has been created, select the groups to which to assign</text>
  <text key="accountUpdated">The account {0} has been updated</text>
  <text key="accountDeleted">The account {0} has been deleted</text>
+ <text key="accountInterpreted">You're interpreting the selected account</text>
  <text key="accountCustomized">Your account has been updated</text>
  <text key="accountPasswordChanged">Your password has been updated</text>
  <text key="accountSwitched1">From this moment you are working with administrator privileges :)</text>
@@ -31,6 +32,8 @@
  <text key="logs_accounts_loginDisabled">User access {0} has been blocked</text>
  <text key="logs_accounts_accountCreated">The account {0} has been created</text>
  <text key="logs_accounts_accountUpdated">The account {0} has been updated</text>
+ <text key="logs_accounts_accountInterpreted">The user {1} is interpreting the user {3}</text>
+ <text key="logs_accounts_accountInterpretedStop">The user {1} does not interpret more user {3}</text>
  <text key="logs_accounts_accountCustomized">User {0} has customized his profile</text>
  <text key="logs_accounts_accountGrouproleAdded">The account {0} has been added to the group {1}</text>
  <text key="logs_accounts_accountGrouproleMain">The default group for the account {0} is now {1}</text>
@@ -88,6 +91,8 @@
  <text key="accounts_edit-fc-cancel">Cancel</text>
  <text key="accounts_edit-fc-delete">Delete</text>
  <text key="accounts_edit-fc-delete-confirm">Permanently delete this account?</text>
+ <text key="accounts_edit-fc-interpret">Interpret</text>
+ <text key="accounts_edit-fc-interpret-confirm">Interpreting this user you lose your permission. To conclude the interpretation is necessary to interrupt the interpretation or logout and sign in again.</text>
  <text key="accounts_edit-th-group">Group</text>
  <text key="accounts_edit-th-role">Role</text>
  <text key="accounts_edit-td-main">Main</text>

@@ -221,6 +221,11 @@ public function header($title="",$nav="dashboard",$navbar=TRUE){
         <li><a href="<?php echo $GLOBALS['dir']."dashboard/dashboard_edit.php";?>"><?php echo api_text("core-menu-dashboard-edit"); ?></a></li>
 
         <?php
+
+         if($_SESSION['account']->interpreter>1){
+          echo "<li><a href='".$GLOBALS['dir']."accounts/submit.php?act=account_interpret_stop'>".api_text("core-menu-interpretStop")."</a></li>";
+         }
+
          if($_SESSION['account']->administrator && $_SESSION['account']->id>1){
           echo "<li class='divider'></li>\n";
           if($_SESSION['account']->debug){

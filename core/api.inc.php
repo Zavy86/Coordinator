@@ -1572,11 +1572,14 @@ function api_log($typology,$module,$action,$event,$key=NULL,$link=NULL){
  $log=new stdClass();
  // clean variables
  $event=addslashes($event);
+ // log interpreter id if account is interpreted
+ $idAccount=$_SESSION['account']->id;
+ if($_SESSION['account']->interpreter){$idAccount=$_SESSION['account']->interpreter;}
  // build log query
  $query="INSERT INTO logs_logs
   (typology,timestamp,module,action,`key`,event,link,idAccount,ip) VALUES
   ('".$typology."','".date("Y-m-d H:i:s")."','".$module."','".$action."','".$key."',
-   '".$event."','".$link."','".$_SESSION['account']->id."','".$_SERVER['REMOTE_ADDR']."')";
+   '".$event."','".$link."','".$idAccount."','".$_SERVER['REMOTE_ADDR']."')";
  // execute query
  $GLOBALS['db']->execute($query);
  // acquire log id

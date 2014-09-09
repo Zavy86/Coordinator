@@ -8,6 +8,8 @@ switch($act){
  // accounts
  case "account_login":account_login();break;
  case "account_logout":account_logout();break;
+ case "account_interpret":account_interpret();break;
+ case "account_interpret_stop":account_interpret_stop();break;
  case "account_save":account_save();break;
  case "account_customize":account_customize();break;
  case "account_grouprole_add":account_grouprole_add();break;
@@ -69,6 +71,7 @@ function account_login(){
      // account enabled
      session_destroy();
      session_start();
+     $account->password=NULL;
      $_SESSION['account']=$account;
      // update session language
      $_SESSION['language']=$account->language;
@@ -107,9 +110,11 @@ function account_login(){
   // open new session
   session_destroy();
   session_start();
+  $account->password=NULL;
   $_SESSION['account']=$account;
   // update session language
   $_SESSION['language']=$account->language;
+  // administrator
   if($account->typology==1){$_SESSION['account']->typology=2;$_SESSION['account']->administrator=TRUE;}
   // update lastLogin
   $GLOBALS['db']->execute("UPDATE accounts_accounts SET lastLogin='".date('Y-m-d H:i:s')."' WHERE id='".$account->id."'");
@@ -149,6 +154,56 @@ function account_logout(){
  session_destroy();
  session_start();
  header("location: index.php");
+}
+
+/* -[ Account Interpret ]---------------------------------------------------- */
+function account_interpret(){
+ // check for admins
+ if(!$_SESSION['account']->administrator){api_die("accessDenied");}
+ $interpreter=$_SESSION['account']->id;
+ // reset session
+ session_destroy();
+ session_start();
+ // acquire variables
+ $g_idAccount=$_GET['idAccount'];
+ // get object
+ $account=$GLOBALS['db']->queryUniqueObject("SELECT * FROM accounts_accounts WHERE id='".$g_idAccount."'");
+ // set password to null
+ $account->password=NULL;
+ $account->interpreter=$interpreter;
+ // set session to account
+ $_SESSION['account']=$account;
+ // update session language
+ $_SESSION['language']=$account->language;
+ // log
+ api_log(API_LOG_WARNING,"accounts","accountInterpreted",
+  "{logs_accounts_accountInterpreted|".$interpreter."|".api_accountName($interpreter)."|".$_SESSION['account']->id."|".api_accountName($_SESSION['account']->id)."}");
+ // redirect
+ $alert="?alert=accountInterpreted&alert_class=alert-success";
+ header("location: index.php".$alert);
+}
+
+/* -[ Account Interpretation Stop ]------------------------------------------ */
+function account_interpret_stop(){
+ // check for interpretation
+ if(!$_SESSION['account']->interpreter){api_die("accessDenied");}
+ $interpreted=$_SESSION['account']->id;
+ // get object
+ $account=$GLOBALS['db']->queryUniqueObject("SELECT * FROM accounts_accounts WHERE id='".$_SESSION['account']->interpreter."'");
+ // reset session
+ session_destroy();
+ session_start();
+ $account->password=NULL;
+ $_SESSION['account']=$account;
+ // update session language
+ $_SESSION['language']=$account->language;
+ if($account->typology==1){$_SESSION['account']->typology=2;$_SESSION['account']->administrator=TRUE;}
+ // log
+ api_log(API_LOG_NOTICE,"accounts","accountInterpretedStop",
+  "{logs_accounts_accountInterpretedStop|".$_SESSION['account']->id."|".api_accountName($_SESSION['account']->id)."|".$interpreted."|".api_accountName($interpreted)."}");
+ // redirect
+ $alert="?alert=accountInterpreted&alert_class=alert-success";
+ header("location: index.php".$alert);
 }
 
 /* -[ Account Save ]--------------------------------------------------------- */

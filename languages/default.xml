@@ -56,6 +56,7 @@
  <text key="core-menu-logs">Logs registry</text>
  <text key="core-menu-database">Show Database</text>
  <text key="core-menu-dashboard-edit">Edit Dashboard</text>
+ <text key="core-menu-interpretStop">Stop Interpretation</text>
  <text key="core-menu-becomeAdministrator">Become an Administrator</text>
  <text key="core-menu-becomeUser">Become an User</text>
  <text key="core-menu-debugEnable">Enable Debug</text>
