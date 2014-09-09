@@ -9,6 +9,7 @@
  <text key="accountCreated">L'account {0} è stato creato, seleziona i gruppi a cui assegnarlo</text>
  <text key="accountUpdated">L'account {0} è stato aggiornato</text>
  <text key="accountDeleted">L'account {0} è stato eliminato</text>
+ <text key="accountInterpreted">Stai interpretando l'account selezionato</text>
  <text key="accountCustomized">Il tuo account è stato aggiornato</text>
  <text key="accountPasswordChanged">La tua password è stata aggiornata</text>
  <text key="accountSwitched1">Da questo momento stai operando con i privilegi di amministratore, ogni porta ti sarà aperta.. :)</text>
@@ -31,6 +32,8 @@
  <text key="logs_accounts_loginDisabled">L'accesso dell'utente {0} è stato bloccato</text>
  <text key="logs_accounts_accountCreated">L'account {0} è stato creato</text>
  <text key="logs_accounts_accountUpdated">L'account {0} è stato aggiornato</text>
+ <text key="logs_accounts_accountInterpreted">L'utente {1} sta interpretando l'utente {3}</text>
+ <text key="logs_accounts_accountInterpretedStop">L'utente {1} ha smesso di interpretare l'utente {3}</text>
  <text key="logs_accounts_accountCustomized">L'utente {0} ha personalizzato il proprio profilo</text>
  <text key="logs_accounts_accountGrouproleAdded">L'account {0} è stato aggiunto al gruppo {1}</text>
  <text key="logs_accounts_accountGrouproleMain">Il gruppo predefinito per l'account {0} è ora {1}</text>
@@ -88,6 +91,8 @@
  <text key="accounts_edit-fc-cancel">Annulla</text>
  <text key="accounts_edit-fc-delete">Elimina</text>
  <text key="accounts_edit-fc-delete-confirm">Eliminare definitivamente questo utente?</text>
+ <text key="accounts_edit-fc-interpret">Interpreta</text>
+ <text key="accounts_edit-fc-interpret-confirm">Interpretando questo utente perderai i tuoi permessi, per concludere l'interpretazione è necessario interrompere l'interpretazione oppure uscire e autenticarsi nuovamente.</text>
  <text key="accounts_edit-th-group">Gruppo</text>
  <text key="accounts_edit-th-role">Ruolo</text>
  <text key="accounts_edit-td-main">Principale</text>

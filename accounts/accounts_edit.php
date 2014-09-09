@@ -50,6 +50,9 @@ function content(){
  if($account->id>0 && api_checkPermission("accounts","accounts_delete")){
   $form->addControl("button",api_text("accounts_edit-fc-delete"),"btn-danger","submit.php?act=account_delete&id=".$account->id,api_text("accounts_edit-fc-delete-confirm"));
  }
+ if($_SESSION['account']->administrator && $account->id<>$_SESSION['account']->id){
+  $form->addControl("button",api_text("accounts_edit-fc-interpret"),"btn-warning","submit.php?act=account_interpret&idAccount=".$account->id,api_text("accounts_edit-fc-interpret-confirm"));
+ }
  // show form
  $form->render();
  // split window

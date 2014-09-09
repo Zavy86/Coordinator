@@ -76,6 +76,7 @@
  <text key="core-menu-logs">Registro eventi</text>
  <text key="core-menu-database">Mostra Database</text>
  <text key="core-menu-dashboard-edit">Modifica Dashboard</text>
+ <text key="core-menu-interpretStop">Termina Interpretazione</text>
  <text key="core-menu-becomeAdministrator">Diventa Amministratore</text>
  <text key="core-menu-becomeUser">Diventa Utente</text>
  <text key="core-menu-debugEnable">Abilita Debug</text>
