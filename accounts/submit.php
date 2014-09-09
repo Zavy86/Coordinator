@@ -194,10 +194,10 @@ function account_interpret_stop(){
  session_destroy();
  session_start();
  $account->password=NULL;
+ $_SESSION['account']->administrator=TRUE;
  $_SESSION['account']=$account;
  // update session language
  $_SESSION['language']=$account->language;
- if($account->typology==1){$_SESSION['account']->typology=2;$_SESSION['account']->administrator=TRUE;}
  // log
  api_log(API_LOG_NOTICE,"accounts","accountInterpretedStop",
   "{logs_accounts_accountInterpretedStop|".$_SESSION['account']->id."|".api_accountName($_SESSION['account']->id)."|".$interpreted."|".api_accountName($interpreted)."}");
