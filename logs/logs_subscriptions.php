@@ -34,6 +34,7 @@ function content(){
   $form->addFieldOption(0,api_text("subscriptions-fo-none"),TRUE);
   $form->addFieldOption(1,api_text("subscriptions-fo-notification"),($subscription->idAccount)?TRUE:FALSE);
   $form->addFieldOption(2,api_text("subscriptions-fo-mail"),($subscription->mail)?TRUE:FALSE);
+  $form->addFieldOption(3,api_text("subscriptions-fo-archived"),($subscription->archived)?TRUE:FALSE);
  }
  $form->addControl("submit",api_text("subscriptions-fc-submit"));
  // show form

@@ -1635,8 +1635,10 @@ function api_logNotificationTriggers($module,$action,$event,$id,$link){
     api_loadLocaleFile("../".$module."/",api_accountLanguage($subscription->idAccount));
     $notification->subject=api_text($trigger->trigger."-subject",api_textParse($event)->parameters);
     $notification->message=api_text($trigger->trigger."-message",api_textParse($event)->parameters);
+    // if subscription mail is 2 archive the notification by default
+    if($subscription->archived){$status=3;}else{$status=1;}
     // send and acquire notification hash
-    $notification->hash=api_notification($subscription->idAccount,$module,$action,$notification->subject,$notification->message,$notification->link);
+    $notification->hash=api_notification($subscription->idAccount,$module,$action,$notification->subject,$notification->message,$notification->link,NULL,$status);
     // send mail
     if($subscription->mail){
      $notification->mail=TRUE;
@@ -1665,13 +1667,14 @@ function api_logNotificationTriggers($module,$action,$event,$id,$link){
 // @string $message : log message
 // @string $link : log link
 // @string $hash : md5 log hash
-function api_notification($idAccount,$module,$action,$subject,$message,$link=NULL,$hash=NULL){
+// @integer $status : 1 received, 2 readed, 3 archived
+function api_notification($idAccount,$module,$action,$subject,$message,$link=NULL,$hash=NULL,$status=1){
  if($idAccount<2 || $module==NULL || $subject==NULL || $message==NULL){return FALSE;}
  if($hash===NULL){$hash=md5(date('YdmHsi').api_randomString());}
  $query="INSERT INTO logs_notifications
   (hash,idAccount,timestamp,module,action,subject,message,link,status) VALUES
   ('".$hash."','".$idAccount."','".date("Y-m-d H:i:s")."','".$module."','".$action."',
-   '".addslashes($subject)."','".addslashes($message)."','".$link."','1')";
+   '".addslashes($subject)."','".addslashes($message)."','".$link."','".$status."')";
  $GLOBALS['db']->execute($query);
  if($GLOBALS['db']->lastInsertedId()>0){return $hash;}
  else{return FALSE;}
