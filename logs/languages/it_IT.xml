@@ -73,7 +73,8 @@
  <!-- logs_notifications_subscriptions.php -->
  <text key="subscriptions-fo-none">Nessuna</text>
  <text key="subscriptions-fo-notification">Notifica</text>
- <text key="subscriptions-fo-mail">Notifica + Mail</text>
+ <text key="subscriptions-fo-mail">Notifica e Mail</text>
+ <text key="subscriptions-fo-archived">Notifica archiviata e Mail</text>
  <text key="subscriptions-fc-submit">Aggiorna iscrizioni</text>
 
  <!-- logs_mails_list.php -->

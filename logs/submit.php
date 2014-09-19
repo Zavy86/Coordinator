@@ -99,8 +99,9 @@ function notification_subscriptions(){
   $notification=$_POST["notification_".$trigger->trigger];
   // subscribe trigger
   switch($notification){
-   case 1:$query="INSERT INTO logs_subscriptions VALUES ('".api_accountId()."','".$trigger->trigger."','0')";break;
-   case 2:$query="INSERT INTO logs_subscriptions VALUES ('".api_accountId()."','".$trigger->trigger."','1')";break;
+   case 1:$query="INSERT INTO logs_subscriptions VALUES ('".api_accountId()."','".$trigger->trigger."','0','0')";break;
+   case 2:$query="INSERT INTO logs_subscriptions VALUES ('".api_accountId()."','".$trigger->trigger."','1','0')";break;
+   case 3:$query="INSERT INTO logs_subscriptions VALUES ('".api_accountId()."','".$trigger->trigger."','1','1')";break;
    default:$query=NULL;
   }
   $GLOBALS['db']->execute($query);
