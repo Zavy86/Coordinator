@@ -20,6 +20,7 @@
  <text key="date-textual">l, F jS Y</text>
  <text key="datetime">Y-m-d H:i:s</text>
  <text key="datetime-short">'y-m-d H:i</text>
+ <text key="datetime-noyear">m-d H:i</text>
  <text key="datetime-textual">l, F jS Y g:i A</text>
  <text key="timestamp">Y-m-d H:i:s</text>
  <text key="second">second</text>

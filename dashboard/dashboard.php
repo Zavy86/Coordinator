@@ -87,7 +87,7 @@ function content(){
   if($widget->refresh>0){
    echo "  var refreshWidget_".$widget->id."=setInterval(function(){\n";
    echo "   $('#widget_".$widget->id."').css('background','url(".$GLOBALS['dir']."core/images/icons/loader.gif) no-repeat top center');\n";
-   echo "   $('#widget_".$widget->id."').load('../".$widget->module."/widget.inc.php?refresh=1".$widget->parameters."',function(){\n";
+   echo "   $('#widget_".$widget->id."').load('../".$widget->module."/widget.inc.php?refresh=1&span=".$widget->span.$widget->parameters."',function(){\n";
    echo "    $('#widget_".$widget->id."').css('background-image','none');\n";
    echo "   });\n";
    echo "  },".$widget->refresh.");\n";
