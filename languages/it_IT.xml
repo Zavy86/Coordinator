@@ -20,6 +20,7 @@
  <text key="date-textual">l, j F Y</text>
  <text key="datetime">d-m-Y H:i</text>
  <text key="datetime-short">d-m-y H:i</text>
+ <text key="datetime-noyear">d-m H:i</text>
  <text key="datetime-textual">l, j M Y G:i</text>
  <text key="timestamp">d-m-Y H:i:s</text>
  <text key="day-monday">Lunedì</text>
