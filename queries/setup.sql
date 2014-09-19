@@ -203,7 +203,8 @@ CREATE TABLE IF NOT EXISTS `logs_notifications` (
 CREATE TABLE IF NOT EXISTS `logs_subscriptions` (
   `idAccount` int(11) unsigned NOT NULL,
   `trigger` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
-  `mail` tinyint(1) NOT NULL DEFAULT '0',
+  `mail` tinyint(1) unsigned NOT NULL DEFAULT '0',
+  `archived` tinyint(1) unsigned NOT NULL DEFAULT '0',
   KEY `idAccount` (`idAccount`),
   KEY `trigger` (`trigger`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
