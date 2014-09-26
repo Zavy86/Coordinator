@@ -1104,12 +1104,12 @@ class str_form{
     // check for array of options
     if(is_array($ff->options)){
      // show option
-     foreach($ff->options as $fo){
+     foreach($ff->options as $index=>$fo){
       switch(strtolower($ff->type)){
        // show checkbox option
        case "checkbox":
         $return.="  <label class='".$ff->type." ".$ff->class."'>";
-        $return.="<input type='".$ff->type."' name='".$ff->name."' value=\"".$fo->value."\"";
+        $return.="<input type='".$ff->type."' name='".$ff->name."' id='".$this->name."_input_".$ff->name."_option_".$fo->value."' value=\"".$fo->value."\"";
         if($fo->checked){$return.=" checked='checked'";}
         if($fo->disabled){$return.=" disabled='disabled'";}
         $return.=">".$fo->label."</label>\n";
@@ -1117,7 +1117,7 @@ class str_form{
        // show radio option
        case "radio":
         $return.="  <label class='".$ff->type." ".$ff->class."'>";
-        $return.="<input type='".$ff->type."' name='".$ff->name."' value=\"".$fo->value."\"";
+        $return.="<input type='".$ff->type."' name='".$ff->name."' id='".$this->name."_input_".$ff->name."_option_".$fo->value."' value=\"".$fo->value."\"";
         if($fo->checked){$return.=" checked='checked'";}
         if($fo->disabled){$return.=" disabled='disabled'";}
         $return.=">".$fo->label."</label>\n";
@@ -1125,7 +1125,7 @@ class str_form{
        // show select or multiselect option
        case "select":
        case "multiselect":
-        $return.="   <option value=\"".$fo->value."\"";
+        $return.="   <option value=\"".$fo->value."\" id='".$this->name."_input_".$ff->name."_option_".$fo->value."'";
         if($fo->checked){$return.=" selected='selected'";}
         $return.=">".$fo->label."</option>\n";
         break;
