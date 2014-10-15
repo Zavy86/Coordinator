@@ -529,7 +529,7 @@ class str_pagination{
    $total=$GLOBALS['db']->countOfAll($table);
   }
   // build url
-  $url=api_baseName()."?p={p}".$get;
+  $url=api_baseName()."?p={p}".$get."&l=".$limit;
   // set variables
   $this->url=$url;
   $this->total=$total;
@@ -609,7 +609,15 @@ class str_pagination{
    }else{
     echo "  <li class='".$this->class_li_disabled."'><span>&raquo;</span></li>\n";
    }
-   echo "<li class='".$this->class_li."'><a href='".str_replace("{p}",1,$this->url)."&l=unlimited'>".ucfirst(api_text("showall"))."</a></li>\n";
+
+   switch($this->limit){
+    case 20:echo "<li class='".$this->class_li."'><a href='".str_replace("{p}",1,$this->url)."&l=50'>".ucfirst(api_text("show"))." 50</a></li>\n";break;
+    case 50:echo "<li class='".$this->class_li."'><a href='".str_replace("{p}",1,$this->url)."&l=100'>".ucfirst(api_text("show"))." 100</a></li>\n";break;
+    case 100:echo "<li class='".$this->class_li."'><a href='".str_replace("{p}",1,$this->url)."&l=unlimited'>".ucfirst(api_text("show"))." ".api_text("all")."</a></li>\n";break;
+    default:echo "<li class='".$this->class_li."'><a href='".str_replace("{p}",1,$this->url)."&l=20'>".ucfirst(api_text("show"))." 20</a></li>\n";
+   }
+
+
    echo " </ul>\n";
    echo "</div><!-- /pagination -->\n\n";
   }
