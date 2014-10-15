@@ -28,6 +28,8 @@ config.inc.php
 /uploads/accounts/*
 !/uploads/accounts/
 !/uploads/accounts/avatar.jpg
+/core/nusoap/wsdl/*
+!/core/nusoap/wsdl/
 /tmp/*
 
 
