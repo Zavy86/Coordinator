@@ -517,9 +517,7 @@ class str_pagination{
  public function __construct($table=NULL,$where=NULL,$get=NULL,$limit=20,$class="pagination-small pagination-right",$class_ul="",$class_li="",$class_li_active="active",$class_li_disabled="disabled"){
   if($table==NULL || !is_int($limit)){return FALSE;}
   // acquire variables
-  $g_limit=$_GET['l'];
-  if($g_limit>0){$limit=$g_limit;}
-  if($g_limit=="unlimited"){$limit=0;}
+  if(isset($_GET['l'])){$limit=$_GET['l'];}
   $g_page=$_GET['p'];
   if(!$g_page){$g_page=1;}
   // count total rows
@@ -556,17 +554,27 @@ class str_pagination{
  /* -[ Render ]------------------------------------------------------------- */
  function render(){
   if(!$this->total>0){return FALSE;}
-  if(!$this->limit){return NULL;}
-  $adjacents="2";
-  $prev=$this->page-1;
-  $next=$this->page+1;
-  $lastpage=ceil($this->total/$this->limit);
-  $lpm1=$lastpage-1;
+  if($this->limit){
+   $adjacents="2";
+   $prev=$this->page-1;
+   $next=$this->page+1;
+   $lastpage=ceil($this->total/$this->limit);
+   $lpm1=$lastpage-1;
+  }
+  // open pavigation
+  echo "<!-- pagination -->\n";
+  echo "<div class='pagination ".$this->class."'>\n";
+  echo " <ul class='".$this->class_ul."'>\n";
+  // pagination limit
+  echo "<li class='".$this->class_li_disabled."'><a href='#'>".ucfirst(api_text("show"))."</a></li>\n";
+  $pagination_limit_array=array(20=>"20",100=>"100",250=>"250",0=>ucfirst(api_text("all")));
+  foreach($pagination_limit_array as $index=>$limit){
+   if($index==$this->limit){$class=$this->class_li_active;}else{$class=$this->class_li;}
+   echo "<li class='".$class."'><a href='".str_replace("{p}",1,$this->url)."&l=".$index."'>".$limit."</a></li>\n";
+  }
+  // pages
   if($lastpage>1){
-   // open pavigation
-   echo "<!-- pagination -->\n";
-   echo "<div class='pagination ".$this->class."'>\n";
-   echo " <ul class='".$this->class_ul."'>\n";
+   echo "<li class='null'><a href='#'>&nbsp;</a></li>\n";
    if($this->page>1){echo "  <li class='".$this->class_li."'><a href='".str_replace("{p}",$prev,$this->url)."'>&laquo;</a></li>\n";}
     else{echo "  <li class='".$this->class_li_disabled."'><span>&laquo;</span></li>\n";}
    if($lastpage<7+($adjacents*2)){
@@ -609,18 +617,9 @@ class str_pagination{
    }else{
     echo "  <li class='".$this->class_li_disabled."'><span>&raquo;</span></li>\n";
    }
-
-   switch($this->limit){
-    case 20:echo "<li class='".$this->class_li."'><a href='".str_replace("{p}",1,$this->url)."&l=50'>".ucfirst(api_text("show"))." 50</a></li>\n";break;
-    case 50:echo "<li class='".$this->class_li."'><a href='".str_replace("{p}",1,$this->url)."&l=100'>".ucfirst(api_text("show"))." 100</a></li>\n";break;
-    case 100:echo "<li class='".$this->class_li."'><a href='".str_replace("{p}",1,$this->url)."&l=unlimited'>".ucfirst(api_text("show"))." ".api_text("all")."</a></li>\n";break;
-    default:echo "<li class='".$this->class_li."'><a href='".str_replace("{p}",1,$this->url)."&l=20'>".ucfirst(api_text("show"))." 20</a></li>\n";
-   }
-
-
-   echo " </ul>\n";
-   echo "</div><!-- /pagination -->\n\n";
   }
+  echo " </ul>\n";
+  echo "</div><!-- /pagination -->\n\n";
   return TRUE;
  }
 
