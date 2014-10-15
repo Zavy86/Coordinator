@@ -519,6 +519,7 @@ class str_pagination{
   // acquire variables
   $g_limit=$_GET['l'];
   if($g_limit>0){$limit=$g_limit;}
+  if($g_limit=="unlimited"){$limit=0;}
   $g_page=$_GET['p'];
   if(!$g_page){$g_page=1;}
   // count total rows
@@ -544,13 +545,18 @@ class str_pagination{
 
  /* -[ Query Limit ]--------------------------------------------------------- */
  function queryLimit(){
-  $start=($this->page-1)*$this->limit;
-  return " LIMIT ".$start.",".$this->limit;
+  if($this->limit){
+   $start=($this->page-1)*$this->limit;
+   return " LIMIT ".$start.",".$this->limit;
+  }else{
+   return NULL;
+  }
  }
 
  /* -[ Render ]------------------------------------------------------------- */
  function render(){
   if(!$this->total>0){return FALSE;}
+  if(!$this->limit){return NULL;}
   $adjacents="2";
   $prev=$this->page-1;
   $next=$this->page+1;
@@ -603,6 +609,7 @@ class str_pagination{
    }else{
     echo "  <li class='".$this->class_li_disabled."'><span>&raquo;</span></li>\n";
    }
+   echo "<li class='".$this->class_li."'><a href='".str_replace("{p}",1,$this->url)."&l=unlimited'>".ucfirst(api_text("showall"))."</a></li>\n";
    echo " </ul>\n";
    echo "</div><!-- /pagination -->\n\n";
   }
@@ -1104,12 +1111,12 @@ class str_form{
     // check for array of options
     if(is_array($ff->options)){
      // show option
-     foreach($ff->options as $fo){
+     foreach($ff->options as $index=>$fo){
       switch(strtolower($ff->type)){
        // show checkbox option
        case "checkbox":
         $return.="  <label class='".$ff->type." ".$ff->class."'>";
-        $return.="<input type='".$ff->type."' name='".$ff->name."' value=\"".$fo->value."\"";
+        $return.="<input type='".$ff->type."' name='".$ff->name."' id='".$this->name."_input_".$ff->name."_option_".$fo->value."' value=\"".$fo->value."\"";
         if($fo->checked){$return.=" checked='checked'";}
         if($fo->disabled){$return.=" disabled='disabled'";}
         $return.=">".$fo->label."</label>\n";
@@ -1117,7 +1124,7 @@ class str_form{
        // show radio option
        case "radio":
         $return.="  <label class='".$ff->type." ".$ff->class."'>";
-        $return.="<input type='".$ff->type."' name='".$ff->name."' value=\"".$fo->value."\"";
+        $return.="<input type='".$ff->type."' name='".$ff->name."' id='".$this->name."_input_".$ff->name."_option_".$fo->value."' value=\"".$fo->value."\"";
         if($fo->checked){$return.=" checked='checked'";}
         if($fo->disabled){$return.=" disabled='disabled'";}
         $return.=">".$fo->label."</label>\n";
@@ -1125,7 +1132,7 @@ class str_form{
        // show select or multiselect option
        case "select":
        case "multiselect":
-        $return.="   <option value=\"".$fo->value."\"";
+        $return.="   <option value=\"".$fo->value."\" id='".$this->name."_input_".$ff->name."_option_".$fo->value."'";
         if($fo->checked){$return.=" selected='selected'";}
         $return.=">".$fo->label."</option>\n";
         break;

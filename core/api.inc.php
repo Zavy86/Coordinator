@@ -1733,4 +1733,22 @@ function api_icon($icon,$title=NULL,$style=NULL){
  return $return;
 }
 
+
+/**
+ * Connect to a Web Service with a WSDL file
+ *
+ * @param string $wsdl Web Service Description Language file
+ * @param string $username Web Service username
+ * @param string $password Web Service password
+ */
+function api_webservice_wsdl($wsdl,$username=NULL,$password=NULL){
+ if(!file_exists("../core/nusoap/wsdl/".$wsdl)){return FALSE;}
+ // initialize webservice
+ require_once("../core/nusoap/nusoap.php");
+ $nusoap_client=new nusoap_client("../core/nusoap/wsdl/".$wsdl,TRUE);
+ if($username<>NULL){$nusoap_client->setCredentials($username,$password);}
+ // return nusoap client
+ return $nusoap_client;
+}
+
 ?>
