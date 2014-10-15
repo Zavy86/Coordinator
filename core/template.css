@@ -129,7 +129,7 @@ li.search div{margin:0px;}
 
 .well-white{background-color:#fff;}
 
-
+div.pagination ul li.null a{border-left:none;border-top:none;border-bottom:none;}
 
 
 
