@@ -8,7 +8,8 @@
  <text key="notfound">not found</text>
  <text key="support">support</text>
  <text key="any">any</text>
- <text key="showall">show all</text>
+ <text key="show">show</text>
+ <text key="all">all</text>
  <text key="undefined">undefined</text>
  <text key="noresults">no results found..</text>
 
