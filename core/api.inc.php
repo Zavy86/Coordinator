@@ -45,6 +45,10 @@ if($g_submit=="cron"){
      && api_baseName()<>"password_reset.php"
      && api_baseName()<>"request_account_ldap.php"
      && $dontCheckSession==FALSE){
+   // save url to session and redirect to login page
+   if($_SERVER['REQUEST_URI']<>$GLOBALS['dir']."accounts/submit.php?act=account_login"){
+    $_SESSION['external_redirect']="http://".$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'];
+   }
    header("location: ".$GLOBALS['dir']."accounts/login.php");
   }
  }

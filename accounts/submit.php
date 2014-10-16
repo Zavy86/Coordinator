@@ -45,6 +45,7 @@ function account_login(){
  // acquire variables
  $p_account=addslashes($_POST['account']);
  $p_password=$_POST['password'];
+ $s_url=$_SESSION['external_redirect'];
  // [ LDAP START ]--------------------------------------------------------------
  // if account is not an email
  if(strpos($p_account,"@")==FALSE && $p_account<>"root" && api_getOption('ldap')){
@@ -82,7 +83,8 @@ function account_login(){
      api_log(API_LOG_NOTICE,"accounts","loginSuccess",
       "{logs_accounts_loginSuccess|".$p_account."}",$account->id);
      // redirect
-     exit(header("location: ../index.php"));
+     if($s_url){exit(header("location: ".$s_url));}
+      else{exit(header("location: ../index.php"));}
     }
    }else{
     // account does not exist
@@ -98,54 +100,55 @@ function account_login(){
    exit(header("location: login.php".$alert));
   }
  }else{
- // [ LDAP END ]----------------------------------------------------------------
- // retrieve account
- $account=$GLOBALS['db']->queryUniqueObject("SELECT * FROM accounts_accounts WHERE account='".$p_account."' AND password='".md5($p_password)."' AND typology>'0'");
- if($account->id){
-  // check maintenance
-  if($account->typology<>1 && api_getOption("maintenance")){
-   $alert="?alert=maintenance&alert_class=alert-warning";
-   exit(header("location: login.php".$alert));
-  }
-  // open new session
-  session_destroy();
-  session_start();
-  $account->password=NULL;
-  $_SESSION['account']=$account;
-  // update session language
-  $_SESSION['language']=$account->language;
-  // administrator
-  if($account->typology==1){$_SESSION['account']->typology=2;$_SESSION['account']->administrator=TRUE;}
-  // update lastLogin
-  $GLOBALS['db']->execute("UPDATE accounts_accounts SET lastLogin='".date('Y-m-d H:i:s')."' WHERE id='".$account->id."'");
-  // log and notifications
-  api_log(API_LOG_NOTICE,"accounts","loginSuccess",
-   "{logs_accounts_loginSuccess|".$p_account."}",$account->id);
-  // redirect
-  exit(header("location: ../index.php"));
- }else{
-  // login failed
-  $account=$GLOBALS['db']->queryUniqueObject("SELECT * FROM accounts_accounts WHERE account='".$p_account."'");
+  // [ LDAP END ]---------------------------------------------------------------
+  // retrieve account
+  $account=$GLOBALS['db']->queryUniqueObject("SELECT * FROM accounts_accounts WHERE account='".$p_account."' AND password='".md5($p_password)."' AND typology>'0'");
   if($account->id){
-   if($account->typology==0){
-    // log and notifications
-    api_log(API_LOG_ERROR,"accounts","loginDisabled",
-     "{logs_accounts_loginDisabled|".$p_account."}",$account->id);
-    $alert="?alert=loginDisabled&alert_class=alert-warning";
+   // check maintenance
+   if($account->typology<>1 && api_getOption("maintenance")){
+    $alert="?alert=maintenance&alert_class=alert-warning";
+    exit(header("location: login.php".$alert));
+   }
+   // open new session
+   session_destroy();
+   session_start();
+   $account->password=NULL;
+   $_SESSION['account']=$account;
+   // update session language
+   $_SESSION['language']=$account->language;
+   // administrator
+   if($account->typology==1){$_SESSION['account']->typology=2;$_SESSION['account']->administrator=TRUE;}
+   // update lastLogin
+   $GLOBALS['db']->execute("UPDATE accounts_accounts SET lastLogin='".date('Y-m-d H:i:s')."' WHERE id='".$account->id."'");
+   // log and notifications
+   api_log(API_LOG_NOTICE,"accounts","loginSuccess",
+    "{logs_accounts_loginSuccess|".$p_account."}",$account->id);
+   // redirect
+   if($s_url){exit(header("location: ".$s_url));}
+    else{exit(header("location: ../index.php"));}
+  }else{
+   // login failed
+   $account=$GLOBALS['db']->queryUniqueObject("SELECT * FROM accounts_accounts WHERE account='".$p_account."'");
+   if($account->id){
+    if($account->typology==0){
+     // log and notifications
+     api_log(API_LOG_ERROR,"accounts","loginDisabled",
+      "{logs_accounts_loginDisabled|".$p_account."}",$account->id);
+     $alert="?alert=loginDisabled&alert_class=alert-warning";
+    }else{
+     // log and notifications
+     api_log(API_LOG_WARNING,"accounts","loginFailed",
+      "{logs_accounts_loginFailed|".$p_account."}",$account->id);
+     $alert="?alert=loginFailed&alert_class=alert-error";
+    }
    }else{
     // log and notifications
-    api_log(API_LOG_WARNING,"accounts","loginFailed",
-     "{logs_accounts_loginFailed|".$p_account."}",$account->id);
-    $alert="?alert=loginFailed&alert_class=alert-error";
+    api_log(API_LOG_ERROR,"accounts","loginError",
+     "{logs_accounts_loginError|".$p_account."}");
+    $alert="?alert=loginError&alert_class=alert-error";
    }
-  }else{
-   // log and notifications
-   api_log(API_LOG_ERROR,"accounts","loginError",
-    "{logs_accounts_loginError|".$p_account."}");
-   $alert="?alert=loginError&alert_class=alert-error";
+   exit(header("location: login.php".$alert));
   }
-  exit(header("location: login.php".$alert));
- }
  }
 }
 
