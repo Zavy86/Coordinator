@@ -4,8 +4,10 @@
 \* -------------------------------------------------------------------------- */
 include("../core/api.inc.php");
 // reset current session
+$s_url=$_SESSION['external_redirect'];
 session_destroy();
 session_start();
+$_SESSION['external_redirect']=$s_url;
 $html->header(NULL,NULL,FALSE);
 ?>
 <div class="login-form">
