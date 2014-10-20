@@ -209,7 +209,7 @@ class str_navigation{
    }
    if($value<>NULL){$return.=$value;}
   }
-  return "&filtered=1".$return;
+  return "&filtered=1"."&q=".$_GET['q'].$return;
  }
 
  /* -[ Filters Query ]------------------------------------------------------- */
@@ -324,7 +324,7 @@ class str_navigation{
    // store session filters
    if($_GET['filtered']){$_SESSION['filters'][api_baseName()]=$_GET;}
    // load session filters if exist
-   if(isset($_SESSION['filters'][api_baseName()])){$_GET=array_merge($_GET,$_SESSION['filters'][api_baseName()]);}
+   if(isset($_SESSION['filters'][api_baseName()])){$_GET=array_merge($_SESSION['filters'][api_baseName()],$_GET);}
    // build filter form modal body
    $modal_filter_body=new str_form(api_baseName(),"get","filters");
    $modal_filter_body->addField("hidden","filtered",NULL,"1");
@@ -472,7 +472,7 @@ class str_navigation{
     }
    }
    echo "    <input type='text' name='q' class='input-large' placeholder='Ricerca' value='".$_GET['q']."'>\n";
-   if($_GET['q']<>NULL){echo "    <a class='btn' href='".api_baseName()."?q=".$this->filtersGet()."'><i class='icon-remove-sign'></i></a>\n";}
+   if($_GET['q']<>NULL){echo "    <a class='btn' href='".api_baseName()."?nav-search-submit=reset".$this->filtersGet()."&q='><i class='icon-remove-sign'></i></a>\n";}
    echo "    <button type='submit' name='nav-search-submit' class='btn'><i class='icon-search'></i></button>\n";
    echo "   </div>\n  </li>\n </form><!-- /search -->\n";
   }
