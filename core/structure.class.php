@@ -522,9 +522,15 @@ class str_pagination{
   if(!$g_page){$g_page=1;}
   // count total rows
   if($where<>NULL){
-   $total=$GLOBALS['db']->countOf($table,$where);
+   //$total=$GLOBALS['db']->countOf($table,$where);
+   $total=0;
+   $results=$GLOBALS['db']->query("SELECT * FROM ".$table." WHERE ".$where);
+   while($result=$GLOBALS['db']->fetchNextObject($results)){$total++;}
   }else{
-   $total=$GLOBALS['db']->countOfAll($table);
+   //$total=$GLOBALS['db']->countOfAll($table);
+   $total=0;
+   $results=$GLOBALS['db']->query("SELECT * FROM ".$table);
+   while($result=$GLOBALS['db']->fetchNextObject($results)){$total++;}
   }
   // build url
   $url=api_baseName()."?p={p}".$get."&l=".$limit;
