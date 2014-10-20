@@ -137,6 +137,12 @@ function api_text($key,$parameters=NULL){
  return $text;
 }
 
+/* -[ Boolean Text ]--------------------------------------------------------- */
+// @param $boolean : boolean value
+function api_text_boolean($boolean){
+ if($boolean){return api_text("yes");}else{return api_text("no");}
+}
+
 
 /* -[ Die ]------------------------------------------------------------------ */
 function api_die($error=""){
@@ -1702,7 +1708,7 @@ function api_logHistory($module,$key,$only=NULL,$exclude=NULL){
   if($only!==NULL){
    if(in_array($event->action,$only)){$history_array[]=$event;}
   }elseif($exclude!==NULL){
-   if(!in_array($event->action,$only)){$history_array[]=$event;}
+   if(!in_array($event->action,$exclude)){$history_array[]=$event;}
   }else{
    $history_array[]=$event;
   }
