@@ -16,6 +16,11 @@
  <text key="menuMoved">The menu has been moved</text>
  <text key="menuDeleted">The menu has been deleted</text>
 
+ <!-- logs -->
+ <text key="logs_settings_moduleInstalled">Module {0} [Installed]</text>
+ <text key="logs_settings_moduleUpdated">Module {0} [Updated] from {1} to {2}</text>
+ <text key="logs_settings_moduleUninstalled">Module {0} [Uninstalled]</text>
+
  <!-- template.inc.php -->
  <text key="nav-settings">Settings</text>
  <text key="nav-modules">Modules</text>
