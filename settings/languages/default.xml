@@ -22,6 +22,7 @@
  <text key="logs_settings_moduleInstalled">Module {0} [Installed]</text>
  <text key="logs_settings_moduleUpdated">Module {0} [Updated] from {1} to {2}</text>
  <text key="logs_settings_moduleUninstalled">Module {0} [Uninstalled]</text>
+ <text key="logs_settings_moduleGitPull">Moduli aggiornati tramite GIT Pull&#xA;&#xA;{0}&#xA;&#xA;{1}</text>
 
  <!-- template.inc.php -->
  <text key="nav-settings">Settings</text>
@@ -68,6 +69,7 @@
  <text key="modules-td-remove-confirm">Are you sure you want to remove this module?\nThe module directory will be deleted</text>
  <text key="modules-tr-unvalued">There are no modules to display..</text>
  <text key="modules-update-git_pull">Update by GIT Pull</text>
+ <text key="modules-update-git_pull-confirm">Performing this operation will lose any local changes made ​​to the source code of the modules installed and Coordinator; will all be in sync with the latest release available. Are you sure you want to continue?</text>
 
 
  <!-- menu_edit.php -->

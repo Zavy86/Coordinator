@@ -108,7 +108,7 @@ function module_git_pull(){
   }
   // log event
   api_log(API_LOG_NOTICE,"settings","moduleGitPull",
-   "{logs_settings_moduleGitPull|".implode("|",$modules_cloned)."|".$output."}",
+   "{logs_settings_moduleGitPull|".implode(", ",$modules_cloned)."|".$output."}",
    NULL,"settings/modules_edit.php");
   // alert
   $alert="?alert=gitpullSuccess&alert_class=alert-success";
