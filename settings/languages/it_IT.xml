@@ -67,6 +67,7 @@
  <text key="modules-td-remove">Elimina</text>
  <text key="modules-td-remove-confirm">Sei sicuro di voler rimuovere questo modulo?\nLa directory del modulo verrà eliminata</text>
  <text key="modules-tr-unvalued">Non ci sono moduli da visualizzare..</text>
+ <text key="modules-update-git_pull">Aggiorna tramite GIT Pull</text>
 
  <!-- menu_edit.php -->
  <text key="menus-th-menu">Menu</text>

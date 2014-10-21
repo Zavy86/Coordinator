@@ -102,8 +102,9 @@ function module_git_pull(){
  }
  // disabled for localhost and 127.0.0.1
  if($_SERVER['HTTP_HOST']<>"localhost" && $_SERVER['HTTP_HOST']<>"127.0.0.1"){
+  $output.=exec('whoami')."@".exec('hostname').":".shell_exec("cd /var/www/".$GLOBALS['dir']." ; pwd ; git stash ; git pull")."\n\n";
   foreach($modules_cloned as $module){
-   $output.=exec('whoami')."@".exec('hostname').":".shell_exec("cd /var/www/".$module." ; pwd ; git stash ; git pull")."\n\n";
+   $output.=exec('whoami')."@".exec('hostname').":".shell_exec("cd /var/www/".$GLOBALS['dir']."/".$module." ; pwd ; git stash ; git pull")."\n\n";
   }
   // log event
   api_log(API_LOG_NOTICE,"settings","moduleGitPull",
