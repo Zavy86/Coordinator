@@ -15,6 +15,8 @@
  <text key="menuUpdated">Il menu è stato aggiornato</text>
  <text key="menuMoved">Il menu è stato spostato</text>
  <text key="menuDeleted">Il menu è stato cancellato</text>
+ <text key="gitpullSuccess">L'aggiornamento tramite GIT Pull è stato eseguito</text>
+ <text key="gitpullDisabled">L'aggiornamento tramite GIT Pull non è attivo per questo host</text>
 
  <!-- logs -->
  <text key="logs_settings_moduleInstalled">Modulo {0} [Installato]</text>
