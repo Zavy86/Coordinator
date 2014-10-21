@@ -91,7 +91,7 @@ function validations_toggle(){
 function module_git_pull(){
  if(!api_checkPermission("settings","modules_edit")){api_die("accessDenied");}
  // definitions
- $modules_cloned=array();
+ $modules_cloned=array("coordinator");
  // check for modules cloned with git
  if($dh=opendir("../")){
   while(($entry=readdir($dh))!==false){
