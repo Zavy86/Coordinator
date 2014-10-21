@@ -88,5 +88,9 @@ function content(){
  }
  // show table
  $table->render();
+
+ // if git is
+ echo api_link("submit.php?act=module_git_pull",api_text("update-git_pull"),NULL,"btn btn-primary",FALSE,api_text("update-git_pull-confirm"));
+
 }
 ?>
