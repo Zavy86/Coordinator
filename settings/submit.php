@@ -112,6 +112,10 @@ function module_setup(){
   }
   // execute setup queries by mysql dump
   if(file_exists($module_path."queries/setup.sql")){api_restoreMysqlDump($module_path."queries/setup.sql");}
+  // log event
+  api_log(API_LOG_NOTICE,"settings","moduleInstalled",
+   "{logs_settings_moduleInstalled|".$module_name."}",
+   NULL,"settings/modules_edit.php");
   // redirect
   $alert="?alert=moduleSetup&alert_class=alert-success";
   exit(header("location: modules_edit.php".$alert));
@@ -122,7 +126,6 @@ function module_setup(){
  }
 }
 
-
 /* -[ Module Update ]-------------------------------------------------------- */
 function module_update(){
  if(!api_checkPermission("settings","modules_edit")){api_die("accessDenied");}
@@ -130,23 +133,52 @@ function module_update(){
  $g_module=$_GET['module'];
  $module_path="../".$g_module."/";
  if(file_exists($module_path."module.inc.php")){
-  $infinite_loop=0;
   // include module informations
   include($module_path."module.inc.php");
-  // get current installed version
-  $current_version=$GLOBALS['db']->queryUniqueValue("SELECT version FROM settings_modules WHERE module='".$module_name."'");
-  // check for update
+  // get initial version
+  $initial_version=$GLOBALS['db']->queryUniqueValue("SELECT version FROM settings_modules WHERE module='".$module_name."'");
+  $current_version=$initial_version;
+  // explode versions
+  $module_version_array=explode(".",$module_version);
+  $current_version_array=explode(".",$current_version);
+  // cycle untile version are syncronized
   while($current_version<>$module_version){
-   // execute update queries by mysql dump
-   api_restoreMysqlDump($module_path."queries/update_".$current_version.".sql");
-   $current_version=$GLOBALS['db']->queryUniqueValue("SELECT version FROM settings_modules WHERE module='".$module_name."'");
-   // check for infinite loop
-   $infinite_loop++;
-   if($infinite_loop==9999999){
-    $alert="?alert=moduleUpdateSqlError&alert_class=alert-error";
-    exit(header("location: modules_edit.php".$alert));
+   // check major release
+   if($current_version_array[0]<$module_version_array[0]){
+    // execute dump from current minor release if exist for a maximum of 1000 minor releases
+    if($current_version_array[1]<1000){
+     api_restoreMysqlDump($module_path."queries/update_".$current_version_array[0].".".$current_version_array[1].".sql");
+     // increment minor release
+     $current_version_array[1]++;
+    }else{
+     // increment major release
+     $current_version_array[0]++;
+     // reset minor release
+     $current_version_array[1]=0;
+    }
+   }elseif($current_version_array[0]==$module_version_array[0]){
+    // if major release are syncronized check the minor release
+    if($current_version_array[1]<$module_version_array[1]){
+     // execute dump from current minor release
+     api_restoreMysqlDump($module_path."queries/update_".$current_version_array[0].".".$current_version_array[1].".sql");
+     // increment minor release
+     $current_version_array[1]++;
+    }
    }
+   // if major and minor release are syncronized, syncronize the hotfix
+   if($current_version_array[0]==$module_version_array[0] &&
+      $current_version_array[1]==$module_version_array[1] &&
+      $current_version_array[2]<>$module_version_array[2]){
+    $current_version_array[2]=$module_version_array[2];
+   }
+   $current_version=$current_version_array[0].".".$current_version_array[1].".".$current_version_array[2];
   }
+  // update version on database
+  $GLOBALS['db']->execute("UPDATE `settings_modules` SET `version`='".$current_version."' WHERE `module`='".$module_name."';");
+  // log event
+  api_log(API_LOG_NOTICE,"settings","moduleUpdated",
+   "{logs_settings_moduleUpdated|".$module_name."|".$initial_version."|".$current_version."}",
+   NULL,"settings/modules_edit.php");
   // redirect
   $alert="?alert=moduleUpdated&alert_class=alert-success";
   exit(header("location: modules_edit.php".$alert));
@@ -184,6 +216,10 @@ function module_uninstall(){
   $GLOBALS['db']->execute("DELETE FROM settings_modules WHERE module='".$module_name."'");
   // execute unistall queries by mysql dump
   if(file_exists($module_path."queries/uninstall.sql")){api_restoreMysqlDump($module_path."queries/uninstall.sql");}
+  // log event
+  api_log(API_LOG_WARNING,"settings","moduleUninstalled",
+   "{logs_settings_moduleUninstalled|".$module_name."}",
+   NULL,"settings/modules_edit.php");
   // redirect
   $alert="?alert=moduleUninstalled&alert_class=alert-warning";
   exit(header("location: modules_edit.php".$alert));

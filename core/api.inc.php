@@ -1764,4 +1764,22 @@ function api_webservice_wsdl($wsdl,$username=NULL,$password=NULL){
  return $nusoap_client;
 }
 
+
+/**
+ * Show a variable dump into a pre tag
+ *
+ * @param string $variable Variable to dump
+ * @param string $echo Typology of echo : dump | print
+ * @param string $label Dump label
+ */
+function pre_var_dump($variable,$echo="dump",$label=NULL){
+ echo "<pre>";
+ if($label<>NULL){echo "<strong>".$label."</strong><br>";}
+ switch($echo){
+  case "print":print_r($variable);break;
+  default:var_dump($variable);
+ }
+ echo "</pre>";
+}
+
 ?>
