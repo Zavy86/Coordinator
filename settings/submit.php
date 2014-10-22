@@ -10,11 +10,12 @@ switch($act){
  // validations
  //case "validations_toggle":validations_toggle();break;
  // modules
- case "module_git_pull":module_git_pull();break;
  case "module_setup":module_setup();break;
  case "module_update":module_update();break;
  case "module_uninstall":module_uninstall();break;
  case "module_remove":module_remove();break;
+ case "module_git_pull":module_git_pull();break;
+ case "module_git_clone":module_git_clone();break;
  // permissions
  case "permissions_add":permissions_add();break;
  case "permissions_del":permissions_del();break;
@@ -86,39 +87,6 @@ function validations_toggle(){
  header("location: validations_edit.php?module=".$g_module);
 }
 
-
-/* -[ Module Git Pull ]------------------------------------------------------ */
-function module_git_pull(){
- if(!api_checkPermission("settings","modules_edit")){api_die("accessDenied");}
- // definitions
- $modules_cloned=array("coordinator");
- // check for modules cloned with git
- if($dh=opendir("../")){
-  while(($entry=readdir($dh))!==false){
-   if(is_dir("../".$entry) && $entry<>"." && $entry<>".."){
-    if(is_dir("../".$entry."/.git")){$modules_cloned[]=$entry;}
-   }
-  }
- }
- // disabled for localhost and 127.0.0.1
- if($_SERVER['HTTP_HOST']<>"localhost" && $_SERVER['HTTP_HOST']<>"127.0.0.1"){
-  $output.=exec('whoami')."@".exec('hostname').":".shell_exec("cd /var/www/".$GLOBALS['dir']." ; pwd ; git stash ; git pull")."\n\n";
-  foreach($modules_cloned as $module){
-   $output.=exec('whoami')."@".exec('hostname').":".shell_exec("cd /var/www/".$GLOBALS['dir']."/".$module." ; pwd ; git stash ; git pull")."\n\n";
-  }
-  // log event
-  api_log(API_LOG_NOTICE,"settings","moduleGitPull",
-   "{logs_settings_moduleGitPull|".implode(", ",$modules_cloned)."|".$output."}",
-   NULL,"settings/modules_edit.php");
-  // alert
-  $alert="?alert=gitpullSuccess&alert_class=alert-success";
- }else{
-  // alert
-  $alert="?alert=gitpullDisabled&alert_class=alert-error";
- }
- // redirect
- exit(header("location: modules_edit.php".$alert));
-}
 
 /* -[ Module Setup ]--------------------------------------------------------- */
 function module_setup(){
@@ -283,6 +251,57 @@ function module_remove(){
   $alert="?alert=settingError&alert_class=alert-error";
   exit(header("location: modules_edit.php".$alert));
  }
+}
+
+/* -[ Module Git Pull ]------------------------------------------------------ */
+function module_git_pull(){
+ if(!api_checkPermission("settings","modules_edit")){api_die("accessDenied");}
+ // definitions
+ $modules_cloned=array("coordinator");
+ // check for modules cloned with git
+ if($dh=opendir("../")){
+  while(($entry=readdir($dh))!==false){
+   if(is_dir("../".$entry) && $entry<>"." && $entry<>".."){
+    if(is_dir("../".$entry."/.git")){$modules_cloned[]=$entry;}
+   }
+  }
+ }
+ // disabled for localhost and 127.0.0.1
+ if($_SERVER['HTTP_HOST']<>"localhost" && $_SERVER['HTTP_HOST']<>"127.0.0.1"){
+  $output.=exec('whoami')."@".exec('hostname').":".shell_exec("cd /var/www/".$GLOBALS['dir']." ; pwd ; git stash ; git pull")."\n\n";
+  foreach($modules_cloned as $module){
+   $output.=exec('whoami')."@".exec('hostname').":".shell_exec("cd /var/www/".$GLOBALS['dir']."/".$module." ; pwd ; git stash ; git pull")."\n\n";
+  }
+  // log event
+  api_log(API_LOG_NOTICE,"settings","moduleGitPull",
+   "{logs_settings_moduleGitPull|".implode(", ",$modules_cloned)."|".$output."}",
+   NULL,"settings/modules_edit.php");
+  // alert
+  $alert="?alert=gitpullSuccess&alert_class=alert-success";
+ }else{
+  // alert
+  $alert="?alert=gitpullDisabled&alert_class=alert-error";
+ }
+ // redirect
+ exit(header("location: modules_edit.php".$alert));
+}
+
+/* -[ Module Git Clone ]----------------------------------------------------- */
+function module_git_clone(){
+ if(!api_checkPermission("settings","modules_edit")){api_die("accessDenied");}
+ // acquire variables
+ $p_url=$_POST['url'];
+ $p_dir=$_POST['dir'];
+ $p_branch=$_POST['branch'];
+ // execute shell commands
+ $output.=exec('whoami')."@".exec('hostname').shell_exec("cd /var/www/".$GLOBALS['dir']." ; pwd ; git clone ".$p_url." ".$p_dir." ; cd ".$p_dir." ; pwd ; git checkout ".$p_branch);
+ // log event
+ api_log(API_LOG_NOTICE,"settings","moduleGitClone",
+  "{logs_settings_moduleGitClone|".$p_dir."|".$output."}",
+  NULL,"settings/modules_edit.php");
+ // redirect
+ $alert="?alert=gitpullSuccess&alert_class=alert-success";
+ exit(header("location: modules_edit.php".$alert));
 }
 
 
