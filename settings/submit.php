@@ -257,7 +257,9 @@ function module_remove(){
 function module_git_pull(){
  if(!api_checkPermission("settings","modules_edit")){api_die("accessDenied");}
  // definitions
- $modules_cloned=array("coordinator");
+ $modules_cloned=array();
+ // check if coordinator is installed via git
+ if(is_dir("../.git")){$modules_cloned[]="coordinator";}
  // check for modules cloned with git
  if($dh=opendir("../")){
   while(($entry=readdir($dh))!==false){
