@@ -45,8 +45,16 @@ function content(){
   $module_db=$GLOBALS['db']->queryUniqueObject("SELECT * FROM settings_modules WHERE module='".$module_name."'");
   if($module_db->module<>NULL){
    $module_obj->installed_version=$module_db->version;
-   if($module_db->version<>$module_version){
+   // calculate version weight
+   $module_version_weight=explode(".",$module_version);
+   $module_version_weight=str_pad($module_version_weight[0],4,"0",STR_PAD_RIGHT).str_pad($module_version_weight[1],4,"0",STR_PAD_RIGHT).str_pad($module_version_weight[2],4,"0",STR_PAD_RIGHT);
+   $module_db_version_weight=explode(".",$module_db->version);
+   $module_db_version_weight=str_pad($module_db_version_weight[0],4,"0",STR_PAD_RIGHT).str_pad($module_db_version_weight[1],4,"0",STR_PAD_RIGHT).str_pad($module_db_version_weight[2],4,"0",STR_PAD_RIGHT);
+   // check weight
+   if($module_version_weight>$module_db_version_weight){
     $module_obj->action="update";
+   }elseif($module_version_weight<$module_db_version_weight){
+    $module_obj->action="sync";
    }else{
     $module_obj->action=NULL;
    }
@@ -73,6 +81,10 @@ function content(){
    case "update":
     $tr_class="warning";
     $td="<a href='submit.php?act=module_update&module=".$module->name."'>".api_text("modules-td-update",$module->installed_version)."</a>";
+    break;
+   case "sync":
+    $tr_class="error";
+    $td="<a href='submit.php?act=module_uninstall&module=".$module->name."' onClick=\"return confirm('".api_text("modules-td-uninstall-confirm")."');\">".api_text("modules-td-uninstall")."</a>";
     break;
    default:
     $tr_class=NULL;
