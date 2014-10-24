@@ -76,7 +76,7 @@ function account_login(){
      $_SESSION['account']=$account;
      // update session language
      $_SESSION['language']=$account->language;
-     if($account->typology==1){$_SESSION['account']->typology=2;$_SESSION['account']->administrator=TRUE;}
+     if($account->id>1 && $account->typology==1){$_SESSION['account']->typology=2;$_SESSION['account']->administrator=TRUE;}
      // update lastLogin and domain password
      $GLOBALS['db']->execute("UPDATE accounts_accounts SET password='".md5($p_password)."',lastLogin='".date('Y-m-d H:i:s')."' WHERE id='".$account->id."'");
      // log and notifications
@@ -117,7 +117,7 @@ function account_login(){
    // update session language
    $_SESSION['language']=$account->language;
    // administrator
-   if($account->typology==1){$_SESSION['account']->typology=2;$_SESSION['account']->administrator=TRUE;}
+   if($account->id>1 && $account->typology==1){$_SESSION['account']->typology=2;$_SESSION['account']->administrator=TRUE;}
    // update lastLogin
    $GLOBALS['db']->execute("UPDATE accounts_accounts SET lastLogin='".date('Y-m-d H:i:s')."' WHERE id='".$account->id."'");
    // log and notifications
