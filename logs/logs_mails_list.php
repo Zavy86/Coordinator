@@ -45,10 +45,10 @@ function content(){
   $table->addRow($tr_class);
   // build table fields
   $table->addField($modal->link(api_icon("icon-search")));
-  $table->addField(api_timestampFormat($mail->addDate,api_text("datetime-short")),"nowarp");
+  $table->addField(api_timestampFormat($mail->addDate,api_text("datetime")),"nowarp");
   $table->addField(stripslashes($mail->to),"nowarp");
   $table->addField(stripslashes($mail->subject));
-  $table->addField(api_timestampFormat($mail->sendDate,api_text("datetime-short")),"nowarp");
+  $table->addField(api_timestampFormat($mail->sendDate,api_text("datetime")),"nowarp");
   $table->addField($status,"nowarp");
  }
  // show table
