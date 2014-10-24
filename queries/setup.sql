@@ -172,7 +172,26 @@ CREATE TABLE IF NOT EXISTS `logs_logs` (
   KEY `typology` (`typology`),
   KEY `timestamp` (`timestamp`),
   KEY `module` (`module`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=9 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `logs_mails`
+--
+
+CREATE TABLE IF NOT EXISTS `logs_mails` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `to` text COLLATE utf8_unicode_ci NOT NULL,
+  `subject` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `message` text COLLATE utf8_unicode_ci,
+  `headers` text COLLATE utf8_unicode_ci,
+  `status` int(11) NOT NULL DEFAULT '0' COMMENT '0 draft, 1 sended, 2+ failed',
+  `addDate` datetime NOT NULL,
+  `addIdAccount` int(11) unsigned NOT NULL,
+  `sendDate` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -240,7 +259,6 @@ CREATE TABLE IF NOT EXISTS `logs_triggers` (
 ALTER TABLE `logs_subscriptions`
   ADD CONSTRAINT `logs_subscriptions_ibfk_1` FOREIGN KEY (`idAccount`) REFERENCES `accounts_accounts` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `logs_subscriptions_ibfk_2` FOREIGN KEY (`trigger`) REFERENCES `logs_triggers` (`trigger`) ON DELETE CASCADE ON UPDATE CASCADE;
-
 
 -- --------------------------------------------------------
 
