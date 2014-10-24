@@ -7,6 +7,9 @@
 |* -[ Navigation ]----------------------------------------------------------- *|
 \* -------------------------------------------------------------------------- */
 
+/**
+ * Navigation structure
+ */
 class str_navigation{
 
  private $current_tab;
@@ -18,10 +21,14 @@ class str_navigation{
 
  protected $filters;
 
- /* -[ Construct ]----------------------------------------------------------- */
- // @boolean $search : show search bar
- // @array $get : additional get parameters for search bar
- // @string $class : navigation css class
+ /**
+ * Navigation class
+ *
+ * @param boolean $search show search bar
+ * @param array $get additional get parameters for search bar
+ * @param string $class navigation css class
+ * @return object navigation object
+ */
  public function __construct($search=FALSE,$get=NULL,$class=NULL){
   if($get<>NULL && !is_array($get)){$get=array($get);}
   $this->search=$search;
@@ -30,17 +37,20 @@ class str_navigation{
   $this->current_tab=-1;
   $this->nt_array=array();
   $this->filters=array();
-  return TRUE;
  }
 
- /* -[ Add Tab ]------------------------------------------------------------- */
- // @string $label : label of the tab
- // @string $url : link url
- // @string $get : additional get parameters for link (&key=value)
- // @string $class : tab css class
- // @boolean $enabled : enable the navigation tab (true) or not
- // @string $target : target page _blank, _self, _parent, _top
- // @string $confirm : confirmation message to approve if not null
+ /**
+ * Add navigation tab
+ *
+ * @param string $label label of the tab
+ * @param string $url link url
+ * @param string $get additional get parameters for link (&key=value)
+ * @param string $class tab css class
+ * @param boolean $enabled enable the navigation tab (true) or not
+ * @param string $target target page _blank, _self, _parent, _top
+ * @param string $confirm confirmation message to approve
+ * @return true|false
+ */
  function addTab($label,$url=NULL,$get=NULL,$class=NULL,$enabled=TRUE,$target="_self",$confirm=NULL){
   if(strlen($label)==0){return FALSE;}
   $nt=new stdClass();
@@ -57,14 +67,18 @@ class str_navigation{
   return TRUE;
  }
 
- /* -[ Add Sub Tab ]------------------------------------------------------------- */
- // @string $label : label of the tab
- // @string $url : link url
- // @string $get : additional get parameters for link (&key=value)
- // @string $class : sub tab css class
- // @boolean $enabled : enable the navigation tab (true) or not
- // @string $target : target page _blank, _self, _parent, _top
- // @string $confirm : confirmation message to approve if not null
+ /**
+ * Add navigation sub tab
+ *
+ * @param string $label label of the tab
+ * @param string $url link url
+ * @param string $get additional get parameters for link (&key=value)
+ * @param string $class sub tab css class
+ * @param boolean $enabled enable the navigation tab (true) or not
+ * @param string $target target page _blank, _self, _parent, _top
+ * @param string $confirm confirmation message to approve
+ * @return true|false
+ */
  function addSubTab($label,$url=NULL,$get=NULL,$class=NULL,$enabled=TRUE,$target="_self",$confirm=NULL){
   if(strlen($label)==0){return FALSE;}
   $nt=new stdClass();
@@ -83,8 +97,12 @@ class str_navigation{
   return TRUE;
  }
 
- /* -[ Add SubTab Header ]--------------------------------------------------- */
- // @string $label : label of the tab
+ /**
+ * Add navigation sub tab header
+ *
+ * @param string $label label of the tab
+ * @return true|false
+ */
  function addSubTabHeader($label){
   if(strlen($label)==0){return FALSE;}
   $nt=new stdClass();
@@ -97,7 +115,11 @@ class str_navigation{
   return TRUE;
  }
 
- /* -[ Add SubTab Divider ]-------------------------------------------------- */
+ /**
+ * Add navigation sub tab divider
+ *
+ * @return true|false
+ */
  function addSubTabDivider(){
   $nt=new stdClass();
   $nt->typology="subtab-divider";
@@ -108,13 +130,17 @@ class str_navigation{
   return TRUE;
  }
 
- /* -[ Add Filter ]---------------------------------------------------------- */
- // @string $type : text, checkbox, radio, select, multiselect, range, date, datetime, daterange, datetimerange
- // @string $name : name of the filter input
- // @string $label : label of the filter
- // @array $options : array of options (value=>label)
- // @string $class : filter input css class
- // @string $placeholder : placeholder message
+ /**
+ * Add navigation filter
+ *
+ * @param string $type text, checkbox, radio, select, multiselect, range, date, datetime, daterange, datetimerange
+ * @param string $name name of the filter input
+ * @param string $label label of the filter
+ * @param array $options array of options (value=>label)
+ * @param string $class filter input css class
+ * @param string $placeholder placeholder message
+ * @return true|false
+ */
  function addFilter($type,$name,$label,$options=NULL,$class=NULL,$placeholder=NULL){
   if(!in_array(strtolower($type),array("text","checkbox","radio","select","multiselect","range","date","datetime","daterange","datetimerange"))){return FALSE;}
   if(strlen($name)==0){return FALSE;}
@@ -130,8 +156,12 @@ class str_navigation{
   return TRUE;
  }
 
- /* -[ Filters Textual ]----------------------------------------------------- */
- // @string $unvalued : text to show if no filters
+ /**
+ * Retrieve navigation filters in textual format
+ *
+ * @param string $unvalued : text to return if no filters
+ * @return string|$unvalued
+ */
  function filtersText($unvalued=NULL){
   $text=NULL;
   foreach($this->filters as $filter){
@@ -182,7 +212,11 @@ class str_navigation{
   return $return;
  }
 
- /* -[ Filters Get Format ]-------------------------------------------------- */
+ /**
+ * Retrieve navigation filters in url parameters format
+ *
+ * @return string &filtered=1&q=search
+ */
  function filtersGet(){
   $return=NULL;
   foreach($this->filters as $filter){
@@ -209,11 +243,15 @@ class str_navigation{
    }
    if($value<>NULL){$return.=$value;}
   }
-  return "&filtered=1"."&q=".$_GET['q'].$return;
+  return "&filtered=1".$return."&q=".$_GET['q'];
  }
 
- /* -[ Filters Query ]------------------------------------------------------- */
- // @string $unvalued : query to show if no filters
+ /**
+ * Retrieve navigation filters query
+ *
+ * @string $unvalued query to return if no filters
+ * @return string|$unvalued
+ */
  function filtersQuery($unvalued="0"){
   $query=NULL;
   foreach($this->filters as $filter){
@@ -260,10 +298,14 @@ class str_navigation{
   return $return;
  }
 
- /* -[ Filters Parameter Query ]--------------------------------------------- */
- // @string $parameter : parameter id
- // @string $unvalued : query to show if no filters
- // @string $field : rename query field
+ /**
+ * Retrieve navigation filters parameter query
+ *
+ * @param string $parameter parameter id
+ * @param string $unvalued query to return if no filters
+ * @param string $field rename query field
+ * @return string|$unvalued
+ */
  function filtersParameterQuery($parameter,$unvalued="0",$field=NULL){
   foreach($this->filters as $filter_tmp){
    if($filter_tmp->name==$parameter){
@@ -312,8 +354,10 @@ class str_navigation{
   return $return;
  }
 
- /* -[ Render ]-------------------------------------------------------------- */
-  function render(){
+ /**
+ * Renderize navigation object
+ */
+ function render(){
   // open navigation
   echo "<!-- navigation-tabs -->\n";
   echo "<ul class='nav nav-tabs ".$this->class."'>\n";

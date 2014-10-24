@@ -19,6 +19,7 @@
  <!-- dashboard_edit.php -->
  <text key="edit-addWidget">Add Widget</text>
  <text key="edit-editWidget">Edit Widget</text>
+ <text key="edit-tr-unvalued">There are no widgets enabled..</text>
  <text key="edit-th-span">Span</text>
  <text key="edit-th-title">Widget</text>
  <text key="edit-th-module">Module</text>
