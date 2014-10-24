@@ -59,7 +59,7 @@ function account_login(){
     if($account->typology==0){
      // account disabled
      // log and notifications
-     api_log(API_LOG_ERROR,"accounts","loginDisabled",
+     api_log(API_LOG_WARNING,"accounts","loginDisabled",
       "{logs_accounts_loginDisabled|".$p_account."}",$account->id);
      $alert="?alert=loginDisabled&alert_class=alert-warning";
      exit(header("location: login.php".$alert));
@@ -132,12 +132,13 @@ function account_login(){
    if($account->id){
     if($account->typology==0){
      // log and notifications
-     api_log(API_LOG_ERROR,"accounts","loginDisabled",
+     api_log(API_LOG_WARNING,"accounts","loginDisabled",
       "{logs_accounts_loginDisabled|".$p_account."}",$account->id);
      $alert="?alert=loginDisabled&alert_class=alert-warning";
     }else{
+     if($p_account=="root"){$log_typology=API_LOG_WARNING;}else{$log_typology=API_LOG_NOTICE;}
      // log and notifications
-     api_log(API_LOG_WARNING,"accounts","loginFailed",
+     api_log($log_typology,"accounts","loginFailed",
       "{logs_accounts_loginFailed|".$p_account."}",$account->id);
      $alert="?alert=loginFailed&alert_class=alert-error";
     }
