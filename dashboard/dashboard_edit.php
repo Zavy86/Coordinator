@@ -87,6 +87,7 @@ function content(){
  if(!$selected_widget->id){
   $form->addField("select","module",api_text("edit-ff-widget"),NULL,"input-large");
   if(count($widgets_array)){
+   $form->addFieldOption('',api_text("edit-fo-selectWidget"));
    foreach($widgets_array as $widget){
     $form->addFieldOption($widget->module,$widget->title);
    }
@@ -132,5 +133,16 @@ function content(){
  $form->render();
  // close split
  $GLOBALS['html']->split_close();
-}
 ?>
+<script type="text/javascript">
+ $(document).ready(function(){
+  // validation
+  $("form[name='dashboard_edit']").validate({
+   rules:{
+    module:{required:true}
+   },
+   submitHandler:function(form){form.submit();}
+  });
+ });
+</script>
+<?php } ?>
