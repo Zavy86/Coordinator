@@ -9,6 +9,6 @@
  <text key="nav-servers">Servers</text>
 
  <!-- stats_server.php -->
- <text key="server-configNotFound">The configuration file was not found. <br> Clone the sample file {0}stats/config.inc.php.temp in {0}stats/config.inc.php and configure it as your requirements.</text>
+ <text key="server-configNotFound">The configuration file was not found.&lt;br&gt;Clone the sample file {0}stats/config.inc.php.temp in {0}stats/config.inc.php and configure it as your requirements.</text>
 
 </locale>
