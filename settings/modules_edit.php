@@ -47,9 +47,9 @@ function content(){
    $module_obj->installed_version=$module_db->version;
    // calculate version weight
    $module_version_weight=explode(".",$module_version);
-   $module_version_weight=str_pad($module_version_weight[0],4,"0",STR_PAD_RIGHT).str_pad($module_version_weight[1],4,"0",STR_PAD_RIGHT).str_pad($module_version_weight[2],4,"0",STR_PAD_RIGHT);
+   $module_version_weight=str_pad($module_version_weight[0],4,"0",STR_PAD_LEFT).str_pad($module_version_weight[1],4,"0",STR_PAD_LEFT).str_pad($module_version_weight[2],4,"0",STR_PAD_LEFT);
    $module_db_version_weight=explode(".",$module_db->version);
-   $module_db_version_weight=str_pad($module_db_version_weight[0],4,"0",STR_PAD_RIGHT).str_pad($module_db_version_weight[1],4,"0",STR_PAD_RIGHT).str_pad($module_db_version_weight[2],4,"0",STR_PAD_RIGHT);
+   $module_db_version_weight=str_pad($module_db_version_weight[0],4,"0",STR_PAD_LEFT).str_pad($module_db_version_weight[1],4,"0",STR_PAD_LEFT).str_pad($module_db_version_weight[2],4,"0",STR_PAD_LEFT);
    // check weight
    if($module_version_weight>$module_db_version_weight){
     $module_obj->action="update";
