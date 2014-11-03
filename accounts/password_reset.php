@@ -7,10 +7,10 @@ $html->header("Password reset",NULL,FALSE);
 // acquire variables
 $g_account=$_GET['account'];
 $g_secret=$_GET['key'];
-if($g_secret==NULL||$g_account==NULL){die("FATAL ERROR /!\\");}
+if($g_secret==NULL||$g_account==NULL){die("/!\\ FATAL ERROR /!\\");}
 // check account
 $account=$GLOBALS['db']->queryUniqueObject("SELECT * FROM accounts_accounts WHERE account='".$g_account."' AND secret='".$g_secret."'");
-if(!$account->id){die("FATAL ERROR /!\\");}
+if(!$account->id){die("/!\\ 2FATAL ERROR /!\\");}
 ?>
 
 <div class="row-fluid">
@@ -26,17 +26,17 @@ if(!$account->id){die("FATAL ERROR /!\\");}
 
  <div class="control-group">
   <label class="control-label" for="iName">Password</label>
-  <div class="controls"><input type="password" id="iPassword" class="input-xlarge" name="password" placeholder="Scegli una password"></div>
+  <div class="controls"><input type="password" id="iPassword" class="input-xlarge" name="password" placeholder="Choose a new password"></div>
  </div>
 
  <div class="control-group">
-  <label class="control-label" for="iName">Conferma</label>
-  <div class="controls"><input type="password" id="iConfirm" class="input-xlarge" name="confirm" placeholder="Conferma la password scelta"></div>
+  <label class="control-label" for="iName">Confirm</label>
+  <div class="controls"><input type="password" id="iConfirm" class="input-xlarge" name="confirm" placeholder="Confirm your chosen password"></div>
  </div>
 
  <div class="control-group">
   <div class="controls">
-   <input type="submit" class="btn btn-primary" value="Salva">
+   <input type="submit" class="btn btn-primary" value="Save">
   </div>
  </div>
 
