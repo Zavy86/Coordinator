@@ -10,6 +10,12 @@ footer .credit a{color:#333333;}
  text-align:center;
 }
 
+.login-background{
+ background-image:url('../uploads/core/loginbg.png');
+ background-repeat:no-repeat;
+ background-size:100%;
+}
+
 .login-form{
  position: fixed;
  top:50%;
