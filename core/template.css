@@ -11,7 +11,7 @@ footer .credit a{color:#333333;}
 }
 
 .login-background{
- background-image:url('../uploads/core/loginbg.png');
+ background-image:url('../uploads/core/loginbg.png'),url('../uploads/core/loginbg.jpg');
  background-repeat:no-repeat;
  background-size:100%;
 }
@@ -28,9 +28,9 @@ footer .credit a{color:#333333;}
  -webkit-border-radius:8px;
     -moz-border-radius:8px;
          border-radius:8px;
- -webkit-box-shadow:0 1px 2px #ccc;
-    -moz-box-shadow:0 1px 2px #ccc;
-         box-shadow:0 1px 2px #ccc;
+ -webkit-box-shadow:0 1px 5px #666;
+    -moz-box-shadow:0 1px 5px #666;
+         box-shadow:0 1px 5px #666;
 }
 
 .login-form .control-group{margin-left:-80px;}
