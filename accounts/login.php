@@ -11,7 +11,7 @@ $_SESSION['external_redirect']=$s_url;
 $html->header(NULL,NULL,FALSE);
 ?>
 <div class="login-form">
- <h3>Accesso al sistema</h3>
+ <h3 style="text-align:center;"><?php echo api_getOption('title')?></h3>
  <form class="form-horizontal" action="submit.php?act=account_login" method="post">
   <input type="text" id="iAccount" class="input-xlarge" name="account" placeholder="Account" autofocus>
   <input type="password" id="iPassword" class="input-xlarge" name="password" placeholder="Password"><br>
