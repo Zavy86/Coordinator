@@ -1439,14 +1439,38 @@ class str_dl{
   return TRUE;
  }
 
+ /* -[ Add Separator ]------------------------------------------------------- */
+ // @string $separator : null, hr, br
+ // @string $class : element css class
+ public function addSeparator($separator="default",$class=NULL){
+  if(!in_array(strtolower($separator),array(NULL,"default","hr","br"))){return FALSE;}
+  if($separator=="default"){$separator=$this->separator;}
+  if(!strlen($value)>0){$value="&nbsp;";}
+  $element=new stdClass();
+  $element->type="separator";
+  $element->label="&nbsp;";
+  $element->value="&nbsp;";
+  $element->separator=$separator;
+  $element->class=$class;
+  $this->elements_array[]=$element;
+  return TRUE;
+ }
+
  /* -[ Render ]-------------------------------------------------------------- */
  // @boolean $echo : echo result (true) or return
  public function render($echo=TRUE){
   $return="\n<!-- dynamic-list -->\n";
   $return.="<dl class='".$this->class."'>\n";
-  foreach($this->elements_array as $element){
-   $return.=" <dt>".$element->label."</dt><dd class='".$element->class."'>".$element->value."</dd>";
-   if($element->separator<>NULL){$return.="<".$element->separator.">\n";}else{$return.="\n";}
+  foreach($this->elements_array as $index=>$element){
+   switch($element->type){
+    case "element":
+     $return.=" <dt>".$element->label."</dt><dd class='".$element->class."'>".$element->value."</dd>";
+     if($element->separator<>NULL && $this->elements_array[$index+1]->type=="element"){$return.="<".$element->separator.">\n";}else{$return.="\n";}
+     break;
+    case "separator":
+     if($element->separator<>NULL){$return.="<".$element->separator.">\n";}else{$return.="\n";}
+     break;
+   }
   }
   $return.="</dl><!-- /dynamic-list -->\n";
   if($echo){echo $return;return TRUE;}else{return $return;}
