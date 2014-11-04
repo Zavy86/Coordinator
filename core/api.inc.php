@@ -1541,7 +1541,7 @@ function api_link($url,$label,$title=NULL,$class=NULL,$popup=FALSE,$confirm=NULL
  if(strlen($confirm)>0){
   $return.=" onClick=\"return confirm('".addslashes($confirm)."')\"";
  }
- $return.=" target='".$target."'>".$label."</a>\n";
+ $return.=" target='".$target."'>".$label."</a>";
  return $return;
 }
 
