@@ -201,7 +201,11 @@ class str_navigation{
     default:
      if($_GET[$filter->name]<>NULL){$value=$_GET[$filter->name];}
    }
-   if($value<>NULL){$text.=" <span class='label label-info'>".$filter->label." = ".$value."</span>";}
+   if($value<>NULL){
+    $text.=" <span class='label label-info'>";
+    if($filter->label<>NULL && strtolower($filter->label)<>"&nbsp;"){$text.=$filter->label." = ";}
+    $text.=$value."</span>";
+   }
   }
   if($text<>NULL){
    $return="<p><span class='label'>".api_text("filters-filters").":</span> ".substr(str_replace("*","%",$text),1)."</p>\n";
