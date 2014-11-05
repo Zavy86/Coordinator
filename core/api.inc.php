@@ -1541,7 +1541,7 @@ function api_link($url,$label,$title=NULL,$class=NULL,$popup=FALSE,$confirm=NULL
  if(strlen($confirm)>0){
   $return.=" onClick=\"return confirm('".addslashes($confirm)."')\"";
  }
- $return.=" target='".$target."'>".$label."</a>\n";
+ $return.=" target='".$target."'>".$label."</a>";
  return $return;
 }
 
@@ -1780,6 +1780,31 @@ function pre_var_dump($variable,$echo="dump",$label=NULL){
   default:var_dump($variable);
  }
  echo "</pre>";
+}
+
+
+/**
+ * Format a Phone Number
+ *
+ * @param string $phone Phone Number
+ * @param string $separator Separator character
+ */
+function api_phoneFormat($phone,$separator=" "){
+ // check region and set offset
+ if(substr($phone,0,1)=="+"){$region=substr($phone,0,3);$offset=3;}else{$offset=0;}
+ // switch typology
+ switch(substr($phone,$offset,1)){
+  // italian
+  case "0":
+   if(strlen($phone)>($offset+8)){$number_cut=3;}else{$number_cut=2;}
+   $phone=substr($phone,$offset,2).$separator.substr($phone,$offset+2,2).$separator.substr($phone,$offset+4,$number_cut).$separator.substr($phone,$offset+4+$number_cut);
+   break;
+  // italian mobile
+  case "3":
+   $phone=substr($phone,$offset,3).$separator.substr($phone,$offset+3,3).$separator.substr($phone,$offset+6);
+   break;
+ }
+ return trim($region.$separator.$phone,$separator);
 }
 
 ?>
