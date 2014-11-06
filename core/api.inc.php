@@ -1739,6 +1739,7 @@ function api_logHistoryParse($timestamp,$account,$status_from=NULL,$status_to=NU
  * @param string $icon bootstrap icon glyphs
  * @param string $title title of icon
  * @param string $style manual styles tag
+ * @return string Glyphicons icon html tag
  */
 function api_icon($icon,$title=NULL,$style=NULL){
  if($icon==NULL){return FALSE;}
@@ -1753,6 +1754,7 @@ function api_icon($icon,$title=NULL,$style=NULL){
  * @param string $wsdl Web Service Description Language file
  * @param string $username Web Service username
  * @param string $password Web Service password
+ * @return object
  */
 function api_webservice_wsdl($wsdl,$username=NULL,$password=NULL){
  if(!file_exists("../core/nusoap/wsdl/".$wsdl)){return FALSE;}
@@ -1768,9 +1770,10 @@ function api_webservice_wsdl($wsdl,$username=NULL,$password=NULL){
 /**
  * Show a variable dump into a pre tag
  *
- * @param string $variable Variable to dump
- * @param string $echo Typology of echo : dump | print
- * @param string $label Dump label
+ * @param string $variable variable to dump
+ * @param string $echo typology of echo : dump | print
+ * @param string $label dump label
+ * @return print variable dump into a pre tag
  */
 function pre_var_dump($variable,$echo="dump",$label=NULL){
  echo "<pre>";
@@ -1786,8 +1789,9 @@ function pre_var_dump($variable,$echo="dump",$label=NULL){
 /**
  * Format a Phone Number
  *
- * @param string $phone Phone Number
- * @param string $separator Separator character
+ * @param string $phone phone number
+ * @param string $separator separator character
+ * @return string formatted phone number
  */
 function api_phoneFormat($phone,$separator=" "){
  // check region and set offset
@@ -1806,5 +1810,47 @@ function api_phoneFormat($phone,$separator=" "){
  }
  return trim($region.$separator.$phone,$separator);
 }
+
+
+/**
+ * Clean a string
+ *
+ * @param string $string string to clean
+ * @param string $pattern pattern to clean
+ * @return string cleaned string
+ */
+function api_cleanString($string,$pattern="/[^A-Za-zÀ-ÿ0-9-._' ]/"){
+ if(!$string){return NULL;}
+ $string=preg_replace("!\s+!"," ",$string);
+ $string=preg_replace($pattern,"",$string);
+ return $string;
+}
+
+
+/**
+ * Clean a number
+ *
+ * @param string $number number to clean
+ * @param string $pattern pattern to clean
+ * @return string cleaned number
+ */
+function api_cleanNumber($number,$pattern="/[^0-9]/"){
+ if(!$number){return NULL;}
+ $number=preg_replace($pattern,"",$number);
+ return $number;
+}
+
+
+/**
+ * Current date and time
+ *
+ * @return string current date and time
+ */
+function api_now(){
+ return date("Y-m-d H:i:s");
+}
+
+
+
 
 ?>
