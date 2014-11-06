@@ -101,7 +101,7 @@ function content(){
  // show table
  $table->render();
  // git pull
- echo api_link("submit.php?act=module_git_pull",api_text("modules-git_pull"),NULL,"btn btn-primary",FALSE,api_text("modules-git_pull-confirm"));
- echo api_link("modules_git_clone.php",api_text("modules-git_clone"),NULL,"btn");
+ echo api_link("submit.php?act=module_git_pull",api_text("modules-git_pull"),NULL,"btn btn-primary",FALSE,api_text("modules-git_pull-confirm"))."\n";
+ echo api_link("modules_git_clone.php",api_text("modules-git_clone"),NULL,"btn")."\n";
 }
 ?>
