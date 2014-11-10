@@ -620,15 +620,15 @@ class str_pagination{
   echo "<div class='pagination ".$this->class."'>\n";
   echo " <ul class='".$this->class_ul."'>\n";
   // pagination limit
-  echo "<li class='".$this->class_li_disabled."'><a href='#'>".ucfirst(api_text("show"))."</a></li>\n";
+  echo "  <li class='".$this->class_li_disabled."'><a href='#'>".ucfirst(api_text("show"))."</a></li>\n";
   $pagination_limit_array=array(20=>"20",100=>"100",250=>"250",0=>ucfirst(api_text("all")));
   foreach($pagination_limit_array as $index=>$limit){
    if($index==$this->limit){$class=$this->class_li_active;}else{$class=$this->class_li;}
-   echo "<li class='".$class."'><a href='".str_replace("{p}",1,$this->url)."&l=".$index."'>".$limit."</a></li>\n";
+   echo "  <li class='".$class."'><a href='".str_replace("{p}",1,$this->url)."&l=".$index."'>".$limit."</a></li>\n";
   }
   // pages
   if($lastpage>1){
-   echo "<li class='null'><a href='#'>&nbsp;</a></li>\n";
+   echo "  <li class='null'><a href='#'>&nbsp;</a></li>\n";
    if($this->page>1){echo "  <li class='".$this->class_li."'><a href='".str_replace("{p}",$prev,$this->url)."'>&laquo;</a></li>\n";}
     else{echo "  <li class='".$this->class_li_disabled."'><span>&laquo;</span></li>\n";}
    if($lastpage<7+($adjacents*2)){
@@ -1052,7 +1052,7 @@ class str_form{
    // show label
    if($ff->label<>NULL && $this->controlGroup){
     $return.=" <label class='control-label'>".$ff->label."</label>\n";
-    $return.=" <div class='controls'>\n";
+    if($ff->type<>"custom"){$return.=" <div class='controls'>\n";}
    }
    // open append div
    if($ff->append<>NULL){$return.="  <div class='input-append'>\n";}
@@ -1212,7 +1212,7 @@ class str_form{
    }
    // show and close append div
    if($ff->append<>NULL){
-    if(substr($ff->append,0,1)<>"<"){
+    if(substr($ff->append,0,1)<>"<" && strpos($ff->append,"input")===FALSE){
      $return.="  <span class='add-on'>".$ff->append."</span>\n";
     }else{
      $return.="  ".$ff->append."\n";
@@ -1220,7 +1220,7 @@ class str_form{
     $return.=" </div><!-- /input-append -->\n";
    }
    // close controls
-   if($ff->label<>NULL && $this->controlGroup){$return.=" </div><!-- /controls -->\n";}
+   if($ff->label<>NULL && $this->controlGroup && $ff->type<>"custom"){$return.=" </div><!-- /controls -->\n";}
    // close group
    if($ff->type<>"separator" && $ff->label<>NULL && $this->controlGroup){$return.="</div><!-- /control-group -->\n\n";}
    // file script

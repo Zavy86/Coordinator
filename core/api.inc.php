@@ -647,6 +647,20 @@ function api_accountCompany($account_id=NULL){
 }
 
 
+/* -[ Account Division by account id ]--------------------------------------- */
+// @param $account_id : ID of the account
+function api_accountDivision($account_id=NULL){
+ if($account_id===0){return NULL;}
+ if($account_id==NULL){$account_id=$_SESSION['account']->id;}
+ $company=$GLOBALS['db']->queryUniqueObject("SELECT accounts_companies.* FROM accounts_companies JOIN accounts_accounts ON accounts_accounts.idCompany=accounts_companies.id WHERE accounts_accounts.id='".$account_id."'");
+ if($company->id>0){
+  return $company->division;
+ }else{
+  return FALSE;
+ }
+}
+
+
 /* -[ Profile language by account id ]--------------------------------------- */
 // @param $account_id : ID of the account
 function api_accountLanguage($account_id=NULL){
@@ -1176,6 +1190,7 @@ function api_parse_csv_file($csv_file,$csv_delimiter=',',$csv_enclosure='"'){
 function api_clearFileName($file_name){
  $file_name=str_replace(" ","-",$file_name);
  $file_name=strtolower(preg_replace("/[^A-Za-z0-9-._]/", "",$file_name));
+ $file_name=str_replace("---","-",$file_name);
  return $file_name;
 }
 
@@ -1368,6 +1383,7 @@ function api_queryOrder($default=NULL){
   return " ORDER BY ".$default;
  }else{
   if($query_order_mode==1){$query_order_mode=" ASC";}else{$query_order_mode=" DESC";}
+  $query_order_field=str_replace(","," ".$query_order_mode.",",$query_order_field);
   return " ORDER BY ".$query_order_field.$query_order_mode;
  }
 }
@@ -1739,6 +1755,7 @@ function api_logHistoryParse($timestamp,$account,$status_from=NULL,$status_to=NU
  * @param string $icon bootstrap icon glyphs
  * @param string $title title of icon
  * @param string $style manual styles tag
+ * @return string Glyphicons icon html tag
  */
 function api_icon($icon,$title=NULL,$style=NULL){
  if($icon==NULL){return FALSE;}
@@ -1753,6 +1770,7 @@ function api_icon($icon,$title=NULL,$style=NULL){
  * @param string $wsdl Web Service Description Language file
  * @param string $username Web Service username
  * @param string $password Web Service password
+ * @return object
  */
 function api_webservice_wsdl($wsdl,$username=NULL,$password=NULL){
  if(!file_exists("../core/nusoap/wsdl/".$wsdl)){return FALSE;}
@@ -1768,9 +1786,10 @@ function api_webservice_wsdl($wsdl,$username=NULL,$password=NULL){
 /**
  * Show a variable dump into a pre tag
  *
- * @param string $variable Variable to dump
- * @param string $echo Typology of echo : dump | print
- * @param string $label Dump label
+ * @param string $variable variable to dump
+ * @param string $echo typology of echo : dump | print
+ * @param string $label dump label
+ * @return print variable dump into a pre tag
  */
 function pre_var_dump($variable,$echo="dump",$label=NULL){
  echo "<pre>";
@@ -1786,8 +1805,9 @@ function pre_var_dump($variable,$echo="dump",$label=NULL){
 /**
  * Format a Phone Number
  *
- * @param string $phone Phone Number
- * @param string $separator Separator character
+ * @param string $phone phone number
+ * @param string $separator separator character
+ * @return string formatted phone number
  */
 function api_phoneFormat($phone,$separator=" "){
  // check region and set offset
@@ -1806,5 +1826,47 @@ function api_phoneFormat($phone,$separator=" "){
  }
  return trim($region.$separator.$phone,$separator);
 }
+
+
+/**
+ * Clean a string
+ *
+ * @param string $string string to clean
+ * @param string $pattern pattern to clean
+ * @return string cleaned string
+ */
+function api_cleanString($string,$pattern="/[^A-Za-zÀ-ÿ0-9-._' ]/"){
+ if(!$string){return NULL;}
+ $string=preg_replace("!\s+!"," ",$string);
+ $string=preg_replace($pattern,"",$string);
+ return $string;
+}
+
+
+/**
+ * Clean a number
+ *
+ * @param string $number number to clean
+ * @param string $pattern pattern to clean
+ * @return string cleaned number
+ */
+function api_cleanNumber($number,$pattern="/[^0-9]/"){
+ if(!$number){return NULL;}
+ $number=preg_replace($pattern,"",$number);
+ return $number;
+}
+
+
+/**
+ * Current date and time
+ *
+ * @return string current date and time
+ */
+function api_now(){
+ return date("Y-m-d H:i:s");
+}
+
+
+
 
 ?>

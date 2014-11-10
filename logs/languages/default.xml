@@ -16,7 +16,7 @@
  <text key="filter-warnings">Warnings</text>
  <text key="filter-errors">Errors</text>
  <text key="filter-date">Date</text>
- <text key="filter-module">Modules</text>
+ <text key="filter-modules">Modules</text>
 
  <!-- template.inc.php -->
  <text key="nav-logs">Events log</text>
