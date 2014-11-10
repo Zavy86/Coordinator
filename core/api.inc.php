@@ -1368,6 +1368,7 @@ function api_queryOrder($default=NULL){
   return " ORDER BY ".$default;
  }else{
   if($query_order_mode==1){$query_order_mode=" ASC";}else{$query_order_mode=" DESC";}
+  $query_order_field=str_replace(","," ".$query_order_mode.",",$query_order_field);
   return " ORDER BY ".$query_order_field.$query_order_mode;
  }
 }
