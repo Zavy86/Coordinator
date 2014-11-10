@@ -647,6 +647,20 @@ function api_accountCompany($account_id=NULL){
 }
 
 
+/* -[ Account Division by account id ]--------------------------------------- */
+// @param $account_id : ID of the account
+function api_accountDivision($account_id=NULL){
+ if($account_id===0){return NULL;}
+ if($account_id==NULL){$account_id=$_SESSION['account']->id;}
+ $company=$GLOBALS['db']->queryUniqueObject("SELECT accounts_companies.* FROM accounts_companies JOIN accounts_accounts ON accounts_accounts.idCompany=accounts_companies.id WHERE accounts_accounts.id='".$account_id."'");
+ if($company->id>0){
+  return $company->division;
+ }else{
+  return FALSE;
+ }
+}
+
+
 /* -[ Profile language by account id ]--------------------------------------- */
 // @param $account_id : ID of the account
 function api_accountLanguage($account_id=NULL){
@@ -1176,6 +1190,7 @@ function api_parse_csv_file($csv_file,$csv_delimiter=',',$csv_enclosure='"'){
 function api_clearFileName($file_name){
  $file_name=str_replace(" ","-",$file_name);
  $file_name=strtolower(preg_replace("/[^A-Za-z0-9-._]/", "",$file_name));
+ $file_name=str_replace("---","-",$file_name);
  return $file_name;
 }
 
