@@ -48,7 +48,11 @@ if($g_submit=="cron"){
      && $dontCheckSession==FALSE){
    // save url to session if not in this skip array
    $url_skip=array($GLOBALS['dir']."accounts/submit.php?act=account_login",
-                   $GLOBALS['dir']."accounts/index.php");
+    $GLOBALS['dir']."accounts/index.php",
+    $GLOBALS['dir']."chats/chats.inc.php",
+    $GLOBALS['dir']."chats/chats_counter.inc.php",
+    $GLOBALS['dir']."logs/logs_notifications_list.inc.php",
+    $GLOBALS['dir']."logs/logs_notifications_counter.inc.php");
    if(!in_array($_SERVER['REQUEST_URI'],$url_skip)){
     $_SESSION['external_redirect']="http://".$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'];
    }
@@ -167,6 +171,7 @@ function api_alert(){
   $alert=$_GET['alert'];
   $class=$_GET['alert_class'];
   $parameters=$_GET['alert_parameters'];
+  $idLog=$_GET['idLog'];
  }elseif(isset($GLOBALS['alert'])){
   $alert=$GLOBALS['alert']->alert;
   $class=$GLOBALS['alert']->class;
@@ -175,6 +180,7 @@ function api_alert(){
  // show the alert
  if(isset($alert)){
   $alert=api_text($alert,$parameters);
+  if($idLog){$alert="<a href='../logs/logs_list.php?filtered=1&typology%5B%5D=1&typology%5B%5D=2&typology%5B%5D=3&idLog=".$idLog."' target='_blank'>".api_icon("icon-book")."</a> &nbsp;".$alert;}
   echo "<div id=\"alert-message\" class=\"alert ".$class."\">\n";
   echo "<button type=\"button\" class=\"close\" data-dismiss=\"alert\">&times;</button>";
   echo "\n".$alert."\n";

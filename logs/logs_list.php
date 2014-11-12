@@ -75,4 +75,10 @@ function content(){
  foreach($modals_array as $modal){$modal->render();}
  // show pagination
  $pagination->render();
-}
+?>
+<script type="text/javascript">
+ $(document).ready(function(){
+  <?php if($_GET['idLog']){echo "$('#modal_".$_GET['idLog']."').modal('show');\n";} ?>
+ });
+</script>
+<?php } ?>

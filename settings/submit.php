@@ -115,11 +115,11 @@ function module_setup(){
   // execute setup queries by mysql dump
   if(file_exists($module_path."queries/setup.sql")){api_restoreMysqlDump($module_path."queries/setup.sql");}
   // log event
-  api_log(API_LOG_NOTICE,"settings","moduleInstalled",
+  $log=api_log(API_LOG_NOTICE,"settings","moduleInstalled",
    "{logs_settings_moduleInstalled|".$module_name."}",
    NULL,"settings/modules_edit.php");
   // redirect
-  $alert="?alert=moduleSetup&alert_class=alert-success";
+  $alert="?alert=moduleSetup&alert_class=alert-success&idLog=".$log->id;
   exit(header("location: modules_edit.php".$alert));
  }else{
   // redirect
@@ -178,11 +178,11 @@ function module_update(){
   // update version on database
   $GLOBALS['db']->execute("UPDATE `settings_modules` SET `version`='".$current_version."' WHERE `module`='".$module_name."';");
   // log event
-  api_log(API_LOG_NOTICE,"settings","moduleUpdated",
+  $log=api_log(API_LOG_NOTICE,"settings","moduleUpdated",
    "{logs_settings_moduleUpdated|".$module_name."|".$initial_version."|".$current_version."}",
    NULL,"settings/modules_edit.php");
   // redirect
-  $alert="?alert=moduleUpdated&alert_class=alert-success";
+  $alert="?alert=moduleUpdated&alert_class=alert-success&idLog=".$log->id;
   exit(header("location: modules_edit.php".$alert));
  }else{
   // redirect
@@ -219,11 +219,11 @@ function module_uninstall(){
   // execute unistall queries by mysql dump
   if(file_exists($module_path."queries/uninstall.sql")){api_restoreMysqlDump($module_path."queries/uninstall.sql");}
   // log event
-  api_log(API_LOG_WARNING,"settings","moduleUninstalled",
+  $log=api_log(API_LOG_WARNING,"settings","moduleUninstalled",
    "{logs_settings_moduleUninstalled|".$module_name."}",
    NULL,"settings/modules_edit.php");
   // redirect
-  $alert="?alert=moduleUninstalled&alert_class=alert-warning";
+  $alert="?alert=moduleUninstalled&alert_class=alert-warning&idLog=".$log->id;
   exit(header("location: modules_edit.php".$alert));
  }else{
   // redirect
@@ -275,11 +275,11 @@ function module_git_pull(){
    $output.=exec('whoami')."@".exec('hostname').":".shell_exec("cd ".$GLOBALS['path'].$GLOBALS['dir'].$module." ; pwd ; git stash ; git pull")."\n\n";
   }
   // log event
-  api_log(API_LOG_NOTICE,"settings","moduleGitPull",
+  $log=api_log(API_LOG_NOTICE,"settings","moduleGitPull",
    "{logs_settings_moduleGitPull|".implode(", ",$modules_cloned)."|".$output."}",
    NULL,"settings/modules_edit.php");
   // alert
-  $alert="?alert=gitpullSuccess&alert_class=alert-success";
+  $alert="?alert=gitpullSuccess&alert_class=alert-success&idLog=".$log->id;
  }else{
   // alert
   $alert="?alert=gitpullDisabled&alert_class=alert-error";
@@ -298,11 +298,11 @@ function module_git_clone(){
  // execute shell commands
  $output.=exec('whoami')."@".exec('hostname').shell_exec("cd /var/www/".$GLOBALS['dir']." ; pwd ; git clone ".$p_url." ".$p_dir." ; cd ".$p_dir." ; pwd ; git checkout ".$p_branch);
  // log event
- api_log(API_LOG_NOTICE,"settings","moduleGitClone",
+ $log=api_log(API_LOG_NOTICE,"settings","moduleGitClone",
   "{logs_settings_moduleGitClone|".$p_dir."|".$output."}",
   NULL,"settings/modules_edit.php");
  // redirect
- $alert="?alert=gitpullSuccess&alert_class=alert-success";
+ $alert="?alert=gitpullSuccess&alert_class=alert-success&idLog=".$log->id;
  exit(header("location: modules_edit.php".$alert));
 }
 
