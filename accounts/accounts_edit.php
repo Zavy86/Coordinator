@@ -13,7 +13,7 @@ function content(){
  // split window
  $GLOBALS['html']->split_open();
  $GLOBALS['html']->split_span(6);
- echo "<dl class='dl-horizontal'>\n<dt>".api_text("accounts_edit-ff-avatar")."</dt>\n</dd>\n&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src='".api_accountAvatar($account->id)."?".rand(0,999)."' class='img-polaroid' width='125'>\n</dd>\n</dl>\n";
+ if($account->id){echo "<dl class='dl-horizontal'>\n<dt>".api_text("accounts_edit-ff-avatar")."</dt>\n</dd>\n&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src='".api_accountAvatar($account->id)."?".rand(0,999)."' class='img-polaroid' width='125'>\n</dd>\n</dl>\n";}
  // build form
  $form=new str_form("submit.php?act=account_save&id=".$account->id,"post","accounts");
  $form->addField("text","name",api_text("accounts_edit-ff-name"),stripslashes($account->name),"input-large",api_text("accounts_edit-ff-name-placeholder"));
@@ -50,7 +50,7 @@ function content(){
  if($account->id>0 && api_checkPermission("accounts","accounts_delete")){
   $form->addControl("button",api_text("accounts_edit-fc-delete"),"btn-danger","submit.php?act=account_delete&id=".$account->id,api_text("accounts_edit-fc-delete-confirm"));
  }
- if($_SESSION['account']->administrator && $account->id<>$_SESSION['account']->id){
+ if($account->id && (($_SESSION['account']->administrator && $account->id<>$_SESSION['account']->id) || $_SESSION['account']->id==1)){
   $form->addControl("button",api_text("accounts_edit-fc-interpret"),"btn-warning","submit.php?act=account_interpret&idAccount=".$account->id,api_text("accounts_edit-fc-interpret-confirm"));
  }
  // show form
