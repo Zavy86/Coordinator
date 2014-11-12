@@ -5,8 +5,9 @@ session_start();
 global $debug;                  // debug variable
 global $html;                   // html structure resource
 global $db;                     // database resource
-global $dir;                    // base path resource
-global $alert;                  // base path resource
+global $path;                   // base path of web root directory
+global $dir;                    // directory of web application
+global $alert;                  // alerts global variable
 global $locale;                 // array with translation
 include("../config.inc.php");   // include the configuration file
 include("html.class.php");      // include the html class
