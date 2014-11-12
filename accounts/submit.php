@@ -693,7 +693,7 @@ function ldap_account_create(){
  //include('../core/ldap.inc.php');
  //if(ldap_authenticate($ldap_host,$ldap_dn,$ldap_domain,$p_ldapUsername,$p_ldapPassword,$ldap_group)){
  // check if not exist
- if(!$GLOBALS['db']->countOf("accounts_accounts","account='".$p_account."'") &&
+ if(strlen($p_account)>0 && !$GLOBALS['db']->countOf("accounts_accounts","account='".$p_account."'") &&
     !$GLOBALS['db']->countOf("accounts_accounts","ldapUsername='".$p_ldapUsername."'")){
   // build query
   $query="INSERT INTO accounts_accounts
