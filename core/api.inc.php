@@ -1842,10 +1842,11 @@ function api_phoneFormat($phone,$separator=" "){
  * @param string $pattern pattern to clean
  * @return string cleaned string
  */
-function api_cleanString($string,$pattern="/[^A-Za-zÀ-ÿ0-9-._' ]/"){
+function api_cleanString($string,$pattern="/[^A-Za-zÀ-ÿ0-9-._' ]/",$null=NULL){
  if(!$string){return NULL;}
  $string=preg_replace("!\s+!"," ",$string);
  $string=preg_replace($pattern,"",$string);
+ if(!strlen($string)){$string=$null;}
  return $string;
 }
 
@@ -1857,9 +1858,10 @@ function api_cleanString($string,$pattern="/[^A-Za-zÀ-ÿ0-9-._' ]/"){
  * @param string $pattern pattern to clean
  * @return string cleaned number
  */
-function api_cleanNumber($number,$pattern="/[^0-9]/"){
+function api_cleanNumber($number,$pattern="/[^0-9]/",$null=NULL){
  if(!$number){return NULL;}
  $number=preg_replace($pattern,"",$number);
+ if(!strlen($number)){$number=$null;}
  return $number;
 }
 
