@@ -222,11 +222,11 @@ public function header($title="",$nav="dashboard",$navbar=TRUE){
 
         <?php
 
-         if($_SESSION['account']->interpreter>1){
+         if($_SESSION['account']->interpreter){
           echo "<li><a href='".$GLOBALS['dir']."accounts/submit.php?act=account_interpret_stop'>".api_text("core-menu-interpretStop")."</a></li>";
          }
 
-         if($_SESSION['account']->administrator && $_SESSION['account']->id>1){
+         if($_SESSION['account']->administrator){
           echo "<li class='divider'></li>\n";
           if($_SESSION['account']->debug){
            echo "<li><a href='".$GLOBALS['dir']."accounts/submit.php?act=account_debug_disable'>".api_text("core-menu-debugDisable")."</a></li>";
@@ -235,7 +235,7 @@ public function header($title="",$nav="dashboard",$navbar=TRUE){
           }
           if($_SESSION['account']->typology==2){
            echo "<li><a href='".$GLOBALS['dir']."accounts/submit.php?act=account_switch_to_admin'>".api_text("core-menu-becomeAdministrator")."</a></li>";
-          }else{
+          }elseif($_SESSION['account']->id>1){
            echo "<li><a href='".$GLOBALS['dir']."accounts/submit.php?act=account_switch_to_user'>".api_text("core-menu-becomeUser")."</a></li>";
           }
          }
