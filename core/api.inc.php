@@ -682,15 +682,16 @@ function api_accountLanguage($account_id=NULL){
 }
 
 
-/* -[ Company by company id ]------------------------------------------------ */
-// @param $idCompany : ID of the company
-function api_company($idCompany){
- $company=$GLOBALS['db']->queryUniqueObject("SELECT * FROM accounts_companies WHERE id='".$idCompany."'");
- if($company->id>0){
-  return $company;
- }else{
-  return FALSE;
- }
+/* -[ Company object ]------------------------------------------------------- */
+// @param $company : company id or object
+function api_company($company){
+ if(is_numeric($company)){$company=$GLOBALS['db']->queryUniqueObject("SELECT * FROM accounts_companies WHERE id='".$company."'");}
+ if(!$company->id){return FALSE;}
+ $company->company=stripslashes($company->company);
+ $company->division=stripslashes($company->division);
+ $company->name=stripslashes($company->name);
+ $company->fiscal_name=stripslashes($company->fiscal_name);
+ return $company;
 }
 
 
