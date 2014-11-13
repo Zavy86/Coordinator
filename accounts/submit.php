@@ -118,6 +118,7 @@ function account_login(){
    $_SESSION['language']=$account->language;
    // administrator
    if($account->id>1 && $account->typology==1){$_SESSION['account']->typology=2;$_SESSION['account']->administrator=TRUE;}
+   if($account->id==1){$_SESSION['account']->administrator=TRUE;}
    // update lastLogin
    $GLOBALS['db']->execute("UPDATE accounts_accounts SET lastLogin='".date('Y-m-d H:i:s')."' WHERE id='".$account->id."'");
    // log and notifications
