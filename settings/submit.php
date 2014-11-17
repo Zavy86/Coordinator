@@ -7,8 +7,6 @@ $act=$_GET['act'];
 switch($act){
  // settings
  case "settings_save":settings_save();break;
- // validations
- //case "validations_toggle":validations_toggle();break;
  // modules
  case "module_setup":module_setup();break;
  case "module_update":module_update();break;
@@ -60,31 +58,6 @@ function settings_save(){
  // redirect
  $alert="?alert=settingSaved&alert_class=alert-success";
  header("location: settings_edit.php".$alert);
-}
-
-
-/* -[ Validations Toggle ]--------------------------------------------------- */
-function validations_toggle(){
- if(!api_checkPermission("settings","validations_edit")){api_die("accessDenied");}
- // acquire variables
- $g_module=$_GET['module'];
- $g_idValidation=$_GET['idValidation'];
- $g_idGroup=$_GET['idGroup'];
- // check current status
- $check=$GLOBALS['db']->queryUniqueValue("SELECT idValidation FROM accounts_validations_links WHERE idValidation='".$g_idValidation."' AND idGroup='".$g_idGroup."'");
- // check lock status
- $locked=$GLOBALS['db']->queryUniqueValue("SELECT locked FROM accounts_validations WHERE id='".$g_idValidation."'");
- if($_SESSION['account']->id<>1 && $locked){api_die("accessDenied");}
- // build query
- if($check==$g_idValidation){
-  // revoke permission
-  $GLOBALS['db']->execute($query="DELETE FROM accounts_validations_links WHERE idValidation='".$g_idValidation."' AND idGroup='".$g_idGroup."'");
- }else{
-  // enable permission
-  $GLOBALS['db']->execute("INSERT INTO accounts_validations_links (idValidation,idGroup) VALUES ('".$g_idValidation."','".$g_idGroup."')");
- }
- // redirect
- header("location: validations_edit.php?module=".$g_module);
 }
 
 
@@ -270,8 +243,8 @@ function module_git_pull(){
  }
  // disabled for localhost and 127.0.0.1
  if($_SERVER['HTTP_HOST']<>"localhost" && $_SERVER['HTTP_HOST']<>"127.0.0.1"){
-  $output.=exec('whoami')."@".exec('hostname').":".shell_exec("cd ".$GLOBALS['path'].$GLOBALS['dir']." ; pwd ; git stash clear ; git pull")."\n\n";
   foreach($modules_cloned as $module){
+   if($module=="coordinator"){$module=NULL;}
    $output.=exec('whoami')."@".exec('hostname').":".shell_exec("cd ".$GLOBALS['path'].$GLOBALS['dir'].$module." ; pwd ; git stash clear ; git pull")."\n\n";
   }
   // log event
