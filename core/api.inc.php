@@ -1877,6 +1877,22 @@ function api_now(){
 }
 
 
-
+/**
+ * Convert tabs to spaces
+ *
+ * @return string text with space instead of tabs
+ */
+function api_tab2space($text,$tab=4,$nbsp=FALSE){
+ $lines=explode("\n",$text);
+ foreach($lines as $line){
+  while(($t=mb_strpos($line,"\t"))!==FALSE){
+   if($t){$preTab=mb_substr($line,0,$t);}else{$preTab='';}
+   $line=$preTab.str_repeat($nbsp?chr(7):' ',$tab-(mb_strlen($preTab)%$tab)).mb_substr($line,$t+1);
+  }
+  if($nbsp){$line=str_replace($nbsp?chr(7):' ', '&nbsp;',rtrim($line));}
+  $return.=rtrim($line)."\n";
+ }
+ return substr($return,0,-1);
+}
 
 ?>
