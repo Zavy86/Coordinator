@@ -7,6 +7,7 @@
 
  <!-- logs -->
  <text key="logs_cron_sendmail">Invio mail asincrono - Processate {0} mail&#xA;&#xA;Inviate: {1}&#xA;Invii falliti: {2}</text>
+ <text key="logs_cron_sendmailDeleted">Invio mail asincrono - Eliminate dal log {0} dello scorso mese</text>
  <text key="logs_cron_sendmailFailed">Invio mail asincrono fallito&#xA;&#xA;Destinatario: {0}&#xA;Oggetto: {1}&#xA;&#xA;Errore: {3}</text>
 
 </locale>
