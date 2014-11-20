@@ -245,7 +245,7 @@ function module_git_pull(){
  if($_SERVER['HTTP_HOST']<>"localhost" && $_SERVER['HTTP_HOST']<>"127.0.0.1"){
   foreach($modules_cloned as $module){
    if($module=="coordinator"){$module=NULL;}
-   $output.=exec('whoami')."@".exec('hostname').":".shell_exec("cd ".$GLOBALS['path'].$GLOBALS['dir'].$module." ; pwd ; git stash clear ; git pull")."\n\n";
+   $output.=exec('whoami')."@".exec('hostname').":".shell_exec("cd ".$GLOBALS['path'].$GLOBALS['dir'].$module." ; pwd ; git stash ; git stash clear ; git pull")."\n\n";
   }
   // log event
   $log=api_log(API_LOG_NOTICE,"settings","moduleGitPull",
