@@ -1696,15 +1696,19 @@ function api_logNotificationTriggers($module,$action,$event,$id,$link){
 }
 
 
-/* -[ Send notification ]---------------------------------------------------- */
-// @integer $idAccount : account id of notification recipient
-// @string $module : module name
-// @string $action : module action
-// @string $subject : log subject
-// @string $message : log message
-// @string $link : log link
-// @string $hash : md5 log hash
-// @integer $status : 1 received, 2 readed, 3 archived
+/**
+ * Send notification
+ *
+ * @param integer $idAccount account id of notification recipient
+ * @param string $module module name
+ * @param string $action module action
+ * @param string $subject log subject
+ * @param string $message log message
+ * @param string $link log link
+ * @param string $hash md5 log hash
+ * @param integer $status 1 received, 2 readed, 3 archived
+ * @return mixed log hash or FALSE
+ */
 function api_notification($idAccount,$module,$action,$subject,$message,$link=NULL,$hash=NULL,$status=1){
  if($idAccount<2 || $module==NULL || $subject==NULL || $message==NULL){return FALSE;}
  if($hash===NULL){$hash=md5(date('YdmHsi').api_randomString());}
@@ -1717,9 +1721,15 @@ function api_notification($idAccount,$module,$action,$subject,$message,$link=NUL
  else{return FALSE;}
 }
 
-/* -[ Log History ]---------------------------------------------------- */
-// @string $module : module name
-// @integer $key : id of the object
+/**
+ * Log History
+ *
+ * @param string $module module name
+ * @param integer $key id of the object
+ * @param array $only action to include (null for all)
+ * @param array $only action to exclude (null for all)
+ * @return array array of history events
+ */
 function api_logHistory($module,$key,$only=NULL,$exclude=NULL){
  if($module==NULL || $key==NULL){return FALSE;}
  if($only!==NULL){if(!is_array($only)){$only=array($only);}}
@@ -1740,16 +1750,23 @@ function api_logHistory($module,$key,$only=NULL,$exclude=NULL){
  return $history_array;
 }
 
-/* -[ Log History Parse ]---------------------------------------------------- */
-// @string $module : module name
-// @integer $key : id of the object
+/**
+ * Log History Parse
+ *
+ * @param string $timestamp event date and time
+ * @param integer $account event account id
+ * @param string $status_from event status from
+ * @param string $status_to event status to
+ * @param string $note event note
+ * @return string parsed history event
+ */
 function api_logHistoryParse($timestamp,$account,$status_from=NULL,$status_to=NULL,$note=NULL){
  if(!$timestamp||!$account){return FALSE;}
  $return="<div id='history'>\n";
  $return.=" <div id='history_status'>\n";
  $return.="  <small>".api_timestampFormat($timestamp,api_text("datetime"))." - ".api_accountName($account)."</small><br>\n";
- if($status_from){$return.="  <strong><small>".$status_from."</small>";}
- if($status_to){$return.=" &rarr; <small>".$status_to."</small></strong>\n";}
+ if($status_from){$return.="  <strong><small>".$status_from."</small></strong>";}
+ if($status_to){$return.="<strong> &rarr; <small>".$status_to."</small></strong>\n";}
  $return.=" </div>\n";
  if($note){$return.=" <div id='history_note'><small>".$note."</small></div>\n";}
  $return.="</div>\n";
