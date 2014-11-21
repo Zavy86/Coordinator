@@ -25,8 +25,8 @@ function content(){
  // link menu
  $links_menu=$GLOBALS['db']->query("SELECT * FROM settings_menus WHERE idMenu='2' ORDER BY position ASC");
  while($menu=$GLOBALS['db']->fetchNextObject($links_menu)){
-  $menu->url=$menu->url;
-  $menu->external=TRUE;
+  if(strlen($menu->module)>0){$menu->url="../".$menu->module."/".$menu->url;}
+  if(substr($menu->url,0,7)=="http://"){$menu->external=TRUE;}
   $menu->icon=$GLOBALS['dir']."uploads/links/".$menu->id.".png";
   $menu_array[]=$menu;
  }
