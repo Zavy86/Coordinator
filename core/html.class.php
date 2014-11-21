@@ -106,6 +106,11 @@ public function header($title="",$nav="dashboard",$navbar=TRUE){
       <li<?php if($nav=="dashboard"){echo " class=\"active\"";} ?>><a href="<?php echo $GLOBALS['dir']."dashboard/index.php";?>"><?php echo api_text("core-menu-dashboard"); ?></a></li>
 
       <?php
+       // definitions
+       $menu_count=0;
+       // menu
+       $menu_array=array();
+       $secondary_menu_array=array();
        // admin menu shortcut array
        $admin_menu_array=array();
        // acquire main menu
@@ -113,27 +118,43 @@ public function header($title="",$nav="dashboard",$navbar=TRUE){
        while($menu=$GLOBALS['db']->fetchNextObject($menus)){
         //if(api_checkMenuPermission($menu->id,FALSE)){
         if(api_checkPermissionShowModule($menu->module,FALSE)){
-         echo "<li class=\"";
-         $submenus=$GLOBALS['db']->countOf("settings_menus","idMenu='".$menu->id."'");
-         if($nav==$menu->module){echo "active";}
-         if($submenus==0){
-          echo "\"><a href='".$GLOBALS['dir'].$menu->module."/".$menu->url."'>".stripslashes($menu->menu)."</a>";
-         }else{
-          echo " dropdown\">";
-          echo "<a href='#' class='dropdown-toggle' data-toggle='dropdown'>";
-          echo stripslashes($menu->menu)." <b class='caret'></b></a>\n";
-          // submenus
-          echo "<ul class='dropdown-menu'>\n";
-          $submenus=$GLOBALS['db']->query("SELECT * FROM settings_menus WHERE idMenu='".$menu->id."' ORDER BY position ASC");
-          while($submenu=$GLOBALS['db']->fetchNextObject($submenus)){
-           echo "<li><a href='".$GLOBALS['dir'].$submenu->module."/".$submenu->url."'>".stripslashes($submenu->menu)."</a></li>";
-          }
-          echo "</ul>\n";
-         }
-         echo "</li>\n";
+         $menu_count++;
+         if($menu_count<8){$menu_array[]=$menu;}else{$secondary_menu_array[]=$menu;}
         }elseif($_SESSION['account']->typology==1){
          $admin_menu_array[]=$menu;
         }
+       }
+       // show menu
+       foreach($menu_array as $menu){
+        echo "<li class=\"";
+        $submenus=$GLOBALS['db']->countOf("settings_menus","idMenu='".$menu->id."'");
+        if($nav==$menu->module){echo "active";}
+        if($submenus==0){
+         echo "\"><a href='".$GLOBALS['dir'].$menu->module."/".$menu->url."'>".stripslashes($menu->menu)."</a>";
+        }else{
+         echo " dropdown\">";
+         echo "<a href='#' class='dropdown-toggle' data-toggle='dropdown'>";
+         echo stripslashes($menu->menu)." <b class='caret'></b></a>\n";
+         // submenus
+         echo "<ul class='dropdown-menu'>\n";
+         $submenus=$GLOBALS['db']->query("SELECT * FROM settings_menus WHERE idMenu='".$menu->id."' ORDER BY position ASC");
+         while($submenu=$GLOBALS['db']->fetchNextObject($submenus)){
+          echo "<li><a href='".$GLOBALS['dir'].$submenu->module."/".$submenu->url."'>".stripslashes($submenu->menu)."</a></li>";
+         }
+         echo "</ul>\n";
+        }
+        echo "</li>\n";
+       }
+       // show secondary menu
+       if(count($secondary_menu_array)>0){
+        echo "<li class='dropdown'><a href='#' class='dropdown-toggle' data-toggle='dropdown'>";
+        echo api_icon('icon-th')." <b class='caret'></b></a>\n";
+         echo "<ul class='dropdown-menu'>\n";
+         foreach($secondary_menu_array as $menu){
+          echo "<li><a href='".$GLOBALS['dir'].$menu->module."/".$menu->url."'>".stripslashes($menu->menu)."</a></li>";
+         }
+         echo "</ul>\n";
+        echo "</li>\n";
        }
        // show admin menu shortcut
        if($_SESSION['account']->typology==1 && count($admin_menu_array)>0){
