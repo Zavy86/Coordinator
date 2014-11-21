@@ -305,6 +305,18 @@ INSERT IGNORE INTO `settings_menus` (`id`, `idMenu`, `menu`, `module`, `url`, `p
 -- --------------------------------------------------------
 
 --
+-- Struttura della tabella `settings_menus_join_accounts_groups`
+--
+
+CREATE TABLE IF NOT EXISTS `settings_menus_join_accounts_groups` (
+  `idMenu` int(11) unsigned NOT NULL DEFAULT '0',
+  `idGroup` int(11) unsigned NOT NULL DEFAULT '0',
+  KEY `idMenu` (`idMenu`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `settings_modules`
 --
 
