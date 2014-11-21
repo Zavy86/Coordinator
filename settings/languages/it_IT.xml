@@ -92,6 +92,7 @@
  <text key="menus-ff-module-placeholder">Directory del modulo</text>
  <text key="menus-ff-url">URL</text>
  <text key="menus-ff-url-placeholder">Percorso del file da caricare</text>
+ <text key="menus-ff-file">Icona</text>
  <text key="menus-fc-submit">Salva</text>
  <text key="menus-fc-cancel">Annulla</text>
  <text key="menus-fc-delete">Elimina</text>

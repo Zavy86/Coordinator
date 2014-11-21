@@ -92,6 +92,7 @@
  <text key="menus-ff-module-placeholder">Module directory name</text>
  <text key="menus-ff-url">URL</text>
  <text key="menus-ff-url-placeholder">Path of file to load</text>
+ <text key="menus-ff-file">Icon</text>
  <text key="menus-fc-submit">Save</text>
  <text key="menus-fc-cancel">Cancel</text>
  <text key="menus-fc-delete">Delete</text>
