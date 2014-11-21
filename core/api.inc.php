@@ -1523,6 +1523,7 @@ function api_file($idFile,$table="uploads_uploads"){
 // @integet $idFile : file id
 // @string $table : database table name
 // @string $name : file name if you want to rename
+
 function api_file_download($idFile,$table="uploads_uploads",$name=NULL,$force=TRUE,$path=NULL){
  // get file object
  $file=$GLOBALS['db']->queryUniqueObject("SELECT * FROM ".$table." WHERE id='".$idFile."'");
@@ -1565,11 +1566,17 @@ function api_file_download($idFile,$table="uploads_uploads",$name=NULL,$force=TR
 /* -[ File Delete from Database ]-------------------------------------------- */
 // @integet $idFile : file id
 // @string $table : database table name
-function api_file_delete($idFile,$table="uploads_uploads"){
+
+function api_file_delete($idFile,$table="uploads_uploads",$path=NULL){
  // get file object
  $file=$GLOBALS['db']->queryUniqueObject("SELECT * FROM ".$table." WHERE id='".$idFile."'");
  if($file->id>0){
   $GLOBALS['db']->execute("DELETE FROM ".$table." WHERE id='".$idFile."'");
+  if(strlen($path)>1){
+   $file->file=NULL;
+   if(substr($path,-1)<>"/"){$path=$path."/";}
+   if(file_exists("../uploads/".$path.$file->id."-".$file->hash)){unlink("../uploads/".$path.$file->id."-".$file->hash);}
+  }
   return TRUE;
  }else{
   return "[File not found]";
