@@ -50,6 +50,7 @@ if($g_submit=="cron"){
    $url_skip=array($GLOBALS['dir']."accounts/submit.php?act=account_login",
     $GLOBALS['dir']."accounts/index.php",
     $GLOBALS['dir']."chats/chats.inc.php",
+    $GLOBALS['dir']."chats/chats_list.inc.php",
     $GLOBALS['dir']."chats/chats_counter.inc.php",
     $GLOBALS['dir']."logs/logs_notifications_list.inc.php",
     $GLOBALS['dir']."logs/logs_notifications_counter.inc.php");
