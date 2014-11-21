@@ -94,8 +94,17 @@
  <text key="menus-ff-url-placeholder">Path of file to load</text>
  <text key="menus-ff-file">Icon</text>
  <text key="menus-fc-submit">Save</text>
- <text key="menus-fc-cancel">Cancel</text>
  <text key="menus-fc-delete">Delete</text>
  <text key="menus-fc-delete-confirm">Are you sure you want to delete this menu?</text>
+ <text key="menus-fc-cancel">Cancel</text>
+ <text key="menus-fc-permissions">Permissions</text>
+
+ <!-- menu_permissions.php -->
+ <text key="menus_permissions-tr-unvalued">Accessible from all ..</text>
+ <text key="menus_permissions-th-groups">Groups</text>
+ <text key="menus_permissions-td-delete-confirm">Are you sure you want to delete this group?</text>
+ <text key="menus_permissions-ff-idGroup">Group</text>
+ <text key="menus_permissions-fc-submit">Add group</text>
+ <text key="menus_permissions-fc-cancel">Close</text>
 
 </locale>
