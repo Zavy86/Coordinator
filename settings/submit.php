@@ -375,7 +375,7 @@ function menu_save(){
   $position=$GLOBALS['db']->countOf("settings_menus","idMenu='".$p_idMenu."'");
   $position++;
   // if changed parent menu move back submenu located after
-  if($p_idMenu<>$menu->idMenu){
+  if($menu->idMenu<>NULL && $p_idMenu<>$menu->idMenu){
    echo $GLOBALS['db']->execute("UPDATE settings_menus SET position=position-1 WHERE position>'".$menu->position."' AND idMenu='".$menu->idMenu."'");
   }
  }
@@ -390,9 +390,8 @@ function menu_save(){
    WHERE id='".$g_id."'";
   // execute query
   $GLOBALS['db']->execute($query);
-  // redirect
+  // alert
   $alert="&alert=menuUpdated&alert_class=alert-success";
-  header("location: menus_edit.php?idMenu=".$p_idMenu.$alert);
  }else{
   $query="INSERT INTO settings_menus
    (idMenu,menu,module,url,position) VALUES
@@ -401,10 +400,17 @@ function menu_save(){
   $GLOBALS['db']->execute($query);
   // set id to last inserted id
   $g_id=$GLOBALS['db']->lastInsertedId();
-  // redirect
+  // alert
   $alert="&alert=menuCreated&alert_class=alert-success";
-  header("location: menus_edit.php?idMenu=".$p_idMenu.$alert);
  }
+ // upload image
+ if(intval($_FILES['file']['size'])>0 && $_FILES['file']['error']==UPLOAD_ERR_OK){
+  if(!is_dir("../uploads/links")){mkdir("../uploads/links",0777,TRUE);}
+  if(file_exists("../uploads/links/".$g_id.".png")){unlink("../uploads/links/".$g_id.".png");}
+  if(is_uploaded_file($_FILES['file']['tmp_name'])){move_uploaded_file($_FILES['file']['tmp_name'],"../uploads/links/".$g_id.".png");}
+ }
+ // redirect
+ exit(header("location: menus_edit.php?idMenu=".$p_idMenu.$alert));
 }
 
 /* -[ Menu Move ]------------------------------------------------------------ */
@@ -463,6 +469,8 @@ function menu_delete(){
   echo $GLOBALS['db']->execute("DELETE FROM settings_menus WHERE id='".$g_id."'");
   // moves back fields located after
   echo $GLOBALS['db']->execute("UPDATE settings_menus SET position=position-1 WHERE position>'".$position."' AND idMenu='".$g_idMenu."'");
+  // delete icon
+  if(file_exists("../uploads/links/".$g_id.".png")){unlink("../uploads/links/".$g_id.".png");}
   // redirect
   $alert="&alert=menuDeleted&alert_class=alert-success";
   exit(header("location: menus_edit.php?idMenu=".$g_idMenu.$alert));

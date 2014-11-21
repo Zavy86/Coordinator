@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<locale language="IT">
+
+ <!-- module -->
+ <text key="module-title">Index</text>
+
+ <!-- index -->
+ <text key="index-dashboard">Bacheca</text>
+
+</locale>
