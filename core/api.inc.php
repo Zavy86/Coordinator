@@ -1848,6 +1848,8 @@ function api_phoneFormat($phone,$separator=" "){
   case "3":
    $phone=substr($phone,$offset,3).$separator.substr($phone,$offset+3,3).$separator.substr($phone,$offset+6);
    break;
+  default:
+   $phone=substr($phone,$offset,2).$separator.substr($phone,$offset+2,2).$separator.substr($phone,$offset+4,3).$separator.substr($phone,$offset+7);
  }
  return trim($region.$separator.$phone,$separator);
 }
