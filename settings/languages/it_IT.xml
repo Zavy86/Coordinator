@@ -94,8 +94,17 @@
  <text key="menus-ff-url-placeholder">Percorso del file da caricare</text>
  <text key="menus-ff-file">Icona</text>
  <text key="menus-fc-submit">Salva</text>
- <text key="menus-fc-cancel">Annulla</text>
  <text key="menus-fc-delete">Elimina</text>
  <text key="menus-fc-delete-confirm">Sei sicuro di voler eliminare questo menu?</text>
+ <text key="menus-fc-cancel">Annulla</text>
+ <text key="menus-fc-permissions">Permessi</text>
+
+ <!-- menu_permissions.php -->
+ <text key="menus_permissions-tr-unvalued">Accessibile da tutti..</text>
+ <text key="menus_permissions-th-groups">Gruppi</text>
+ <text key="menus_permissions-td-delete-confirm">Confermi di voler eliminare questo gruppo?</text>
+ <text key="menus_permissions-ff-idGroup">Gruppo</text>
+ <text key="menus_permissions-fc-submit">Aggiungi</text>
+ <text key="menus_permissions-fc-cancel">Chiudi</text>
 
 </locale>

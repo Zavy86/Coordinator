@@ -88,6 +88,9 @@ function content(){
    $form->addControl("button",api_text("menus-fc-delete"),"btn-danger","submit.php?act=menu_delete&idMenu=".$selectedMenu->idMenu."&id=".$selectedMenu->id,api_text("menus-fc-delete-confirm"));
   }
   $form->addControl("button",api_text("menus-fc-cancel"),NULL,"menus_edit.php?idMenu=".$selectedMenu->idMenu);
+  if($selectedMenu->idMenu==2){
+   $form->addControl("button",api_text("menus-fc-permissions"),"btn-warning","menus_permissions.php?id=".$selectedMenu->id."&idMenu=".$selectedMenu->idMenu);
+  }
  }
  // show form
  $form->render();

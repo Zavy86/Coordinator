@@ -23,6 +23,8 @@ switch($act){
  case "menu_move_up":menu_move("up");break;
  case "menu_move_down":menu_move("down");break;
  case "menu_delete":menu_delete();break;
+ case "menu_permission_add":menu_permission_add();break;
+ case "menu_permission_delete":menu_permission_delete();break;
  // default
  default:header("location: index.php");
 }
@@ -479,6 +481,37 @@ function menu_delete(){
   $alert="&alert=settingError&alert_class=alert-error";
   exit(header("location: menus_edit.php?idMenu=".$g_idMenu.$alert));
  }
+}
+
+/* -[ Menu Permission Add ]-------------------------------------------------- */
+function menu_permission_add(){
+ if(!api_checkPermission("settings","menu_edit")){api_die("accessDenied");}
+ // acquire variables
+ $g_id=$_GET['id'];
+ $g_idMenu=$_GET['idMenu'];
+ $p_idGroup=$_POST['idGroup'];
+ // check
+ if($g_id>0 && $p_idGroup>0){
+  $GLOBALS['db']->execute("DELETE FROM settings_menus_join_accounts_groups WHERE idMenu='".$g_id."' AND idGroup='".$p_idGroup."'");
+  $GLOBALS['db']->execute("INSERT INTO settings_menus_join_accounts_groups (idMenu,idGroup) VALUES ('".$g_id."','".$p_idGroup."')");
+ }
+ // redirect
+ header("location: menus_permissions.php?id=".$g_id."&idMenu=".$g_idMenu);
+}
+
+/* -[ Menu Permission Delete ]----------------------------------------------- */
+function menu_permission_delete(){
+ if(!api_checkPermission("settings","menu_edit")){api_die("accessDenied");}
+ // acquire variables
+ $g_id=$_GET['id'];
+ $g_idMenu=$_GET['idMenu'];
+ $g_idGroup=$_GET['idGroup'];
+ // check
+ if($g_id>0 && $g_idGroup>0){
+  $GLOBALS['db']->execute("DELETE FROM settings_menus_join_accounts_groups WHERE idMenu='".$g_id."' AND idGroup='".$g_idGroup."'");
+ }
+ // redirect
+ header("location: menus_permissions.php?id=".$g_id."&idMenu=".$g_idMenu);
 }
 
 ?>
