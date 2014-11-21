@@ -25,6 +25,14 @@ function content(){
  // link menu
  $links_menu=$GLOBALS['db']->query("SELECT * FROM settings_menus WHERE idMenu='2' ORDER BY position ASC");
  while($menu=$GLOBALS['db']->fetchNextObject($links_menu)){
+  if($_SESSION['account']->typology<>1){
+   if($GLOBALS['db']->countOf("settings_menus_join_accounts_groups","idMenu='".$menu->id."'")>0){
+    $enabled=FALSE;
+    $groups=$GLOBALS['db']->query("SELECT * FROM settings_menus_join_accounts_groups WHERE idMenu='".$menu->id."'");
+    while($group=$GLOBALS['db']->fetchNextObject($groups)){if(api_accountGroupMember($group->idGroup)>0){$enabled=TRUE;continue;}}
+    if(!$enabled){continue;}
+   }
+  }
   if(strlen($menu->module)>0){$menu->url="../".$menu->module."/".$menu->url;}
   if(substr($menu->url,0,7)=="http://"){$menu->external=TRUE;}
   $menu->icon=$GLOBALS['dir']."uploads/links/".$menu->id.".png";
