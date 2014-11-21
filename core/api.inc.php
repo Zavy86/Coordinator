@@ -1430,7 +1430,7 @@ function api_loadModule($modules_required=NULL){
 // if file is duplicate and $uploadDuplicate are true return file->id with idDuplicate
 // return -1 : error uploading file
 // return -2 : file type doesn't match
-function api_file_upload($input,$table="uploads_uploads",$name=NULL,$label=NULL,$description=NULL,$tags=NULL,$txtContent=FALSE,$types=NULL,$uploadDuplicate=TRUE){
+function api_file_upload($input,$table="uploads_uploads",$name=NULL,$label=NULL,$description=NULL,$tags=NULL,$txtContent=FALSE,$types=NULL,$uploadDuplicate=TRUE,$path=NULL){
  // check if a file are uploaded
  if(intval($input['size'])>0 && $input['error']==UPLOAD_ERR_OK){
   // get file from input field
@@ -1441,10 +1441,10 @@ function api_file_upload($input,$table="uploads_uploads",$name=NULL,$label=NULL,
   $file->hash=md5_file($input['tmp_name']);
   $file->file=mysql_real_escape_string(file_get_contents($input['tmp_name']));
   // check metadata
-  if($name<>NULL){$file->name=api_clearFileName($name);}
-  if($label<>NULL){$file->label=$label;}else{$file->label=NULL;}
-  if($description<>NULL){$file->description=$description;}else{$file->description=NULL;}
-  if($tags<>NULL){$file->tags=$tags;}else{$file->tags=NULL;}
+  if($name<>NULL){$file->name=substr(api_clearFileName($name),-200);}
+  if($label<>NULL){$file->label=api_cleanString($label,"/[^A-Za-z0-9- ]/");}else{$file->label=NULL;}
+  if($description<>NULL){$file->description=api_cleanString($description,"/[^A-Za-zÀ-ÿ0-9-.,' ]/");}else{$file->description=NULL;}
+  if($tags<>NULL){$file->tags=api_cleanString(strtolower($tags),"/[^a-z0-9-,]/");}else{$file->tags=NULL;}
   // check file type
   if($types<>NULL){
    if(!is_array($types)){$types=array(strtolower($types));}else{$types=array_map('strtolower',$types);}
@@ -1472,15 +1472,28 @@ function api_file_upload($input,$table="uploads_uploads",$name=NULL,$label=NULL,
     return $file;
    }
   }
-  // upload file in database
+  // check for upload path or upload to database
+  if(strlen($path)>1){
+   $file->file=NULL;
+   if(substr($path,-1)<>"/"){$path=$path."/";}
+   if(!is_dir("../uploads/".$path)){mkdir("../uploads/".$path,0777,TRUE);}
+   if(file_exists("../uploads/".$path."upload.tmp")){unlink("../uploads/".$path."upload.tmp");}
+   if(is_uploaded_file($input['tmp_name'])){if(!move_uploaded_file($input['tmp_name'],"../uploads/".$path."upload.tmp")){$return=-1;}}else{$return=-1;}
+  }
+  // build query
   $query="INSERT INTO ".$table."
    (name,type,size,hash,file,label,description,tags,txtcontent,addDate,addIdAccount) VALUES
    ('".$file->name."','".$file->type."','".$file->size."','".$file->hash."','".$file->file."',
     '".$file->label."','".$file->description."','".$file->tags."','".$file->txtContent."',
     '".date("Y-m-d H:i:s")."','".$_SESSION['account']->id."')";
+  // execute query
   $GLOBALS['db']->execute($query);
   // get file id
   $file->id=$GLOBALS['db']->lastInsertedId();
+  // rename file into file system
+  if($path<>NULL){
+   if(file_exists("../uploads/".$path."upload.tmp")){rename("../uploads/".$path."upload.tmp","../uploads/".$path.$file->id."-".$file->hash);}
+  }
   // return metadata
   $return=$file;
  }else{
@@ -1510,20 +1523,39 @@ function api_file($idFile,$table="uploads_uploads"){
 // @integet $idFile : file id
 // @string $table : database table name
 // @string $name : file name if you want to rename
-function api_file_download($idFile,$table="uploads_uploads",$name=NULL,$force=TRUE){
+function api_file_download($idFile,$table="uploads_uploads",$name=NULL,$force=TRUE,$path=NULL){
  // get file object
  $file=$GLOBALS['db']->queryUniqueObject("SELECT * FROM ".$table." WHERE id='".$idFile."'");
  if($file->id>0){
   if(strlen($name)>0){$file->name=$name;}
-  header("Pragma: no-cache");
-  header("Cache-Control: no-cache, must-revalidate");
-  header('Content-Transfer-Encoding: binary');
-  header("Content-length: ".strlen($file->file));
-  header("Content-type: ".$file->type);
-  if($force){$dispositions="attachment; ";}
-  header("Content-Disposition: ".$dispositions."filename=".$file->name);
-  ob_end_clean();
-  echo $file->file;
+  // check for upload path or upload to database
+  if(strlen($path)>1){
+   if(substr($path,-1)<>"/"){$path=$path."/";}
+   if(file_exists("../uploads/".$path.$file->id."-".$file->hash)){
+    //header("location: ../uploads/".$path.$file->id.$file->name);
+    header("Pragma: no-cache");
+    header("Cache-Control: no-cache, must-revalidate");
+    header("Content-Description: File Transfer");
+    header("Content-Type: application/octet-stream");
+    header("Content-Length: ".filesize("../uploads/".$path.$file->id."-".$file->hash));
+    if($force){$dispositions="attachment; ";}
+    header("Content-Disposition: ".$dispositions."filename=".$file->name);
+    ob_end_clean();
+    readfile("../uploads/".$path.$file->id."-".$file->hash);
+   }else{
+    echo "Error, file not found";
+   }
+  }else{
+   header("Pragma: no-cache");
+   header("Cache-Control: no-cache, must-revalidate");
+   header('Content-Transfer-Encoding: binary');
+   header("Content-Length: ".strlen($file->file));
+   header("Content-Type: ".$file->type);
+   if($force){$dispositions="attachment; ";}
+   header("Content-Disposition: ".$dispositions."filename=".$file->name);
+   ob_end_clean();
+   echo $file->file;
+  }
  }else{
   echo "Error, file not found";
  }
