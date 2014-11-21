@@ -15,7 +15,8 @@ function content(){
  // main menu
  $main_menu=$GLOBALS['db']->query("SELECT * FROM settings_menus WHERE idMenu='1' ORDER BY position ASC");
  while($menu=$GLOBALS['db']->fetchNextObject($main_menu)){
-  if(api_checkPermissionShowModule($menu->module,FALSE)){
+  if($_SESSION['account']->typology==1 || api_checkPermissionShowModule($menu->module,FALSE)){
+   if(!file_exists("../".$menu->module."/icon.png")){continue;}
    $menu->url=$GLOBALS['dir'].$menu->module."/".$menu->url;
    $menu->icon=$GLOBALS['dir'].$menu->module."/icon.png";
    $menu_array[]=$menu;
