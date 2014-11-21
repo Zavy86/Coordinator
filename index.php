@@ -1,4 +1,4 @@
 <?php
 /* -[ Redirect ]------------------------------------------------------------- */
-header("location: dashboard/index.php");
+header("location: index/index.php");
 ?>
