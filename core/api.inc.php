@@ -1594,9 +1594,10 @@ function api_file_delete($idFile,$table="uploads_uploads",$path=NULL){
 // @string $confirm : show confirm alert
 // @string $style : manual styles tag
 // @string $target : target window
-function api_link($url,$label,$title=NULL,$class=NULL,$popup=FALSE,$confirm=NULL,$style=NULL,$target="_self"){
+// @string $id : link id
+function api_link($url,$label,$title=NULL,$class=NULL,$popup=FALSE,$confirm=NULL,$style=NULL,$target="_self",$id=NULL){
  if($url==NULL){return FALSE;}
- $return="<a href=\"".$url."\" class='".$class."' style=\"".$style."\"";
+ $return="<a id=\"link_".$id."\" href=\"".$url."\" class='".$class."' style=\"".$style."\"";
  if($popup){
   $return.=" data-toggle='popover' data-placement='top' data-content=\"".$title."\"";
  }elseif($title<>NULL){
