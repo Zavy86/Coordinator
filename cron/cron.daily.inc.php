@@ -7,7 +7,7 @@ if(api_basePath()<>$GLOBALS['dir']."cron"){api_die();}
 
 
 /* -[ Delete Old Sended Mail ]----------------------------------------------- */
-$log.="\nCRON - DELETE OLD SENDED MAIL\n";
+$log="CRON - DELETE OLD SENDED MAIL\n";
 $count=$GLOBALS['db']->countOf("logs_mails","status='1' AND sendDate < DATE(NOW() - INTERVAL 1 MONTH)");
 if($count){
  $mails=$GLOBALS['db']->query("SELECT * FROM logs_mails WHERE status='1' AND sendDate < DATE(NOW() - INTERVAL 1 MONTH)");

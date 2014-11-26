@@ -1402,7 +1402,7 @@ function api_queryOrder($default=NULL){
 function api_includeModule($module){
  if(!is_dir("../".$module."/")){die("Module ".$module." not found..");}
  // include module api
- if(file_exists("../".$module."/api.inc.php")){include("../".$module."/api.inc.php");}
+ if(file_exists("../".$module."/api.inc.php")){include_once("../".$module."/api.inc.php");}
  // load module language file
  api_loadLocaleFile("../".$module."/");
 }
@@ -1411,7 +1411,7 @@ function api_includeModule($module){
 // @array $modules_required : modules name to be included
 function api_loadModule($modules_required=NULL){
  // include module api
- if(file_exists("api.inc.php")){include("api.inc.php");}
+ if(file_exists("api.inc.php")){include_once("api.inc.php");}
  // include required modules
  if($modules_required<>NULL){
   if(!is_array($modules_required)){$modules_required=array($modules_required);}
