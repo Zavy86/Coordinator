@@ -1878,16 +1878,33 @@ function pre_var_dump($variable,$echo="dump",$label=NULL){
 function api_phoneFormat($phone,$separator=" "){
  // check region and set offset
  if(substr($phone,0,1)=="+"){$region=substr($phone,0,3);$offset=3;}else{$offset=0;}
+ // switch region
+ switch($region){
+  case "+00":
+   $typology="INT";
+  case "+39":
+   if(substr($phone,$offset,1)=="0"){$typology="IT";}
+   if(substr($phone,$offset,1)=="3"){$typology="IT-mobile";}
+   break;
+  case "+41":
+   $typology="CH";
+   break;
+ }
  // switch typology
- switch(substr($phone,$offset,1)){
-  // italian
-  case "0":
+ switch($typology){
+  case "INT":
+   $phone=substr($phone,$offset,3).$separator.substr($phone,$offset+3,3).$separator.substr($phone,$offset+6,3).$separator.substr($phone,$offset+9);
+   $region=NULL;
+   break;
+  case "IT":
    if(strlen($phone)>($offset+8)){$number_cut=3;}else{$number_cut=2;}
    $phone=substr($phone,$offset,2).$separator.substr($phone,$offset+2,2).$separator.substr($phone,$offset+4,$number_cut).$separator.substr($phone,$offset+4+$number_cut);
    break;
-  // italian mobile
-  case "3":
+  case "IT-mobile":
    $phone=substr($phone,$offset,3).$separator.substr($phone,$offset+3,3).$separator.substr($phone,$offset+6);
+   break;
+  case "CH":
+   $phone=substr($phone,$offset,2).$separator.substr($phone,$offset+2,3).$separator.substr($phone,$offset+5,2).$separator.substr($phone,$offset+7);
    break;
   default:
    $phone=substr($phone,$offset,2).$separator.substr($phone,$offset+2,2).$separator.substr($phone,$offset+4,3).$separator.substr($phone,$offset+7);
