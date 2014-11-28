@@ -349,11 +349,11 @@ public function footer($wiki_link=NULL,$copyright=TRUE){
    $("[data-toggle=popover]").popover({trigger:"hover"});
    // refresh notifications every 1 minutes
    var refreshNotificationsCounter=setInterval(function(){
-    $.get("../notifications/notifications_counter.inc.php",function(data){
+    $.get("../logs/logs_notifications_counter.inc.php",function(data){
      $('#notifications_counter').html(data);
      if(data.substr(3,1)>0){
       clearInterval(refreshNotificationsCounter);
-      $('#notifications_list').load("../notifications/notifications_list.inc.php");
+      $('#notifications_list').load("../logs/logs_notifications_list.inc.php");
      }
     });
    },60000);
