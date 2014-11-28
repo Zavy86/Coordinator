@@ -137,7 +137,15 @@ li.search div{margin:0px;}
 
 div.pagination ul li.null a{border-left:none;border-top:none;border-bottom:none;}
 
-.hiddenlink{color:#000000;}
+.hiddenlink{color:#000;}
+
+.btn-index{
+ background: #fff;
+ border-bottom: 1px solid #dedede;
+ border-radius: 16px;
+ -webkit-border-radius: 16px;
+ -moz-border-radius: 16px;
+}
 
 
 /* Bootstrap code examples
