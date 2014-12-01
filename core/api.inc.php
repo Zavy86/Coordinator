@@ -683,6 +683,17 @@ function api_accountLanguage($account_id=NULL){
 }
 
 
+/* -[ Return if account is admin ]------------------------------------------- */
+// @param $now : if is admin now true or if account typology is administrator
+function api_accountIsAdmin($now=TRUE){
+ if($now){
+  if($_SESSION['account']->typology==1){return TRUE;}else{return FALSE;}
+ }else{
+  if($_SESSION['account']->administrator){return TRUE;}else{return FALSE;}
+ }
+}
+
+
 /* -[ Company object ]------------------------------------------------------- */
 // @param $company : company id or object
 function api_company($company){
