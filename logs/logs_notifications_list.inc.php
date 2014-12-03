@@ -15,7 +15,7 @@
   echo "<li class='divider'></li>\n";
  }
  // query notifications
- $notifications=$GLOBALS['db']->query("SELECT * FROM logs_notifications WHERE idAccount='".$_SESSION['account']->id."' AND status='1' LIMIT 0,25");
+ $notifications=$GLOBALS['db']->query("SELECT * FROM logs_notifications WHERE idAccount='".$_SESSION['account']->id."' AND status='1' LIMIT 0,10");
  while($notification=$GLOBALS['db']->fetchNextObject($notifications)){$notifications_array[]=$notification;}
  // show notifications subject
  foreach($notifications_array as $notification){
@@ -48,7 +48,7 @@
   $modal->footer($m_footer);
   $modals_notifications_array[]=$modal;
   // show notification
-  echo "<li>".$modal->link(stripslashes($notification->subject))."</li>\n";
+  echo "<li>".$modal->link(substr(stripslashes($notification->subject),0,50))."</li>\n";
  }
  // show second divider
  if(count($notifications_array)>0){echo "<li class='divider'></li>\n";}
