@@ -48,7 +48,7 @@
   $modal->footer($m_footer);
   $modals_notifications_array[]=$modal;
   // show notification
-  echo "<li>".$modal->link(substr(stripslashes($notification->subject),0,50))."</li>\n";
+  echo "<li>".$modal->link(substr(stripslashes($notification->subject),0,100))."</li>\n";
  }
  // show second divider
  if(count($notifications_array)>0){echo "<li class='divider'></li>\n";}
