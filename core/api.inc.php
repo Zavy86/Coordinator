@@ -1454,7 +1454,7 @@ function api_file_upload($input,$table="uploads_uploads",$name=NULL,$label=NULL,
   $file->file=mysql_real_escape_string(file_get_contents($input['tmp_name']));
   // check metadata
   if($name<>NULL){$file->name=substr(api_clearFileName($name),-200);}
-  if($label<>NULL){$file->label=api_cleanString($label,"/[^A-Za-z0-9- ]/");}else{$file->label=NULL;}
+  if($label<>NULL){$file->label=api_cleanString($label,"/[^A-Za-z0-9- ]/");}else{$file->label=substr($file->name,0,-4);}
   if($description<>NULL){$file->description=api_cleanString($description,"/[^A-Za-zÀ-ÿ0-9-.,' ]/");}else{$file->description=NULL;}
   if($tags<>NULL){$file->tags=api_cleanString(strtolower($tags),"/[^a-z0-9-,]/");}else{$file->tags=NULL;}
   // check file type

@@ -22,16 +22,15 @@ config.inc.php
 /stats/charts/*
 
 # ignore Uploads directory but not Core and Account directory
-/uploads/*
-/uploads/core/*
-!/uploads/core/
-/uploads/accounts/*
-!/uploads/accounts/
-!/uploads/accounts/avatar.jpg
+/uploads/uploads/*
+/uploads/uploads/core/*
+!/uploads/uploads/core/
+/uploads/uploads/accounts/*
+!/uploads/uploads/accounts/
+!/uploads/uploads/accounts/avatar.jpg
 /core/nusoap/wsdl/*
 !/core/nusoap/wsdl/
 /tmp/*
-
 
 # Never ignore index.php files
 !index.php
