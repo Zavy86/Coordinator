@@ -11,7 +11,7 @@ footer .credit a{color:#333333;}
 }
 
 .login-background{
- background-image:url('../uploads/core/loginbg.png'),url('../uploads/core/loginbg.jpg');
+ background-image:url('../uploads/uploads/core/loginbg.png'),url('../uploads/uploads/core/loginbg.jpg');
  background-repeat:no-repeat;
  background-size:100%;
 }

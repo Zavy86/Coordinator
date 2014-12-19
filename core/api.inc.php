@@ -877,8 +877,8 @@ function api_sexName($idSex,$lang=""){
 // @param $idAccount : ID of the account
 function api_accountAvatar($idAccount=NULL){
  if($idAccount==NULL){$idAccount=$_SESSION['account']->id;}
- if(file_exists("../uploads/accounts/avatar_".$idAccount.".jpg")){
-  return "../uploads/accounts/avatar_".$idAccount.".jpg";
+ if(file_exists("../uploads/uploads/accounts/avatar_".$idAccount.".jpg")){
+  return "../uploads/uploads/accounts/avatar_".$idAccount.".jpg";
  }else{
   return $GLOBALS['dir']."uploads/accounts/avatar.jpg";
  }
@@ -1120,8 +1120,8 @@ function api_imageScale($source,$output,$max_width,$max_height,$watermark=FALSE,
  // watermark
  if($watermark){
   // check if watermark file exist
-  if(file_exists("../../uploads/images/copyright.png")){
-   $watermark = imagecreatefrompng("../../uploads/images/copyright.png");
+  if(file_exists("../../uploads/uploads/images/copyright.png")){
+   $watermark = imagecreatefrompng("../../uploads/uploads/images/copyright.png");
    imagealphablending($tmp,true);
    $x=imagesx($tmp)-imagesx($watermark)-20;
    $y=imagesy($tmp)-imagesy($watermark)-20;
@@ -1488,9 +1488,9 @@ function api_file_upload($input,$table="uploads_uploads",$name=NULL,$label=NULL,
   if(strlen($path)>1){
    $file->file=NULL;
    if(substr($path,-1)<>"/"){$path=$path."/";}
-   if(!is_dir("../uploads/".$path)){mkdir("../uploads/".$path,0777,TRUE);}
-   if(file_exists("../uploads/".$path."upload.tmp")){unlink("../uploads/".$path."upload.tmp");}
-   if(is_uploaded_file($input['tmp_name'])){if(!move_uploaded_file($input['tmp_name'],"../uploads/".$path."upload.tmp")){$return=-1;}}else{$return=-1;}
+   if(!is_dir("../uploads/uploads/".$path)){mkdir("../uploads/uploads/".$path,0777,TRUE);}
+   if(file_exists("../uploads/uploads/".$path."upload.tmp")){unlink("../uploads/uploads/".$path."upload.tmp");}
+   if(is_uploaded_file($input['tmp_name'])){if(!move_uploaded_file($input['tmp_name'],"../uploads/uploads/".$path."upload.tmp")){$return=-1;}}else{$return=-1;}
   }
   // build query
   $query="INSERT INTO ".$table."
@@ -1504,7 +1504,7 @@ function api_file_upload($input,$table="uploads_uploads",$name=NULL,$label=NULL,
   $file->id=$GLOBALS['db']->lastInsertedId();
   // rename file into file system
   if($path<>NULL){
-   if(file_exists("../uploads/".$path."upload.tmp")){rename("../uploads/".$path."upload.tmp","../uploads/".$path.$file->id."-".$file->hash);}
+   if(file_exists("../uploads/uploads/".$path."upload.tmp")){rename("../uploads/uploads/".$path."upload.tmp","../uploads/uploads/".$path.$file->id."-".$file->hash);}
   }
   // return metadata
   $return=$file;
@@ -1544,17 +1544,17 @@ function api_file_download($idFile,$table="uploads_uploads",$name=NULL,$force=TR
   // check for upload path or upload to database
   if(strlen($path)>1){
    if(substr($path,-1)<>"/"){$path=$path."/";}
-   if(file_exists("../uploads/".$path.$file->id."-".$file->hash)){
-    //header("location: ../uploads/".$path.$file->id.$file->name);
+   if(file_exists("../uploads/uploads/".$path.$file->id."-".$file->hash)){
+    //header("location: ../uploads/uploads/".$path.$file->id.$file->name);
     header("Pragma: no-cache");
     header("Cache-Control: no-cache, must-revalidate");
     header("Content-Description: File Transfer");
     header("Content-Type: application/octet-stream");
-    header("Content-Length: ".filesize("../uploads/".$path.$file->id."-".$file->hash));
+    header("Content-Length: ".filesize("../uploads/uploads/".$path.$file->id."-".$file->hash));
     if($force){$dispositions="attachment; ";}
     header("Content-Disposition: ".$dispositions."filename=".$file->name);
     ob_end_clean();
-    readfile("../uploads/".$path.$file->id."-".$file->hash);
+    readfile("../uploads/uploads/".$path.$file->id."-".$file->hash);
    }else{
     echo "Error, file not found";
    }
@@ -1587,7 +1587,7 @@ function api_file_delete($idFile,$table="uploads_uploads",$path=NULL){
   if(strlen($path)>1){
    $file->file=NULL;
    if(substr($path,-1)<>"/"){$path=$path."/";}
-   if(file_exists("../uploads/".$path.$file->id."-".$file->hash)){unlink("../uploads/".$path.$file->id."-".$file->hash);}
+   if(file_exists("../uploads/uploads/".$path.$file->id."-".$file->hash)){unlink("../uploads/uploads/".$path.$file->id."-".$file->hash);}
   }
   return TRUE;
  }else{

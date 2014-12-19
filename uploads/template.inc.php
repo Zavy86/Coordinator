@@ -22,7 +22,7 @@ if(api_baseName()=="uploads_list.php"){
  // roles
  $filter_roles_array=array();
  $roles=$GLOBALS['db']->query("SELECT id,name FROM contacts_roles WHERE del='0' ORDER BY name ASC");
- while($role=api_contacts_role($GLOBALS['db']->fetchNextObject($roles))){
+ while($role=$GLOBALS['db']->fetchNextObject($roles)){
   $filter_roles_array[$role->id]=$role->name;
  }
  $navigation->addFilter("multiselect","role",api_text("filter-role"),$filter_roles_array);
@@ -32,15 +32,16 @@ if(api_baseName()=="uploads_list.php"){
 // operations
 if($g_idFile){
  $navigation->addTab(api_text("nav-operations"),NULL,NULL,"active");
- $navigation->addSubTab(api_text("nav-edit-file"),"contacts_edit.php?idContact=".$g_idContact,NULL,NULL,(api_checkPermission($module_name,"contacts_edit")?TRUE:FALSE));
+ $navigation->addSubTab(api_text("nav-edit-file"),"uploads_files_edit.php?idFile=".$g_idFile,NULL,NULL,(api_checkPermission($module_name,"uploads_edit")?TRUE:FALSE));
+ $navigation->addSubTab(api_text("nav-add-link"),"uploads_links_edit.php",NULL,NULL,(api_checkPermission($module_name,"links_edit")?TRUE:FALSE));
 }else{
  $navigation->addTab(api_text("nav-operations"));
  if($g_idFolder){
-  $navigation->addSubTab(api_text("nav-edit-folder"),"contacts_edit.php?idContact=".$g_idContact,NULL,NULL,(api_checkPermission($module_name,"contacts_edit")?TRUE:FALSE));
+  $navigation->addSubTab(api_text("nav-edit-folder"),"uploads_folders_edit.php?idFolder=".$g_idFolder,NULL,NULL,(api_checkPermission($module_name,"folders_edit")?TRUE:FALSE));
   $navigation->addSubTabDivider();
  }
- $navigation->addSubTab(api_text("nav-add-file"),"uploads_file_edit.php");
- $navigation->addSubTab(api_text("nav-add-folder"),"uploads_folder_edit.php");
+ $navigation->addSubTab(api_text("nav-add-file"),"uploads_files_edit.php",NULL,NULL,(api_checkPermission($module_name,"uploads_edit")?TRUE:FALSE));
+ $navigation->addSubTab(api_text("nav-add-folder"),"uploads_folders_edit.php",NULL,NULL,(api_checkPermission($module_name,"folders_edit")?TRUE:FALSE));
 }
 // show navigation
 $navigation->render();
