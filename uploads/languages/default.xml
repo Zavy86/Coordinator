@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<locale language="EN">
+
+ <!-- module -->
+ <text key="module-title">Uploads</text>
+
+ <!-- alerts -->
+ <text key="uploadNotFound">The upload was not found</text>
+ <text key="uploadError">There was an error saving upload</text>
+  <text key="fileCreated">The file has been uploaded</text>
+  <text key="fileUpdated">The file has been updated</text>
+  <text key="fileDeleted">The file has been deleted</text>
+  <text key="fileUndeleted">The file has been undeleted</text>
+  <text key="fileRemoved">The file has been removed</text>
+
+ <!-- logs -->
+  <text key="logs_uploads_fileCreated">File [Created] {1}</text>
+  <text key="logs_uploads_fileUpdated">File [Updated] {1}</text>
+  <text key="logs_uploads_fileDeleted">File [Deleted] {1}</text>
+  <text key="logs_uploads_fileUndeleted">File [Undeleted] {1}</text>
+  <text key="logs_uploads_fileRemoved">File [Removed] {1}</text>
+
+ <!-- notifications -->
+
+ <!-- link typology -->
+ <text key="uploads-links-typology-public">Public link</text>
+ <text key="uploads-links-typology-private">Private link</text>
+ <text key="uploads-links-typology-password">Password protected link</text>
+
+ <!-- filters -->
+ <text key="filter-typology">Typology</text>
+ <text key="filter-del">Show deleted</text>
+
+ <!-- api.inc.php -->
+ <text key="api-uploads-dt-typology">Typology</text>
+ <text key="api-uploads-dt-counter">Downloaded</text>
+ <text key="api-uploads-dd-counter">{0} times</text>
+ <text key="api-uploads-dt-add">Created by</text>
+ <text key="api-uploads-dd-add">{0}, {1}</text>
+ <text key="api-uploads-dt-upd">Updated by</text>
+ <text key="api-uploads-dd-upd">{0}, {1}</text>
+ <text key="api-uploads-dd-del">Deleted</text>
+
+ <!-- template.inc.php -->
+ <text key="nav-list">Uploads</text>
+ <text key="nav-operations">Operations</text>
+ <text key="nav-edit-file">Edit file</text>
+ <text key="nav-edit-folder">Edit folder</text>
+ <text key="nav-add-file">Add new file</text>
+ <text key="nav-add-folder">Add new folder</text>
+ <text key="nav-add-link">Add new link</text>
+
+ <!-- uploads_list.php -->
+ <text key="uploads_list-tr-unvalued">There are no uploads to display..</text>
+ <text key="uploads_list-th-name">Name</text>
+ <text key="uploads_list-th-description">Description</text>
+ <text key="uploads_list-th-size">Size</text>
+ <text key="uploads_list-th-timestamp">Timestamp</text>
+ <text key="uploads_list-td-back">Previous folder</text>
+
+ <!-- uploads_files_view.php -->
+ <text key="uploads_files_view-dt-name">Name</text>
+ <text key="uploads_files_view-dt-file">File</text>
+ <text key="uploads_files_view-dt-links">Links</text>
+ <text key="uploads_files_view-dt-description">Description</text>
+ <text key="uploads_files_view-dd-share">Share link</text>
+
+</locale>

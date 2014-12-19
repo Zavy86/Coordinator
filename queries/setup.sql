@@ -300,7 +300,8 @@ CREATE TABLE IF NOT EXISTS `settings_menus` (
 
 INSERT IGNORE INTO `settings_menus` (`id`, `idMenu`, `menu`, `module`, `url`, `position`) VALUES
 (1, 0, 'main', '', '', 0),
-(2, 0, 'user', '', '', 0);
+(2, 0, 'user', '', '', 0),
+(3, 1, 'Uploads', 'uploads', '', 1);
 
 -- --------------------------------------------------------
 
@@ -446,11 +447,51 @@ ALTER TABLE `settings_permissions_join_accounts_groups`
 -- --------------------------------------------------------
 
 --
--- Struttura della tabella `uploads_uploads`
+-- Table structure for table `uploads_folders`
+--
+
+CREATE TABLE IF NOT EXISTS `uploads_folders` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `idFolder` int(10) unsigned DEFAULT NULL,
+  `name` varchar(50) COLLATE utf8_unicode_ci NOT NULL,
+  `size` int(11) unsigned NOT NULL DEFAULT '0',
+  `addDate` datetime NOT NULL,
+  `addIdAccount` int(11) unsigned NOT NULL,
+  `updDate` datetime DEFAULT NULL,
+  `updIdAccount` int(11) unsigned DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `idFolder` (`idFolder`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `uploads_links`
+--
+
+CREATE TABLE IF NOT EXISTS `uploads_links` (
+  `id` varchar(32) COLLATE utf8_unicode_ci NOT NULL,
+  `idUpload` int(11) unsigned NOT NULL,
+  `public` tinyint(1) unsigned NOT NULL DEFAULT '0' COMMENT '0 false, 1 true',
+  `password` varchar(32) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `counter` int(11) unsigned NOT NULL DEFAULT '0',
+  `addDate` datetime NOT NULL,
+  `addIdAccount` int(11) unsigned NOT NULL,
+  `updDate` datetime DEFAULT NULL,
+  `updIdAccount` int(11) unsigned DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `idUpload` (`idUpload`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `uploads_uploads`
 --
 
 CREATE TABLE IF NOT EXISTS `uploads_uploads` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `idFolder` int(11) unsigned DEFAULT NULL,
   `name` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `type` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `size` int(11) NOT NULL,
@@ -466,7 +507,32 @@ CREATE TABLE IF NOT EXISTS `uploads_uploads` (
   `updIdAccount` int(11) unsigned DEFAULT NULL,
   `del` tinyint(1) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
+  KEY `idFolder` (`idFolder`),
   KEY `hash` (`hash`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Constraints for dumped tables
+--
+
+--
+-- Constraints for table `uploads_folders`
+--
+ALTER TABLE `uploads_folders`
+  ADD CONSTRAINT `uploads_folders_ibfk_1` FOREIGN KEY (`idFolder`) REFERENCES `uploads_folders` (`id`) ON DELETE SET NULL ON UPDATE CASCADE;
+
+--
+-- Constraints for table `uploads_links`
+--
+ALTER TABLE `uploads_links`
+  ADD CONSTRAINT `uploads_links_ibfk_1` FOREIGN KEY (`idUpload`) REFERENCES `uploads_uploads` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Constraints for table `uploads_uploads`
+--
+ALTER TABLE `uploads_uploads`
+  ADD CONSTRAINT `uploads_uploads_ibfk_1` FOREIGN KEY (`idFolder`) REFERENCES `uploads_folders` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- --------------------------------------------------------

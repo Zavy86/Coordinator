@@ -384,10 +384,10 @@ class str_navigation{
       $checked=FALSE;
       if(is_array($_GET[$filter->name])){
        foreach($_GET[$filter->name] as $g_option){
-        if($g_option==$value){$checked=TRUE;}
+        if($g_option===$value){$checked=TRUE;}
        }
       }else{
-       if($_GET[$filter->name]==$value){$checked=TRUE;}
+       if($_GET[$filter->name]===$value){$checked=TRUE;}
       }
       $modal_filter_body->addFieldOption($value,$label,$checked);
      }

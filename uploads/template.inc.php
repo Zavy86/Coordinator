@@ -18,14 +18,7 @@ $navigation->addTab(api_text("nav-list"),"uploads_list.php");
 // uploads filters
 if(api_baseName()=="uploads_list.php"){
  // typologies
- $navigation->addFilter("multiselect","typology",api_text("filter-typology"),array(1=>api_text("filter-typology-public"),2=>api_text("filter-typology-private")));
- // roles
- $filter_roles_array=array();
- $roles=$GLOBALS['db']->query("SELECT id,name FROM contacts_roles WHERE del='0' ORDER BY name ASC");
- while($role=$GLOBALS['db']->fetchNextObject($roles)){
-  $filter_roles_array[$role->id]=$role->name;
- }
- $navigation->addFilter("multiselect","role",api_text("filter-role"),$filter_roles_array);
+ $navigation->addFilter("multiselect","typology",api_text("filter-typology"),array(1=>api_text("uploads-links-typology-public"),0=>api_text("uploads-links-typology-private")));
  // deleted
  $navigation->addFilter("checkbox","del","&nbsp;",array(1=>api_text("filter-del")));
 }
