@@ -1864,11 +1864,11 @@ function api_webservice_wsdl($wsdl,$username=NULL,$password=NULL){
  * Show a variable dump into a pre tag
  *
  * @param string $variable variable to dump
- * @param string $echo typology of echo : dump | print
+ * @param string $echo typology of echo :  print | dump
  * @param string $label dump label
  * @return print variable dump into a pre tag
  */
-function pre_var_dump($variable,$echo="dump",$label=NULL){
+function pre_var_dump($variable,$echo="print",$label=NULL){
  echo "<pre>";
  if($label<>NULL){echo "<strong>".$label."</strong><br>";}
  switch($echo){
@@ -1981,6 +1981,29 @@ function api_tab2space($text,$tab=4,$nbsp=FALSE){
   $return.=rtrim($line)."\n";
  }
  return substr($return,0,-1);
+}
+
+
+/**
+ * Query tree
+ *
+ * @param string $parent parent field
+ * @param string $root root field value
+ * @param string $order query order
+ * @param string $id id field
+ * @return array tree of rows
+ */
+function api_query_tree($parent,$root=NULL,$order=NULL,$id="id"){
+ $return=array();
+ if($root===NULL){$query_where=$parent." IS NULL";}
+  else{$query_where=$parent."='".$root."'";}
+ if($order){$query_order=" ORDER BY ".$order;}
+ $rows=$GLOBALS['db']->query("SELECT * FROM uploads_folders WHERE ".$query_where.$query_order);
+ while($row=$GLOBALS['db']->fetchNextObject($rows)){
+  $return[]=$row;
+  $return=array_merge($return,api_query_tree($parent,$row->$id,$order));
+ }
+ return $return;
 }
 
 ?>

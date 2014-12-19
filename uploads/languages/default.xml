@@ -66,4 +66,23 @@
  <text key="uploads_files_view-dt-description">Description</text>
  <text key="uploads_files_view-dd-share">Share link</text>
 
+ <!-- uploads_files_edit.php -->
+ <text key="uploads_files_edit-ff-idFolder">Folder</text>
+ <text key="uploads_files_edit-ff-file">File</text>
+ <text key="uploads_files_edit-ff-file-placeholder">Select a file to upload</text>
+ <text key="uploads_files_edit-ff-file-placeholder-replace">Select a file to upload and replace previous</text>
+ <text key="uploads_files_edit-ff-label">Label</text>
+ <text key="uploads_files_edit-ff-label-placeholder">If left empty will be copied from file name</text>
+ <text key="uploads_files_edit-ff-description">Description</text>
+ <text key="uploads_files_edit-ff-description-placeholder">Optional file description</text>
+ <text key="uploads_files_edit-ff-tags">TAGS</text>
+ <text key="uploads_files_edit-ff-tags-placeholder">Comma separated tags</text>
+ <text key="uploads_files_edit-fc-submit">Save</text>
+ <text key="uploads_files_edit-fc-cancel">Cancel</text>
+ <text key="uploads_files_edit-fc-delete">Delete</text>
+ <text key="uploads_files_edit-fc-delete-confirm">Are you sure you want to delete this file?</text>
+ <text key="uploads_files_edit-fc-undelete">Undelete</text>
+ <text key="uploads_files_edit-fc-remove">Remove</text>
+ <text key="uploads_files_edit-fc-remove-confirm">Are you sure you want to permanently delete this file?</text>
+
 </locale>

@@ -1,6 +1,6 @@
 <?php
 /* -------------------------------------------------------------------------- *\
-|* -[ Contacts - Template ]-------------------------------------------------- *|
+|* -[ Uploads - Template ]--------------------------------------------------- *|
 \* -------------------------------------------------------------------------- */
 include("module.inc.php");
 include("../core/api.inc.php");
@@ -33,7 +33,7 @@ if($g_idFile){
   $navigation->addSubTab(api_text("nav-edit-folder"),"uploads_folders_edit.php?idFolder=".$g_idFolder,NULL,NULL,(api_checkPermission($module_name,"folders_edit")?TRUE:FALSE));
   $navigation->addSubTabDivider();
  }
- $navigation->addSubTab(api_text("nav-add-file"),"uploads_files_edit.php",NULL,NULL,(api_checkPermission($module_name,"uploads_edit")?TRUE:FALSE));
+ $navigation->addSubTab(api_text("nav-add-file"),"uploads_files_edit.php?idFolder=".$g_idFolder,NULL,NULL,(api_checkPermission($module_name,"uploads_edit")?TRUE:FALSE));
  $navigation->addSubTab(api_text("nav-add-folder"),"uploads_folders_edit.php",NULL,NULL,(api_checkPermission($module_name,"folders_edit")?TRUE:FALSE));
 }
 // show navigation
