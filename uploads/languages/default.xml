@@ -63,6 +63,8 @@
  <text key="uploads_files_view-dt-name">Name</text>
  <text key="uploads_files_view-dt-file">File</text>
  <text key="uploads_files_view-dt-links">Links</text>
+ <text key="uploads_files_view-dt-tags">TAGS</text>
+ <text key="uploads_files_view-dt-size">Size</text>
  <text key="uploads_files_view-dt-description">Description</text>
  <text key="uploads_files_view-dd-share">Share link</text>
 
@@ -70,7 +72,6 @@
  <text key="uploads_files_edit-ff-idFolder">Folder</text>
  <text key="uploads_files_edit-ff-file">File</text>
  <text key="uploads_files_edit-ff-file-placeholder">Select a file to upload</text>
- <text key="uploads_files_edit-ff-file-placeholder-replace">Select a file to upload and replace previous</text>
  <text key="uploads_files_edit-ff-label">Label</text>
  <text key="uploads_files_edit-ff-label-placeholder">If left empty will be copied from file name</text>
  <text key="uploads_files_edit-ff-description">Description</text>
@@ -84,5 +85,11 @@
  <text key="uploads_files_edit-fc-undelete">Undelete</text>
  <text key="uploads_files_edit-fc-remove">Remove</text>
  <text key="uploads_files_edit-fc-remove-confirm">Are you sure you want to permanently delete this file?</text>
+
+ <!-- download.php -->
+ <text key="download-download">If the download doesn't start automatically click here</text>
+ <text key="download-ff-password">Password</text>
+ <text key="download-fc-submit">Submit</text>
+ <text key="download-ff-"></text>
 
 </locale>

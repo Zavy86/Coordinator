@@ -9,6 +9,7 @@ function content(){
  $uploads_status_modals_array=array();
  // acquire variables
  $g_search=$_GET['q'];
+ $g_idFile=$_GET['idFile'];
  $current_folder=api_uploads_folder($_GET['idFolder']);
  // show filters
  echo $GLOBALS['navigation']->filtersText();
@@ -43,18 +44,13 @@ function content(){
   while($folder=api_uploads_folder($GLOBALS['db']->fetchNextObject($folders),TRUE)){
    // build modal window
    $uploads_status_modals_array[]=api_uploads_folderStatusModal($folder);
-   // make size
-   if($folder->size==0){$size_td=NULL;}
-    elseif($folder->size>1048576){$size_td=number_format(($folder->size/1048576),2,",",".")." MB";}
-    elseif($folder->size>134217728){$size_td=number_format(($folder->size/134217728),2,",",".")." GB";}
-    else{$size_td=number_format(($folder->size/1024),2,",",".")." KB";}
    // build group row
    $table->addRow();
    // build table field
    $table->addField(api_link("uploads_list.php?idFolder=".$folder->id,api_icon("icon-folder-open")),"nowarp");
    $table->addField($folder->name,"nowarp");
    $table->addField("&nbsp;");
-   $table->addField($size_td,"nowarp text-right");
+   $table->addField($folder->size_formatted,"nowarp text-right");
    $table->addField(api_timestampFormat($folder->updDate,api_text("datetime")),"nowarp text-right");
    $table->addField(end($uploads_status_modals_array)->link(api_icon("icon-info-sign")),"nowarp");
   }
@@ -84,10 +80,12 @@ function content(){
   if($file->size>1048576){$size_td=number_format(($file->size/1048576),2,",",".")." MB";}
    elseif($file->size>134217728){$size_td=number_format(($file->size/134217728),2,",",".")." GB";}
    else{$size_td=number_format(($file->size/1024),2,",",".")." KB";}
+  // make row class
+  if($g_idFile==$file->id){$tr_class="info";}else{$tr_class=NULL;}
   // build modal window
   $uploads_status_modals_array[]=api_uploads_fileStatusModal($file);
   // build group table row
-  $table->addRow();
+  $table->addRow($tr_class);
   // build table fields
   $table->addField(api_link("uploads_files_view.php?idFile=".$file->id."&idFolder=".$file->idFolder,api_icon("icon-search")),"nowarp");
   $table->addField($file->label,"nowarp");

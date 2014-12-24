@@ -5,46 +5,137 @@
 include('../core/api.inc.php');
 include('api.inc.php');
 $act=$_GET['act'];
-//switch($act){
-// // contacts
-// case "contact_save":contact_save();break;
-// case "contact_manage":contact_manage();break;
-// case "contact_delete":contact_delete("delete");break;
-// case "contact_undelete":contact_delete("undelete");break;
-// case "contact_remove":contact_delete("remove");break;
-// case "contact_import":contact_import();break;
-// case "contact_address_save":contact_address_save();break;
-// case "contact_address_delete":contact_address_delete("delete");break;
-// case "contact_address_undelete":contact_address_delete("undelete");break;
-// case "contact_address_remove":contact_address_delete("remove");break;
-// case "contact_referent_save":contact_referent_save();break;
-// case "contact_referent_delete":contact_referent_delete("delete");break;
-// case "contact_referent_undelete":contact_referent_delete("undelete");break;
-// case "contact_referent_remove":contact_referent_delete("remove");break;
-// case "contact_attachment_upload":contact_attachment_upload();break;
-// case "contact_attachment_download":contact_attachment_download();break;
-// case "contact_attachment_delete":contact_attachment_delete();break;
-// // roles
-// case "role_save":role_save();break;
-// case "role_delete":role_delete("delete");break;
-// case "role_undelete":role_delete("undelete");break;
-// case "role_remove":role_delete("remove");break;
-// case "role_txt_save":role_txt_save();break;
-// case "role_txt_delete":role_txt_delete();break;
-// // areas
-// case "area_save":area_save();break;
-// case "area_delete":area_delete("delete");break;
-// case "area_undelete":area_delete("undelete");break;
-// case "area_remove":area_delete("remove");break;
-// case "area_txt_save":area_txt_save();break;
-// case "area_txt_delete":area_txt_delete();break;
-// // default
-// default:
+switch($act){
+ // uploads
+ case "file_save":file_save();break;
+ case "file_download":file_download();break;
+ case "file_delete":file_delete("delete");break;
+ case "file_undelete":file_delete("undelete");break;
+ case "file_remove":file_delete("remove");break;
+// default
+default:
   $alert="?alert=submitFunctionNotFound&alert_class=alert-warning&act=".$act;
   exit(header("location: index.php".$alert));
-//}
-//
-//
+}
+
+
+/**
+ * File Save
+ */
+function file_save(){
+ if(!api_checkPermission("uploads","files_edit")){api_die("accessDenied");}
+ // get objects
+ $file=api_uploads_file($_GET['idFile'],TRUE);
+ // aquire variables
+ $p_idFolder=$_POST['idFolder'];
+ $p_label=api_cleanString($_POST['label'],"/[^A-Za-z0-9- ]/");
+ $p_description=api_cleanString($_POST['description'],"/[^A-Za-zÀ-ÿ0-9-.,' ]/");
+ $p_tags=api_cleanString(strtolower($_POST['tags']),"/[^a-z0-9-,]/");
+ if($file->id){
+  $query="UPDATE uploads_uploads SET
+   idFolder='".$p_idFolder."',
+   label='".addslashes($p_label)."',
+   description='".addslashes($p_description)."',
+   tags='".addslashes($p_tags)."',
+   updDate='".api_now()."',
+   updIdAccount='".api_accountId()."'
+   WHERE id='".$file->id."'";
+  // execute query
+  $GLOBALS['db']->execute($query);
+  // log event
+  $log=api_log(API_LOG_NOTICE,"uploads","fileUpdated",
+   "{logs_uploads_fileUpdated|".$file->id."|".$file->name."|".$p_label."}",
+   $file->id,"uploads/uploads_files_view.php?idFile=".$file->id."&idFolder=".$p_idFolder);
+  // redirect
+  $alert="&alert=fileUpdated&alert_class=alert-success&idLog=".$log->id;
+  exit(header("location: uploads_files_view.php?idFile=".$file->id."&idFolder=".$p_idFolder.$alert));
+ }else{
+  // call upload file api
+  $result=api_file_upload($_FILES['file'],"uploads_uploads",NULL,$p_label,$p_description,$p_tags,TRUE,NULL,TRUE,"uploads",$file->id);
+  // check result
+  if($result->id){
+   $GLOBALS['db']->execute("UPDATE uploads_uploads SET idFolder='".$p_idFolder."' WHERE id='".$result->id."'");
+   // update folder size
+   if($p_idFolder){
+    $size=$GLOBALS['db']->queryUniqueValue("SELECT SUM(size) FROM `uploads_uploads` WHERE del='0' AND idFolder='".$p_idFolder."'");
+    $GLOBALS['db']->execute("UPDATE uploads_folders SET size='".$size."' WHERE id='".$p_idFolder."'");
+   }
+   // check action
+   if($result->id==$file->id){$action="fileUpdated";}else{$action="fileCreated";}
+   // log event
+   $log=api_log(API_LOG_NOTICE,"uploads",$action,
+    "{logs_uploads_".$action."|".$result->id."|".$result->name."|".$result->label."}",
+    $result->id,"uploads/uploads_files_view.php?idFile=".$result->id."&idFolder=".$p_idFolder);
+   // redirect
+   $alert="&alert=".$action."&alert_class=alert-success&idLog=".$log->id;
+   exit(header("location: uploads_files_view.php?idFile=".$result->id."&idFolder=".$p_idFolder.$alert));
+  }
+ }
+ // redirect
+ $alert="?alert=uploadError&alert_class=alert-error";
+ exit(header("location: uploads_list.php".$alert));
+}
+
+/**
+ * File Download
+ */
+function file_download(){
+ if(!api_checkPermission("uploads","uploads_view")){api_die("accessDenied");}
+ // download file from database
+ api_file_download($_GET['idFile'],"uploads_uploads",NULL,FALSE,"uploads");
+}
+
+/**
+ * File Delete
+ *
+ * @param string $action delete | undelete | remove
+ */
+function file_delete($action){
+ if(!api_checkPermission("uploads","files_edit")){api_die("accessDenied");}
+ // get objects
+ $file=api_uploads_file($_GET['idFile'],TRUE);
+ // acquire variables
+ $g_idFolder=$_GET['idFolder'];
+ // check area
+ if($file->id){
+  // build contact query
+  switch($action){
+   case "delete":
+    $query="UPDATE uploads_uploads SET del='1',updDate='".api_now()."',updIdAccount='".api_accountId()."' WHERE id='".$file->id."'";
+    $log_action="fileDeleted";
+    break;
+   case "undelete":
+    $query="UPDATE uploads_uploads SET del='0',updDate='".api_now()."',updIdAccount='".api_accountId()."' WHERE id='".$file->id."'";
+    $log_action="fileUndeleted";
+    break;
+   case "remove":
+    $query="DELETE FROM uploads_uploads WHERE id='".$file->id."'";
+    @unlink("../uploads/uploads/uploads/".$file->id."-".$file->hash);
+    $log_action="fileRemoved";
+    break;
+   default:$query=NULL;
+  }
+  // execute query
+  if($query){
+   $GLOBALS['db']->execute($query);
+   // update folder size
+   if($g_idFolder){
+    $size=$GLOBALS['db']->queryUniqueValue("SELECT SUM(size) FROM `uploads_uploads` WHERE del='0' AND idFolder='".$g_idFolder."'");
+    $GLOBALS['db']->execute("UPDATE uploads_folders SET size='".$size."' WHERE id='".$g_idFolder."'");
+   }
+   // log event
+   $log=api_log(API_LOG_WARNING,"uploads",$log_action,
+    "{logs_contacts_".$log_action."|".$file->id."|".$file->name."|".$file->label."}",
+    $file->id,"uploads/uploads_list.php?idFile=".$file->id."&idFolder=".$file->idFolder);
+   // alert
+   $alert="&alert=".$log_action."&alert_class=alert-warning&idLog=".$log->id;
+  }else{$alert="&alert=uploadError&alert_class=alert-error";}
+ }else{$alert="&alert=uploadError&alert_class=alert-error";}
+ // redirect
+ exit(header("location: uploads_list.php?idFolder=".$file->idFolder.$alert));
+}
+
+
 ///**
 // * Contact Save
 // *

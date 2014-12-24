@@ -2,6 +2,7 @@
 /* -------------------------------------------------------------------------- *\
 |* -[ Uploads - Files Edit ]------------------------------------------------- *|
 \* -------------------------------------------------------------------------- */
+$checkPermission="files_edit";
 include("template.inc.php");
 function content(){
  // get objects
@@ -9,7 +10,7 @@ function content(){
  $g_idFolder=$_GET['idFolder'];
  if(!$g_idFolder){$g_idFolder=$file->idFolder;}
  // build form
- $form=new str_form("submit.php?act=uploads_file_save&idFile=".$file->id,"post","contacts_attachments");
+ $form=new str_form("submit.php?act=file_save&idFile=".$file->id,"post","uploads_files_edit");
  // folders
  $form->addField("select","idFolder",api_text("uploads_files_edit-ff-idFolder"),NULL,"input-xlarge");
   $form->addFieldOption("","/Uploads");
@@ -19,9 +20,7 @@ function content(){
    $form->addFieldOption($folder->id,$folder->path,($folder->id==$g_idFolder?TRUE:FALSE));
   }
  // file
- if($file->id){$file_placeholder=api_text("uploads_files_edit-ff-file-placeholder-replace");}
-  else{$file_placeholder=api_text("uploads_files_edit-ff-file-placeholder");}
- $form->addField("file","file",api_text("uploads_files_edit-ff-file"),NULL,"input-xlarge",$file_placeholder);
+ if(!$file->id){$form->addField("file","file",api_text("uploads_files_edit-ff-file"),NULL,"input-xlarge",api_text("uploads_files_edit-ff-file-placeholder"));}
  // data
  $form->addField("text","label",api_text("uploads_files_edit-ff-label"),$file->label,"input-xlarge",api_text("uploads_files_edit-ff-label-placeholder"));
  $form->addField("text","description",api_text("uploads_files_edit-ff-description"),$file->description,"input-xxlarge",api_text("uploads_files_edit-ff-description-placeholder"));

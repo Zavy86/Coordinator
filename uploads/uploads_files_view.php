@@ -22,14 +22,16 @@ function content(){
   }else{$link_icon="icon-lock";$link_title=api_text("uploads-links-typology-private");}
   $dd_links.="<br>".api_link("#",api_icon("icon-edit"));
   $dd_links.=" ".end($links_modal_array)->link(api_icon($link_icon,$link_title));
-  $dd_links.=" <code>".api_link("#",$link->id)."</code>";
+  $dd_links.=" <code>".api_link("../uploads/download.php?link=".$link->id,$link->id)."</code>";
   $dd_links.=" ".api_link("#",api_icon("icon-share",api_text("uploads_files_view-dd-share")));
  }
  // build contact dynamic list
  $dl_file=new str_dl("br","dl-horizontal");
  $dl_file->addElement(api_text("uploads_files_view-dt-name"),$file->label);
- $dl_file->addElement(api_text("uploads_files_view-dt-file"),$folder->path_html."/".api_link("#",$file->name));
+ $dl_file->addElement(api_text("uploads_files_view-dt-file"),$folder->path_html." / ".api_link("submit.php?act=file_download&idFile=".$file->id,$file->name));
  if($dd_links){$dl_file->addElement(api_text("uploads_files_view-dt-links"),substr($dd_links,4));}
+ if($file->tags){$dl_file->addElement(api_text("uploads_files_view-dt-tags"),$file->tags_html);}
+ $dl_file->addElement(api_text("uploads_files_view-dt-size"),$file->size_formatted);
  if($file->description){$dl_file->addElement(api_text("uploads_files_view-dt-description"),$file->description);}
  /*if($file->del){$status_icon="icon-trash";}else{$status_icon="icon-info-sign";}
  if($file->updIdAccount){$status="uploads_files_view-dt-updIdAccount";$account_name=api_accountName($file->updIdAccount);}
