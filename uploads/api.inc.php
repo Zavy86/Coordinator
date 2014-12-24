@@ -24,6 +24,15 @@ function api_uploads_file($file,$del=FALSE){
  $file->description=stripslashes($file->description);
  $file->tags=stripslashes($file->tags);
  $file->txtContent=stripslashes($file->txtContent);
+ // make html tags
+ $tags=explode(",",$file->tags);
+ foreach($tags as $tag){$tags_html.=", ".api_link("../uploads/uploads_list.php?q=".$tag,$tag);}
+ $file->tags_html=substr($tags_html,2);
+ // make formatted size
+ if($file->size==0){$file->size_formatted=NULL;}
+  elseif($file->size>1048576){$file->size_formatted=number_format(($file->size/1048576),2,",",".")." MB";}
+  elseif($file->size>134217728){$file->size_formatted=number_format(($file->size/134217728),2,",",".")." GB";}
+  else{$file->size_formatted=number_format(($file->size/1024),2,",",".")." KB";}
  // build links
  $file->links=array();
  $links=$GLOBALS['db']->query("SELECT * FROM uploads_links WHERE idUpload='".$file->id."'");
@@ -69,15 +78,20 @@ function api_uploads_folder($folder,$del=FALSE){
  $folder->name=stripslashes($folder->name);
  // make path
  $folder->path="/".$folder->name;
- $folder->path_html.="/".api_link("../uploads/uploads/uploads_list.php?idFolder=".$folder->id,$folder->name);
+ $folder->path_html.=" / ".api_link("../uploads/uploads_list.php?idFolder=".$folder->id,$folder->name);
  $parent_folder=$folder;
  while($parent_folder->idFolder<>NULL){
   $parent_folder=$GLOBALS['db']->queryUniqueObject("SELECT * FROM uploads_folders WHERE id='".$parent_folder->idFolder."'");
   $folder->path="/".$parent_folder->name.$folder->path;
-  $folder->path_html="/".api_link("../uploads/uploads/uploads_list.php?idFolder=".$parent_folder->id,$parent_folder->name).$folder->path_html;
+  $folder->path_html=" / ".api_link("../uploads/uploads_list.php?idFolder=".$parent_folder->id,$parent_folder->name).$folder->path_html;
  }
  $folder->path="/Uploads".$folder->path;
- $folder->path_html="/".api_link("../uploads/uploads/uploads_list.php?idFolder=","Uploads").$folder->path_html;
+ $folder->path_html=" / ".api_link("../uploads/uploads_list.php?idFolder=","Uploads").$folder->path_html;
+ // make formatted size
+ if($folder->size==0){$folder->size_formatted=NULL;}
+  elseif($folder->size>1048576){$folder->size_formatted=number_format(($folder->size/1048576),2,",",".")." MB";}
+  elseif($folder->size>134217728){$folder->size_formatted=number_format(($folder->size/134217728),2,",",".")." GB";}
+  else{$folder->size_formatted=number_format(($folder->size/1024),2,",",".")." KB";}
  return $folder;
 }
 
@@ -99,6 +113,20 @@ function api_uploads_folderStatusModal($folder){
  if($folder->del){$dl_body->addElement("&nbsp;",api_icon("icon-trash")." ".api_text("api-uploads-dd-del"));}
  $return->body($dl_body->render(FALSE));
  return $return;
+}
+
+
+/**
+ * Link object
+ *
+ * @param mixed $link link id or object
+ * @return object folder object
+ */
+function api_uploads_link($link){
+ // get file object
+ if(strlen($link)==32){$link=$GLOBALS['db']->queryUniqueObject("SELECT * FROM uploads_links WHERE id='".$link."'");}
+ if(!$link->id){return FALSE;}
+ return $link;
 }
 
 /**

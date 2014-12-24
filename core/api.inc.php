@@ -45,6 +45,7 @@ if($g_submit=="cron"){
      && api_baseName()<>"password_retrieve.php"
      && api_baseName()<>"password_reset.php"
      && api_baseName()<>"request_account_ldap.php"
+     && api_baseName()<>"download.php"
      && $dontCheckSession==FALSE){
    // save url to session if not in this skip array
    $url_skip=array($GLOBALS['dir']."accounts/submit.php?act=account_login",
@@ -1494,10 +1495,12 @@ function api_file_upload($input,$table="uploads_uploads",$name=NULL,$label=NULL,
   }
   // build query
   $query="INSERT INTO ".$table."
-   (name,type,size,hash,file,label,description,tags,txtcontent,addDate,addIdAccount) VALUES
-   ('".$file->name."','".$file->type."','".$file->size."','".$file->hash."','".$file->file."',
-    '".$file->label."','".$file->description."','".$file->tags."','".$file->txtContent."',
-    '".date("Y-m-d H:i:s")."','".$_SESSION['account']->id."')";
+   (name,type,size,hash,file,label,description,tags,txtContent,addDate,addIdAccount,
+    updDate,updIdAccount) VALUES
+   ('".addslashes($file->name)."','".$file->type."','".$file->size."','".$file->hash."',
+    '".addslashes($file->file)."','".addslashes($file->label)."','".addslashes($file->description)."',
+    '".addslashes($file->tags)."','".addslashes($file->txtContent)."','".date("Y-m-d H:i:s")."',
+    '".$_SESSION['account']->id."','".date("Y-m-d H:i:s")."','".$_SESSION['account']->id."')";
   // execute query
   $GLOBALS['db']->execute($query);
   // get file id
@@ -1535,7 +1538,6 @@ function api_file($idFile,$table="uploads_uploads"){
 // @integet $idFile : file id
 // @string $table : database table name
 // @string $name : file name if you want to rename
-
 function api_file_download($idFile,$table="uploads_uploads",$name=NULL,$force=TRUE,$path=NULL){
  // get file object
  $file=$GLOBALS['db']->queryUniqueObject("SELECT * FROM ".$table." WHERE id='".$idFile."'");
