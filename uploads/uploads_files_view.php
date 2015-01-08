@@ -20,7 +20,7 @@ function content(){
    if($link->password){$link_icon="icon-asterisk";$link_title=api_text("uploads-links-typology-password");}
     else{$link_icon="icon-globe";$link_title=api_text("uploads-links-typology-public");}
   }else{$link_icon="icon-lock";$link_title=api_text("uploads-links-typology-private");}
-  $dd_links.="<br>".api_link("#",api_icon("icon-edit"));
+  $dd_links.="<br>".api_link("uploads_links_edit.php?idLink=".$link->id."&idFile=".$file->id,api_icon("icon-edit"));
   $dd_links.=" ".end($links_modal_array)->link(api_icon($link_icon,$link_title));
   $dd_links.=" <code>".api_link("../uploads/download.php?link=".$link->id,$link->id)."</code>";
   $dd_links.=" ".api_link("#",api_icon("icon-share",api_text("uploads_files_view-dd-share")));

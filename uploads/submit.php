@@ -6,12 +6,14 @@ include('../core/api.inc.php');
 include('api.inc.php');
 $act=$_GET['act'];
 switch($act){
- // uploads
+ // file
  case "file_save":file_save();break;
  case "file_download":file_download();break;
  case "file_delete":file_delete("delete");break;
  case "file_undelete":file_delete("undelete");break;
  case "file_remove":file_delete("remove");break;
+ // link
+ case "link_save":link_save();break;
 // default
 default:
   $alert="?alert=submitFunctionNotFound&alert_class=alert-warning&act=".$act;
@@ -133,6 +135,61 @@ function file_delete($action){
  }else{$alert="&alert=uploadError&alert_class=alert-error";}
  // redirect
  exit(header("location: uploads_list.php?idFolder=".$file->idFolder.$alert));
+}
+
+
+/**
+ * Link Save
+ */
+function link_save(){
+ if(!api_checkPermission("uploads","files_edit")){api_die("accessDenied");}
+ // get objects
+ $link=api_uploads_link($_GET['idLink']);
+ $file=api_uploads_file($_POST['idUpload']);
+ // aquire variables
+ $p_idUpload=$_POST['idUpload'];
+ $p_public=$_POST['public'];
+ $p_password=$_POST['password'];
+ if($p_password==$link->password){$p_password=NULL;}
+ if($p_password<>NULL){$p_password=md5($p_password);}
+ // build query
+ if($link->id){
+  $query="UPDATE uploads_links SET
+   idUpload='".$p_idUpload."',
+   public='".$p_public."',";
+  if($p_password){$query.="password='".$p_password."',";}
+  $query.="updDate='".api_now()."',
+   updIdAccount='".api_accountId()."'
+   WHERE id='".$link->id."'";
+  // execute query
+  $GLOBALS['db']->execute($query);
+  // log event
+  $log=api_log(API_LOG_NOTICE,"uploads","linkUpdated",
+   "{logs_uploads_linkUpdated|".$file->id."|".$link->idUpload."|".$p_public."}",
+   $file->id,"uploads/uploads_files_view.php?idFile=".$file->id."&idFolder=".$file->idFolder);
+  // redirect
+  $alert="&alert=linkUpdated&alert_class=alert-success&idLog=".$log->id;
+  exit(header("location: uploads_files_view.php?idFile=".$file->id."&idFolder=".$file->idFolder.$alert));
+ }else{
+  $query="INSERT INTO uploads_links
+   (id,idUpload,public,password,addDate,addIdAccount) VALUES
+   ('".md5(api_now())."','".$p_idUpload."','".$p_public."','".$p_password."',
+    '".api_now()."','".api_accountId()."')";
+  // execute query
+  $GLOBALS['db']->execute($query);
+  // get last insert id
+  $q_idLink=$GLOBALS['db']->lastInsertedId();
+  // log event
+  $log=api_log(API_LOG_NOTICE,"uploads","linkCreated",
+   "{logs_uploads_linkCreated|".$file->id."|".$q_idLink."|".$p_public."}",
+   $file->id,"uploads/uploads_files_view.php?idFile=".$file->id."&idFolder=".$file->idFolder);
+  // redirect
+  $alert="&alert=linkCreated&alert_class=alert-success&idLog=".$log->id;
+  exit(header("location: uploads_files_view.php?idFile=".$file->id."&idFolder=".$file->idFolder.$alert));
+ }
+ // redirect
+ $alert="?alert=uploadError&alert_class=alert-error";
+ exit(header("location: uploads_list.php".$alert));
 }
 
 

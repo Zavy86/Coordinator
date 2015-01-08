@@ -35,7 +35,7 @@ function api_uploads_file($file,$del=FALSE){
   else{$file->size_formatted=number_format(($file->size/1024),2,",",".")." KB";}
  // build links
  $file->links=array();
- $links=$GLOBALS['db']->query("SELECT * FROM uploads_links WHERE idUpload='".$file->id."'");
+ $links=$GLOBALS['db']->query("SELECT * FROM uploads_links WHERE idUpload='".$file->id."' ORDER BY addDate ASC");
  while($link=$GLOBALS['db']->fetchNextObject($links)){$file->links[$link->id]=$link;}
  // return object
  return $file;
@@ -120,7 +120,7 @@ function api_uploads_folderStatusModal($folder){
  * Link object
  *
  * @param mixed $link link id or object
- * @return object folder object
+ * @return object link object
  */
 function api_uploads_link($link){
  // get file object

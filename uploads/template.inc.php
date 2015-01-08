@@ -30,7 +30,7 @@ if(api_baseName()=="uploads_list.php"){
 if($g_idFile){
  $navigation->addTab(api_text("nav-operations"),NULL,NULL,"active");
  $navigation->addSubTab(api_text("nav-edit-file"),"uploads_files_edit.php?idFile=".$g_idFile,NULL,NULL,(api_checkPermission($module_name,"files_edit")?TRUE:FALSE));
- $navigation->addSubTab(api_text("nav-add-link"),"uploads_links_edit.php",NULL,NULL,(api_checkPermission($module_name,"links_edit")?TRUE:FALSE));
+ $navigation->addSubTab(api_text("nav-add-link"),"uploads_links_edit.php?idFile=".$g_idFile,NULL,NULL,(api_checkPermission($module_name,"links_edit")?TRUE:FALSE));
 }else{
  $navigation->addTab(api_text("nav-operations"));
  if($g_idFolder){
