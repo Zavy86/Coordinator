@@ -38,7 +38,7 @@ if($g_idFile){
   $navigation->addSubTabDivider();
  }
  $navigation->addSubTab(api_text("nav-add-file"),"uploads_files_edit.php?idFolder=".$g_idFolder,NULL,NULL,(api_checkPermission($module_name,"files_edit")?TRUE:FALSE));
- $navigation->addSubTab(api_text("nav-add-folder"),"uploads_folders_edit.php",NULL,NULL,(api_checkPermission($module_name,"folders_edit")?TRUE:FALSE));
+ $navigation->addSubTab(api_text("nav-add-folder"),"uploads_folders_edit.php?idParentFolder=".$g_idFolder,NULL,NULL,(api_checkPermission($module_name,"folders_edit")?TRUE:FALSE));
 }
 // show navigation
 $navigation->render();

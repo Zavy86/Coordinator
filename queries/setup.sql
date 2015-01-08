@@ -454,6 +454,7 @@ CREATE TABLE IF NOT EXISTS `uploads_folders` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `idFolder` int(10) unsigned DEFAULT NULL,
   `name` varchar(50) COLLATE utf8_unicode_ci NOT NULL,
+  `description` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
   `size` int(11) unsigned NOT NULL DEFAULT '0',
   `addDate` datetime NOT NULL,
   `addIdAccount` int(11) unsigned NOT NULL,

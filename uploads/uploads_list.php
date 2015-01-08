@@ -49,7 +49,7 @@ function content(){
    // build table field
    $table->addField(api_link("uploads_list.php?idFolder=".$folder->id,api_icon("icon-folder-open")),"nowarp");
    $table->addField($folder->name,"nowarp");
-   $table->addField("&nbsp;");
+   $table->addField($folder->description);
    $table->addField($folder->size_formatted,"nowarp text-right");
    $table->addField(api_timestampFormat($folder->updDate,api_text("datetime")),"nowarp text-right");
    $table->addField(end($uploads_status_modals_array)->link(api_icon("icon-info-sign")),"nowarp");
