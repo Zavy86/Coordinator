@@ -23,7 +23,7 @@ function content(){
  $form->addControl("submit",api_text("uploads_links_edit-fc-submit"));
  if($file->id){
   $form->addControl("button",api_text("uploads_links_edit-fc-cancel"),NULL,"uploads_files_view.php?idFile=".$file->id."&idFolder=".$g_idFolder);
-  if($link->id){$form->addControl("button",api_text("uploads_links_edit-fc-delete"),"btn-warning","submit.php?act=link_delete&idLink=".$link->id."&idFolder=".$g_idFolder,api_text("uploads_links_edit-fc-delete-confirm"));}
+  if($link->id){$form->addControl("button",api_text("uploads_links_edit-fc-delete"),"btn-warning","submit.php?act=link_delete&idLink=".$link->id,api_text("uploads_links_edit-fc-delete-confirm"));}
  }else{
   $form->addControl("button",api_text("uploads_links_edit-fc-cancel"),NULL,"uploads_list.php?idFolder=".$g_idFolder);
  }

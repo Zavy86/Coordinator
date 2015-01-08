@@ -14,6 +14,7 @@ switch($act){
  case "file_remove":file_delete("remove");break;
  // link
  case "link_save":link_save();break;
+ case "link_delete":link_delete();break;
 // default
 default:
   $alert="?alert=submitFunctionNotFound&alert_class=alert-warning&act=".$act;
@@ -98,7 +99,7 @@ function file_delete($action){
  $file=api_uploads_file($_GET['idFile'],TRUE);
  // acquire variables
  $g_idFolder=$_GET['idFolder'];
- // check area
+ // check file
  if($file->id){
   // build contact query
   switch($action){
@@ -127,7 +128,7 @@ function file_delete($action){
    }
    // log event
    $log=api_log(API_LOG_WARNING,"uploads",$log_action,
-    "{logs_contacts_".$log_action."|".$file->id."|".$file->name."|".$file->label."}",
+    "{logs_uploads_".$log_action."|".$file->id."|".$file->name."|".$file->label."}",
     $file->id,"uploads/uploads_list.php?idFile=".$file->id."&idFolder=".$file->idFolder);
    // alert
    $alert="&alert=".$log_action."&alert_class=alert-warning&idLog=".$log->id;
@@ -165,26 +166,50 @@ function link_save(){
   $GLOBALS['db']->execute($query);
   // log event
   $log=api_log(API_LOG_NOTICE,"uploads","linkUpdated",
-   "{logs_uploads_linkUpdated|".$file->id."|".$link->idUpload."|".$p_public."}",
+   "{logs_uploads_linkUpdated|".$file->id."|".$link->id."|".$p_public."}",
    $file->id,"uploads/uploads_files_view.php?idFile=".$file->id."&idFolder=".$file->idFolder);
   // redirect
   $alert="&alert=linkUpdated&alert_class=alert-success&idLog=".$log->id;
   exit(header("location: uploads_files_view.php?idFile=".$file->id."&idFolder=".$file->idFolder.$alert));
  }else{
+  $idLink=md5(api_now());
   $query="INSERT INTO uploads_links
    (id,idUpload,public,password,addDate,addIdAccount) VALUES
-   ('".md5(api_now())."','".$p_idUpload."','".$p_public."','".$p_password."',
+   ('".$idLink."','".$p_idUpload."','".$p_public."','".$p_password."',
     '".api_now()."','".api_accountId()."')";
   // execute query
   $GLOBALS['db']->execute($query);
-  // get last insert id
-  $q_idLink=$GLOBALS['db']->lastInsertedId();
   // log event
   $log=api_log(API_LOG_NOTICE,"uploads","linkCreated",
-   "{logs_uploads_linkCreated|".$file->id."|".$q_idLink."|".$p_public."}",
+   "{logs_uploads_linkCreated|".$file->id."|".$idLink."|".$p_public."}",
    $file->id,"uploads/uploads_files_view.php?idFile=".$file->id."&idFolder=".$file->idFolder);
   // redirect
   $alert="&alert=linkCreated&alert_class=alert-success&idLog=".$log->id;
+  exit(header("location: uploads_files_view.php?idFile=".$file->id."&idFolder=".$file->idFolder.$alert));
+ }
+ // redirect
+ $alert="?alert=uploadError&alert_class=alert-error";
+ exit(header("location: uploads_list.php".$alert));
+}
+
+/**
+ * Link Delete
+ */
+function link_delete(){
+ if(!api_checkPermission("uploads","files_edit")){api_die("accessDenied");}
+ // get objects
+ $link=api_uploads_link($_GET['idLink'],TRUE);
+ $file=api_uploads_file($link->idUpload,TRUE);
+ // check link
+ if($link->id){
+  // delete link
+  $GLOBALS['db']->execute("DELETE FROM uploads_links WHERE id='".$link->id."'");
+  // log event
+  $log=api_log(API_LOG_WARNING,"uploads","linkDeleted",
+   "{logs_uploads_linkDeleted|".$file->id."|".$link->id."|".$link->public."}",
+   $file->id,"uploads/uploads_list.php?idFile=".$file->id."&idFolder=".$file->idFolder);
+  // redirect
+  $alert="&alert=linkDeleted&alert_class=alert-warning&idLog=".$log->id;
   exit(header("location: uploads_files_view.php?idFile=".$file->id."&idFolder=".$file->idFolder.$alert));
  }
  // redirect

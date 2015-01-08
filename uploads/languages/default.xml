@@ -13,13 +13,19 @@
   <text key="fileDeleted">The file has been deleted</text>
   <text key="fileUndeleted">The file has been undeleted</text>
   <text key="fileRemoved">The file has been removed</text>
+  <text key="linkCreated">The link has been created</text>
+  <text key="linkUpdated">The link has been updated</text>
+  <text key="linkDeleted">The link has been deleted</text>
 
  <!-- logs -->
-  <text key="logs_uploads_fileCreated">File [Created] {1}</text>
-  <text key="logs_uploads_fileUpdated">File [Updated] {1}</text>
-  <text key="logs_uploads_fileDeleted">File [Deleted] {1}</text>
-  <text key="logs_uploads_fileUndeleted">File [Undeleted] {1}</text>
-  <text key="logs_uploads_fileRemoved">File [Removed] {1}</text>
+ <text key="logs_uploads_fileCreated">File [Created] {1}</text>
+ <text key="logs_uploads_fileUpdated">File [Updated] {1}</text>
+ <text key="logs_uploads_fileDeleted">File [Deleted] {1}</text>
+ <text key="logs_uploads_fileUndeleted">File [Undeleted] {1}</text>
+ <text key="logs_uploads_fileRemoved">File [Removed] {1}</text>
+ <text key="logs_uploads_linkCreated">Link [Created] {1}</text>
+ <text key="logs_uploads_linkUpdated">Link [Updated] {1}</text>
+ <text key="logs_uploads_linkDeleted">Link [Deleted] {1}</text>
 
  <!-- notifications -->
 
