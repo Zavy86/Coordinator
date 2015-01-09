@@ -881,7 +881,7 @@ function api_accountAvatar($idAccount=NULL){
  if(file_exists("../uploads/uploads/accounts/avatar_".$idAccount.".jpg")){
   return "../uploads/uploads/accounts/avatar_".$idAccount.".jpg";
  }else{
-  return $GLOBALS['dir']."uploads/accounts/avatar.jpg";
+  return $GLOBALS['dir']."uploads/uploads/accounts/avatar.jpg";
  }
 }
 
