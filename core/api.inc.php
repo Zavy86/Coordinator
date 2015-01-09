@@ -45,6 +45,7 @@ if($g_submit=="cron"){
      && api_baseName()<>"password_retrieve.php"
      && api_baseName()<>"password_reset.php"
      && api_baseName()<>"request_account_ldap.php"
+     && api_baseName()<>"download.php"
      && $dontCheckSession==FALSE){
    // save url to session if not in this skip array
    $url_skip=array($GLOBALS['dir']."accounts/submit.php?act=account_login",
@@ -877,8 +878,8 @@ function api_sexName($idSex,$lang=""){
 // @param $idAccount : ID of the account
 function api_accountAvatar($idAccount=NULL){
  if($idAccount==NULL){$idAccount=$_SESSION['account']->id;}
- if(file_exists("../uploads/accounts/avatar_".$idAccount.".jpg")){
-  return "../uploads/accounts/avatar_".$idAccount.".jpg";
+ if(file_exists("../uploads/uploads/accounts/avatar_".$idAccount.".jpg")){
+  return "../uploads/uploads/accounts/avatar_".$idAccount.".jpg";
  }else{
   return $GLOBALS['dir']."uploads/accounts/avatar.jpg";
  }
@@ -1120,8 +1121,8 @@ function api_imageScale($source,$output,$max_width,$max_height,$watermark=FALSE,
  // watermark
  if($watermark){
   // check if watermark file exist
-  if(file_exists("../../uploads/images/copyright.png")){
-   $watermark = imagecreatefrompng("../../uploads/images/copyright.png");
+  if(file_exists("../../uploads/uploads/images/copyright.png")){
+   $watermark = imagecreatefrompng("../../uploads/uploads/images/copyright.png");
    imagealphablending($tmp,true);
    $x=imagesx($tmp)-imagesx($watermark)-20;
    $y=imagesy($tmp)-imagesy($watermark)-20;
@@ -1454,7 +1455,7 @@ function api_file_upload($input,$table="uploads_uploads",$name=NULL,$label=NULL,
   $file->file=mysql_real_escape_string(file_get_contents($input['tmp_name']));
   // check metadata
   if($name<>NULL){$file->name=substr(api_clearFileName($name),-200);}
-  if($label<>NULL){$file->label=api_cleanString($label,"/[^A-Za-z0-9- ]/");}else{$file->label=NULL;}
+  if($label<>NULL){$file->label=api_cleanString($label,"/[^A-Za-z0-9- ]/");}else{$file->label=substr($file->name,0,-4);}
   if($description<>NULL){$file->description=api_cleanString($description,"/[^A-Za-zÀ-ÿ0-9-.,' ]/");}else{$file->description=NULL;}
   if($tags<>NULL){$file->tags=api_cleanString(strtolower($tags),"/[^a-z0-9-,]/");}else{$file->tags=NULL;}
   // check file type
@@ -1488,23 +1489,25 @@ function api_file_upload($input,$table="uploads_uploads",$name=NULL,$label=NULL,
   if(strlen($path)>1){
    $file->file=NULL;
    if(substr($path,-1)<>"/"){$path=$path."/";}
-   if(!is_dir("../uploads/".$path)){mkdir("../uploads/".$path,0777,TRUE);}
-   if(file_exists("../uploads/".$path."upload.tmp")){unlink("../uploads/".$path."upload.tmp");}
-   if(is_uploaded_file($input['tmp_name'])){if(!move_uploaded_file($input['tmp_name'],"../uploads/".$path."upload.tmp")){$return=-1;}}else{$return=-1;}
+   if(!is_dir("../uploads/uploads/".$path)){mkdir("../uploads/uploads/".$path,0777,TRUE);}
+   if(file_exists("../uploads/uploads/".$path."upload.tmp")){unlink("../uploads/uploads/".$path."upload.tmp");}
+   if(is_uploaded_file($input['tmp_name'])){if(!move_uploaded_file($input['tmp_name'],"../uploads/uploads/".$path."upload.tmp")){$return=-1;}}else{$return=-1;}
   }
   // build query
   $query="INSERT INTO ".$table."
-   (name,type,size,hash,file,label,description,tags,txtcontent,addDate,addIdAccount) VALUES
-   ('".$file->name."','".$file->type."','".$file->size."','".$file->hash."','".$file->file."',
-    '".$file->label."','".$file->description."','".$file->tags."','".$file->txtContent."',
-    '".date("Y-m-d H:i:s")."','".$_SESSION['account']->id."')";
+   (name,type,size,hash,file,label,description,tags,txtContent,addDate,addIdAccount,
+    updDate,updIdAccount) VALUES
+   ('".addslashes($file->name)."','".$file->type."','".$file->size."','".$file->hash."',
+    '".addslashes($file->file)."','".addslashes($file->label)."','".addslashes($file->description)."',
+    '".addslashes($file->tags)."','".addslashes($file->txtContent)."','".date("Y-m-d H:i:s")."',
+    '".$_SESSION['account']->id."','".date("Y-m-d H:i:s")."','".$_SESSION['account']->id."')";
   // execute query
   $GLOBALS['db']->execute($query);
   // get file id
   $file->id=$GLOBALS['db']->lastInsertedId();
   // rename file into file system
   if($path<>NULL){
-   if(file_exists("../uploads/".$path."upload.tmp")){rename("../uploads/".$path."upload.tmp","../uploads/".$path.$file->id."-".$file->hash);}
+   if(file_exists("../uploads/uploads/".$path."upload.tmp")){rename("../uploads/uploads/".$path."upload.tmp","../uploads/uploads/".$path.$file->id."-".$file->hash);}
   }
   // return metadata
   $return=$file;
@@ -1535,7 +1538,6 @@ function api_file($idFile,$table="uploads_uploads"){
 // @integet $idFile : file id
 // @string $table : database table name
 // @string $name : file name if you want to rename
-
 function api_file_download($idFile,$table="uploads_uploads",$name=NULL,$force=TRUE,$path=NULL){
  // get file object
  $file=$GLOBALS['db']->queryUniqueObject("SELECT * FROM ".$table." WHERE id='".$idFile."'");
@@ -1544,17 +1546,17 @@ function api_file_download($idFile,$table="uploads_uploads",$name=NULL,$force=TR
   // check for upload path or upload to database
   if(strlen($path)>1){
    if(substr($path,-1)<>"/"){$path=$path."/";}
-   if(file_exists("../uploads/".$path.$file->id."-".$file->hash)){
-    //header("location: ../uploads/".$path.$file->id.$file->name);
+   if(file_exists("../uploads/uploads/".$path.$file->id."-".$file->hash)){
+    //header("location: ../uploads/uploads/".$path.$file->id.$file->name);
     header("Pragma: no-cache");
     header("Cache-Control: no-cache, must-revalidate");
     header("Content-Description: File Transfer");
     header("Content-Type: application/octet-stream");
-    header("Content-Length: ".filesize("../uploads/".$path.$file->id."-".$file->hash));
+    header("Content-Length: ".filesize("../uploads/uploads/".$path.$file->id."-".$file->hash));
     if($force){$dispositions="attachment; ";}
     header("Content-Disposition: ".$dispositions."filename=".$file->name);
     ob_end_clean();
-    readfile("../uploads/".$path.$file->id."-".$file->hash);
+    readfile("../uploads/uploads/".$path.$file->id."-".$file->hash);
    }else{
     echo "Error, file not found";
    }
@@ -1587,7 +1589,7 @@ function api_file_delete($idFile,$table="uploads_uploads",$path=NULL){
   if(strlen($path)>1){
    $file->file=NULL;
    if(substr($path,-1)<>"/"){$path=$path."/";}
-   if(file_exists("../uploads/".$path.$file->id."-".$file->hash)){unlink("../uploads/".$path.$file->id."-".$file->hash);}
+   if(file_exists("../uploads/uploads/".$path.$file->id."-".$file->hash)){unlink("../uploads/uploads/".$path.$file->id."-".$file->hash);}
   }
   return TRUE;
  }else{
@@ -1864,11 +1866,11 @@ function api_webservice_wsdl($wsdl,$username=NULL,$password=NULL){
  * Show a variable dump into a pre tag
  *
  * @param string $variable variable to dump
- * @param string $echo typology of echo : dump | print
+ * @param string $echo typology of echo :  print | dump
  * @param string $label dump label
  * @return print variable dump into a pre tag
  */
-function pre_var_dump($variable,$echo="dump",$label=NULL){
+function pre_var_dump($variable,$echo="print",$label=NULL){
  echo "<pre>";
  if($label<>NULL){echo "<strong>".$label."</strong><br>";}
  switch($echo){
@@ -1981,6 +1983,29 @@ function api_tab2space($text,$tab=4,$nbsp=FALSE){
   $return.=rtrim($line)."\n";
  }
  return substr($return,0,-1);
+}
+
+
+/**
+ * Query tree
+ *
+ * @param string $parent parent field
+ * @param string $root root field value
+ * @param string $order query order
+ * @param string $id id field
+ * @return array tree of rows
+ */
+function api_query_tree($parent,$root=NULL,$order=NULL,$id="id"){
+ $return=array();
+ if($root===NULL){$query_where=$parent." IS NULL";}
+  else{$query_where=$parent."='".$root."'";}
+ if($order){$query_order=" ORDER BY ".$order;}
+ $rows=$GLOBALS['db']->query("SELECT * FROM uploads_folders WHERE ".$query_where.$query_order);
+ while($row=$GLOBALS['db']->fetchNextObject($rows)){
+  $return[]=$row;
+  $return=array_merge($return,api_query_tree($parent,$row->$id,$order));
+ }
+ return $return;
 }
 
 ?>

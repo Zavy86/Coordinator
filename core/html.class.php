@@ -90,7 +90,7 @@ public function header($title="",$nav="dashboard",$navbar=TRUE){
     </a>
 
     <?php
-     if(file_exists("../uploads/core/logo.png") && api_getOption('show_logo')){
+     if(file_exists("../uploads/uploads/core/logo.png") && api_getOption('show_logo')){
       echo "<a class='brand-logo' href='".$GLOBALS['dir']."index.php'><img src='".$GLOBALS['dir']."uploads/core/logo.png'></a>\n";
      }else{
       echo "<a class='brand' href='".$GLOBALS['dir']."index.php'>".api_getOption('title')."</a>\n";

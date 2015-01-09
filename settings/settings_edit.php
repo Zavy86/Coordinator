@@ -27,7 +27,7 @@ function content(){
  // title and logo
  $form->addField("text","title",api_text("settings-ff-title"),api_getOption("title"),"input-small");
  $form->addField("checkbox","show_logo",api_text("settings-ff-show_logo"));
- if(!file_exists("../uploads/core/logo.png")){
+ if(!file_exists("../uploads/uploads/core/logo.png")){
   $disabled=TRUE;
   $label=api_text("settings-ff-show_logo-label-path").": ".$GLOBALS['dir']."uploads/core/logo.png";
  }else{
