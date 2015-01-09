@@ -79,8 +79,8 @@ function content(){
  $form->addField("text","module",api_text("menus-ff-module"),stripslashes($selectedMenu->module),NULL,api_text("menus-ff-module-placeholder"));
  $form->addField("text","url",api_text("menus-ff-url"),stripslashes($selectedMenu->url),NULL,api_text("menus-ff-url-placeholder"));
  $form->addField("file","file",api_text("menus-ff-file"));
- if(file_exists("../uploads/links/".$selectedMenu->id.".png")){
-  $form->addCustomField("&nbsp;","<div class='controls'><img src='../uploads/links/".$selectedMenu->id.".png' width='128' height='128' class='img-polaroid'></div>\n");
+ if(file_exists("../uploads/uploads/links/".$selectedMenu->id.".png")){
+  $form->addCustomField("&nbsp;","<div class='controls'><img src='../uploads/uploads/links/".$selectedMenu->id.".png' width='128' height='128' class='img-polaroid'></div>\n");
  }
  $form->addControl("submit",api_text("menus-fc-submit"));
  if($selectedMenu->id>0){

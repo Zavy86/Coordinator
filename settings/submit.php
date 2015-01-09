@@ -407,9 +407,9 @@ function menu_save(){
  }
  // upload image
  if(intval($_FILES['file']['size'])>0 && $_FILES['file']['error']==UPLOAD_ERR_OK){
-  if(!is_dir("../uploads/links")){mkdir("../uploads/links",0777,TRUE);}
-  if(file_exists("../uploads/links/".$g_id.".png")){unlink("../uploads/links/".$g_id.".png");}
-  if(is_uploaded_file($_FILES['file']['tmp_name'])){move_uploaded_file($_FILES['file']['tmp_name'],"../uploads/links/".$g_id.".png");}
+  if(!is_dir("../uploads/uploads/links")){mkdir("../uploads/uploads/links",0777,TRUE);}
+  if(file_exists("../uploads/uploads/links/".$g_id.".png")){unlink("../uploads/uploads/links/".$g_id.".png");}
+  if(is_uploaded_file($_FILES['file']['tmp_name'])){move_uploaded_file($_FILES['file']['tmp_name'],"../uploads/uploads/links/".$g_id.".png");}
  }
  // redirect
  exit(header("location: menus_edit.php?idMenu=".$p_idMenu.$alert));
@@ -472,7 +472,7 @@ function menu_delete(){
   // moves back fields located after
   echo $GLOBALS['db']->execute("UPDATE settings_menus SET position=position-1 WHERE position>'".$position."' AND idMenu='".$g_idMenu."'");
   // delete icon
-  if(file_exists("../uploads/links/".$g_id.".png")){unlink("../uploads/links/".$g_id.".png");}
+  if(file_exists("../uploads/uploads/links/".$g_id.".png")){unlink("../uploads/uploads/links/".$g_id.".png");}
   // redirect
   $alert="&alert=menuDeleted&alert_class=alert-success";
   exit(header("location: menus_edit.php?idMenu=".$g_idMenu.$alert));

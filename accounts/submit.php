@@ -324,7 +324,7 @@ function account_customize(){
   if(isset($_FILES['avatar']['tmp_name']) && $_FILES['avatar']['tmp_name']<>'' && intval($_FILES['avatar']['size'])>0){
    if($_FILES['avatar']['error']==UPLOAD_ERR_OK){
     // scale avatar to 125x125 and convert it to jpg
-    api_avatarResize($_FILES['avatar']['tmp_name'],"../uploads/accounts/avatar_".$_SESSION['account']->id.".jpg",125,125);
+    api_avatarResize($_FILES['avatar']['tmp_name'],"../uploads/uploads/accounts/avatar_".$_SESSION['account']->id.".jpg",125,125);
    }
   }
  }
