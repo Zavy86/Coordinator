@@ -370,7 +370,10 @@ INSERT IGNORE INTO `settings_permissions` (`id`, `module`, `action`, `descriptio
 (NULL, 'accounts', 'companies_add', 'Add a company', 0),
 (NULL, 'accounts', 'companies_edit', 'Edit a company', 0),
 (NULL, 'accounts', 'companies_delete', 'Delete a company', 1),
-(NULL, 'database', 'database_view', 'View Coordinator database', 0);
+(NULL, 'database', 'database_view', 'View Coordinator database', 0),
+(NULL, 'uploads', 'uploads_view', 'View uploads', 0),
+(NULL, 'uploads', 'files_edit', 'Edit folders', 0),
+(NULL, 'uploads', 'folders_edit', 'Edit files', 0);
 
 -- --------------------------------------------------------
 
