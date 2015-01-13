@@ -28,7 +28,7 @@ function content(){
  $form->addControl("submit",api_text("uploads_folders_edit-fc-submit"));
  if($folder->id){
   $form->addControl("button",api_text("uploads_folders_edit-fc-cancel"),NULL,"uploads_list.php?idFolder=".$folder->id);
-  if(!$GLOBALS['db']->countOf("uploads_uploads","idFolder='".$folder->id."'")){
+  if(!$GLOBALS['db']->countOf("uploads_uploads","idFolder='".$folder->id."' AND del='0'")){
    $form->addControl("button",api_text("uploads_folders_edit-fc-delete"),"btn-warning","submit.php?act=folder_delete&idFolder=".$folder->id,api_text("uploads_folders_edit-fc-delete-confirm"));
   }
  }else{
