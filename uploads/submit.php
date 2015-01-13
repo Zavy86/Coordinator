@@ -29,7 +29,7 @@ default:
  * Folder Save
  */
 function folder_save(){
- if(!api_checkPermission("uploads","folder_edit")){api_die("accessDenied");}
+ if(!api_checkPermission("uploads","folders_edit")){api_die("accessDenied");}
  // get objects
  $folder=api_uploads_folder($_GET['idFolder']);
  // aquire variables
