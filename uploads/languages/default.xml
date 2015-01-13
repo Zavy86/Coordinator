@@ -93,6 +93,7 @@
  <text key="uploads_files_view-dt-size">Size</text>
  <text key="uploads_files_view-dt-description">Description</text>
  <text key="uploads_files_view-dd-share">Share link</text>
+ <text key="uploads_files_view-dd-counter">Downloaded {0} times</text>
 
  <!-- uploads_files_edit.php -->
  <text key="uploads_files_edit-ff-idFolder">Folder</text>
