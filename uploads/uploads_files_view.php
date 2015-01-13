@@ -24,6 +24,7 @@ function content(){
   $dd_links.=" ".end($links_modal_array)->link(api_icon($link_icon,$link_title));
   $dd_links.=" <code>".api_link("../uploads/download.php?link=".$link->id,$link->id)."</code>";
   //$dd_links.=" ".api_link("#",api_icon("icon-share",api_text("uploads_files_view-dd-share")));
+  $dd_links.=" ".$link->counter." ".api_icon("icon-time",api_text("uploads_files_view-dd-counter",$link->counter));
  }
  // build contact dynamic list
  $dl_file=new str_dl("br","dl-horizontal");
