@@ -29,7 +29,7 @@ default:
  * Folder Save
  */
 function folder_save(){
- if(!api_checkPermission("uploads","folder_edit")){api_die("accessDenied");}
+ if(!api_checkPermission("uploads","folders_edit")){api_die("accessDenied");}
  // get objects
  $folder=api_uploads_folder($_GET['idFolder']);
  // aquire variables
@@ -86,7 +86,7 @@ function folder_delete(){
  // check folder
  if($folder->id){
   // check if folder is empty
-  if(!$GLOBALS['db']->countOf("uploads_uploads","idFolder='".$folder->id."'")){
+  if(!$GLOBALS['db']->countOf("uploads_uploads","idFolder='".$folder->id."' AND del='0'")){
    // execute query
    $GLOBALS['db']->execute("DELETE FROM uploads_folders WHERE id='".$folder->id."'");
    // update folder size
