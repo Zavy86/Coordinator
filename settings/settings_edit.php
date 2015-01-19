@@ -29,11 +29,11 @@ function content(){
  $form->addField("checkbox","show_logo",api_text("settings-ff-show_logo"));
  if(!file_exists("../uploads/uploads/core/logo.png")){
   $disabled=TRUE;
-  $label=api_text("settings-ff-show_logo-label-path").": ".$GLOBALS['dir']."uploads/core/logo.png";
+  $label=api_text("settings-ff-show_logo-label-path").": ".$GLOBALS['dir']."uploads/uploads/core/logo.png";
  }else{
   $disabled=FALSE;
   $label=api_text("settings-ff-show_logo-label")."<br><br>\n";
-  $label.="<img src='".$GLOBALS['dir']."uploads/core/logo.png' alt='Title logo' class='logo'>";
+  $label.="<img src='".$GLOBALS['dir']."uploads/uploads/core/logo.png' alt='Title logo' class='logo'>";
  }
  $form->addFieldOption(1,$label,(api_getOption("show_logo"))?TRUE:FALSE,$disabled);
  $form->addSeparator();
