@@ -94,7 +94,7 @@
  <!-- forms -->
  <text key="form-select">Seleziona</text>
  <text key="form-select-all">Tutti</text>
- <text key="form-select-none">Nessuno</text>
+ <text key="form-select-none">Disabilita questo filtro</text>
  <text key="form-range-from">Da</text>
  <text key="form-range-to">A</text>
 

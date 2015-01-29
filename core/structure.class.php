@@ -171,16 +171,16 @@ class str_navigation{
     // multiple filters have array results
     case "multiselect":
      $text_filter=NULL;
-     if(count($filter->options)==count($_GET[$filter->name])){
+     /*if(count($filter->options)==count($_GET[$filter->name])){
       $value="Tutti";
-     }else{
+     }else{*/
       if(is_array($_GET[$filter->name])){
        foreach($_GET[$filter->name] as $g_option){
         $text_filter.=", ".$filter->options[$g_option];
        }
       }
       $value=substr($text_filter,2);
-     }
+     //}
      break;
     // checkbox and radio have text value
     case "checkbox":
@@ -376,19 +376,22 @@ class str_navigation{
    // build filter form modal body
    $modal_filter_body=new str_form(api_baseName(),"get","filters");
    $modal_filter_body->addField("hidden","filtered",NULL,"1");
+   //pre_var_dump($_GET);
    foreach($this->filters as $filter){
+    //pre_var_dump($filter,"print","filter");
+    //pre_var_dump($_GET[$filter->name],"print","value");
     // filter with options
-    if($filter->options<>NULL){
-     $modal_filter_body->addField($filter->type,$filter->name,$filter->label,NULL,$filter->class,$filter->placeholder);
+    if($filter->options<>NULL){$modal_filter_body->addField($filter->type,$filter->name,$filter->label,NULL,$filter->class,$filter->placeholder);
      foreach($filter->options as $value=>$label){
       $checked=FALSE;
       if(is_array($_GET[$filter->name])){
        foreach($_GET[$filter->name] as $g_option){
-        if($g_option===$value){$checked=TRUE;}
+        if($g_option==$value){$checked=TRUE;}
        }
       }else{
-       if($_GET[$filter->name]===$value){$checked=TRUE;}
+       if($_GET[$filter->name]==$value){$checked=TRUE;}
       }
+      //pre_var_dump($value." -> ".$label." -> ".$checked,"print","option");
       $modal_filter_body->addFieldOption($value,$label,$checked);
      }
     }else{
