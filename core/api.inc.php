@@ -26,7 +26,6 @@ if($_SESSION['account']->debug){
  ini_set('display_errors',1);
 }
 
-
 /* -[ Check Session or Token ]----------------------------------------------- */
 if($dontCheckSession<>TRUE){$dontCheckSession=FALSE;}
 $g_submit=$_GET['submit'];
