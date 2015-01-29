@@ -442,7 +442,8 @@ function api_randomString($size=10){
 // @booelan $html : Send mail in HTML format
 // @string $from_mail : Sender mail
 // @string $from_name : Sender name
-function api_sendmail($to_mail,$message,$subject="",$html=FALSE,$from_mail="",$from_name=""){
+// @string $cc_mails : Carbon Copy mails
+function api_sendmail($to_mail,$message,$subject="",$html=FALSE,$from_mail="",$from_name="",$cc_mails=""){
  if($to_mail==NULL){return FALSE;}
  // headers
  $eol="\n";
@@ -453,6 +454,7 @@ function api_sendmail($to_mail,$message,$subject="",$html=FALSE,$from_mail="",$f
  $headers.="From: ".$from_name." <".$from_mail.">".$eol;
  $headers.="Reply-To: ".$from_mail.$eol;
  $headers.="Return-Path: ".$from_mail.$eol;
+ if(strlen($cc_mails)>0){$headers.="CC: ".str_replace(" ","",$cc_mails).$eol;}
  // subject
  if($subject==""){$subject="Coordinator - Communication";}
  // message
