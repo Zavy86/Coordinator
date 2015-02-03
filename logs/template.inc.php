@@ -32,7 +32,7 @@ if(api_baseName()=="logs_list.php"){
  }
  $navigation->addFilter("multiselect","module",api_text("filter-modules"),$modules_array,"input-xlarge");
  // if not filtered load default filters
- if($_GET['filtered']<>1){
+ if($_GET['resetFilters']||($_GET['filtered']<>1 && $_SESSION['filters'][api_baseName()]['filtered']<>1)){
   $_GET['timestamp_from']=date("Y-m-d",strtotime("-7 days"));
   $_GET['timestamp_to']=date("Y-m-d",strtotime("+1 days"));
   $_GET['typology']=array(2,3);
