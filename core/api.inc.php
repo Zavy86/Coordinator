@@ -685,6 +685,19 @@ function api_accountLanguage($account_id=NULL){
 }
 
 
+/* -[ Profile ISO language code by account id ]------------------------------ */
+// @param $account_id : ID of the account
+// @param $default : default ISO language code
+function api_accountLanguageISO($account_id=NULL,$default="EN"){
+ $language=api_accountLanguage($account_id);
+ if($language<>NULL && $language<>"default"){
+  return substr($language,-2);
+ }else{
+  return $default;
+ }
+}
+
+
 /* -[ Return if account is admin ]------------------------------------------- */
 // @param $now : if is admin now true or if account typology is administrator
 function api_accountIsAdmin($now=TRUE){
