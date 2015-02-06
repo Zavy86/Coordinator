@@ -1,7 +1,8 @@
 <?php
+ // requires
+ require_once("../core/api.inc.php");
  // initializations
  $path="../chats/chats/";
- require_once("../core/api.inc.php");
  $ul=array();
 ?>
 <li class="nav-header">Messaggistica</li>

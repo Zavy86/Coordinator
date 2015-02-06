@@ -1,8 +1,9 @@
 <?php
+ // requires
+ require_once("../core/api.inc.php");
  // initializations
  $chats_unread=0;
  $path="../chats/chats/";
- require_once("../core/api.inc.php");
  // cycle all chats files
  if($handle=opendir($path)){
   while(FALSE!==($entry=readdir($handle))){
