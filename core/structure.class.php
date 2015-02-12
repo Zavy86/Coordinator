@@ -624,7 +624,7 @@ class str_pagination{
   echo " <ul class='".$this->class_ul."'>\n";
   // pagination limit
   echo "  <li class='".$this->class_li_disabled."'><a href='#'>".ucfirst(api_text("show"))."</a></li>\n";
-  $pagination_limit_array=array(20=>"20",100=>"100",250=>"250",0=>ucfirst(api_text("all")));
+  $pagination_limit_array=array(20=>"20",100=>"100",250=>"250",0=>ucfirst(api_text("all")." (".number_format($this->total,0,",",".").")"));
   foreach($pagination_limit_array as $index=>$limit){
    if($index==$this->limit){$class=$this->class_li_active;}else{$class=$this->class_li;}
    echo "  <li class='".$class."'><a href='".str_replace("{p}",1,$this->url)."&l=".$index."'>".$limit."</a></li>\n";
@@ -752,6 +752,11 @@ class str_table{
   $td->colspan=$colspan;
   $this->tr_array[$this->current_row]->fields[]=$td;
   return TRUE;
+ }
+
+ /* -[ Count ]--------------------------------------------------------------- */
+ public function count(){
+  return $this->current_row;
  }
 
  /* -[ Render ]-------------------------------------------------------------- */
