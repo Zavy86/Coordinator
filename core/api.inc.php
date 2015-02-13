@@ -1963,7 +1963,7 @@ function api_cleanString($string,$pattern="/[^A-Za-zÀ-ÿ0-9-._' ]/",$null=NULL)
  * @param string $pattern pattern to clean
  * @return string cleaned number
  */
-function api_cleanNumber($number,$pattern="/[^0-9]/",$null=NULL){
+function api_cleanNumber($number,$pattern="/[^0-9.]/",$null=NULL){
  if(!$number){return NULL;}
  $number=preg_replace($pattern,"",$number);
  if(!strlen($number)){$number=$null;}
