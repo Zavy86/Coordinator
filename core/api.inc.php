@@ -49,9 +49,9 @@ if($g_submit=="cron"){
    // save url to session if not in this skip array
    $url_skip=array($GLOBALS['dir']."accounts/submit.php?act=account_login",
     $GLOBALS['dir']."accounts/index.php",
-    $GLOBALS['dir']."chats/chats.inc.php",
-    $GLOBALS['dir']."chats/chats_list.inc.php",
-    $GLOBALS['dir']."chats/chats_counter.inc.php",
+    $GLOBALS['dir']."chats/chat.inc.php",
+    $GLOBALS['dir']."chats/chat_list.inc.php",
+    $GLOBALS['dir']."chats/chat_counter.inc.php",
     $GLOBALS['dir']."logs/logs_notifications_list.inc.php",
     $GLOBALS['dir']."logs/logs_notifications_counter.inc.php");
    if(!in_array($_SERVER['REQUEST_URI'],$url_skip)){
