@@ -49,9 +49,9 @@ if($g_submit=="cron"){
    // save url to session if not in this skip array
    $url_skip=array($GLOBALS['dir']."accounts/submit.php?act=account_login",
     $GLOBALS['dir']."accounts/index.php",
-    $GLOBALS['dir']."chats/chats.inc.php",
-    $GLOBALS['dir']."chats/chats_list.inc.php",
-    $GLOBALS['dir']."chats/chats_counter.inc.php",
+    $GLOBALS['dir']."chats/chat.inc.php",
+    $GLOBALS['dir']."chats/chat_list.inc.php",
+    $GLOBALS['dir']."chats/chat_counter.inc.php",
     $GLOBALS['dir']."logs/logs_notifications_list.inc.php",
     $GLOBALS['dir']."logs/logs_notifications_counter.inc.php");
    if(!in_array($_SERVER['REQUEST_URI'],$url_skip)){
@@ -1192,7 +1192,7 @@ function api_avatarResize($source,$output,$width=125,$height=125){
 
 /* -[ Parse CSV file ]------------------------------------------------------- */
 // @param $csvfile : File CSV
-function api_parse_csv_file($csv_file,$csv_delimiter=',',$csv_enclosure='"'){
+function api_parse_csv_file($csv_file,$csv_delimiter=',',$csv_enclosure='"',$header=TRUE){
  // definitions
  $csv_rows=array();
  $csv_error=FALSE;
@@ -1201,13 +1201,13 @@ function api_parse_csv_file($csv_file,$csv_delimiter=',',$csv_enclosure='"'){
   // get max lines
   $max_line_length=defined('MAX_LINE_LENGTH')?MAX_LINE_LENGTH:100000;
   // get haders
-  $header=fgetcsv($handle,$max_line_length);
+  if($header){$header=fgetcsv($handle,$max_line_length);}
   // get rows
   while(($csv_row=fgetcsv($handle,$max_line_length,$csv_delimiter,$csv_enclosure))!==FALSE){
-   if(count($csv_row)==count($header)){
+   if($header==FALSE || count($csv_row)==count($header)){
     // add entry to row array
-    $entry=array_combine($header,$csv_row);
-    $csv_rows[]=$entry;
+    if($header){$csv_row=array_combine($header,$csv_row);}
+    $csv_rows[]=$csv_row;
    }else{$csv_error=TRUE;}
   }
   // close handles
@@ -1963,7 +1963,7 @@ function api_cleanString($string,$pattern="/[^A-Za-zÀ-ÿ0-9-._' ]/",$null=NULL)
  * @param string $pattern pattern to clean
  * @return string cleaned number
  */
-function api_cleanNumber($number,$pattern="/[^0-9]/",$null=NULL){
+function api_cleanNumber($number,$pattern="/[^0-9.]/",$null=NULL){
  if(!$number){return NULL;}
  $number=preg_replace($pattern,"",$number);
  if(!strlen($number)){$number=$null;}
@@ -2020,6 +2020,26 @@ function api_query_tree($parent,$root=NULL,$order=NULL,$id="id"){
   $return=array_merge($return,api_query_tree($parent,$row->$id,$order));
  }
  return $return;
+}
+
+
+/**
+ * Sound
+ *
+ * @param string $sound sound name or path of mp3 file
+ * Available sound: alarm,
+ * @return boolean FALSE if sound file was not found
+ */
+function api_sound($sound="alarm"){
+ if(substr($sound,-3)<>".mp3"){$sound="../core/sounds/".$sound.".mp3";}
+ if(!file_exists($sound)){return FALSE;}
+ echo "<!-- sound audio -->\n";
+ echo "<audio id='audio_alarm' src='".$sound."' preload='auto'></audio>\n";
+ echo "<script type='text/javascript'>\n";
+ echo " $(document).ready(function(){\n  document.getElementById('audio_alarm').play();\n });\n";
+ echo "</script>\n";
+ echo "<!-- /sound audio -->\n";
+ return TRUE;
 }
 
 ?>

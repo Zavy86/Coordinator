@@ -1290,14 +1290,17 @@ class str_form{
    }
    // show control
    foreach($this->fc_array as $index=>$fc){
+    // check disabled
+    if($fc->disabled){$disabled=" disabled='disabled'";$fc->url="#";$fc->confirm=NULL;}else{$disabled=NULL;}
+    // switch typology
     switch(strtolower($fc->type)){
      // submit
      case "submit":
-      $return.="  <input type='submit' name='".$this->name."_submit' id='".$this->name."_control_submit' class='btn btn-primary ".$fc->class."' value=\"".$fc->label."\">\n";
+      $return.="  <input type='submit' name='".$this->name."_submit' id='".$this->name."_control_submit' class='btn btn-primary ".$fc->class."'".$disabled." value=\"".$fc->label."\">\n";
       break;
      // reset
      case "reset":
-      $return.="  <input type='reset' name='".$this->name."_reset' id='".$this->name."_control_reset' class='btn ".$fc->class."' value=\"".$fc->label."\">\n";
+      $return.="  <input type='reset' name='".$this->name."_reset' id='".$this->name."_control_reset' class='btn ".$fc->class."'".$disabled." value=\"".$fc->label."\">\n";
       break;
      // button, link
      case "button":
@@ -1306,7 +1309,7 @@ class str_form{
       if(strtolower($fc->type)=="button"){$return.="class='btn ".$fc->class."'";}
        else{$return.="class='".$fc->class."'";}
       if(strlen($fc->confirm)){$return.=" onClick=\"return confirm('".$fc->confirm."')\"";}
-      $return.=" id='".$this->name."_control_".$index."'>".$fc->label."</a>\n";
+      $return.=" id='".$this->name."_control_".$index."'".$disabled.">".$fc->label."</a>\n";
       break;
     }
    }
