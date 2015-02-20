@@ -92,7 +92,7 @@ if($ldap){
   <label class="control-label">Societ&agrave;</label>
   <div class="controls">
    <select name="idCompany">
-    <option value='0'>Nessuna</option>";
+    <option value=''>Nessuna</option>";
   <?php
    $companies=$GLOBALS['db']->query("SELECT * FROM accounts_companies ORDER BY company ASC,division ASC");
    while($company=$GLOBALS['db']->fetchNextObject($companies)){
