@@ -4,6 +4,46 @@
 \* -------------------------------------------------------------------------- */
 
 /**
+ * Uploads list
+ *
+ * @param string $search search query
+ * @param boolean $pagination limit query by page
+ * @return array contact objects array
+ */
+function api_uploads_list($search,$pagination=TRUE){
+ // definitions
+ $uploads_array=array();
+ // generate query
+ // where
+ $query_where="1";
+ $query_where.=" AND (uploads_uploads.del='0' OR ".$GLOBALS['navigation']->filtersParameterQuery("del","0","uploads_uploads.del").")";
+ $query_where.=" AND ".$GLOBALS['navigation']->filtersParameterQuery("public","1","uploads_uploads.public");
+ // search
+ if(strlen($search)){
+  $query_where.=" AND (uploads_uploads.name LIKE '%".addslashes($search)."%'";
+  $query_where.=" OR uploads_uploads.label LIKE '%".api_cleanString($search,"/[^A-Za-z0-9- ]/","FALSENULL")."%'";
+  $query_where.=" OR uploads_uploads.description LIKE '%".api_cleanString($search,"/[^A-Za-zÀ-ÿ0-9-.,' ]/","FALSENULL")."%'";
+  $query_where.=" OR uploads_uploads.tags LIKE '%".api_cleanString($search,"/[^a-z0-9-,]/","FALSENULL")."%'";
+  $query_where.=" OR uploads_uploads.txtContent LIKE '%".addslashes($search)."%' )";
+ }
+ // order
+ $query_order=api_queryOrder("uploads_uploads.label ASC");
+ // fields
+ $query_fields="id,idFolder,name,type,size,hash,label,description,tags,txtContent,addDate,addIdAccount,updDate,updIdAccount,del";
+ // pagination
+ if($pagination){
+  $pagination=new str_pagination("uploads_uploads",$query_where,$GLOBALS['navigation']->filtersGet());
+  $query_limit=$pagination->queryLimit();
+ }
+ // execute query
+ $files=$GLOBALS['db']->query("SELECT ".$query_fields." FROM uploads_uploads WHERE ".$query_where.$query_order.$query_limit);
+ // acquire files
+ while($file=$GLOBALS['db']->fetchNextObject($files)){$uploads_array[$file->id]=api_uploads_file($file,TRUE);}
+ // return contacts objects
+ return $uploads_array;
+}
+
+/**
  * File object
  *
  * @param mixed $file file id or object
