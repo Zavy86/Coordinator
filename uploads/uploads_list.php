@@ -95,7 +95,7 @@ function content(){
   $table->addField(end($uploads_status_modals_array)->link(api_icon($icon_td)),"nowarp");
  }
  // show folder path
- if(!$current_folder->path_html){$current_folder->path_html="/".api_link("../uploads/uploads/uploads_list.php?idFolder=","Uploads");}
+ if(!$current_folder->path_html){$current_folder->path_html="/".api_link("../uploads/uploads_list.php?idFolder=","Uploads");}
  echo "<h4>".$current_folder->path_html."</h4>";
  // renderize table
  $table->render();
