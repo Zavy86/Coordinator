@@ -332,16 +332,20 @@ function api_folder_icon($size=128,$float=NULL){
 /* -[ Timestamp Format ]----------------------------------------------------- */
 // @param $timestamp : MySql timestamp
 // @param $format : datetime format
-function api_timestampFormat($timestamp,$format="Y-m-d H:i"){
+// @param $language : language conversion
+function api_timestampFormat($timestamp,$format="Y-m-d H:i",$language=NULL){
  if($timestamp==NULL){return NULL;}
+ if(!strlen($language)){$language=$_SESSION['language'];}
  $datetime=new DateTime($timestamp);
  $return=$datetime->format($format);
  // if language not default
- if($_SESSION['language']<>"default"){
+ if($language<>"default"){
+  if($language<>$_SESSION['language']){api_loadLocaleFile("../",$language);}
   $days=array("Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday");
   $locale_days=array(api_text("day-monday"),api_text("day-tuesday"),api_text("day-wednesday"),api_text("day-thursday"),api_text("day-friday"),api_text("day-saturday"),api_text("day-sunday"));
   $months=array("January","February","March","April","May","July","August","September","October","November","December");
   $locale_months=array(api_text("month-january"),api_text("month-february"),api_text("month-march"),api_text("month-april"),api_text("month-may"),api_text("month-june"),api_text("month-july"),api_text("month-august"),api_text("month-september"),api_text("month-october"),api_text("month-november"),api_text("month-december"));
+  if($language<>$_SESSION['language']){api_loadLocaleFile();}
   // replace days
   if(strpos($format,"l")!==FALSE){$return=str_replace($days,$locale_days,$return);}
   // replace three digit day
