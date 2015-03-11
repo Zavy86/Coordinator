@@ -438,8 +438,7 @@ function api_randomString($size=10){
  return $random;
 }
 
-
-/* -[ Sendmail ]------------------------------------------------------------- */
+/* -[ Sendmail ]---------- OLD DA NON USARE DA ------------------------------ */
 // @string $to_mail : Recipient mail
 // @string $message : Content of mail
 // @string $subject : Subject of mail
@@ -447,6 +446,16 @@ function api_randomString($size=10){
 // @string $from_mail : Sender mail
 // @string $from_name : Sender name
 // @string $cc_mails : Carbon Copy mails
+/**
+ * Sendmail
+ *
+ * /!\ ATTENZIONE /!\
+ *
+ * Vecchia funziona da non usare
+ *
+ * Sostituita con api_mailer()
+ *
+ */
 function api_sendmail($to_mail,$message,$subject="",$html=FALSE,$from_mail="",$from_name="",$cc_mails=""){
  if($to_mail==NULL){return FALSE;}
  // headers
@@ -481,22 +490,8 @@ function api_sendmail($to_mail,$message,$subject="",$html=FALSE,$from_mail="",$f
   $mail_message.=$eol."--PHP-alt-".$mail_random_hash."--".$eol;
   $message=$mail_message;
  }
- // check for asynchronous sendmail
- if(api_getOption("sendmail_asynchronous")){
-  // insert mail into database
-  $query="INSERT INTO logs_mails
-   (`to`,`subject`,`message`,`headers`,`addDate`,`addIdAccount`) VALUES
-   ('".$to_mail."','".addslashes($subject)."','".addslashes($message)."',
-    '".addslashes($headers)."','".date('Y-m-d H:i:s')."','".api_accountId()."')";
-  // execute query
-  $GLOBALS['db']->execute($query);
-  // set id to last inserted id
-  $q_id=$GLOBALS['db']->lastInsertedId();
-  if($q_id>0){return TRUE;}else{return FALSE;}
- }else{
-  // sendmail
-  return mail($to_mail,$subject,$message,$headers);
- }
+ // sendmail
+ return mail($to_mail,$subject,$message,$headers);
 }
 
 
@@ -2044,6 +2039,117 @@ function api_sound($sound="alarm"){
  echo "</script>\n";
  echo "<!-- /sound audio -->\n";
  return TRUE;
+}
+
+
+/**
+ * Mailer
+ *
+ * @param string $to recipient A mails comma separated
+ * @param string $message mail content
+ * @param string $subject mail subject
+ * @param booelan $html send mail in HTML format
+ * @param string $from_mail sender mail
+ * @param string $from_name sender name
+ * @param string $cc recipient CC mails comma separed
+ * @param string $bcc recipient BCC mails comma separed
+ * @param string $attachments attachment paths comma separed
+ * @return boolean
+ */
+function api_mailer($to,$message,$subject="",$html=FALSE,$from_mail="",$from_name="",$cc="",$bcc="",$attachments=""){
+ // checks and cleans
+ $f_to=addslashes(str_replace(",",";",strtolower(api_cleanString($to,$pattern="/[^A-Za-z0-9-.,;_@]/"))));
+ $f_message=addslashes($message);
+ $f_subject=addslashes($subject);
+ $f_from=addslashes($from_mail);
+ $f_sender=addslashes($from_name);
+ $f_cc=addslashes(str_replace(",",";",strtolower(api_cleanString($cc,$pattern="/[^A-Za-z0-9-.,;_@]/"))));
+ $f_bcc=addslashes(str_replace(",",";",strtolower(api_cleanString($bcc,$pattern="/[^A-Za-z0-9-.,;_@]/"))));
+ $f_attachments=addslashes(str_replace(",",";",$attachments));
+ if($html){$f_html="1";}else{$f_html="0";}
+ if(!strlen($to)){return FALSE;}
+ // insert mail into database
+ $query="INSERT INTO logs_mails
+  (`to`,`cc`,`bcc`,`from`,`sender`,`subject`,`message`,`attachments`,`html`,
+   `addDate`,`addIdAccount`) VALUES
+  ('".$f_to."','".$f_cc."','".$f_bcc."','".$f_from."','".$f_sender."','".$f_subject."',
+   '".$f_message."','".$f_attachments."','".$f_html."','".api_now()."','".api_accountId()."')";
+ // execute query
+ $GLOBALS['db']->execute($query);
+ // set id to last inserted id
+ $q_idMail=$GLOBALS['db']->lastInsertedId();
+ // check if insert
+ if($q_idMail>0){$return=TRUE;}else{$return=FALSE;}
+ // check if asynchronous sendmail is false and send
+ if(!api_getOption("sendmail_asynchronous")){$return=api_mailer_process($q_idMail);}
+ // return
+ return $return;
+}
+
+/* -[ Mailer Process --]----------------------------------------------------- */
+// @mixed $mail mail id or object
+// @return boolean
+function api_mailer_process($mail){
+ // get object
+ if(is_numeric($mail)){$mail=$GLOBALS['db']->queryUniqueObject("SELECT * FROM logs_mails WHERE id='".$mail."'");}
+ if(!$mail->id){return FALSE;}
+ // definitions
+ $to_array=explode(";",$mail->to);
+ $cc_array=explode(";",$mail->cc);
+ $bcc_array=explode(";",$mail->bcc);
+ $attachments_array=explode(";",$mail->attachments);
+ // requrie php mailer class
+ require_once("../core/phpmailer/PHPMailerAutoload.php");
+ // build php mailer
+ $mailer=new PHPMailer;
+ $mailer->CharSet="UTF-8";
+ // check for stmp or relay
+ if(api_getOption("smtp")){
+  $mailer->isSMTP();
+  // host
+  $mailer->Host=api_getOption("smtp_host");
+  // authentication
+  if(strlen(api_getOption("smtp_username"))>0){
+   $mailer->SMTPAuth=TRUE;
+   $mailer->Username=api_getOption("smtp_username");
+   $mailer->Password=api_getOption("smtp_password");
+  }else{
+   $mailer->SMTPAuth=FALSE;
+  }
+  // secure
+  switch(strtolower(api_getOption("smtp_username"))){
+   case "tls":$mailer->SMTPSecure="tls";break;
+   case "ssl":$mailer->SMTPSecure="ssl";break;
+  }
+ }
+ // sender
+ if(!strlen($mail->from)){$mail->from=api_getOption('owner_mail');}
+ if(!strlen($mail->sender)){$mail->sender=api_getOption('owner_mail_from');}
+ $mailer->From=stripslashes($mail->from);
+ $mailer->FromName=stripslashes($mail->sender);
+ $mailer->addReplyTo(stripslashes($mail->from));
+ // receivers
+ if(count($to_array)){foreach($to_array as $to){$mailer->addAddress(trim(stripslashes($to)));}}
+ if(count($cc_array)){foreach($cc_array as $cc){$mailer->addCC(trim(stripslashes($cc)));}}
+ if(count($bcc_array)){foreach($bcc_array as $bcc){$mailer->addBCC(trim(stripslashes($bcc)));}}
+ if(count($attachments_array)){foreach($attachments_array as $attachment){$mailer->addAttachment(trim(stripslashes($attachment)));}}
+ // subject
+ $mailer->Subject=stripslashes($mail->subject);
+ // message
+ if($mail->html){
+  $mailer->isHTML(TRUE);
+  $mailer->Body=stripslashes(nl2br($mail->message));
+  $mailer->AltBody=strip_tags(str_replace("<br>","\n",stripslashes($mail->message)));
+ }else{
+  $mailer->Body=strip_tags(str_replace("<br>","\n",stripslashes($mail->message)));
+ }
+ // sendmail
+ $sended=$mailer->send();
+ // update status
+ if(!$sended){$f_status="2";$f_error=$mailer->ErrorInfo;}else{$f_status="1";}
+ $GLOBALS['db']->execute("UPDATE `logs_mails` SET `status`='".$f_status."',`sendDate`='".api_now()."',`error`='".$f_error."' WHERE id='".$mail->id."'");
+ // return
+ return $sended;
 }
 
 ?>

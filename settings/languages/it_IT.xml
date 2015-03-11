@@ -56,6 +56,15 @@
  <text key="settings-ff-ldap_domain">Domain</text>
  <text key="settings-ff-ldap_userfield">Userfield</text>
  <text key="settings-ff-ldap_group">Group</text>
+ <text key="settings-ff-smtp">SMTP</text>
+ <text key="settings-ff-smtp-label">Abilita invio mail tramite SMTP</text>
+ <text key="settings-ff-smtp_host">Host</text>
+ <text key="settings-ff-smtp_username">Username</text>
+ <text key="settings-ff-smtp_password">Password</text>
+ <text key="settings-ff-smtp_secure">Sicurezza</text>
+ <text key="settings-ff-smtp_secure-none">None</text>
+ <text key="settings-ff-smtp_secure-ssl">SSL</text>
+ <text key="settings-ff-smtp_secure-tls">TLS</text>
  <text key="settings-fc-submit">Salva impostazioni</text>
  <text key="settings-fc-cron">Rigenera Cron Token</text>
 

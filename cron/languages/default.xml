@@ -8,6 +8,6 @@
  <!-- logs -->
  <text key="logs_cron_sendmail">Send mail asynchronous - Processed {0} mail&#xA;&#xA;Sended: {1}&#xA;Sending failed: {2}</text>
  <text key="logs_cron_sendmailDeleted">Send mail asynchronous - Deleted from the log {0} last month</text>
- <text key="logs_cron_sendmailFailed">Send mail asynchronous failed&#xA;&#xA;Recipient: {0}&#xA;Subject: {1}&#xA;&#xA;Error: {3}</text>
+ <text key="logs_cron_sendmailFailed">Send mail asynchronous failed&#xA;&#xA;Recipient: {0}&#xA;Subject: {1}&#xA;&#xA;Error: {2}</text>
 
 </locale>
