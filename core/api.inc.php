@@ -970,7 +970,7 @@ function api_accountGroups($idAccount=NULL,$supgroups=TRUE){
    $group_obj->description=$group->description;
    $group_obj->grouprole=$group->idGrouprole;
    $group_obj->idGroup=$group->idGroup;
-   $supgroup_obj->inherited=FALSE;
+   $group_obj->inherited=FALSE;               // $supgroup_obj->inherited=FALSE;
    $groups_array[$group->id]=$group_obj;
    if($supgroups && $group->idGroup>0){
     $supgroup=$GLOBALS['db']->queryUniqueObject("SELECT * FROM accounts_groups WHERE id='".$group->idGroup."'");
@@ -1749,7 +1749,7 @@ function api_logNotificationTriggers($module,$action,$event,$id,$link){
      if(substr($link,0,4)<>"http"){$mail_link="http://".$_SERVER['SERVER_NAME'].$GLOBALS['dir'].$link;}
      else{$mail_link=$link;}
      $mail_message=$notification->message."<br>\n"."Link: <a href='".$mail_link."'>".$mail_link."</a>";
-     $notification->mail_sent=api_sendmail(api_accountMail($subscription->idAccount),stripslashes($mail_message),stripslashes($notification->subject),TRUE);
+     $notification->mail_sent=api_mailer(api_accountMail($subscription->idAccount),stripslashes($mail_message),stripslashes($notification->subject),TRUE);
     }
     // build notifications array
     $notifications_array[]=$notification;
