@@ -282,7 +282,7 @@ function account_save(){
   $message.="http://".$_SERVER['SERVER_NAME'].$GLOBALS['dir'];
   $message.="accounts/password_reset.php?account=".$p_account."&key=".$secret."\n\n";
   $message.="Ricorda che questo codice è utilizzabile solamente per il tuo primo accesso.";
-  if($g_id>0){api_sendmail($p_account,$message,"Attivazione account Coordinator personale");}
+  if($g_id>0){api_mailer($p_account,$message,"Attivazione account Coordinator personale");}
 
   // redirect
   $alert="&alert=accountCreated&alert_class=alert-success&alert_parameters=".$p_name;
@@ -311,7 +311,7 @@ function account_customize(){
   // sendmail
   $message="Ciao ".$_SESSION['account']->name.",\n";
   $message.=" la modifica della tua password è avvenuta correttamente.";
-  api_sendmail($_SESSION['account']->account,$message,"Notifica di variazione della password");
+  api_mailer($_SESSION['account']->account,$message,"Notifica di variazione della password");
  }else{
   $query="UPDATE accounts_accounts SET
    name='".$p_name."',
@@ -480,7 +480,7 @@ function password_retrieve(){
   $message.="http://".$_SERVER['SERVER_NAME'].$GLOBALS['dir'];
   $message.="accounts/password_reset.php?account=".$account->account."&key=".$secret."\n\n";
   $message.="Si ricordi che questo codice è utilizzabile solamente per questa specifica sessione.";
-  api_sendmail($p_account,$message,"Richiesta di ripristino della password");
+  api_mailer($p_account,$message,"Richiesta di ripristino della password");
  }
  // redirect
  exit(eader("location: index.php".$alert));
@@ -513,7 +513,7 @@ function password_reset(){
   // sendmail
   $message="Salve ".$account->name.",\n";
   $message.=" il ripristino della sua password è avvenuto correttamente.";
-  api_sendmail($p_account,$message,"Notifica di ripristino della password");
+  api_mailer($p_account,$message,"Notifica di ripristino della password");
  }
  // redirect
  exit(header("location: index.php".$alert));
@@ -722,7 +722,7 @@ function ldap_account_create(){
    $message.="Per eseguire l'accesso puoi usare il seguente indirizzo:\n\n";
    $message.="http://".$_SERVER['SERVER_NAME'].$GLOBALS['dir']."accounts/login.php\n\n";
    $message.="Inserendo il tuo account e la tua password di sistema.";
-   api_sendmail($p_account,$message,"Attivazione account Coordinator personale");
+   api_mailer($p_account,$message,"Attivazione account Coordinator personale");
    // notification
    $notification_subject="Benvenuto ".$name." su Coordinator";
    $notification_message="Benvenuto ".$name.", il tuo account è stato creato.\n";

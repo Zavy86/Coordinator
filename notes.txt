@@ -1,0 +1,24 @@
+------------------------------------------------------------------------
+------------------------------ 2015.03.11 ------------------------------
+------------------------------------------------------------------------
+
+Eseguire le seguenti query per aggiungere i parametri relativi all'SMTP
+
+INSERT IGNORE INTO `settings_settings` (`code`, `value`) VALUES
+('smtp', '1'),
+('smtp_host',''),
+('smtp_username',''),
+('smtp_password',''),
+('smtp_secure','');
+
+ALTER TABLE  `logs_mails`
+CHANGE  `to`  `to` TEXT CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
+CHANGE  `status`  `status` INT( 11 ) NOT NULL DEFAULT  '0' COMMENT  '0 draft, 1 sended, 2 failed'
+ADD  `cc` TEXT NULL AFTER  `to` ,
+ADD  `bcc` TEXT NULL AFTER  `cc`,
+ADD  `from` VARCHAR( 255 ) NOT NULL AFTER  `bcc`,
+ADD  `sender` VARCHAR( 255 ) NOT NULL AFTER  `from`,
+ADD  `attachments` TEXT NULL AFTER  `message`,
+ADD  `html` TINYINT( 1 ) UNSIGNED NOT NULL DEFAULT  '0' COMMENT  '0 false, 1 true' AFTER  `attachments`,
+ADD  `error` TEXT NULL AFTER  `status`
+DROP  `headers`
