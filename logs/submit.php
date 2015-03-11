@@ -12,6 +12,7 @@ switch($act){
  case "notification_restore":notification_restore();break;
  case "notification_subscriptions":notification_subscriptions();break;
  // mails
+ case "mails_retry":mails_retry();break;
  case "mails_delete":mails_delete();break;
  // default
  default:
@@ -109,6 +110,21 @@ function notification_subscriptions(){
  // redirect
  $alert="?alert=notificationUpdated&alert_class=alert-success";
  exit(header("location: logs_subscriptions.php".$alert));
+}
+
+/* -[ Mails Retry ]---------------------------------------------------------- */
+function mails_retry(){
+ $g_id=$_GET['id'];
+ if(!isset($g_id)){$g_id=0;}
+ // get mail
+ $mail=$GLOBALS['db']->queryUniqueObject("SELECT * FROM logs_mails WHERE id='".$g_id."'");
+ // check if exist
+ if($mail->id>0){
+  // delete mail
+  $GLOBALS['db']->execute("UPDATE logs_mails SET status='0',error='',sendDate='' WHERE id='".$mail->id."'");
+ }
+ // redirect
+ exit(header("location: logs_mails_list.php"));
 }
 
 /* -[ Mails Delete ]--------------------------------------------------------- */

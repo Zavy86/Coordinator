@@ -37,15 +37,15 @@ function content(){
  }
  $form->addFieldOption(1,$label,(api_getOption("show_logo"))?TRUE:FALSE,$disabled);
  $form->addSeparator();
- // maintenance
- $form->addField("checkbox","maintenance",api_text("settings-ff-maintenance"));
- $form->addFieldOption(1,api_text("settings-ff-maintenance-label"),(api_getOption("maintenance"))?TRUE:FALSE);
- $form->addField("text","maintenance_description",api_text("settings-ff-maintenance_description"),api_getOption("maintenance_description"),"input-xlarge");
- $form->splitSpan();
  // tokens
  $form->addField("text","google_analytics",api_text("settings-ff-google_analytics"),api_getOption("google_analytics"),"input-medium");
  $form->addField("text","piwik_analytics",api_text("settings-ff-piwik_analytics"),api_getOption("piwik_analytics"),"input-medium");
  $form->addField("text","cron_token",api_text("settings-ff-cron_token"),$cron_token,"input-xlarge");
+ $form->splitSpan();
+ // maintenance
+ $form->addField("checkbox","maintenance",api_text("settings-ff-maintenance"));
+ $form->addFieldOption(1,api_text("settings-ff-maintenance-label"),(api_getOption("maintenance"))?TRUE:FALSE);
+ $form->addField("text","maintenance_description",api_text("settings-ff-maintenance_description"),api_getOption("maintenance_description"),"input-xlarge");
  $form->addSeparator();
  // ldap
  $form->addField("checkbox","ldap",api_text("settings-ff-ldap"));
@@ -55,6 +55,17 @@ function content(){
  $form->addField("text","ldap_domain",api_text("settings-ff-ldap_domain"),api_getOption("ldap_domain"),"input-xlarge");
  $form->addField("text","ldap_userfield",api_text("settings-ff-ldap_userfield"),api_getOption("ldap_userfield"),"input-xlarge");
  $form->addField("text","ldap_group",api_text("settings-ff-ldap_group"),api_getOption("ldap_group"),"input-xlarge");
+ $form->addSeparator();
+ // smtp
+ $form->addField("checkbox","smtp",api_text("settings-ff-smtp"));
+ $form->addFieldOption(1,api_text("settings-ff-smtp-label"),(api_getOption("smtp"))?TRUE:FALSE);
+ $form->addField("text","smtp_host",api_text("settings-ff-smtp_host"),api_getOption("smtp_host"),"input-xlarge");
+ $form->addField("text","smtp_username",api_text("settings-ff-smtp_username"),api_getOption("smtp_username"),"input-xlarge");
+ $form->addField("password","smtp_password",api_text("settings-ff-smtp_password"),api_getOption("smtp_password"),"input-xlarge");
+ $form->addField("radio","smtp_secure",api_text("settings-ff-smtp_secure"),NULL,"inline");
+ $form->addFieldOption(0,api_text("settings-ff-smtp_secure-none"),(api_getOption("smtp_secure")==0)?TRUE:FALSE);
+ $form->addFieldOption("ssl",api_text("settings-ff-smtp_secure-ssl"),(api_getOption("smtp_secure")=="ssl")?TRUE:FALSE);
+ $form->addFieldOption("tls",api_text("settings-ff-smtp_secure-tls"),(api_getOption("smtp_secure")=="tls")?TRUE:FALSE);
  $form->splitClose();
  // controls
  $form->addControl("submit",api_text("settings-fc-submit"));

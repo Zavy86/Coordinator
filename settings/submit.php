@@ -57,6 +57,12 @@ function settings_save(){
  if(isset($_POST['ldap_domain'])){$GLOBALS['db']->execute("UPDATE settings_settings SET value='".addslashes($_POST['ldap_domain'])."' WHERE code='ldap_domain'");}
  if(isset($_POST['ldap_userfield'])){$GLOBALS['db']->execute("UPDATE settings_settings SET value='".addslashes($_POST['ldap_userfield'])."' WHERE code='ldap_userfield'");}
  if(isset($_POST['ldap_group'])){$GLOBALS['db']->execute("UPDATE settings_settings SET value='".addslashes($_POST['ldap_group'])."' WHERE code='ldap_group'");}
+ // smtp
+ if($_POST['smtp']){$GLOBALS['db']->execute("UPDATE settings_settings SET value='1' WHERE code='smtp'");}else{$GLOBALS['db']->execute("UPDATE settings_settings SET value='0' WHERE code='smtp'");}
+ if(isset($_POST['smtp_host'])){$GLOBALS['db']->execute("UPDATE settings_settings SET value='".addslashes($_POST['smtp_host'])."' WHERE code='smtp_host'");}
+ if(isset($_POST['smtp_username'])){$GLOBALS['db']->execute("UPDATE settings_settings SET value='".addslashes($_POST['smtp_username'])."' WHERE code='smtp_username'");}
+ if(isset($_POST['smtp_password'])){$GLOBALS['db']->execute("UPDATE settings_settings SET value='".addslashes($_POST['smtp_password'])."' WHERE code='smtp_password'");}
+ if(isset($_POST['smtp_secure'])){$GLOBALS['db']->execute("UPDATE settings_settings SET value='".addslashes($_POST['smtp_secure'])."' WHERE code='smtp_secure'");}
  // redirect
  $alert="?alert=settingSaved&alert_class=alert-success";
  header("location: settings_edit.php".$alert);

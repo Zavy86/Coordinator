@@ -83,7 +83,8 @@
  <text key="mails_list-th-subject">Oggetto</text>
  <text key="mails_list-th-sended">Inviata</text>
  <text key="mails_list-tr-no-results">Non è presente nessuna mail..</text>
- <text key="mails_list-m-failed">L'invio di questa mail è fallito {0} volte</text>
+ <text key="mails_list-m-failed">L'invio di questa mail è fallito</text>
+ <text key="mails_list-m-retry">Riprova</text>
  <text key="mails_list-m-delete">Elimina</text>
  <text key="mails_list-m-delete-confirm">Confermi l'eliminazione di questa mail non inviata</text>
 

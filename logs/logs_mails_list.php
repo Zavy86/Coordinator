@@ -27,8 +27,19 @@ function content(){
   // build modal
   $modal=new str_modal($mail->id);
   $modal->header(stripslashes($mail->subject));
-  $modal->body("<hr>\n<p>".nl2br(stripslashes($mail->headers)).nl2br(stripslashes($mail->message))."</p>\n");
-  if($mail->status>1){$modal->footer(api_text("mails_list-m-failed",$mail->status-1)." &nbsp; ".api_link("submit.php?act=mails_delete&id=".$mail->id,api_text("mails_list-m-delete"),NULL,"btn btn-danger",TRUE,api_text("mails_list-m-delete-confirm")));}
+  $modal_body="<p>FROM: ".stripslashes($mail->sender)." - ".stripslashes($mail->from)."</p>\n";
+  $modal_body.="<p>TO: ".stripslashes($mail->to)."</p>\n";
+  $modal_body.="<p>CC: ".stripslashes($mail->cc)."</p>\n";
+  $modal_body.="<p>BCC: ".stripslashes($mail->bcc)."</p>\n";
+  if($mail->error){$modal_body.="<p class='text-error'>".stripslashes($mail->error)."</p>\n";}
+  $modal_body.="<hr>\n<p>".nl2br(strip_tags(stripslashes($mail->message)))."</p>\n";
+  $modal->body($modal_body);
+  if($mail->status==2){
+   $modal_footer=api_text("mails_list-m-failed")." &nbsp; ";
+   $modal_footer.=api_link("submit.php?act=mails_retry&id=".$mail->id,api_text("mails_list-m-retry"),NULL,"btn btn-success");
+   $modal_footer.=api_link("submit.php?act=mails_delete&id=".$mail->id,api_text("mails_list-m-delete"),NULL,"btn btn-danger",TRUE,api_text("mails_list-m-delete-confirm"));
+   $modal->footer($modal_footer);
+  }
   $modals_array[]=$modal;
   // status
   if($mail->status==0){
