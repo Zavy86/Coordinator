@@ -1750,8 +1750,8 @@ function api_logNotificationTriggers($module,$action,$event,$id,$link){
      else{$mail_link=$link;}
      $mail_message=$notification->message."<br>\n"."Link: <a href='".$mail_link."'>".$mail_link."</a>";
      if($_SESSION['account']->id>1){
-      $mail_sender=api_accountMail($_SESSION['account']->id);
-      $mail_from=api_accountName($_SESSION['account']->id);
+      $mail_from=api_accountMail($_SESSION['account']->id);
+      $mail_sender=api_accountName($_SESSION['account']->id);
      }
      $notification->mail_sent=api_mailer(api_accountMail($subscription->idAccount),stripslashes($mail_message),stripslashes($notification->subject),TRUE,$mail_from,$mail_sender);
     }
