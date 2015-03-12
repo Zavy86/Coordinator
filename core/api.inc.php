@@ -1689,7 +1689,7 @@ function api_log($typology,$module,$action,$event,$key=NULL,$link=NULL){
  // acquire log id
  $q_idLog=$GLOBALS['db']->lastInsertedId();
  // execute notification triggers
- $notifications=api_logNotificationTriggers($module,$action,$event,$key,$link,api_accountId());
+ $notifications=api_logNotificationTriggers($module,$action,$event,$key,$link);
  // build return object
  $log->id=$q_idLog;
  $log->notifications=$notifications;
@@ -1703,7 +1703,7 @@ function api_log($typology,$module,$action,$event,$key=NULL,$link=NULL){
 // @string $log : event to notificate
 // @integer $id : item id
 // @string $link : link to the event item
-function api_logNotificationTriggers($module,$action,$event,$id,$link,$idAccount){
+function api_logNotificationTriggers($module,$action,$event,$id,$link){
  if($module==NULL || $action==NULL){return FALSE;}
  // definitions
  $notifications_array=array();
@@ -1749,8 +1749,10 @@ function api_logNotificationTriggers($module,$action,$event,$id,$link,$idAccount
      if(substr($link,0,4)<>"http"){$mail_link="http://".$_SERVER['SERVER_NAME'].$GLOBALS['dir'].$link;}
      else{$mail_link=$link;}
      $mail_message=$notification->message."<br>\n"."Link: <a href='".$mail_link."'>".$mail_link."</a>";
-     $mail_sender=api_accountMail($idAccount);
-     $mail_from=api_accountName($idAccount);
+     if($_SESSION['account']->id>1){
+      $mail_sender=api_accountMail($_SESSION['account']->id);
+      $mail_from=api_accountName($_SESSION['account']->id);
+     }
      $notification->mail_sent=api_mailer(api_accountMail($subscription->idAccount),stripslashes($mail_message),stripslashes($notification->subject),TRUE,$mail_from,$mail_sender);
     }
     // build notifications array
