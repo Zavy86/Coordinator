@@ -1293,7 +1293,7 @@ class str_form{
     // check disabled
     if($fc->disabled){$disabled=" disabled='disabled'";$fc->url="#";$fc->confirm=NULL;}else{$disabled=NULL;}
     // check confirm
-    if(strlen($fc->confirm)){$confirm.=" onClick=\"return confirm('".$fc->confirm."')\"";}else{$confirm=NULL;}
+    if(strlen($fc->confirm)){$confirm=" onClick=\"return confirm('".$fc->confirm."')\"";}else{$confirm=NULL;}
     // switch typology
     switch(strtolower($fc->type)){
      // submit

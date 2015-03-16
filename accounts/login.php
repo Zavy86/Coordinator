@@ -3,30 +3,46 @@
 |* -[ Accounts - Login ]----------------------------------------------------- *|
 \* -------------------------------------------------------------------------- */
 include("../core/api.inc.php");
+api_loadModule();
+// acquire variables
+$g_language=$_GET['lang'];
+$g_account=$_GET['account'];
+// load language file
+if(strlen($g_language)){
+ api_loadLocaleFile("../",$g_language);
+ api_loadLocaleFile("../accounts/",$g_language);
+}
 // reset current session
 $s_url=$_SESSION['external_redirect'];
 session_destroy();
 session_start();
 $_SESSION['external_redirect']=$s_url;
+// open html
 $html->header(NULL,NULL,FALSE);
+// build login form
+$form=new str_form("submit.php?act=account_login&lang=".$g_language,"POST","login");
+$form->addField("hidden","language",NULL,$g_language);
+$form->addField("text","account",NULL,$g_account,NULL,api_text("login-ff-account-placeholder"));
+$form->addField("password","password",NULL,NULL,NULL,api_text("login-ff-password-placeholder"));
+$login_controls="<input type='submit' class='btn btn-primary' value=\"".api_text("login-fc-submit")."\">\n";
+$login_controls.="<span>&nbsp;<a href='password_retrieve.php?lang=".$g_language."'>".api_text("login-fc-retrieve")."</a></span>\n";
+$form->addCustomField(NULL,$login_controls);
+// open login div
+echo "<div class='login-form'>\n";
+echo "<h3 style='text-align:center;'>".api_getOption('title')."</h3>\n";
+// renderize login form
+$form->render();
+// close login div
+echo "</div>\n";
 ?>
-<div class="login-form">
- <h3 style="text-align:center;"><?php echo api_getOption('title')?></h3>
- <form class="form-horizontal" action="submit.php?act=account_login" method="post">
-  <input type="text" id="iAccount" class="input-xlarge" name="account" placeholder="Account" autofocus>
-  <input type="password" id="iPassword" class="input-xlarge" name="password" placeholder="Password"><br>
-  <input type="submit" class="btn btn-primary" value="Sign in">
-  <?php
-   if(!api_getOption("ldap")){
-    echo "<span>&nbsp;<a href='password_retrieve.php'>Forgot your password?</a></span>\n";
-   }
-   ?>
- </form>
-</div>
 <script type="text/javascript">
  $(document).ready(function(){
+<?php
+ if(strlen($g_account)){echo "  $('input[name=password]').focus();\n";}
+ else{echo "  $('input[name=account]').focus();\n";}
+?>
   // validation
-  $('form').validate({
+  $('form[name=login]').validate({
    rules:{
     account:{required:true},
     password:{required:true}
@@ -35,7 +51,8 @@ $html->header(NULL,NULL,FALSE);
   });
  });
 </script>
-</div><!-- /container -->
-</body>
-</html>
-<?php //$html->footer(); ?>
+<?php
+ // close html without footer
+ echo "</div><!-- /container -->\n";
+ echo "</body>\n</html>\n";
+?>

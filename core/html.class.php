@@ -79,7 +79,7 @@ public function header($title="",$nav="dashboard",$navbar=TRUE){
 <body <?php if(api_baseName()=="login.php"){echo "class='login-background'";}?>>
 
  <!-- Navbar -->
- <div class="navbar navbar-fixed-top <?php if($GLOBALS['debug']){echo "navbar-inverse";}?>">
+ <div class="navbar navbar-fixed-top">
   <div class="navbar-inner">
    <div class="container">
     <!-- collapse -->
