@@ -23,8 +23,9 @@ function content(){
  // build table header
  $table->addHeader("&nbsp;",NULL,"16");
  $table->addHeader(api_text("groups_list-th-group"),"nowarp");
- $table->addHeader(api_text("groups_list-th-description"),NULL,"100%");
- $table->addHeader(api_text("groups_list-th-members"),"nowarp text-center","32",NULL,2);
+ if($_GET['members']){$table->addHeader(api_text("groups_list-th-description-members"),NULL,"100%");}
+ else{$table->addHeader(api_text("groups_list-th-description"),NULL,"100%");}
+ $table->addHeader(api_text("groups_list-th-members"),"nowarp text-right");
  $table->addHeader("&nbsp;",NULL,"16");
  // build group table row
  $groups=api_accounts_groups($company->id);
@@ -61,8 +62,7 @@ function groups_list_tr($groups,&$table,$level=0){
   $table->addField(api_link("groups_view.php?idGroup=".$group->id,api_icon('icon-search')));
   $table->addField($pre.$group->label,"nowarp");
   $table->addField($group->description." ".api_small(api_span(substr($members_list,2),"muted")));
-  $table->addField(count($group->members),"nowarp text-center");
-  $table->addField(api_link("groups_view.php?idGroup=".$group->id,api_icon('icon-user')));
+  $table->addField(count($group->members),"nowarp text-right");
   $table->addField(api_link("groups_edit.php?idGroup=".$group->id,api_icon('icon-edit')));
   //
   groups_list_tr($group->groups,$table,($level+1));
