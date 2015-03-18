@@ -32,6 +32,8 @@ function content(){
    $account_form->addField("text","account",api_text("accounts_edit-ff-account"),stripslashes($account->account),"input-xlarge",api_text("accounts_edit-ff-account-placeholder"));
   }
  }
+ // phone
+ $account_form->addField("text","phone",api_text("accounts_edit-ff-phone"),$account->phone,"input-medium",api_text("accounts_edit-ff-phone-placeholder"));
  // language
  if($account->id<>1){
   $account_form->addField("select","language",api_text("accounts_edit-ff-language"),NULL,"input-medium");

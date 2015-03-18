@@ -38,11 +38,12 @@ if($ldap){
  }
 }
 // build form
-$form=new str_form("submit.php?act=account_ldap","post","accounts_ldap");
+$form=new str_form("submit.php?act=account_save_ldap","post","accounts_ldap");
 $form->addField("text","ldap",api_text("accounts_ldap-ff-ldap"),$g_account,"input-large",api_text("accounts_ldap-ff-ldap-placeholder"),FALSE,NULL,NULL,(strlen($g_account)?TRUE:FALSE));
 $form->addField("text","account",api_text("accounts_ldap-ff-account"),$ldap_mail,"input-xlarge");
-$form->addField("text","firstname",api_text("accounts_ldap-ff-firstname"),$ldap_firsname,"input-medium");
-$form->addField("text","lastname",api_text("accounts_ldap-ff-lastname"),$ldap_lastname,"input-medium");
+$form->addField("text","firstname",api_text("accounts_ldap-ff-firstname"),$ldap_firsname,"input-large");
+$form->addField("text","lastname",api_text("accounts_ldap-ff-lastname"),$ldap_lastname,"input-large");
+$form->addField("text","phone",api_text("accounts_ldap-ff-phone"),$ldap_mail,"input-medium");
 $form->addControl("submit",api_text("accounts_ldap-fc-submit"));
 $form->addControl("button",api_text("accounts_ldap-fc-cancel"),NULL,"login.php");
 $form->addField("select","language",api_text("accounts_ldap-ff-language"),NULL,"input-medium");
@@ -59,8 +60,8 @@ $form->render();
    rules:{
     ldap:{required:true},
     firstname:{required:true,minlength:2},
-    lastname:{required:true,minlength:2}
-    account:{email:true},
+    lastname:{required:true,minlength:2},
+    account:{email:true}
    },
    submitHandler:function(form){form.submit();}
   });
