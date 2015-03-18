@@ -16,7 +16,7 @@ $html->header("Password retrieve",NULL,FALSE);
 // build warning dynamic list
 if(api_getOption("ldap")){
  $warning_dl=new str_dl("br","dl-horizontal");
- $warning_dl->addElement("<span class='text-error'>".api_text("password_retrieve-dt-ldap")."</span>",api_text("password_retrieve-dd-ldap"));
+ $warning_dl->addElement(api_span(api_text("password_retrieve-dt-ldap"),"text-error"),api_text("password_retrieve-dd-ldap"));
 }
 // build password retrieve form
 $form=new str_form("submit.php?act=password_retrieve","post","password_retrieve");

@@ -63,6 +63,7 @@ function content(){
   $companies_table->addHeader("&nbsp;",NULL,"16");
   // build companies table fields
   foreach($account->companies as $company){
+   // check permissions --------------------------------------------------------
    // make del and main
    $del_td=api_link("submit.php?act=account_company_remove&idAccount=".$account->id."&idCompany=".$company->id,api_icon('icon-trash',api_text("accounts_edit-companies-td-remove")),NULL,NULL,FALSE,api_text("accounts_edit-companies-td-remove-confirm"));
    if($company->main){
@@ -82,8 +83,8 @@ function content(){
   $companies_array=array();
   $companies=api_accounts_companies();
   foreach($companies->results as $company){
-   // skip not administrable and assigned companies
-   if(!$company->administrator&&!api_accounts_account()->superuser){continue;}
+   // skip not administrable and assigned companies ----------------------------
+   //if(!api_accounts_account()->superuser){continue;}
    //if(array_key_exists($company->id,$account->companies)){continue;}
    $companies_array[]=$company;
   }

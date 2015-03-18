@@ -16,18 +16,22 @@ function content(){
  // build table header
  $table->addHeader("&nbsp;",NULL,"16");
  $table->addHeader(api_text("accounts_list-th-name"),"nowarp",NULL,"accounts_accounts.name");
- $table->addHeader(api_text("accounts_list-th-account"),"nowarp",NULL,"accounts_accounts.account");
+ if(api_getOption("ldap")){
+  $table->addHeader(api_text("accounts_list-th-mail"),"nowarp",NULL,"accounts_accounts.account");
+ }else{
+  $table->addHeader(api_text("accounts_list-th-account"),"nowarp",NULL,"accounts_accounts.account");
+ }
  $table->addHeader(api_text("accounts_list-th-company"),"nowarp","100%");
  if(api_getOption("ldap")){$table->addHeader(api_text("accounts_list-th-ldap"),"nowarp text-right",NULL,"accounts_accounts.ldapUsername");}
  $table->addHeader(api_text("accounts_list-th-lastAccess"),"nowarp",NULL,"accounts_accounts.accDate");
  $table->addHeader("&nbsp;",NULL,"16");
  // get accounts
- $accounts=api_accounts_accounts($g_search,FALSE); // pagination?
+ $accounts=api_accounts_accounts($g_search,TRUE);
  foreach($accounts->results as $account){
-  // build modal window
-  $accounts_status_modals_array[]=api_accounts_accountStatusModal($account);
   // make class
   if($account->id==$_GET['idAccount']){$tr_class="info";}else{$tr_class=NULL;}
+  // build modal window
+  $accounts_status_modals_array[]=api_accounts_accountStatusModal($account);
   // make companies
   $companies=NULL;
   foreach($account->companies as $company){$companies.=$company->name." (".$company->role->name.")"."<br>";}
@@ -44,6 +48,8 @@ function content(){
  }
  // show table
  $table->render();
+ // renderize the pagination
+ $accounts->pagination->render();
  // renderize status modal windows
  foreach($accounts_status_modals_array as $status_modal){$status_modal->render();}
  // debug

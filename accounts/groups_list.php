@@ -42,6 +42,8 @@ function content(){
 function groups_list_tr($groups,&$table,$level=0){
  if(!is_array($groups)){return FALSE;}
  foreach($groups as $group){
+  // make class
+  if($group->id==$_GET['idGroup']){$tr_class="info";}else{$tr_class=NULL;}
   // make prefix
   $pre=NULL;
   for($i=0;$i<$level;$i++){$pre.="&nbsp;&nbsp;&nbsp;";}
@@ -56,8 +58,8 @@ function groups_list_tr($groups,&$table,$level=0){
     $members_list.=", ".api_link("accounts_edit.php?idAccount=".$account->id,$member_name,NULL,NULL,FALSE,NULL,NULL,"_blank");
    }
   }
-  // build table row
-  $table->addRow();
+  // build group table row
+  $table->addRow($tr_class);
   // build table fields
   $table->addField(api_link("groups_view.php?idGroup=".$group->id,api_icon('icon-search')));
   $table->addField($pre.$group->label,"nowarp");

@@ -24,7 +24,7 @@ function content(){
   $roles_status_modals_array[]=api_accounts_roleStatusModal($role);
   // make class
   if($role->id==$_GET['idRole']){$tr_class="info";}else{$tr_class=NULL;}
-  // build group table row
+  // build role table row
   $table->addRow($tr_class);
   // build table fields
   $table->addField(api_link("roles_edit.php?idRole=".$role->id,api_icon('icon-edit')),"nowarp");

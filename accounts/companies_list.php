@@ -21,10 +21,10 @@ function content(){
  // get companies
  $companies=api_accounts_companies($g_search,TRUE);
  foreach($companies->results as $company){
-  // make company name
-  $name=stripslashes($company->company)." - ".stripslashes($company->division);
   // make class
   if($company->id==$_GET['idCompany']){$tr_class="info";}else{$tr_class=NULL;}
+  // make company name
+  $name=stripslashes($company->company)." - ".stripslashes($company->division);
   // build group table row
   $table->addRow($tr_class);
   // build table fields
