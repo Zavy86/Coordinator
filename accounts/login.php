@@ -20,8 +20,7 @@ $_SESSION['external_redirect']=$s_url;
 // open html
 $html->header(NULL,NULL,FALSE);
 // build login form
-$form=new str_form("submit.php?act=account_login&lang=".$g_language,"POST","login");
-$form->addField("hidden","language",NULL,$g_language);
+$form=new str_form("submit.php?act=account_login&lang=".$g_language,"post","login");
 $form->addField("text","account",NULL,$g_account,NULL,api_text("login-ff-account-placeholder"));
 $form->addField("password","password",NULL,NULL,NULL,api_text("login-ff-password-placeholder"));
 $login_controls="<input type='submit' class='btn btn-primary' value=\"".api_text("login-fc-submit")."\">\n";

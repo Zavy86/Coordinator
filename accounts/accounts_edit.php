@@ -30,6 +30,7 @@ function content(){
    $account_form->addField("text","ldap",api_text("accounts_edit-ff-ldap"),stripslashes($account->ldap),"input-large",api_text("accounts_edit-ff-ldap-placeholder"));
   }else{
    $account_form->addField("text","account",api_text("accounts_edit-ff-account"),stripslashes($account->account),"input-xlarge",api_text("accounts_edit-ff-account-placeholder"));
+   $account_form->addField("hidden","ldap",NULL,stripslashes($account->ldap));
   }
  }
  // phone

@@ -44,7 +44,7 @@ if(api_baseName()=="groups_list.php"){
  // if not filtered load default filters
  if($_GET['resetFilters']||($_GET['filtered']<>1 && $_SESSION['filters'][api_baseName()]['filtered']<>1)){$_GET['company']=$_SESSION['company']->id;}
 }
-$navigation->addTab(api_text("nav-profile"),"index.php");
+$navigation->addTab(api_text("nav-profile"),"accounts_customize.php");
 $navigation->addTab(api_text("nav-accounts"),"accounts_list.php",NULL,NULL,(api_checkPermission("accounts","accounts_view")?TRUE:FALSE));
 $navigation->addTab(api_text("nav-groups"),"groups_list.php",NULL,(api_baseName()=="groups_view.php"?"active":NULL),(api_checkPermission("accounts","groups_view")?TRUE:FALSE));
 $navigation->addTab(api_text("nav-companies"),"companies_list.php",NULL,(api_baseName()=="companies_view.php"?"active":NULL),(api_checkPermission("accounts","accounts_view")?TRUE:FALSE));
