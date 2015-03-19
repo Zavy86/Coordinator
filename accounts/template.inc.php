@@ -45,19 +45,24 @@ if(api_baseName()=="groups_list.php"){
  if($_GET['resetFilters']||($_GET['filtered']<>1 && $_SESSION['filters'][api_baseName()]['filtered']<>1)){$_GET['company']=$_SESSION['company']->id;}
 }
 $navigation->addTab(api_text("nav-profile"),"accounts_customize.php");
-$navigation->addTab(api_text("nav-accounts"),"accounts_list.php",NULL,NULL,(api_checkPermission("accounts","accounts_view")?TRUE:FALSE));
-$navigation->addTab(api_text("nav-groups"),"groups_list.php",NULL,(api_baseName()=="groups_view.php"?"active":NULL),(api_checkPermission("accounts","groups_view")?TRUE:FALSE));
-$navigation->addTab(api_text("nav-companies"),"companies_list.php",NULL,(api_baseName()=="companies_view.php"?"active":NULL),(api_checkPermission("accounts","accounts_view")?TRUE:FALSE));
-$navigation->addTab(api_text("nav-administration"));
-$navigation->addSubTabHeader(api_text("nav-roles"));
-$navigation->addSubTab(api_text("nav-roles-list"),"roles_list.php",NULL,NULL,(api_checkPermission("accounts","roles_view")?TRUE:FALSE));
-$navigation->addSubTab(api_text("nav-roles-add"),"roles_edit.php",NULL,NULL,(api_checkPermission($module_name,"roles_edit")?TRUE:FALSE));
-$navigation->addSubTabHeader(api_text("nav-companies"));
-$navigation->addSubTab(api_text("nav-companies-add"),"companies_edit.php",NULL,NULL,(api_checkPermission($module_name,"companies_edit")?TRUE:FALSE));
-$navigation->addSubTabHeader(api_text("nav-groups"));
-$navigation->addSubTab(api_text("nav-groups-add"),"groups_edit.php",NULL,NULL,(api_checkPermission($module_name,"groups_edit")?TRUE:FALSE));
-$navigation->addSubTabHeader(api_text("nav-accounts"));
-$navigation->addSubTab(api_text("nav-accounts-add"),"accounts_edit.php",NULL,NULL,(api_checkPermission($module_name,"accounts_edit")?TRUE:FALSE));
+if(api_checkPermission("accounts","accounts_view")){$navigation->addTab(api_text("nav-accounts"),"accounts_list.php");}
+if(api_checkPermission("accounts","groups_view")){$navigation->addTab(api_text("nav-groups"),"groups_list.php",NULL,(api_baseName()=="groups_view.php"?"active":NULL));}
+if(api_checkPermission("accounts","companies_view")){$navigation->addTab(api_text("nav-companies"),"companies_list.php",NULL,(api_baseName()=="companies_view.php"?"active":NULL));}
+if(api_checkPermission("accounts","roles_view") ||
+   api_checkPermission("accounts","companies_edit") ||
+   api_checkPermission("accounts","groups_edit") ||
+   api_checkPermission("accounts","accounts_edit") ){
+ $navigation->addTab(api_text("nav-administration"));
+ $navigation->addSubTabHeader(api_text("nav-roles"));
+ $navigation->addSubTab(api_text("nav-roles-list"),"roles_list.php",NULL,NULL,(api_checkPermission("accounts","roles_view")?TRUE:FALSE));
+ $navigation->addSubTab(api_text("nav-roles-add"),"roles_edit.php",NULL,NULL,(api_checkPermission($module_name,"roles_edit")?TRUE:FALSE));
+ $navigation->addSubTabHeader(api_text("nav-companies"));
+ $navigation->addSubTab(api_text("nav-companies-add"),"companies_edit.php",NULL,NULL,(api_checkPermission($module_name,"companies_edit")?TRUE:FALSE));
+ $navigation->addSubTabHeader(api_text("nav-groups"));
+ $navigation->addSubTab(api_text("nav-groups-add"),"groups_edit.php",NULL,NULL,(api_checkPermission($module_name,"groups_edit")?TRUE:FALSE));
+ $navigation->addSubTabHeader(api_text("nav-accounts"));
+ $navigation->addSubTab(api_text("nav-accounts-add"),"accounts_edit.php",NULL,NULL,(api_checkPermission($module_name,"accounts_edit")?TRUE:FALSE));
+}
 // show navigation tab
 $navigation->render();
 // check permissions before displaying module
