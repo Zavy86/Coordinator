@@ -83,6 +83,7 @@
  <text key="mails_list-th-subject">Subject</text>
  <text key="mails_list-th-sended">Sended</text>
  <text key="mails_list-tr-no-results">There is no mail..</text>
+ <text key="mails_list-m-redend">Send again</text>
  <text key="mails_list-m-failed">The sending of this message is failed</text>
  <text key="mails_list-m-retry">Retry</text>
  <text key="mails_list-m-delete">Delete</text>
