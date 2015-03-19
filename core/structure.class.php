@@ -1665,4 +1665,141 @@ class str_splitted{
 
 }
 
+/* -------------------------------------------------------------------------- *\
+|* -[ Tabbable ]------------------------------------------------------------- *|
+\* -------------------------------------------------------------------------- */
+
+/**
+ * Tabbable structure
+ */
+class str_tabbable{
+
+ private $current_tab;
+
+ protected $class;
+ protected $position;
+ protected $nt_array;
+
+ /**
+ * Tabbable class
+ *
+ * @param string $position navigation position (top, right, bottom, left)
+ * @param string $class navigation css class
+ * @return object navigation object
+ */
+ public function __construct($position="top",$class=NULL){
+  $this->class=$class;
+  $this->position=$position;
+  $this->current_tab=-1;
+  $this->nt_array=array();
+ }
+
+ /**
+ * Add tab
+ *
+ * @param string $label label of the tab
+ * @param string $content content of the tab
+ * @param string $class tab css class
+ * @param boolean $enabled enable the navigation tab (true) or not
+ * @return true|false
+ */
+ function addTab($label,$content,$class=NULL,$enabled=TRUE){
+  if(strlen($label)==0){return FALSE;}
+  $nt=new stdClass();
+  $nt->typology="tab";
+  $nt->label=$label;
+  $nt->content=$content;
+  $nt->url=$url;
+  $nt->get=$get;
+  $nt->class=$class;
+  $nt->enabled=$enabled;
+  $nt->target=$target;
+  $nt->confirm=$confirm;
+  $this->current_tab++;
+  $this->nt_array[$this->current_tab]=$nt;
+  return TRUE;
+ }
+
+ /**
+ * Renderize tabbable object
+ */
+ function render(){
+  // make position
+  switch($this->position){
+   case "right":$position_class="tabs-right";break;
+   case "bottom":$position_class="tabs-below";break;
+   case "left":$position_class="tabs-left";break;
+   default:$position_class=NULL;break;
+  }
+  // open tabbable
+  echo "<!-- tabbable -->\n";
+  echo "<div class='tabbable ".$position_class." ".$this->class."'>\n";
+  // renderize navigation and content
+  if($this->position=="bottom"){
+   $this->render_content();
+   echo "<br>\n";
+   $this->render_navigation();
+  }else{
+   $this->render_navigation();
+   $this->render_content();
+  }
+  // close tabbable
+  echo "</div><!-- /tabbable -->\n\n";
+  return TRUE;
+ }
+
+ /**
+ * Renderize navigation
+ */
+ function render_navigation(){
+  // open navigation
+  echo " <!-- navigation-tabs -->\n";
+  echo " <ul class='nav nav-tabs'>\n";
+  // show tabs
+  if(is_array($this->nt_array)){
+   // show field
+   foreach($this->nt_array as $key=>$nt){
+    if(!is_object($nt)){continue;}
+    echo "  <li class='";
+    if($key==0){echo "active ";}
+    if(!$nt->enabled){echo "disabled ";}
+    echo $nt->class."'>";
+    // check url
+    if(!$nt->enabled){echo "<a href='#'";}
+    else{echo "<a href='#tab".$key."' data-toggle='tab'";}
+    // show label
+    echo ">".$nt->label."</a>";
+    echo "</li>\n";
+   }
+  }
+  // close navigation
+  echo " </ul><!-- /navigation-tabs -->\n\n";
+  return TRUE;
+ }
+
+ /**
+ * Renderize content
+ */
+ function render_content(){
+  // open content
+  echo " <!-- content-tabs -->\n";
+  echo " <div class='tab-content'>\n";
+  // show content tabs
+  if(is_array($this->nt_array)){
+   foreach($this->nt_array as $key=>$nt){
+    if(!is_object($nt)){continue;}
+    echo "  <div class='tab-pane ";
+    if($key==0){echo "active ";}
+    echo $nt->class."' id='tab".$key."'>";
+    echo $nt->content;
+    echo "</div>\n";
+   }
+  }
+  // close content
+  echo " </div><!-- /content-tabs -->\n\n";
+  return TRUE;
+ }
+
+}
+
 ?>
