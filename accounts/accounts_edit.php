@@ -2,7 +2,7 @@
 /* -------------------------------------------------------------------------- *\
 |* -[ Accounts - Accounts Edit ]--------------------------------------------- *|
 \* -------------------------------------------------------------------------- */
-if($_GET['id']>0){$checkPermission="accounts_edit";}else{$checkPermission="accounts_add";}
+$checkPermission="accounts_edit";
 include("template.inc.php");
 function content(){
  // acquire variables
@@ -41,14 +41,16 @@ function content(){
   foreach(api_language_availables() as $key=>$language){$account_form->addFieldOption($key,$language." (".$key.")",($key==$account->language?TRUE:FALSE));}
  }
  // super user
- if($account->id>1){
+ if($account->id>1 && api_checkPermission("accounts","accounts_manage")){
   $account_form->addField("checkbox","superuser","&nbsp;");
   $account_form->addFieldOption(1,api_text("accounts_edit-fo-superuser"),($account->superuser?TRUE:FALSE),($account->del?TRUE:FALSE));
+ }else{
+  $account_form->addField("hidden","superuser",NULL,$account->superuser);
  }
  // controls
  $account_form->addControl("submit",api_text("accounts_edit-fc-submit"));
  $account_form->addControl("button",api_text("accounts_edit-fc-cancel"),NULL,"accounts_list.php");
- if($account->id>0 && api_checkPermission("accounts","accounts_delete")){
+ if($account->id>0 && api_checkPermission("accounts","accounts_manage")){
   if($account->del){$account_form->addControl("button",api_text("accounts_edit-fc-undelete"),"btn-warning","submit.php?act=account_undelete&idAccount=".$account->id);}
   else{$account_form->addControl("button",api_text("accounts_edit-fc-delete"),"btn-danger","submit.php?act=account_delete&idAccount=".$account->id,api_text("accounts_edit-fc-delete-confirm"));}
  }

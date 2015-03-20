@@ -12,7 +12,7 @@ function content(){
  // build account form
  $account_form=new str_form("submit.php?act=account_customize&idAccount=".$account->id,"post","accounts_customize");
  $account_form->addField("file","avatar","&nbsp;",NULL,"input-large",api_text("accounts_customize-ff-avatar-placeholder"));
- $account_form->addField("text","name",api_text("accounts_customize-ff-name"),stripslashes($account->name),"input-large",api_text("accounts_customize-ff-name-placeholder"),FALSE,NULL,NULL,(api_checkPermission2("accounts","accounts_customize")?FALSE:TRUE));
+ $account_form->addField("text","name",api_text("accounts_customize-ff-name"),stripslashes($account->name),"input-large",api_text("accounts_customize-ff-name-placeholder"),FALSE,NULL,NULL,(api_checkPermission("accounts","accounts_customize")?FALSE:TRUE));
  if(strlen($account->ldap)){
   $account_form->addField("text","account",api_text("accounts_customize-ff-mail"),stripslashes($account->account),"input-xlarge",api_text("accounts_customize-ff-account-placeholder"),FALSE,NULL,NULL,(api_checkPermission("accounts","accounts_customize")?FALSE:TRUE));
  }else{

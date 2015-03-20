@@ -2,7 +2,7 @@
 /* -------------------------------------------------------------------------- *\
 |* -[ Accounts - Accounts List ]--------------------------------------------- *|
 \* -------------------------------------------------------------------------- */
-$checkPermission="accounts_list";
+$checkPermission="accounts_view";
 include("template.inc.php");
 function content(){
  // definitions
