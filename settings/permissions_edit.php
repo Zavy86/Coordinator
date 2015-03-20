@@ -2,7 +2,7 @@
 /* ------------------------------------------------------------------------- *\
 |* -[ Settings - Permissions Edit ]----------------------------------------- *|
 \* ------------------------------------------------------------------------- */
-$checkPermission="permissions_edit";
+$checkPermission="permissions_manage";
 include("template.inc.php");
 function content(){
  // definitions
@@ -120,7 +120,11 @@ function content(){
  // split page
  $GLOBALS['html']->split_span(9);
  // renderize permissions tabbable
- $tabbable->render();
+ if(strlen($g_module)){
+  $tabbable->render();
+ }else{
+  echo api_text("permissions_edit-modules-select");
+ }
  // close split
  $GLOBALS['html']->split_close();
 ?>

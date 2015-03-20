@@ -120,7 +120,7 @@ public function header($title="",$nav="dashboard",$navbar=TRUE){
         if(api_checkPermissionShowModule($menu->module,FALSE)){
          $menu_count++;
          if($menu_count<8){$menu_array[]=$menu;}else{$secondary_menu_array[]=$menu;}
-        }elseif($_SESSION['account']->typology==1){
+        }elseif($_SESSION['account']->administrator){
          $admin_menu_array[]=$menu;
         }
        }
@@ -157,7 +157,7 @@ public function header($title="",$nav="dashboard",$navbar=TRUE){
         echo "</li>\n";
        }
        // show admin menu shortcut
-       if($_SESSION['account']->typology==1 && count($admin_menu_array)>0){
+       if($_SESSION['account']->administrator && count($admin_menu_array)>0){
         echo "<li class='dropdown'><a href='#' class='dropdown-toggle' data-toggle='dropdown'>";
         echo api_icon('icon-th')." <b class='caret'></b></a>\n";
          echo "<ul class='dropdown-menu'>\n";
@@ -218,9 +218,10 @@ public function header($title="",$nav="dashboard",$navbar=TRUE){
        </a>
        <ul class="dropdown-menu">
         <li class="nav-header"><?php echo $_SESSION['account']->name;?></li>
-        <li><a href="<?php echo $GLOBALS['dir']."accounts/index.php";?>"><?php echo api_text("core-menu-accounts"); ?></a></li>
+        <li><a href="<?php echo $GLOBALS['dir']."accounts/index.php";?>"><?php echo api_text("core-menu-account"); ?></a></li>
+        <?php if(api_checkPermission("accounts","accounts_view")){echo "<li><a href=\"".$GLOBALS['dir']."accounts/index.php\">".api_text("core-menu-accounts")."</a></li>";} ?>
         <?php if(api_checkPermission("stats","stats_server")){echo "<li><a href=\"".$GLOBALS['dir']."stats/index.php\">".api_text("core-menu-statistics")."</a></li>";} ?>
-        <?php if(api_checkPermission("settings","settings_edit")||api_checkPermission("settings","permissions_edit")){echo "<li><a href=\"".$GLOBALS['dir']."settings/index.php\">".api_text("core-menu-settings")."</a></li>";} ?>
+        <?php if(api_checkPermission("settings","settings_edit")||api_checkPermission("settings","permissions_manage")){echo "<li><a href=\"".$GLOBALS['dir']."settings/index.php\">".api_text("core-menu-settings")."</a></li>";} ?>
 
         <?php
          /*
@@ -247,14 +248,14 @@ public function header($title="",$nav="dashboard",$navbar=TRUE){
           echo "<li><a href='".$GLOBALS['dir']."accounts/submit.php?act=account_interpret_stop'>".api_text("core-menu-interpretStop")."</a></li>";
          }
 
-         if($_SESSION['account']->administrator){
+         if($_SESSION['account']->superuser){
           echo "<li class='divider'></li>\n";
           if($_SESSION['account']->debug){
            echo "<li><a href='".$GLOBALS['dir']."accounts/submit.php?act=account_debug_disable'>".api_text("core-menu-debugDisable")."</a></li>";
           }else{
            echo "<li><a href='".$GLOBALS['dir']."accounts/submit.php?act=account_debug_enable'>".api_text("core-menu-debugEnable")."</a></li>";
           }
-          if($_SESSION['account']->typology==2){
+          if(!$_SESSION['account']->administrator){
            echo "<li><a href='".$GLOBALS['dir']."accounts/submit.php?act=account_switch_to_admin'>".api_text("core-menu-becomeAdministrator")."</a></li>";
           }elseif($_SESSION['account']->id>1){
            echo "<li><a href='".$GLOBALS['dir']."accounts/submit.php?act=account_switch_to_user'>".api_text("core-menu-becomeUser")."</a></li>";
