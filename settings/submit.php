@@ -6,27 +6,31 @@ include('../core/api.inc.php');
 $act=$_GET['act'];
 switch($act){
  // settings
- case "settings_save":settings_save();break;
+ case "settings_save":settings_save();break; // -- to check
  // modules
- case "module_setup":module_setup();break;
- case "module_update":module_update();break;
- case "module_uninstall":module_uninstall();break;
- case "module_remove":module_remove();break;
- case "module_git_pull":module_git_pull();break;
- case "module_git_clone":module_git_clone();break;
+ case "module_setup":module_setup();break; // -- to check
+ case "module_update":module_update();break; // -- to check
+ case "module_uninstall":module_uninstall();break; // -- to check
+ case "module_remove":module_remove();break; // -- to check
+ case "module_git_pull":module_git_pull();break; // -- to check
+ case "module_git_clone":module_git_clone();break; // -- to check
+
  // permissions
- case "permissions_add":permissions_add();break;
- case "permissions_del":permissions_del();break;
- case "permissions_reset":permissions_reset();break;
+ case "permission_group_add":permission_group_add();break;
+ case "permission_group_remove":permission_group_remove();break;
+ case "permission_group_reset":permission_group_reset();break;
+
  // menus
- case "menu_save":menu_save();break;
- case "menu_move_up":menu_move("up");break;
- case "menu_move_down":menu_move("down");break;
- case "menu_delete":menu_delete();break;
- case "menu_permission_add":menu_permission_add();break;
- case "menu_permission_delete":menu_permission_delete();break;
+ case "menu_save":menu_save();break;  // -- to check
+ case "menu_move_up":menu_move("up");break; // -- to check
+ case "menu_move_down":menu_move("down");break; // -- to check
+ case "menu_delete":menu_delete();break; // -- to check
+ case "menu_permission_add":menu_permission_add();break; // -- to check
+ case "menu_permission_delete":menu_permission_delete();break; // -- to check
  // default
- default:header("location: index.php");
+ default:
+  $alert="?alert=submitFunctionNotFound&alert_class=alert-warning&act=".$act;
+  exit(header("location: index.php".$alert));
 }
 
 
@@ -304,63 +308,135 @@ function permissions_add_group_grouprole($idPermission,$idGroup,$idGrouprole){
  $GLOBALS['db']->execute("INSERT INTO settings_permissions_join_accounts_groups (idPermission,idGroup,idGrouprole) VALUES ('".$idPermission."','".$idGroup."','".$idGrouprole."')");
 }
 
-/* -[ Permissions Add ]------------------------------------------------------ */
-function permissions_add(){
- if(!api_checkPermission("settings","permissions_edit")){api_die("accessDenied");}
- // acquire variables
- $p_module=$_POST['module'];
- $p_idPermission=$_POST['idPermission'];
- $p_idGroup=$_POST['idGroup'];
- $p_idGrouprole=$_POST['idGrouprole'];
- if($p_module<>"" && $p_idGrouprole>0){
-  if($p_idPermission>0){
-   permissions_add_group_grouprole($p_idPermission,$p_idGroup,$p_idGrouprole);
-  }elseif($p_idPermission==-1){
-   $permissions=$GLOBALS['db']->query("SELECT * FROM settings_permissions WHERE module='".$p_module."' ORDER BY action ASC");
-   while($permission=$GLOBALS['db']->fetchNextObject($permissions)){
-    if(!$permission->locked || $_SESSION['account']->id==1){
-     permissions_add_group_grouprole($permission->id,$p_idGroup,$p_idGrouprole);
-    }
-   }
-  }
- }
- // redirect
- header("location: permissions_edit.php?module=".$p_module);
-}
 
-/* -[ Permissions Delete ]--------------------------------------------------- */
-function permissions_del(){
+/**
+ * Permission Group Add
+ */
+function permission_group_add(){
  if(!api_checkPermission("settings","permissions_edit")){api_die("accessDenied");}
+ // definitions
+ $permissions_array=array();
+ // get objects
+ $company=api_accounts_company($_GET['idCompany']);
  // acquire variables
  $g_module=$_GET['module'];
- $g_idPermission=$_GET['idPermission'];
- $g_idGroup=$_GET['idGroup'];
- if($g_module<>"" && $g_idPermission>0){
-  // check lock status
-  $locked=$GLOBALS['db']->queryUniqueValue("SELECT locked FROM settings_permissions WHERE id='".$g_idPermission."'");
-  if($_SESSION['account']->id<>1 && $locked){api_die("accessDenied");}
-  // delete permission
-  $GLOBALS['db']->execute($query="DELETE FROM settings_permissions_join_accounts_groups WHERE idPermission='".$g_idPermission."' AND idGroup='".$g_idGroup."'");
- }
- // redirect
- header("location: permissions_edit.php?module=".$g_module);
-}
-
-/* -[ Permissions Reset ]---------------------------------------------------- */
-function permissions_reset(){
- if(!api_checkPermission("settings","permissions_edit")){api_die("accessDenied");}
- // acquire variables
- $g_module=$_GET['module'];
- if($g_module<>""){
-  // get unlocked permissions
-  $permissions=$GLOBALS['db']->query("SELECT * FROM settings_permissions WHERE module='".$g_module."' AND locked='0'");
+ $g_idPermission=$_POST['idPermission'];
+ $g_idGroup=$_POST['idGroup'];
+ $g_level=$_POST['level'];
+ // get permissions
+ if($g_idPermission==0){
+  $permissions=$GLOBALS['db']->query("SELECT * FROM settings_permissions WHERE module='".$g_module."'");
   while($permission=$GLOBALS['db']->fetchNextObject($permissions)){
-   // delete permission
-   $GLOBALS['db']->execute($query="DELETE FROM settings_permissions_join_accounts_groups WHERE idPermission='".$permission->id."'");
+   if($permission->locked&&api_accounts_account()->id>1){continue;}
+   $permissions_array[]=$permission;
   }
+ }else{
+  $permissions_array[]=$GLOBALS['db']->queryUniqueObject("SELECT * FROM settings_permissions WHERE id='".$g_idPermission."'");
+ }
+ // get group
+ if($g_idGroup<>0){$group=api_accounts_group($g_idGroup);}else{$group=new stdClass();}
+ // check objects
+ if(!$company->id){echo api_text("companyNotFound");return FALSE;}
+ if($g_idGroup<>0&&!$group->id){echo api_text("groupNotFound");return FALSE;}
+ if(!count($permissions_array)){echo api_text("permissionNotFound");return FALSE;}
+ // make query where, query fields and group 0
+ if($g_idGroup==0){
+  $query_where=" AND idCompany='".$company->id."'";
+  $query_where.=" AND ISNULL(idGroup)";
+  $f_company=$company->id;
+  $f_group=NULL;
+  $group->id=0;
+  $group->name="ALL";
+  $group->description="All company users";
+ }else{
+  $query_where=" AND ISNULL(idCompany)";
+  $query_where.=" AND idGroup='".$group->id."'";
+  $f_company=NULL;
+  $f_group=$group->id;
+ }
+ // make action alert
+ if(count($permissions_array)>1){$action_alert=$g_module."_all";}
+ else{$action_alert=$permissions_array[0]->action;}
+ // cycle permissions
+ foreach($permissions_array as $permission){
+  // remove previous associations
+  $GLOBALS['db']->execute("DELETE FROM settings_permissions_join_accounts_groups WHERE idPermission='".$permission->id."'".$query_where);
+  // build query
+  $query="INSERT INTO settings_permissions_join_accounts_groups
+   (idPermission,idCompany,idGroup,level) VALUES
+   ('".$permission->id."','".$f_company."','".$f_group."','".$g_level."')";
+  // execute query
+  $GLOBALS['db']->execute($query);
+  // log event
+  $log=api_log(API_LOG_NOTICE,"settings","permissionAdded",
+   "{logs_settings_permissionAdded|".$permission->id."|".$permission->module."|".$permission->action."|".$permission->description."|".$company->id."|".$company->name."|".$group->id."|".$group->name."|".$group->description."}",
+   $permission->id,"settings/permissions_edit.php?module=".$permission->module."&idCompany=".$company->id."&action=".$permission->action);
  }
  // redirect
- header("location: permissions_edit.php?module=".$g_module);
+ $alert="&alert=permissionAdded&alert_class=alert-success&alert_parameters[]=".$action_alert."&alert_parameters[]=".$group->name."&idLog=".$log->id;
+ exit(header("location: permissions_edit.php?module=".$permission->module."&idCompany=".$company->id.$alert));
+}
+
+/**
+ * Permission Group Remove
+ */
+function permission_group_remove(){
+ if(!api_checkPermission("settings","permissions_edit")){api_die("accessDenied");}
+ // get objects
+ $permission=$GLOBALS['db']->queryUniqueObject("SELECT * FROM settings_permissions WHERE id='".$_GET['idPermission']."'");
+ $company=api_accounts_company($_GET['idCompany']);
+ // acquire variables
+ $g_idGroup=$_GET['idGroup'];
+ if($g_idGroup<>0){$group=api_accounts_group($g_idGroup);}else{$group=new stdClass();}
+ // check objects
+ if(!$permission->id){echo api_text("permissionNotFound");return FALSE;}
+ if($permission->locked&&api_accounts_account()->id>1){echo api_text("permissionLocked");return FALSE;}
+ if(!$company->id){echo api_text("companyNotFound");return FALSE;}
+ if($g_idGroup<>0&&!$group->id){echo api_text("groupNotFound");return FALSE;}
+ // make query where and group 0
+ if($g_idGroup==0){
+  $query_where=" AND idCompany='".$company->id."'";
+  $query_where.=" AND ISNULL(idGroup)";
+  $group->id=0;
+  $group->name="ALL";
+  $group->description="All company users";
+ }else{
+  $query_where=" AND ISNULL(idCompany)";
+  $query_where.=" AND idGroup='".$group->id."'";
+ }
+ // build query
+ $query="DELETE FROM settings_permissions_join_accounts_groups WHERE idPermission='".$permission->id."'".$query_where;
+ // execute query
+ $GLOBALS['db']->execute($query);
+ // log event
+ $log=api_log(API_LOG_WARNING,"settings","permissionRemoved",
+  "{logs_settings_permissionRemoved|".$permission->id."|".$permission->module."|".$permission->action."|".$permission->description."|".$company->id."|".$company->name."|".$group->id."|".$group->name."|".$group->description."}",
+  $permission->id,"settings/permissions_edit.php?module=".$permission->module."&idCompany=".$company->id."&action=".$permission->action);
+ // redirect
+ $alert="&alert=permissionRemoved&alert_class=alert-warning&alert_parameters[]=".$permission->action."&alert_parameters[]=".$group->name."&idLog=".$log->id;
+ exit(header("location: permissions_edit.php?module=".$permission->module."&idCompany=".$company->id.$alert));
+}
+
+/**
+ * Permission Group Reset
+ */
+function permission_group_reset(){
+ if(!api_checkPermission("settings","permissions_edit")){api_die("accessDenied");}
+ // get objects
+ $company=api_accounts_company($_GET['idCompany']);
+ // check objects
+ if(!$company->id){echo api_text("companyNotFound");return FALSE;}
+ // acquire variables
+ $g_module=$_GET['module'];
+ // remove all group for all actions
+ $GLOBALS['db']->query("DELETE settings_permissions_join_accounts_groups.* FROM settings_permissions_join_accounts_groups JOIN settings_permissions ON settings_permissions.id=settings_permissions_join_accounts_groups.idPermission LEFT JOIN accounts_groups ON accounts_groups.id=settings_permissions_join_accounts_groups.idGroup WHERE settings_permissions.module='".$g_module."' AND ( settings_permissions_join_accounts_groups.idCompany='".$company->id."' OR accounts_groups.idCompany='".$company->id."' )");
+ // log event
+ $log=api_log(API_LOG_WARNING,"settings","permissionResetted",
+  "{logs_settings_permissionResetted|".$g_module."|".$company->id."|".$company->name."}",
+  $g_module,"settings/permissions_edit.php?module=".$g_module."&idCompany=".$company->id);
+ // redirect
+ $alert="&alert=permissionResetted&alert_class=alert-warning&alert_parameters[]=".$g_module."&idLog=".$log->id;
+ exit(header("location: permissions_edit.php?module=".$g_module."&idCompany=".$company->id.$alert));
 }
 
 
