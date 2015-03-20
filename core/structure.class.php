@@ -1678,18 +1678,20 @@ class str_tabbable{
 
  protected $class;
  protected $position;
+ protected $selected;
  protected $nt_array;
 
  /**
  * Tabbable class
  *
- * @param string $position navigation position (top, right, bottom, left)
- * @param string $class navigation css class
- * @return object navigation object
+ * @param string $position tabbable position (top, right, bottom, left)
+ * @param string $class tabbable css class
+ * @return object tabbable object
  */
  public function __construct($position="top",$class=NULL){
   $this->class=$class;
   $this->position=$position;
+  $this->selected=0;
   $this->current_tab=-1;
   $this->nt_array=array();
  }
@@ -1700,22 +1702,20 @@ class str_tabbable{
  * @param string $label label of the tab
  * @param string $content content of the tab
  * @param string $class tab css class
- * @param boolean $enabled enable the navigation tab (true) or not
+ * @param boolean $enabled enable the tab (true) or not
+ * @param boolean $selected tab selected (true) or not
  * @return true|false
  */
- function addTab($label,$content,$class=NULL,$enabled=TRUE){
+ function addTab($label,$content,$class=NULL,$enabled=TRUE,$selected=FALSE){
   if(strlen($label)==0){return FALSE;}
   $nt=new stdClass();
   $nt->typology="tab";
   $nt->label=$label;
   $nt->content=$content;
-  $nt->url=$url;
-  $nt->get=$get;
   $nt->class=$class;
   $nt->enabled=$enabled;
-  $nt->target=$target;
-  $nt->confirm=$confirm;
   $this->current_tab++;
+  if($selected){$this->selected=$this->current_tab;}
   $this->nt_array[$this->current_tab]=$nt;
   return TRUE;
  }
@@ -1761,7 +1761,7 @@ class str_tabbable{
    foreach($this->nt_array as $key=>$nt){
     if(!is_object($nt)){continue;}
     echo "  <li class='";
-    if($key==0){echo "active ";}
+    if($key==$this->selected){echo "active ";}
     if(!$nt->enabled){echo "disabled ";}
     echo $nt->class."'>";
     // check url
@@ -1789,7 +1789,7 @@ class str_tabbable{
    foreach($this->nt_array as $key=>$nt){
     if(!is_object($nt)){continue;}
     echo "  <div class='tab-pane ";
-    if($key==0){echo "active ";}
+    if($key==$this->selected){echo "active ";}
     echo $nt->class."' id='tab".$key."'>";
     echo $nt->content;
     echo "</div>\n";
@@ -1798,6 +1798,137 @@ class str_tabbable{
   // close content
   echo " </div><!-- /content-tabs -->\n\n";
   return TRUE;
+ }
+
+}
+
+
+/* -------------------------------------------------------------------------- *\
+|* -[ Sidebar ]-------------------------------------------------------------- *|
+\* -------------------------------------------------------------------------- */
+
+/**
+ * Sidebar structure
+ */
+class str_sidebar{
+
+ private $current_li;
+
+ protected $class;
+ protected $position;
+ protected $li_array;
+
+ /**
+ * Sidebar class
+ *
+ * @param string $class sidebar css class (nav-list, nav-pills, nav-tabs)
+ * @return object sidebar object
+ */
+ public function __construct($class="nav-list"){
+  $this->class=$class;
+  $this->position=$position;
+  $this->current_li=-1;
+  $this->li_array=array();
+ }
+
+ /**
+ * Add item
+ *
+ * @param string $label label of the item
+ * @param string $url link url
+ * @param string $class item css class
+ * @param boolean $enabled enable the navigation tab (true) or not
+ * @param string $target target page _blank, _self, _parent, _top
+ * @return true|false
+ */
+ function addItem($label,$url=NULL,$class=NULL,$enabled=TRUE,$target="_self"){
+  if(strlen($label)==0){return FALSE;}
+  $li=new stdClass();
+  $li->typology="item";
+  $li->label=$label;
+  $li->url=$url;
+  $li->class=$class;
+  $li->enabled=$enabled;
+  $li->target=$target;
+  $this->current_tab++;
+  $this->li_array[$this->current_tab]=$li;
+  return TRUE;
+ }
+
+ /**
+ * Add header
+ *
+ * @param string $label label of the tab
+ * @return true|false
+ */
+ function addHeader($label){
+  if(strlen($label)==0){return FALSE;}
+  $li=new stdClass();
+  $li->typology="header";
+  $li->label=$label;
+  $this->current_tab++;
+  $this->li_array[$this->current_tab]=$li;
+  return TRUE;
+ }
+
+ /**
+ * Add divider
+ *
+ * @return true|false
+ */
+ function addDivider(){
+  $li=new stdClass();
+  $li->typology="divider";
+  $this->current_tab++;
+  $this->li_array[$this->current_tab]=$li;
+  return TRUE;
+ }
+
+ /**
+ * Renderize sidebar object
+ * @param boolean $echo echo result (true) or return
+ */
+ function render($echo=TRUE){
+  // open sidebar
+  $return="<!-- sidebar -->\n";
+  $return.="<ul class='nav nav-stacked ".$this->class."'>\n";
+  // show tabs
+  if(is_array($this->li_array)){
+   // show field
+   foreach($this->li_array as $li){
+    if(!is_object($li)){continue;}
+    // header
+    if($li->typology=="header"){$return.="<li class='nav-header'>".$li->label."</li>\n";continue;}
+    // divider
+    if($li->typology=="divider"){$return.="<li class='divider'></li>\n";continue;}
+    // item
+    $return.=" <li";
+    $active=FALSE;
+    if(substr($li->url,0,(strpos($li->url,"?")>0)?strpos($li->url,"?"):strlen($li->url))==api_baseName()){
+     $active=TRUE;
+     parse_str(parse_url($li->url,PHP_URL_QUERY),$gets);
+     if(count($gets)>0){
+      foreach($gets as $key=>$value){
+       if($_GET[$key]<>$value){$active=FALSE;}
+      }
+     }
+    }
+    // check active and disabled
+    $return.=" class='";
+    if($active){$return.="active ";}
+    if(!$li->enabled){$return.="disabled ";}
+    $return.=$li->class."'>";
+    // check url
+    if($active || !$li->enabled){$return.="<a href='#'";}
+    else{$return.="<a href='".$li->url.$li->get."' target='".$li->target."'";}
+    // show label
+    $return.=">".$li->label."</a>";
+    $return.="</li>\n";
+   }
+  }
+  // close tabbable
+  $return.="</ul><!-- /sidebar -->\n\n";
+  if($echo){echo $return;return TRUE;}else{return $return;}
  }
 
 }
