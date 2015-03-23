@@ -56,7 +56,10 @@
 
  <!-- alerts -->
  <text key="maintenance">Questo servizio è attualmente in fase di manutenzione programmata, per favore riprova fra 15 minuti</text>
- <text key="accessDenied"><h4>ACCESSO NEGATO</h4>I permessi del tuo account non sono sufficienti per eseguire l'operazione desiderata</text>
+ <text key="accessDenied">ACCESSO NEGATO</text>
+ <text key="accessDenied-message">I permessi del tuo account non sono sufficienti per eseguire l'operazione richiesta</text>
+ <text key="accessDenied-action">(Azione: {0})</text>
+ <text key="permissionNotFound">Attenzione, i permessi per l'azione {1} del modulo {0} non sono stati configurati</text>
  <text key="newLogs">Sono presenti delle nuove notifiche nel registro degli eventi, &lt;a href='../logs/logs_list.php'&gt;visualizza eventi&lt;/a&gt;</text>
  <text key="changeBrowser">Il browser utilizzato sembra non supportare completamente il formato HTML5, si consiglia di utilizzare &lt;a href='http://chrome.google.com' target='_blank'&gt;Google Chrome&lt;/a&gt; o &lt;a href='http://www.apple.com/safari' target='_blank'&gt;Apple Safari&lt;/a&gt;</text>
  <text key="submitFunctionNotFound">Attenzione, la funzione richiamata non è stata implementata, contattare l'amministratore per maggiori informazioni</text>
@@ -72,7 +75,8 @@
 
  <!-- html.class.php -->
  <text key="core-menu-dashboard">Bacheca</text>
- <text key="core-menu-accounts">Account</text>
+ <text key="core-menu-account">Profilo</text>
+ <text key="core-menu-accounts">Accounts</text>
  <text key="core-menu-statistics">Statistiche</text>
  <text key="core-menu-settings">Impostazioni</text>
  <text key="core-menu-logs">Registro eventi</text>

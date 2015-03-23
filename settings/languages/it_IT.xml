@@ -11,6 +11,9 @@
  <text key="moduleSetup">Il modulo è stato installato</text>
  <text key="moduleUpdated">Il modulo è stato aggiornato</text>
  <text key="moduleUninstalled">Il modulo è stato disinstallato</text>
+ <text key="permissionAdded">Il permesso sull'azione {0} è stato aggiunto al gruppo {1}</text>
+ <text key="permissionRemoved">Il permesso sull'azione {0} è stato rimosso al gruppo {1}</text>
+ <text key="permissionResetted">I permessi del modulo {0} sono stati resettati</text>
  <text key="menuCreated">Il menu è stato creato</text>
  <text key="menuUpdated">Il menu è stato aggiornato</text>
  <text key="menuMoved">Il menu è stato spostato</text>
@@ -20,6 +23,9 @@
  <text key="gitcloneSuccess">L'installazione tramite GIT Clone è stata eseguita</text>
 
  <!-- logs -->
+ <text key="logs_settings_permissionAdded">Il permesso sull'azione {2} è stato aggiunto al gruppo {7}&#xA;&#xA;Modulo: {1}&#xA;Azione: {3}&#xA;Società: {5}&#xA;Gruppo: {7} - {8}</text>
+ <text key="logs_settings_permissionRemoved">Il permesso sull'azione {2} è stato rimosso al gruppo {7}&#xA;&#xA;Modulo: {1}&#xA;Azione: {3}&#xA;Società: {5}&#xA;Gruppo: {7} - {8}</text>
+ <text key="logs_settings_permissionResetted">I permessi del modulo {0} per la società {2} sono stati resettati</text>
  <text key="logs_settings_moduleInstalled">Modulo {0} [Installato]</text>
  <text key="logs_settings_moduleUpdated">Modulo {0} [Aggiornato] da {1} a {2}</text>
  <text key="logs_settings_moduleUninstalled">Modulo {0} [Disinstallato]</text>
@@ -45,7 +51,6 @@
  <text key="settings-ff-show_logo-label-path">Il logo deve essere nella directory</text>
  <text key="settings-ff-maintenance">Manutenzione</text>
  <text key="settings-ff-maintenance-label">Blocca il software per manutenzione</text>
- <text key="settings-ff-maintenance_description">Messaggio</text>
  <text key="settings-ff-google_analytics">Google Analytics</text>
  <text key="settings-ff-piwik_analytics">Piwik Analytics</text>
  <text key="settings-ff-cron_token">Cron Token</text>
@@ -108,12 +113,22 @@
  <text key="menus-fc-cancel">Annulla</text>
  <text key="menus-fc-permissions">Permessi</text>
 
- <!-- menu_permissions.php -->
- <text key="menus_permissions-tr-unvalued">Accessibile da tutti..</text>
- <text key="menus_permissions-th-groups">Gruppi</text>
- <text key="menus_permissions-td-delete-confirm">Confermi di voler eliminare questo gruppo?</text>
- <text key="menus_permissions-ff-idGroup">Gruppo</text>
- <text key="menus_permissions-fc-submit">Aggiungi</text>
- <text key="menus_permissions-fc-cancel">Chiudi</text>
+ <!-- permissions_edit.php -->
+ <text key="permissions_edit-modules">Moduli</text>
+ <text key="permissions_edit-modules-select">Seleziona un modulo dalla lista..</text>
+ <text key="permissions_edit-companies-th-name">Società</text>
+ <text key="permissions_edit-fc-reset">Resetta tutti i permessi</text>
+ <text key="permissions_edit-fc-reset-confirm">Confermi di voler resettare tutti i permessi del modulo {0} per questa società?</text>
+ <text key="permissions_edit-permission-th-action">Azione del modulo</text>
+ <text key="permissions_edit-permission-th-group">Gruppi abilitati (livello minimo)</text>
+ <text key="permissions_edit-permission-td-group-any">Qualunque gruppo</text>
+ <text key="permissions_edit-permission-td-group-none">Nessun gruppo abilitato a questa azione</text>
+ <text key="permissions_edit-permission-td-group-remove">Rimuovi gruppo</text>
+ <text key="permissions_edit-permission-td-group-remove-confirm">Confermi di voler rimuovere il permesso del gruppo sul questa azione?</text>
+ <text key="permissions_edit-permission-fo-action-select">Seleziona un'azione</text>
+ <text key="permissions_edit-permission-fo-action-any">Tutte le azioni</text>
+ <text key="permissions_edit-permission-fo-group-select">Seleziona un gruppo</text>
+ <text key="permissions_edit-permission-fo-group-any">Qualunque gruppo della società</text>
+ <text key="permissions_edit-permission-fo-level-select">Seleziona un livello minimo</text>
 
 </locale>

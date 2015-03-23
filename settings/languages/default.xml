@@ -11,6 +11,9 @@
  <text key="moduleSetup">The module has been installed</text>
  <text key="moduleUpdated">The module has been updated</text>
  <text key="moduleUninstalled">The module has been uninstalled</text>
+ <text key="permissionAdded">The action {0} permission was added to the group {1}</text>
+ <text key="permissionRemoved">The action {0} permission was removed to the group {1}</text>
+ <text key="permissionResetted">The module {0} permissions was resetted</text>
  <text key="menuCreated">The menu has been created</text>
  <text key="menuUpdated">The menu has been updated</text>
  <text key="menuMoved">The menu has been moved</text>
@@ -20,6 +23,9 @@
  <text key="gitcloneSuccess">The installation via GIT Clone has been executed</text>
 
  <!-- logs -->
+ <text key="logs_settings_permissionAdded">The action {2} permission was added to the group {7}&#xA;&#xA;Module: {1}&#xA;Action: {3}&#xA;Company: {5}&#xA;Group: {7} - {8}</text>
+ <text key="logs_settings_permissionRemoved">The action {2} permission was removed to the group {7}&#xA;&#xA;Modulo: {1}&#xA;Azione: {3}&#xA;Società: {5}&#xA;Gruppo: {7} - {8}</text>
+ <text key="logs_settings_permissionResetted">The module {0} permissions for company {2} was resetted {2}</text>
  <text key="logs_settings_moduleInstalled">Module {0} [Installed]</text>
  <text key="logs_settings_moduleUpdated">Module {0} [Updated] from {1} to {2}</text>
  <text key="logs_settings_moduleUninstalled">Module {0} [Uninstalled]</text>
@@ -45,7 +51,6 @@
  <text key="settings-ff-show_logo-label-path">Logo should be in the directory</text>
  <text key="settings-ff-maintenance">Maintenance</text>
  <text key="settings-ff-maintenance-label">Lock software for maintenance</text>
- <text key="settings-ff-maintenance_description">Message</text>
  <text key="settings-ff-google_analytics">Google Analytics</text>
  <text key="settings-ff-piwik_analytics">Piwik Analytics</text>
  <text key="settings-ff-cron_token">Cron Token</text>
@@ -108,12 +113,22 @@
  <text key="menus-fc-cancel">Cancel</text>
  <text key="menus-fc-permissions">Permissions</text>
 
- <!-- menu_permissions.php -->
- <text key="menus_permissions-tr-unvalued">Accessible from all ..</text>
- <text key="menus_permissions-th-groups">Groups</text>
- <text key="menus_permissions-td-delete-confirm">Are you sure you want to delete this group?</text>
- <text key="menus_permissions-ff-idGroup">Group</text>
- <text key="menus_permissions-fc-submit">Add group</text>
- <text key="menus_permissions-fc-cancel">Close</text>
+ <!-- permissions_edit.php -->
+ <text key="permissions_edit-modules">Modules</text>
+ <text key="permissions_edit-modules-select">Select a module from the list..</text>
+ <text key="permissions_edit-companies-th-name">Company</text>
+ <text key="permissions_edit-fc-reset">Reset all permissions</text>
+ <text key="permissions_edit-fc-reset-confirm">Are you sure you want to reset all module {0} permissions for this company?</text>
+ <text key="permissions_edit-permission-th-action">Module action</text>
+ <text key="permissions_edit-permission-th-group">Enabled groups (minimum level)</text>
+ <text key="permissions_edit-permission-td-group-any">Any group</text>
+ <text key="permissions_edit-permission-td-group-none">No group enabled to this action</text>
+ <text key="permissions_edit-permission-td-group-remove">Remove group</text>
+ <text key="permissions_edit-permission-td-group-remove-confirm">Are you sure you want to remove the group permission for this action?</text>
+ <text key="permissions_edit-permission-fo-action-select">Select an action</text>
+ <text key="permissions_edit-permission-fo-action-any">Any action</text>
+ <text key="permissions_edit-permission-fo-group-select">Select a group</text>
+ <text key="permissions_edit-permission-fo-group-any">Any company group</text>
+ <text key="permissions_edit-permission-fo-level-select">Select a minimum level</text>
 
 </locale>

@@ -7,7 +7,7 @@ include("template.inc.php");
 function content(){
  // reset cron token
  if($_GET['act']=="reset_cron"){
-  $cron_token=md5(date("Y-m-d H:i:s"));
+  $cron_token=md5(api_now());
  }else{
   $cron_token=api_getOption("cron_token");
  }
@@ -45,7 +45,6 @@ function content(){
  // maintenance
  $form->addField("checkbox","maintenance",api_text("settings-ff-maintenance"));
  $form->addFieldOption(1,api_text("settings-ff-maintenance-label"),(api_getOption("maintenance"))?TRUE:FALSE);
- $form->addField("text","maintenance_description",api_text("settings-ff-maintenance_description"),api_getOption("maintenance_description"),"input-xlarge");
  $form->addSeparator();
  // ldap
  $form->addField("checkbox","ldap",api_text("settings-ff-ldap"));
@@ -86,8 +85,7 @@ function content(){
     owner_url:{required:true,url:true},
     owner_mail:{required:true,email:true},
     owner_mail_from:{required:true,minlength:3},
-    title:{required:true,minlength:3},
-    maintenance_description:{required:true,minlength:3}
+    title:{required:true,minlength:3}
    },
    submitHandler:function(form){form.submit();}
   });

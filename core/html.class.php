@@ -214,7 +214,7 @@ public function header($title="",$nav="dashboard",$navbar=TRUE){
 
       <li class="dropdown">
        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-        <img src="<?php echo api_accountAvatar();?>" class="img-rounded" style="width:22px;margin-top:-4px;padding:0;"> <b class="caret"></b>
+        <img src="<?php echo api_account()->avatar;?>" class="img-rounded" style="width:22px;margin-top:-4px;padding:0;"> <b class="caret"></b>
        </a>
        <ul class="dropdown-menu">
         <li class="nav-header"><?php echo $_SESSION['account']->name;?></li>

@@ -54,7 +54,7 @@ function content(){
   if($account->del){$account_form->addControl("button",api_text("accounts_edit-fc-undelete"),"btn-warning","submit.php?act=account_undelete&idAccount=".$account->id);}
   else{$account_form->addControl("button",api_text("accounts_edit-fc-delete"),"btn-danger","submit.php?act=account_delete&idAccount=".$account->id,api_text("accounts_edit-fc-delete-confirm"));}
  }
- if($account->id>1 && (($_SESSION['account']->administrator && $account->id<>api_accountId())||api_accountId()==1)){
+ if($account->id>1 && ((api_account()->administrator && $account->id<>api_account()->id)||api_account()->id==1)){
   $account_form->addControl("button",api_text("accounts_edit-fc-interpret"),"btn-success","submit.php?act=account_interpret&idAccount=".$account->id,api_text("accounts_edit-fc-interpret-confirm"));
  }
  // companies

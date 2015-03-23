@@ -43,7 +43,7 @@ function folder_save(){
    name='".$p_name."',
    description='".$p_description."',
    updDate='".api_now()."',
-   updIdAccount='".api_accountId()."'
+   updIdAccount='".api_account()->id."'
    WHERE id='".$folder->id."'";
   // execute query
   $GLOBALS['db']->execute($query);
@@ -58,7 +58,7 @@ function folder_save(){
   $query="INSERT INTO uploads_folders
    (idFolder,name,description,addDate,addIdAccount,updDate,updIdAccount) VALUES
    ('".$p_idFolder."','".$p_name."','".$p_description."',
-    '".api_now()."','".api_accountId()."','".api_now()."','".api_accountId()."')";
+    '".api_now()."','".api_account()->id."','".api_now()."','".api_account()->id."')";
   // execute query
   $GLOBALS['db']->execute($query);
   // set id to last inserted id
@@ -127,7 +127,7 @@ function file_save(){
    description='".addslashes($p_description)."',
    tags='".addslashes($p_tags)."',
    updDate='".api_now()."',
-   updIdAccount='".api_accountId()."'
+   updIdAccount='".api_account()->id."'
    WHERE id='".$file->id."'";
   // execute query
   $GLOBALS['db']->execute($query);
@@ -190,11 +190,11 @@ function file_delete($action){
   // build contact query
   switch($action){
    case "delete":
-    $query="UPDATE uploads_uploads SET del='1',updDate='".api_now()."',updIdAccount='".api_accountId()."' WHERE id='".$file->id."'";
+    $query="UPDATE uploads_uploads SET del='1',updDate='".api_now()."',updIdAccount='".api_account()->id."' WHERE id='".$file->id."'";
     $log_action="fileDeleted";
     break;
    case "undelete":
-    $query="UPDATE uploads_uploads SET del='0',updDate='".api_now()."',updIdAccount='".api_accountId()."' WHERE id='".$file->id."'";
+    $query="UPDATE uploads_uploads SET del='0',updDate='".api_now()."',updIdAccount='".api_account()->id."' WHERE id='".$file->id."'";
     $log_action="fileUndeleted";
     break;
    case "remove":
@@ -246,7 +246,7 @@ function link_save(){
    public='".$p_public."',";
   if($p_password){$query.="password='".$p_password."',";}
   $query.="updDate='".api_now()."',
-   updIdAccount='".api_accountId()."'
+   updIdAccount='".api_account()->id."'
    WHERE id='".$link->id."'";
   // execute query
   $GLOBALS['db']->execute($query);
@@ -262,7 +262,7 @@ function link_save(){
   $query="INSERT INTO uploads_links
    (id,idUpload,public,password,addDate,addIdAccount) VALUES
    ('".$idLink."','".$p_idUpload."','".$p_public."','".$p_password."',
-    '".api_now()."','".api_accountId()."')";
+    '".api_now()."','".api_account()->id."')";
   // execute query
   $GLOBALS['db']->execute($query);
   // log event

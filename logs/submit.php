@@ -67,7 +67,7 @@ function notification_archive(){
 /* -[ Notification Archive All ]--------------------------------------------- */
 function notification_archiveAll(){
  // archive all user notifications
- $GLOBALS['db']->execute("UPDATE logs_notifications SET status='3' WHERE idAccount='".api_accountId()."'");
+ $GLOBALS['db']->execute("UPDATE logs_notifications SET status='3' WHERE idAccount='".api_account()->id."'");
  // redirect
  exit(header("location: logs_notifications_list.php?s=3"));
 }
@@ -92,7 +92,7 @@ function notification_restore(){
 /* -[ Notification Subscriptions ]------------------------------------------- */
 function notification_subscriptions(){
  // remove all subscriptions
- $GLOBALS['db']->execute("DELETE FROM logs_subscriptions WHERE idAccount='".api_accountId()."'");
+ $GLOBALS['db']->execute("DELETE FROM logs_subscriptions WHERE idAccount='".api_account()->id."'");
  // parse triggers
  $triggers=$GLOBALS['db']->query("SELECT * FROM logs_triggers GROUP BY `trigger` ORDER BY module ASC");
  while($trigger=$GLOBALS['db']->fetchNextObject($triggers)){
@@ -100,9 +100,9 @@ function notification_subscriptions(){
   $notification=$_POST["notification_".$trigger->trigger];
   // subscribe trigger
   switch($notification){
-   case 1:$query="INSERT INTO logs_subscriptions VALUES ('".api_accountId()."','".$trigger->trigger."','0','0')";break;
-   case 2:$query="INSERT INTO logs_subscriptions VALUES ('".api_accountId()."','".$trigger->trigger."','1','0')";break;
-   case 3:$query="INSERT INTO logs_subscriptions VALUES ('".api_accountId()."','".$trigger->trigger."','1','1')";break;
+   case 1:$query="INSERT INTO logs_subscriptions VALUES ('".api_account()->id."','".$trigger->trigger."','0','0')";break;
+   case 2:$query="INSERT INTO logs_subscriptions VALUES ('".api_account()->id."','".$trigger->trigger."','1','0')";break;
+   case 3:$query="INSERT INTO logs_subscriptions VALUES ('".api_account()->id."','".$trigger->trigger."','1','1')";break;
    default:$query=NULL;
   }
   $GLOBALS['db']->execute($query);

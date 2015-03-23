@@ -25,7 +25,7 @@ if($handle=opendir($path)){
    // cycle al messages
    for($i=0;$i<count($chat_xml->message);$i++){
     // && intval($chat_xml->message[$i]->status)==2
-    if(api_timestampDifference($chat_xml->message[$i]->timestamp,date("Y-m-d H:i:s"),"D")>10){
+    if(api_timestampDifference($chat_xml->message[$i]->timestamp,api_now(),"D")>10){
      $count++;
      $wlog=TRUE;
      // remove message

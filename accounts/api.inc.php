@@ -21,7 +21,13 @@ function api_accounts_account($account=NULL){
  $account->name=stripslashes($account->name);
  $account->ldapUsername=stripslashes($account->ldapUsername);
  $account->typology=api_accounts_accountTypology($account);
+ $account->language=stripslashes($account->language);
  $account->avatar=api_accounts_accountAvatar($account);
+ $account->mail=$account->account;
+ // make firstname
+ if(strrpos($account->name," ")!==FALSE){$account->firstname=substr($account->name,0,strrpos($account->name," "));}
+ // make language ISO
+ if($account->language<>"default"){$account->languageISO=substr($account->language,-2);}else{$account->languageISO="EN";}
  // get companies
  $account->companies=array();
  $companies=$GLOBALS['db']->query("SELECT accounts_companies.*,accounts_accounts_join_companies.idRole,accounts_accounts_join_companies.main FROM accounts_accounts_join_companies JOIN accounts_companies ON accounts_companies.id=accounts_accounts_join_companies.idCompany WHERE idAccount='".$account->id."' ORDER BY main DESC");
@@ -102,8 +108,8 @@ function api_accounts_accountStatusModal($account){
  // build status body dl
  $dl_body=new str_dl("br","dl-horizontal");
  $dl_body->addElement(api_text("api-account-dt-typology"),$account->typologyText);
- $dl_body->addElement(api_text("api-account-dt-add"),api_text("api-account-dd-add",array(api_accountName($account->addIdAccount),api_timestampFormat($account->addDate,api_text("datetime")))));
- if($account->updIdAccount<>NULL){$dl_body->addElement(api_text("api-account-dt-upd"),api_text("api-account-dd-upd",array(api_accountName($account->updIdAccount),api_timestampFormat($account->updDate,api_text("datetime")))));}
+ $dl_body->addElement(api_text("api-account-dt-add"),api_text("api-account-dd-add",array(api_account($account->addIdAccount)->name,api_timestampFormat($account->addDate,api_text("datetime")))));
+ if($account->updIdAccount<>NULL){$dl_body->addElement(api_text("api-account-dt-upd"),api_text("api-account-dd-upd",array(api_account($account->updIdAccount)->name,api_timestampFormat($account->updDate,api_text("datetime")))));}
  if($account->accDate<>NULL){$dl_body->addElement(api_text("api-account-dt-acc"),api_timestampFormat($account->accDate,api_text("datetime")));}
  if($account->del){$dl_body->addElement("&nbsp;",api_icon("icon-trash")." ".api_text("api-account-dd-del"));}
  $return->body($dl_body->render(FALSE));
@@ -137,8 +143,8 @@ function api_accounts_accounts($search=NULL,$pagination=FALSE,$where=NULL){
  $query_where.=" AND ".$GLOBALS['navigation']->filtersParameterQuery("superuser","1","accounts_accounts.superuser");
  $query_where.=" AND ".$GLOBALS['navigation']->filtersParameterQuery("companies","1","accounts_accounts_join_companies.idCompany");
 
- // vincolo                            ------------------------------------ verificare
- //$query_where.=" AND accounts_accounts_join_companies.idCompany='".api_accountCompany()->id."'";
+ // vincolo -------------------------------------------------------------------- verificare
+ //$query_where.=" AND accounts_accounts_join_companies.idCompany='".api_company()->id."'";
 
  // search
  if(strlen($search)>0){
@@ -216,9 +222,13 @@ function api_accounts_companies($search=NULL,$pagination=FALSE,$where=NULL){
  // group
  $query_group=" GROUP BY accounts_companies.id";
  // where
- $query_where="( accounts_companies.del='0' OR ".$GLOBALS['navigation']->filtersParameterQuery("del","0","accounts_companies.del")." )";
+ $query_where="1";
+ // filters
+ if(is_object($GLOBALS['navigation'])){
+  $query_where.=" AND ( accounts_companies.del='0' OR ".$GLOBALS['navigation']->filtersParameterQuery("del","0","accounts_companies.del")." )";
+ }
 
- // if not superuser show only associated company           -------------------------------- check
+ // if not superuser show only associated company  ---------------------------- check
  if(!api_accounts_account()->superuser){$query_where.=" AND accounts_accounts_join_companies.idAccount='".api_accounts_account()->id."'";}
 
  // search
@@ -230,7 +240,7 @@ function api_accounts_companies($search=NULL,$pagination=FALSE,$where=NULL){
  // conditions
  if(strlen($where)>0){$query_where="( ".$query_where." ) AND ( ".$where." )";}
  // order
- $query_order=api_queryOrder("accounts_companies.company ASC,accounts_companies.name ASC");
+ $query_order=api_queryOrder("accounts_companies.name ASC, accounts_companies.company ASC");
  // pagination
  if($pagination){
   $return->pagination=new str_pagination($query_table.$query_join,$query_where.$query_group,$GLOBALS['navigation']->filtersGet());
@@ -277,8 +287,8 @@ function api_accounts_roleStatusModal($role){
  $return->header($role->name);
  // build status body dl
  $dl_body=new str_dl("br","dl-horizontal");
- $dl_body->addElement(api_text("api-role-dt-add"),api_text("api-role-dd-add",array(api_accountName($role->addIdAccount),api_timestampFormat($role->addDate,api_text("datetime")))));
- if($role->updIdAccount<>NULL){$dl_body->addElement(api_text("api-role-dt-upd"),api_text("api-role-dd-upd",array(api_accountName($role->updIdAccount),api_timestampFormat($role->updDate,api_text("datetime")))));}
+ $dl_body->addElement(api_text("api-role-dt-add"),api_text("api-role-dd-add",array(api_account($role->addIdAccount)->name,api_timestampFormat($role->addDate,api_text("datetime")))));
+ if($role->updIdAccount<>NULL){$dl_body->addElement(api_text("api-role-dt-upd"),api_text("api-role-dd-upd",array(api_account($role->updIdAccount)->name,api_timestampFormat($role->updDate,api_text("datetime")))));}
  $return->body($dl_body->render(FALSE));
  return $return;
 }

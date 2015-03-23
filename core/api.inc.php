@@ -13,6 +13,8 @@ include("../config.inc.php");   // include the configuration file
 include("html.class.php");      // include the html class
 include("structure.class.php"); // include structure classes
 include("db.class.php");        // include the database class
+// include core api+
+include_once("../accounts/api.inc.php");
 // load core language file
 api_loadLocaleFile("../");
 // build class
@@ -41,9 +43,10 @@ if($g_submit=="cron"){
  if(!isset($_SESSION['account'])){
   // redirect
   if(api_baseName()<>"login.php"
+     && api_baseName()<>"accounts_ldap.php"
      && api_baseName()<>"password_retrieve.php"
      && api_baseName()<>"password_reset.php"
-     && api_baseName()<>"request_account_ldap.php"
+     && api_baseName()<>"submit.php"
      && api_baseName()<>"download.php"
      && $dontCheckSession==FALSE){
    // save url to session if not in this skip array
@@ -80,6 +83,19 @@ if((strpos($_SERVER['HTTP_USER_AGENT'],'Chrome')==false)
    &&(strpos($_SERVER['HTTP_USER_AGENT'],'11')==false)){
  $GLOBALS['alert']->alert="changeBrowser";
  $GLOBALS['alert']->class="alert-error";
+}
+
+
+/**
+ * Deprecated function alert
+ *
+ * @param string $function fuction name
+ * @param string $new new fuction name
+ */
+function api_deprecatedAlert($function,$new=NULL){
+ if(strlen($new)){$new="<BR>Please use ".$new;}
+ echo api_alert_box("The function ".$function."() is deprecated".$new,"DEPRECATED","alert-error");
+ return FALSE;
 }
 
 
@@ -243,7 +259,7 @@ function api_hostName(){
 
 /* -[ Update Temp Token ]---------------------------------------------------- */
 function api_updateTempToken(){
- $temp_token=md5(date("Y-m-d H:i:s"));
+ $temp_token=md5(api_now());
  $GLOBALS['db']->execute("UPDATE settings_settings SET value='".$temp_token."' WHERE code='temp_token'");
  return $temp_token;
 }
@@ -257,7 +273,7 @@ function api_notification_send($idAccount,$module,$action,$subject,$message,$lin
  // build query
  $query="INSERT INTO logs_notifications
   (idAccount,timestamp,module,action,subject,message,link,hash,status) VALUES
-  ('".$idAccount."','".date("Y-m-d H:i:s")."','".$module."','".$action."',
+  ('".$idAccount."','".api_now()."','".$module."','".$action."',
    '".addslashes($subject)."','".addslashes($message)."','".$link."','".$hash."','1')";
  // execute query
  $GLOBALS['db']->execute($query);
@@ -438,336 +454,8 @@ function api_randomString($size=10){
  return $random;
 }
 
-/* -[ Sendmail ]---------- OLD DA NON USARE DA ------------------------------ */
-// @string $to_mail : Recipient mail
-// @string $message : Content of mail
-// @string $subject : Subject of mail
-// @booelan $html : Send mail in HTML format
-// @string $from_mail : Sender mail
-// @string $from_name : Sender name
-// @string $cc_mails : Carbon Copy mails
-/**
- * Sendmail
- *
- * /!\ ATTENZIONE /!\
- *
- * Vecchia funziona da non usare
- *
- * Sostituita con api_mailer()
- *
- */
-function api_sendmail($to_mail,$message,$subject="",$html=FALSE,$from_mail="",$from_name="",$cc_mails=""){
- if($to_mail==NULL){return FALSE;}
- // headers
- $eol="\n";
- if($from_mail==""){$from_mail=api_getOption('owner_mail');}
- if($from_name==""){$from_name=api_getOption('owner_mail_from');}
- $headers= "MIME-Version: 1.0".$eol;
- $headers.="Content-type: text/plain; Charset=UTF-8".$eol;
- $headers.="From: ".$from_name." <".$from_mail.">".$eol;
- $headers.="Reply-To: ".$from_mail.$eol;
- $headers.="Return-Path: ".$from_mail.$eol;
- if(strlen($cc_mails)>0){$headers.="CC: ".str_replace(" ","",$cc_mails).$eol;}
- // subject
- if($subject==""){$subject="Coordinator - Communication";}
- // message
- $message.=$eol.$eol."--".$eol."Questo messaggio è stato generato automaticamente da Coordinator per conto di ".api_getOption('owner').", si prega di non rispondere.".$eol;
- // check HTML
- if($html){
-  $mail_random_hash=md5(date('r',time()));
-  $headers.="MIME-Version: 1.0".$eol;
-  $headers.="Content-Type: multipart/alternative; boundary=\"PHP-alt-".$mail_random_hash."\"".$eol.$eol;
-  $headers.="This is a multi-part message in MIME format".$eol;
-  // message
-  $mail_message=$eol."--PHP-alt-".$mail_random_hash.$eol.
-   "Content-Type: text/plain; charset=utf-8".$eol.
-   "Content-Transfer-Encoding: 7bit".$eol.$eol;
-  $mail_message.=strip_tags($message).$eol;
-  $mail_message.=$eol."--PHP-alt-".$mail_random_hash.$eol.
-   "Content-Type: text/html; charset=utf-8".$eol.
-   "Content-Transfer-Encoding: 7bit".$eol.$eol;
-  $mail_message.=nl2br($message).$eol;
-  $mail_message.=$eol."--PHP-alt-".$mail_random_hash."--".$eol;
-  $message=$mail_message;
- }
- // sendmail
- return mail($to_mail,$subject,$message,$headers);
-}
 
-
-/* -[ Check permissions ]---------------------------------------------------- */
-// @param $module : Module to check
-// @param $action : Action to check
-// @param $idAccount : ID of the account
-function api_checkPermission($module,$action,$alert=FALSE,$admin=TRUE,$idAccount=NULL){
- if($idAccount===0 || $idAccount==="0"){return NULL;}
- if($idAccount===NULL){$idAccount=$_SESSION['account']->id;}
-  // if account is root return always true
- if($idAccount==1){return TRUE;}
- // if account typology is administrator return always true
- if($admin==TRUE && $idAccount==$_SESSION['account']->id && $_SESSION['account']->typology==1){return TRUE;}
- // retrieve the permission id
- $idPermission=$GLOBALS['db']->queryUniqueValue("SELECT id FROM settings_permissions WHERE module='".$module."' AND action='".$action."'");
- // get required groups
- $requiredgroups=$GLOBALS['db']->query("SELECT * FROM settings_permissions_join_accounts_groups WHERE idPermission='".$idPermission."'");
- while($required=$GLOBALS['db']->fetchNextObject($requiredgroups)){
-  if($required->idGroup==0){
-   $groups=$GLOBALS['db']->query("SELECT * FROM accounts_groups");
-   while($group=$GLOBALS['db']->fetchNextObject($groups)){
-    if(api_accountGrouprole($group->id,$idAccount)>=$required->idGrouprole){return TRUE;}
-   }
-  }else{
-   if(api_accountGrouprole($required->idGroup,$idAccount)>=$required->idGrouprole){return TRUE;}
-   // try in subgroups
-   $subgroups=$GLOBALS['db']->query("SELECT * FROM accounts_groups WHERE idGroup='".$required->idGroup."'");
-   while($subgroup=$GLOBALS['db']->fetchNextObject($subgroups)){
-    if(api_accountGrouprole($subgroup->id,$idAccount)>=$required->idGrouprole){return TRUE;}
-   }
-  }
- }
- if($alert){
-  echo "<div id='alert-message' class='alert alert-error'>\n";
-  echo "<button type='button' class='close' data-dismiss='alert'>&times;</button>\n";
-  echo "<h4>ACCESSO NEGATO</h4>I permessi del tuo account non sono sufficienti per l'operazione selezionata\n";
-  echo "<i>(Action: ".$action.")</i>\n"; // <- debug
-  echo "</div>\n";
- }
- return FALSE;
-}
-
-
-/* -[ Check permissions to show module ]------------------------------------- */
-// @param $module : Module to check
-function api_checkPermissionShowModule($module,$admin=TRUE){
- // if account is root return always true
- if($_SESSION['account']->id==1 && $admin==TRUE){return TRUE;}
- // if account typology is administrator return always true
- if($_SESSION['account']->typology==1 && $admin==TRUE){return TRUE;}
- // retrieve the permissions list
- $permissions=$GLOBALS['db']->query("SELECT * FROM settings_permissions WHERE module='".$module."' ORDER BY id ASC");
- while($permission=$GLOBALS['db']->fetchNextObject($permissions)){
-  // get required groups
-  $requiredgroups=$GLOBALS['db']->query("SELECT * FROM settings_permissions_join_accounts_groups WHERE idPermission='".$permission->id."'");
-  while($required=$GLOBALS['db']->fetchNextObject($requiredgroups)){
-   if($required->idGroup==0){
-    $groups=$GLOBALS['db']->query("SELECT * FROM accounts_groups ORDER BY id ASC");
-    while($group=$GLOBALS['db']->fetchNextObject($groups)){
-     if(api_accountGrouprole($group->id)>=$required->idGrouprole){return TRUE;}
-    }
-   }else{
-    if(api_accountGrouprole($required->idGroup)>=$required->idGrouprole){return TRUE;}
-    // try in subgroups
-    $subgroups=$GLOBALS['db']->query("SELECT * FROM accounts_groups WHERE idGroup='".$required->idGroup."'");
-    while($subgroup=$GLOBALS['db']->fetchNextObject($subgroups)){
-     if(api_accountGrouprole($subgroup->id)>=$required->idGrouprole){return TRUE;}
-    }
-   }
-  }
- }
- return FALSE;
-}
-
-
-/* -[ Account id by session ]------------------------------------------------ */
-function api_accountId(){
- return $_SESSION['account']->id;
-}
-
-
-/* -[ Account object by account id ]----------------------------------------- */
-// @param $account_id : ID of the account
-function api_account($account_id=NULL){
- if($account_id===0){return NULL;}
- if($account_id==NULL){$account_id=$_SESSION['account']->id;}
- $account=$GLOBALS['db']->queryUniqueObject("SELECT * FROM accounts_accounts WHERE id='".$account_id."'");
- if($account->id>0){
-  return $account;
- }else{
-  return "[Not found]";
- }
-}
-
-
-/* -[ Profile mail by account id ]------------------------------------------- */
-// @param $account_id : ID of the account
-function api_accountMail($account_id=NULL){
- if($account_id===0){return NULL;}
- if($account_id==NULL){$account_id=$_SESSION['account']->id;}
- $account=$GLOBALS['db']->queryUniqueObject("SELECT * FROM accounts_accounts WHERE id='".$account_id."'");
- if($account->account<>NULL){
-  return $account->account;
- }else{
-  return "[Not found]";
- }
-}
-
-
-/* -[ Profile name by account id ]------------------------------------------- */
-// @param $account_id : ID of the account
-function api_accountName($account_id=NULL){
- if($account_id===0 || $account_id==="0"){return NULL;}
- if($account_id==NULL){$account_id=$_SESSION['account']->id;}
- $account=$GLOBALS['db']->queryUniqueObject("SELECT * FROM accounts_accounts WHERE id='".$account_id."'");
- if($account->name<>NULL){
-  return $account->name;
- }elseif($account->id){
-  return "[ID ".$account->id."]";
- }else{
-  return "[Not found]";
- }
-}
-
-
-/* -[ Profile Name inverted by account id ]---------------------------------- */
-// @param $account_id : ID of the account
-function api_accountNameInverted($account_id=NULL){
- $accountName=api_accountName($account_id);
- if(strrpos($accountName," ")!==FALSE){
-  $pos=strrpos($accountName," ");
-  $name=substr($accountName,$pos);
-  $name=$name." ".substr($accountName,0,$pos);
- }
- return $name;
-}
-
-
-/* -[ Profile firstname by account id ]-------------------------------------- */
-// @param $account_id : ID of the account
-function api_accountFirstname($account_id=NULL){
- $name=api_accountName($account_id);
- if(strrpos($name," ")!==FALSE){
-  $name=substr($name,0,strrpos($name," "));
- }
- return $name;
-}
-
-
-/* -[ Account Company object by account id ]--------------------------------- */
-// @param $account_id : ID of the account
-function api_accountCompany($account_id=NULL){
- if($account_id===0){return NULL;}
- if($account_id==NULL){$account_id=$_SESSION['account']->id;}
- $company=$GLOBALS['db']->queryUniqueObject("SELECT accounts_companies.* FROM accounts_companies JOIN accounts_accounts ON accounts_accounts.idCompany=accounts_companies.id WHERE accounts_accounts.id='".$account_id."'");
- if($company->id>0){
-  return $company;
- }else{
-  return FALSE;
- }
-}
-
-
-/* -[ Account Division by account id ]--------------------------------------- */
-// @param $account_id : ID of the account
-function api_accountDivision($account_id=NULL){
- if($account_id===0){return NULL;}
- if($account_id==NULL){$account_id=$_SESSION['account']->id;}
- $company=$GLOBALS['db']->queryUniqueObject("SELECT accounts_companies.* FROM accounts_companies JOIN accounts_accounts ON accounts_accounts.idCompany=accounts_companies.id WHERE accounts_accounts.id='".$account_id."'");
- if($company->id>0){
-  return $company->division;
- }else{
-  return FALSE;
- }
-}
-
-
-/* -[ Profile language by account id ]--------------------------------------- */
-// @param $account_id : ID of the account
-function api_accountLanguage($account_id=NULL){
- if($account_id===0){return NULL;}
- if($account_id==NULL){$account_id=$_SESSION['account']->id;}
- $language=$GLOBALS['db']->queryUniqueValue("SELECT language FROM accounts_accounts WHERE id='".$account_id."'");
- if($language<>NULL){
-  return $language;
- }else{
-  return "default";
- }
-}
-
-
-/* -[ Profile ISO language code by account id ]------------------------------ */
-// @param $account_id : ID of the account
-// @param $default : default ISO language code
-function api_accountLanguageISO($account_id=NULL,$default="EN"){
- $language=api_accountLanguage($account_id);
- if($language<>NULL && $language<>"default"){
-  return substr($language,-2);
- }else{
-  return $default;
- }
-}
-
-
-/* -[ Return if account is admin ]------------------------------------------- */
-// @param $now : if is admin now true or if account typology is administrator
-function api_accountIsAdmin($now=TRUE){
- if($now){
-  if($_SESSION['account']->typology==1){return TRUE;}else{return FALSE;}
- }else{
-  if($_SESSION['account']->administrator){return TRUE;}else{return FALSE;}
- }
-}
-
-
-/* -[ Company object ]------------------------------------------------------- */
-// @param $company : company id or object
-function api_company($company){
- if(is_numeric($company)){$company=$GLOBALS['db']->queryUniqueObject("SELECT * FROM accounts_companies WHERE id='".$company."'");}
- if(!$company->id){return FALSE;}
- $company->company=stripslashes($company->company);
- $company->division=stripslashes($company->division);
- $company->name=stripslashes($company->name);
- $company->fiscal_name=stripslashes($company->fiscal_name);
- return $company;
-}
-
-
-/* -[ Company name by company id ]------------------------------------------- */
-// @param $idCompany : ID of the company
-function api_companyName($idCompany,$division=TRUE){
- $company=$GLOBALS['db']->queryUniqueObject("SELECT * FROM accounts_companies WHERE id='".$idCompany."'");
- if($company->name<>NULL){
-  $return=$company->company;
-  if($division && $company->division<>NULL){
-   $return.=" - ".$company->division;
-  }
-  return $return;
- }elseif($company->id){
-  return "[ID ".$company->id."]";
- }else{
-  return "[Not found]";
- }
-}
-
-
-/* -[ Division name by company id ]------------------------------------------ */
-// @param $idCompany : ID of the company
-function api_divisionName($idCompany){
- $company=$GLOBALS['db']->queryUniqueObject("SELECT * FROM accounts_companies WHERE id='".$idCompany."'");
- if($company->division<>NULL){
-  return $company->division;
- }elseif($company->id){
-  return "[ID ".$company->id."]";
- }else{
-  return "[Not found]";
- }
-}
-
-
-/* -[ Account Main Group ]--------------------------------------------------- */
-// @param $account_id : ID of the account
-function api_accountMainGroup($account_id=NULL){
- if($account_id===0 || $account_id==="0"){return NULL;}
- if($account_id==NULL){$account_id=$_SESSION['account']->id;}
- $group=$GLOBALS['db']->queryUniqueObject("SELECT accounts_groups.*,accounts_groups_join_accounts.idGrouprole FROM accounts_groups_join_accounts JOIN accounts_groups ON accounts_groups_join_accounts.idGroup=accounts_groups.id WHERE accounts_groups_join_accounts.idAccount='".$account_id."' AND main='1'");
- if($group->id){
-  return $group;
- }else{
-  return FALSE;
- }
-}
-
-
-/* -[ Group name by group id ]----------------------------------------------- */
+/* -[ Group name by group id ]------------------------ verificare ----------- */
 // @integer $idGroup : ID of the group
 // @string $description : show group description
 // @boolean $popup : show description in popup
@@ -792,10 +480,11 @@ function api_groupName($idGroup,$description=FALSE,$popup=FALSE){
 }
 
 
-/* -[ Group id by group name ]----------------------------------------------- */
+/* -[ Group id by group name ]------------------- verificare ---------------- */
 // @param $groupName : Name of the group
-function api_groupId($groupName){
- $group=$GLOBALS['db']->queryUniqueObject("SELECT * FROM accounts_groups WHERE name='".$groupName."'");
+// @param $idCompany : Company id
+function api_groupId($groupName,$idCompany=1){
+ $group=$GLOBALS['db']->queryUniqueObject("SELECT * FROM accounts_groups WHERE idCompany='".$idCompany."' AND name='".$groupName."'");
  if($group->id){
   return $group->id;
  }else{
@@ -804,223 +493,46 @@ function api_groupId($groupName){
 }
 
 
-/* -[ Grouprole name by grouprole id ]--------------------------------------- */
-// @param $idGrouprole : ID of the grouprole
-function api_grouproleName($idGrouprole,$description=FALSE){
- $grouprole=$GLOBALS['db']->queryUniqueObject("SELECT * FROM accounts_grouproles WHERE id='".$idGrouprole."'");
- if($grouprole->name<>NULL){
-  $return=$grouprole->name;
-  if($description && $grouprole->description<>NULL){
-   $return.=" (".$grouprole->description.")";
-  }
-  return $return;
- }elseif($grouprole->id){
-  return "[ID ".$grouprole->id."]";
- }else{
-  return "[Not found]";
- }
-}
-
-
-/* -[ Grouprole name by grouprole id ]--------------------------------------- */
-// @param $idGrouprole : ID of the grouprole
-function api_grouproleDescription($idGrouprole){
- $grouprole=$GLOBALS['db']->queryUniqueObject("SELECT * FROM accounts_grouproles WHERE id='".$idGrouprole."'");
- if($grouprole->description<>NULL){
-  return $grouprole->description;
- }elseif($grouprole->name<>NULL){
-  return $grouprole->name;
- }elseif($grouprole->id){
-  return "[ID ".$grouprole->id."]";
- }else{
-  return "[Not found]";
- }
-}
-
-
-/* -[ Language extend ]------------------------------------------------------ */
-// @param $language : Short language
-function api_languageExtend($language){
- switch(strtoupper($language)){
-  case "D":$language="Deutsch";break;
-  case "E":$language="English";break;
-  case "I":$language="Italiano";break;
-  case "F":$language="Francais";break;
- }
- return $language;
-}
-
-
-/* -[ Sex by id ]------------------------------------------------------------ */
-// @param $idSex : id of the sex
-function api_sexName($idSex,$lang=""){
- switch(strtoupper($lang)){
-  case "EN":
-   switch($idSex){
-    case 1:$sex="Male";break;
-    case 2:$sex="Female";break;
-    default:$sex="Undefined";
-   }
-   break;
-  case "DE":
-   switch($idSex){
-    case 1:$sex="Mannlich";break;
-    case 2:$sex="weiblich";break;
-    default:$sex="Undefined";
-   }
-   break;
-  case "FR":
-   switch($idSex){
-    case 1:$sex="Homme";break;
-    case 2:$sex="Femme";break;
-    default:$sex="Undefined";
-   }
-   break;
-  default:
-   switch($idSex){
-    case 1:$sex="Maschile";break;
-    case 2:$sex="Femminile";break;
-    default:$sex="Indefinito";
-   }
- }
- return $sex;
-}
-
-
-/* -[ Avatar by account id ]------------------------------------------------- */
-// @param $idAccount : ID of the account
-function api_accountAvatar($idAccount=NULL){
- if($idAccount==NULL){$idAccount=$_SESSION['account']->id;}
- if(file_exists("../uploads/uploads/accounts/avatar_".$idAccount.".jpg")){
-  return "../uploads/uploads/accounts/avatar_".$idAccount.".jpg";
- }else{
-  return $GLOBALS['dir']."uploads/uploads/accounts/avatar.jpg";
- }
-}
-
-
-/* -[ Company name by company id ]------------------------------------------- */
-// @param $company_id : ID of the company
-function api_accountCompanyName($company_id=NULL){
- if($company_id){$company=$GLOBALS['db']->queryUniqueObject("SELECT * FROM accounts_companies WHERE id='".$company_id."'");}
- if($company->id>0){
-  return stripslashes($company->company)." - ".stripslashes($company->division);
- }else{
-  return "[Not found]";
- }
-}
-
-
-/* -[ Return if an account is member of a group or subgroup ]---------------- */
-// @param $idGroup   : ID of the group
+/* -[ Return the group role of an account ]-------------- verificare -------- */
+// @param $idGroup   : ID of the group   // è stata aggiornata giusto per funzionare ma è da sistemare
 // @param $idAccount : ID of the account
 // @param $subgroups : Check also in subgroups
-function api_accountGroupMember($idGroup,$idAccount=NULL,$subgroups=TRUE){
- if($idAccount==NULL){$idAccount=$_SESSION['account']->id;}
- if($idGroup>0 && $idAccount>0){
-  $grouprole=$GLOBALS['db']->queryUniqueValue("SELECT idGrouprole FROM accounts_groups_join_accounts WHERE idGroup='".$idGroup."' AND idAccount='".$idAccount."'");
-  if($grouprole>0){return TRUE;}
-  if($subgroups){
-   $subgroups=$GLOBALS['db']->query("SELECT * FROM accounts_groups WHERE idGroup='".$idGroup."'");
-   while($subgroup=$GLOBALS['db']->fetchNextObject($subgroups)){
-    $grouprole=$GLOBALS['db']->queryUniqueValue("SELECT idGrouprole FROM accounts_groups_join_accounts WHERE idGroup='".$subgroup->id."' AND idAccount='".$idAccount."'");
-    if($grouprole>0){return TRUE;}
+function api_accountGrouprole($idGroup,$idAccount=NULL,$subGroups=FALSE){
+ $group=api_accounts_group($idGroup);
+ $account=api_account($idAccount);
+ if(!$group->id||!$account->id){return FALSE;}
+ // check if group is in array account company groups
+ if(array_key_exists($group->id,$account->companies[$group->idCompany]->groups)){
+  return $account->companies[$group->idCompany]->role->level;
+ }
+ if($subGroups){
+  // retrieve subgroups
+  $subgroups_array=array();
+  $subgroups=api_accounts_groups($group->idCompany,$group->id);
+  api_walkGroupsRecursively($subgroups->results,$subgroups_array);
+  // check subgroups
+  foreach($subgroups_array as $subgroup){
+   // check if subgroup is in array account company groups
+   if(array_key_exists($subgroup,$account->companies[$group->idCompany]->groups)){
+    return $account->companies[$group->idCompany]->role->level;
    }
   }
  }
- return FALSE;
+ return false;
 }
 
 
-/* -[ Return the group role of an account ]---------------------------------- */
-// @param $idGroup   : ID of the group
-// @param $idAccount : ID of the account
-// @param $subgroups : Check also in subgroups
-function api_accountGrouprole($idGroup,$idAccount=NULL,$subgroups=FALSE){
- if($idAccount===0 || $idAccount==="0"){return NULL;}
- if($idAccount===NULL){$idAccount=$_SESSION['account']->id;}
- if(!$idGroup>0 && !$idAccount>0){return FALSE;}
- $grouprole=$GLOBALS['db']->queryUniqueValue("SELECT idGrouprole FROM accounts_groups_join_accounts WHERE idGroup='".$idGroup."' AND idAccount='".$idAccount."'");
- if($grouprole>0){
-  return $grouprole;
- }else{
-  $subgroups=$GLOBALS['db']->query("SELECT * FROM accounts_groups WHERE idGroup='".$idGroup."'");
-  while($subgroup=$GLOBALS['db']->fetchNextObject($subgroups)){
-   $grouprole=$GLOBALS['db']->queryUniqueValue("SELECT idGrouprole FROM accounts_groups_join_accounts WHERE idGroup='".$subgroup->id."' AND idAccount='".$idAccount."'");
-   if($grouprole>0){return $grouprole;}
-  }
- }
- return FALSE;
-}
-
-
-/* -[ Return account groups and grouproles ]--------------------------------- */
-// @param $idAccount : ID of the account
-// @param $supgroups : Check also in superiors groups
-function api_accountGroups($idAccount=NULL,$supgroups=TRUE){
- if($idAccount===0 || $idAccount==="0"){return NULL;}
- if($idAccount===NULL){$idAccount=$_SESSION['account']->id;}
- $groups_array=array();
- if($idAccount>0){
-  $groups=$GLOBALS['db']->query("SELECT * FROM accounts_groups_join_accounts JOIN accounts_groups ON accounts_groups_join_accounts.idGroup=accounts_groups.id WHERE idAccount='".$idAccount."' ORDER BY accounts_groups_join_accounts.idGroup ASC");
-  while($group=$GLOBALS['db']->fetchNextObject($groups)){
-   $group_obj=new stdClass();
-   $group_obj->id=$group->id;
-   $group_obj->name=$group->name;
-   $group_obj->description=$group->description;
-   $group_obj->grouprole=$group->idGrouprole;
-   $group_obj->idGroup=$group->idGroup;
-   $group_obj->inherited=FALSE;               // $supgroup_obj->inherited=FALSE;
-   $groups_array[$group->id]=$group_obj;
-   if($supgroups && $group->idGroup>0){
-    $supgroup=$GLOBALS['db']->queryUniqueObject("SELECT * FROM accounts_groups WHERE id='".$group->idGroup."'");
-    $supgroup_obj=new stdClass();
-    $supgroup_obj->id=$supgroup->id;
-    $supgroup_obj->name=$supgroup->name;
-    $supgroup_obj->description=$supgroup->description;
-    $supgroup_obj->grouprole=$group->idGrouprole;
-    $supgroup_obj->idGroup=0;
-    $supgroup_obj->inherited=TRUE;
-    if($groups_array[$supgroup->id]==NULL){$groups_array[$supgroup->id]=$supgroup_obj;}
-   }
-  }
-  return $groups_array;
- }
- return FALSE;
-}
-
-
-/* -[ Check if account is in group ]----------------------------------------- */
+/* -[ Check if account is in group ]------------------- vertificare --------- */
 // @param $idGroup   : ID of the group
 // @param $idAccount : ID of the account
 // @param $subgroups : Check also in subgroups
 function api_checkAccountGroup($idGroup,$idAccount=NULL,$subgroups=FALSE){
- if($idAccount==NULL){$idAccount=$_SESSION['account']->id;}
- if(api_accountGrouprole($idGroup,$idAccount)>0){
-  return TRUE;
- }else{
-  if($subgroups){
-   // try in subgroups
-   $subgroups=$GLOBALS['db']->query("SELECT * FROM accounts_groups WHERE idGroup='".$idGroup."'");
-   while($subgroup=$GLOBALS['db']->fetchNextObject($subgroups)){
-    if(api_accountGrouprole($subgroup->id)>0){return TRUE;}
-   }
-  }
-  return FALSE;
- }
+ if(api_accountGrouprole($idGroup,$idAccount,$subgroups)>0){return TRUE;}
+ return FALSE;
 }
 
 
-/* -[ Check if account is in company ]--------------------------------------- */
-// @param $idCompany : ID of the company
-// @param $idAccount : ID of the account
-function api_checkAccountCompany($idCompany,$idAccount=NULL){
- $check=$GLOBALS['db']->queryUniqueValue("SELECT id,idCompany FROM accounts_accounts WHERE id='".$idAccount."' AND idCompany='".$idCompany."'");
- if($idAccount>0 && $idAccount==$check){return TRUE;}else{return FALSE;}
-}
-
-
-/* -[ Generate the pagination div ]------------------------------------------ */
+/* -[ Generate the pagination div ]-------------------- verificare ---------- */
 // @param $recordsCountCount : Total number of records
 // @param $recordsLimit      : Number of records for page
 // @param $currentPage       : Number of the current page
@@ -1512,8 +1024,8 @@ function api_file_upload($input,$table="uploads_uploads",$name=NULL,$label=NULL,
     updDate,updIdAccount) VALUES
    ('".addslashes($file->name)."','".$file->type."','".$file->size."','".$file->hash."',
     '".addslashes($file->file)."','".addslashes($file->label)."','".addslashes($file->description)."',
-    '".addslashes($file->tags)."','".addslashes($file->txtContent)."','".date("Y-m-d H:i:s")."',
-    '".$_SESSION['account']->id."','".date("Y-m-d H:i:s")."','".$_SESSION['account']->id."')";
+    '".addslashes($file->tags)."','".addslashes($file->txtContent)."','".api_now()."',
+    '".$_SESSION['account']->id."','".api_now()."','".$_SESSION['account']->id."')";
   // execute query
   $GLOBALS['db']->execute($query);
   // get file id
@@ -1677,12 +1189,12 @@ function api_log($typology,$module,$action,$event,$key=NULL,$link=NULL){
  // clean variables
  $event=addslashes($event);
  // log interpreter id if account is interpreted
- $idAccount=api_accountId();
+ $idAccount=api_account()->id;
  if($_SESSION['account']->interpreter){$idAccount=$_SESSION['account']->interpreter;}
  // build log query
  $query="INSERT INTO logs_logs
   (typology,timestamp,module,action,`key`,event,link,idAccount,ip) VALUES
-  ('".$typology."','".date("Y-m-d H:i:s")."','".$module."','".$action."','".$key."',
+  ('".$typology."','".api_now()."','".$module."','".$action."','".$key."',
    '".$event."','".$link."','".$idAccount."','".$_SERVER['REMOTE_ADDR']."')";
  // execute query
  $GLOBALS['db']->execute($query);
@@ -1736,7 +1248,7 @@ function api_logNotificationTriggers($module,$action,$event,$id,$link){
     // event: {logs_workflows_ticketCreated|00024-00028|parametro2}
     // trigger->name: logs-ticketDisponible
     // load recipient language file
-    api_loadLocaleFile("../".$module."/",api_accountLanguage($subscription->idAccount));
+    api_loadLocaleFile("../".$module."/",api_account($subscription->idAccount)->language);
     $notification->subject=api_text($trigger->trigger."-subject",api_textParse($event)->parameters);
     $notification->message=api_text($trigger->trigger."-message",api_textParse($event)->parameters);
     // if subscription mail is 2 archive the notification by default
@@ -1749,16 +1261,16 @@ function api_logNotificationTriggers($module,$action,$event,$id,$link){
      if(substr($link,0,4)<>"http"){$mail_link="http://".$_SERVER['SERVER_NAME'].$GLOBALS['dir'].$link;}
      else{$mail_link=$link;}
      $mail_message=$notification->message."<br>\n"."Link: <a href='".$mail_link."'>".$mail_link."</a>";
-     if($_SESSION['account']->id>1){
-      $mail_from=api_accountMail($_SESSION['account']->id);
-      $mail_sender=api_accountName($_SESSION['account']->id);
+     if(api_account()->id>1){
+      $mail_from=api_account()->mail;
+      $mail_sender=api_account()->name;
      }
-     $notification->mail_sent=api_mailer(api_accountMail($subscription->idAccount),stripslashes($mail_message),stripslashes($notification->subject),TRUE,$mail_from,$mail_sender);
+     $notification->mail_sent=api_mailer(api_account($subscription->idAccount)->mail,stripslashes($mail_message),stripslashes($notification->subject),TRUE,$mail_from,$mail_sender);
     }
     // build notifications array
     $notifications_array[]=$notification;
     // reload user language file
-    api_loadLocaleFile("../".$module."/",api_accountLanguage());
+    api_loadLocaleFile("../".$module."/",api_account()->language);
    }
   }
  }
@@ -1785,7 +1297,7 @@ function api_notification($idAccount,$module,$action,$subject,$message,$link=NUL
  if($hash===NULL){$hash=md5(date('YdmHsi').api_randomString());}
  $query="INSERT INTO logs_notifications
   (hash,idAccount,timestamp,module,action,subject,message,link,status) VALUES
-  ('".$hash."','".$idAccount."','".date("Y-m-d H:i:s")."','".$module."','".$action."',
+  ('".$hash."','".$idAccount."','".api_now()."','".$module."','".$action."',
    '".addslashes($subject)."','".addslashes($message)."','".$link."','".$status."')";
  $GLOBALS['db']->execute($query);
  if($GLOBALS['db']->lastInsertedId()>0){return $hash;}
@@ -1798,7 +1310,7 @@ function api_notification($idAccount,$module,$action,$subject,$message,$link=NUL
  * @param string $module module name
  * @param integer $key id of the object
  * @param array $only action to include (null for all)
- * @param array $only action to exclude (null for all)
+ * @param array $exclude action to exclude (null for all)
  * @return array array of history events
  */
 function api_logHistory($module,$key,$only=NULL,$exclude=NULL){
@@ -1835,7 +1347,7 @@ function api_logHistoryParse($timestamp,$account,$status_from=NULL,$status_to=NU
  if(!$timestamp||!$account){return FALSE;}
  $return="<div id='history'>\n";
  $return.=" <div id='history_status'>\n";
- $return.="  <small>".api_timestampFormat($timestamp,api_text("datetime"))." - ".api_accountName($account)."</small><br>\n";
+ $return.="  <small>".api_timestampFormat($timestamp,api_text("datetime"))." - ".api_account($account)->name."</small><br>\n";
  if($status_from){$return.="  <strong><small>".$status_from."</small></strong>";}
  if($status_to){$return.="<strong> &rarr; <small>".$status_to."</small></strong>\n";}
  $return.=" </div>\n";
@@ -2027,6 +1539,72 @@ function api_query_tree($parent,$root=NULL,$order=NULL,$id="id"){
 
 
 /**
+ * Alert box
+ *
+ * @param string $message alert box content
+ * @param string $title alert box title
+ * @param string $class alert box css class
+ * @return mixed content html source or false
+ */
+function api_alert_box($message,$title=NULL,$class=NULL){
+ if(!strlen($message)){return FALSE;}
+ $html="<!-- alert-box -->\n";
+ $html.="<div id='alert-message' class='alert ".$class."'>\n";
+ $html.=" <button type='button' class='close' data-dismiss='alert'>&times;</button>\n";
+ if(strlen($title)){$html.=" <h4>".$title."</h4>\n";}
+ $html.=" <span>".$message."<span>\n</div>\n";
+ $html.="<!-- /alert-box -->\n\n";
+ return $html;
+}
+
+
+/**
+ * Tag
+ *
+ * @param string $tag html tag
+ * @param string $text tag content
+ * @param string $class span css class
+ * @return string content into a tag
+ */
+function api_tag($tag,$text,$class=NULL){
+ if(!strlen($tag)||!strlen($text)){return FALSE;}
+ if(strlen($class)){$class=" class='".$class."'";}
+ $html="<".$tag.$class.">".$text."</".$tag.">";
+ return $html;
+}
+
+
+/**
+ * Span
+ *
+ * @param string $text span content
+ * @param string $class span css class
+ * @return string content into a span
+ */
+function api_span($text,$class=NULL){
+ if(!strlen($text)){return FALSE;}
+ if(strlen($class)){$class=" class='".$class."'";}
+ $span="<span".$class.">".$text."</span>";
+ return $span;
+}
+
+
+/**
+ * Small
+ *
+ * @param string $text small content
+ * @param string $class span css class
+ * @return string content into a span
+ */
+function api_small($text,$class=NULL){
+ if(!strlen($text)){return FALSE;}
+ if(strlen($class)){$class=" class='".$class."'";}
+ $small="<small".$class.">".$text."</small>";
+ return $small;
+}
+
+
+/**
  * Sound
  *
  * @param string $sound sound name or path of mp3 file
@@ -2045,6 +1623,84 @@ function api_sound($sound="alarm"){
  return TRUE;
 }
 
+
+/**
+ * Image
+ *
+ * @param string $image image path
+ * @param string $class image css class
+ * @param string $width image width
+ * @param string $height image height
+ * @param string $refresh add random string to refresh
+ * @return string image tag
+ */
+function api_image($image,$class=NULL,$width=NULL,$height=NULL,$refresh=FALSE){
+ if($refresh){$refresh="?".rand(1000,9999);}
+ $image_tag="<img src='".$image.$refresh."' class='".$class."' width='".$width."' height='".$height."'>\n";
+ return $image_tag;
+}
+
+
+/**
+ * Debug
+ *
+ * @param string $module event generator module
+ * @param string $event event description
+ * @param integer $typology event typology
+ * @return mixed debug event object or FALSE
+ */
+define("API_DEBUG_NOTICE",1);
+define("API_DEBUG_WARNING",2);
+define("API_DEBUG_ERROR",3);
+function api_debug_event($module,$event,$typology=1){
+ if(!strlen($module)||!strlen($event)){return FALSE;}
+ if(!is_array($_SESSION['debug'])){$_SESSION['debug']=array();}
+ // build debug event object
+ $debug=new stdClass();
+ $debug->timestamp=api_now();
+ $debug->module=$module;
+ $debug->event=$event;
+ $debug->typology=$typology;
+ switch($typology){
+  case 1:$debug->typologyText="Notice";break;
+  case 2:$debug->typologyText="Warning";break;
+  case 3:$debug->typologyText="Error";break;
+ }
+ // save debug event
+ $_SESSION['debug'][]=$debug;
+ // return
+ return $debug;
+}
+
+
+/**
+ * Available languages
+ *
+ * @param string $path core o module path
+ * @return mixed language objects array or false
+ */
+function api_language_availables($path="../"){
+ $dir=$path."languages/";
+ if(!is_dir($dir)){return FALSE;}
+ $languages_array=array();
+ if($dh=opendir($dir)){
+  while(($file=readdir($dh))!==false){
+   /*if($file=="default.xml"){
+    $languages_array["default"]="Default";
+   }else*/if(substr($file,-4)==".xml"){
+    $language=substr($file,0,-4);
+    // load locale for language
+    api_loadLocaleFile("../",$language);
+    $languages_array[$language]=api_text("language");
+   }
+  }
+  closedir($dh);
+ }
+ // restore locale
+ api_loadLocaleFile("../");
+ // return
+ return $languages_array;
+}
 
 /**
  * Mailer
@@ -2077,7 +1733,7 @@ function api_mailer($to,$message,$subject="",$html=FALSE,$from_mail="",$from_nam
   (`to`,`cc`,`bcc`,`from`,`sender`,`subject`,`message`,`attachments`,`html`,
    `addDate`,`addIdAccount`) VALUES
   ('".$f_to."','".$f_cc."','".$f_bcc."','".$f_from."','".$f_sender."','".$f_subject."',
-   '".$f_message."','".$f_attachments."','".$f_html."','".api_now()."','".api_accountId()."')";
+   '".$f_message."','".$f_attachments."','".$f_html."','".api_now()."','".api_account()->id."')";
  // execute query
  $GLOBALS['db']->execute($query);
  // set id to last inserted id
@@ -2090,9 +1746,12 @@ function api_mailer($to,$message,$subject="",$html=FALSE,$from_mail="",$from_nam
  return $return;
 }
 
-/* -[ Mailer Process --]----------------------------------------------------- */
-// @mixed $mail mail id or object
-// @return boolean
+/**
+ * Mailer Process
+ *
+ * @param mixed $mail mail id or object
+ * @return boolean
+ */
 function api_mailer_process($mail){
  // get object
  if(is_numeric($mail)){$mail=$GLOBALS['db']->queryUniqueObject("SELECT * FROM logs_mails WHERE id='".$mail."'");}
@@ -2140,6 +1799,7 @@ function api_mailer_process($mail){
  // subject
  $mailer->Subject=stripslashes($mail->subject);
  // message
+ $mail->message.="\n\n--This message was automatically generated by Coordinator for company ".api_getOption("owner").", please do not respond.";
  if($mail->html){
   $mailer->isHTML(TRUE);
   $mailer->Body=stripslashes(nl2br($mail->message));
@@ -2155,5 +1815,254 @@ function api_mailer_process($mail){
  // return
  return $sended;
 }
+
+
+/**
+ * Account object
+ *
+ * @param integer $idAccount account id or null for self
+ * @return object account object
+ */
+function api_account($idAccount=NULL){
+ if($idAccount===0||$idAccount==="0"){return FALSE;}
+ if($idAccount===NULL){$account=$_SESSION['account'];}
+ else{$account=api_accounts_account($idAccount);}
+ if($account->id){return $account;}
+ return FALSE;
+}
+
+
+/**
+ * Company object
+ *
+ * @param mixed $company company id, object or null for active
+ * @return object company object
+ */
+function api_company($company=NULL){
+ if(is_numeric($company)){$company=api_accounts_company($company);}
+ if($company===NULL){$company=$_SESSION['company'];}
+ if($company->id){return $company;}
+ return FALSE;
+}
+
+
+/**
+ * Add groups and subgroups into array recursively
+ *
+ * @param array $groups group array to cycle
+ * @param array $array array to implement
+ */
+function api_walkGroupsRecursively($groups,&$array){
+ foreach($groups as $group){
+  $array[$group->id]=$group->id;
+  api_walkGroupsRecursively($group->groups,$array);
+ }
+}
+
+
+/**
+ * Check Permission
+ *
+ * @param string $module coordinator module
+ * @param string $action module action to check
+ * @param booelan $alert show unauthorized alert box
+ * @param booelan $admin permit admin bypass
+ * @param integer $idAccount account to check or self
+ * @return boolean
+ */
+function api_checkPermission($module,$action,$alert=FALSE,$admin=TRUE,$idAccount=NULL){
+ if(!strlen($module)||!strlen($action)){return NULL;}
+ // if account is 0 return null
+ if($idAccount===0 || $idAccount==="0"){return NULL;}
+ // if account is root return always true
+ //if(api_account()->id==1 && $admin==TRUE){return TRUE;} // -------------------
+ if($idAccount==1 && $admin==TRUE){return TRUE;}
+ // if admin and account is superuser return always true
+ if($admin==TRUE && $idAccount===NULL && api_account()->administrator){return TRUE;}
+ // retrieve the permission id
+ $idPermission=$GLOBALS['db']->queryUniqueValue("SELECT id FROM settings_permissions WHERE module='".$module."' AND action='".$action."'");
+ // check permission
+ if(!$idPermission){
+  echo api_alert_box(api_text("permissionNotFound",array(api_tag("i",$module),api_tag("i",$action))),NULL,"alert-warning");
+  return FALSE;
+ }
+ // get account object
+ $account=api_accounts_account($idAccount);
+ // retrieve required groups
+ $query="SELECT settings_permissions_join_accounts_groups.*,
+  IFNULL(settings_permissions_join_accounts_groups.idCompany,accounts_groups.idCompany) as idCompany,
+  IFNULL(settings_permissions_join_accounts_groups.idGroup,'0') AS idGroup
+  FROM settings_permissions_join_accounts_groups
+  LEFT JOIN accounts_groups ON accounts_groups.id=settings_permissions_join_accounts_groups.idGroup
+  WHERE settings_permissions_join_accounts_groups.idPermission='".$idPermission."'";
+ $required_groups=$GLOBALS['db']->query($query);
+ while($required_group=$GLOBALS['db']->fetchNextObject($required_groups)){
+  // definitions
+  $subgroups_array=array();
+  // check groups or company level
+  if($required_group->idGroup==0){
+   // check if account company level >= required level
+   if($account->companies[$required_group->idCompany]->role->level>=$required_group->level){return TRUE;}
+  }else{
+   // check if group is in array account company groups
+   if(array_key_exists($required_group->idGroup,$account->companies[$required_group->idCompany]->groups)){
+    // check if account company level >= required level
+    if($account->companies[$required_group->idCompany]->role->level>=$required_group->level){return TRUE;}
+   }else{
+    // retrieve subgroups
+    $subgroups=api_accounts_groups($required_group->idCompany,$required_group->idGroup);
+    api_walkGroupsRecursively($subgroups->results,$subgroups_array);
+    // check subgroups
+    foreach($subgroups_array as $subgroup){
+     // check if subgroup is in array account company groups
+     if(array_key_exists($subgroup,$account->companies[$required_group->idCompany]->groups)){
+      // check if account company level >= required level
+      if($account->companies[$required_group->idCompany]->role->level>=$required_group->level){return TRUE;}
+     }
+    }
+   }
+  }
+ }
+ if($alert){echo api_alert_box(api_text("accessDenied-message")." ".api_text("accessDenied-action",api_tag("i",$action)),api_text("accessDenied"),"alert-error");}
+ return FALSE;
+}
+
+/**
+ * Check Permission to Show Module ( any module permission )
+ *
+ * @param string $module coordinator module
+ * @param booelan $admin permit admin bypass
+ * @return boolean
+ */
+function api_checkPermissionShowModule($module,$admin=TRUE){
+ if(!strlen($module)){return NULL;}
+ // if account is root return always true
+ if(api_account()->id==1 && $admin==TRUE){return TRUE;}
+ // if account typology is administrator return always true
+ if(api_account()->administrator && $admin==TRUE){return TRUE;}
+ // retrieve all module permissions
+ $permissions=$GLOBALS['db']->query("SELECT * FROM settings_permissions WHERE module='".$module."'");
+ while($permission=$GLOBALS['db']->fetchNextObject($permissions)){
+  // check permissions for all actions
+  if(api_checkPermission($module,$permission->action,FALSE,$admin,api_account()->id)){return TRUE;}
+ }
+ return FALSE;
+}
+
+
+/**
+ * Check if an account is member of a group or his subgroups
+ *
+ * @param integer $idGroup group to check
+ * @param integer $idAccount account to check or self
+ * @param booelan $subGroups check also in his sub groups
+ * @return boolean
+ */
+function api_accountGroupMember($idGroup,$idAccount=NULL,$subGroups=TRUE){
+ // definitions
+ $subgroups_array=array();
+ // get objects
+ $group=api_accounts_group($idGroup);
+ $account=api_accounts_account($idAccount);
+ // checks
+ if(!$group->id||!$account->id){return FALSE;}
+ // check if group is in array account company groups
+ if(array_key_exists($group->id,$account->companies[$group->idCompany]->groups)){return TRUE;}
+ // subgroups
+ if($subGroups){
+  // retrieve subgroups
+  $subgroups=api_accounts_groups($group->idCompany,$group->id);
+  api_walkGroupsRecursively($subgroups->results,$subgroups_array);
+  // check subgroups
+  foreach($subgroups_array as $subgroup){
+   // check if subgroup is in array account company groups
+   if(array_key_exists($subgroup,$account->companies[$group->idCompany]->groups)){return TRUE;}
+  }
+ }
+ return FALSE;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*
+ * -----------------------------------------------------------------------------
+ *                D E P R E C A T E D     F U N C T I O N S
+ * -----------------------------------------------------------------------------
+ */
+
+function api_accountMail($account_id=NULL){api_deprecatedAlert("api_accountMail","api_account()->mail");}
+function api_accountId($account_id=NULL){api_deprecatedAlert("api_accountId","api_account()->id");}
+function api_accountName($account_id=NULL){api_deprecatedAlert("api_accountName","api_account()->name");}
+function api_accountFirstname($account_id=NULL){api_deprecatedAlert("api_accountFirstname","api_account()->firstname");}
+
+
+
+/* -[ Sendmail ]---------- OLD DA NON USARE DA ------------------------------ */
+// @string $to_mail : Recipient mail
+// @string $message : Content of mail
+// @string $subject : Subject of mail
+// @booelan $html : Send mail in HTML format
+// @string $from_mail : Sender mail
+// @string $from_name : Sender name
+// @string $cc_mails : Carbon Copy mails
+/**
+ * Sendmail
+ *
+ * /!\ ATTENZIONE /!\
+ *
+ * Vecchia funziona da non usare
+ *
+ * Sostituita con api_mailer()
+ *
+ */
+function api_sendmail($to_mail,$message,$subject="",$html=FALSE,$from_mail="",$from_name="",$cc_mails=""){
+ if($to_mail==NULL){return FALSE;}
+ // headers
+ $eol="\n";
+ if($from_mail==""){$from_mail=api_getOption('owner_mail');}
+ if($from_name==""){$from_name=api_getOption('owner_mail_from');}
+ $headers= "MIME-Version: 1.0".$eol;
+ $headers.="Content-type: text/plain; Charset=UTF-8".$eol;
+ $headers.="From: ".$from_name." <".$from_mail.">".$eol;
+ $headers.="Reply-To: ".$from_mail.$eol;
+ $headers.="Return-Path: ".$from_mail.$eol;
+ if(strlen($cc_mails)>0){$headers.="CC: ".str_replace(" ","",$cc_mails).$eol;}
+ // subject
+ if($subject==""){$subject="Coordinator - Communication";}
+ // message
+ $message.=$eol.$eol."--".$eol."Questo messaggio è stato generato automaticamente da Coordinator per conto di ".api_getOption('owner').", si prega di non rispondere.".$eol;
+ // check HTML
+ if($html){
+  $mail_random_hash=md5(date('r',time()));
+  $headers.="MIME-Version: 1.0".$eol;
+  $headers.="Content-Type: multipart/alternative; boundary=\"PHP-alt-".$mail_random_hash."\"".$eol.$eol;
+  $headers.="This is a multi-part message in MIME format".$eol;
+  // message
+  $mail_message=$eol."--PHP-alt-".$mail_random_hash.$eol.
+   "Content-Type: text/plain; charset=utf-8".$eol.
+   "Content-Transfer-Encoding: 7bit".$eol.$eol;
+  $mail_message.=strip_tags($message).$eol;
+  $mail_message.=$eol."--PHP-alt-".$mail_random_hash.$eol.
+   "Content-Type: text/html; charset=utf-8".$eol.
+   "Content-Transfer-Encoding: 7bit".$eol.$eol;
+  $mail_message.=nl2br($message).$eol;
+  $mail_message.=$eol."--PHP-alt-".$mail_random_hash."--".$eol;
+  $message=$mail_message;
+ }
+ // sendmail
+ return mail($to_mail,$subject,$message,$headers);
+}
+
 
 ?>
