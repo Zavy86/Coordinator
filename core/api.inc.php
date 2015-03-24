@@ -482,8 +482,9 @@ function api_groupName($idGroup,$description=FALSE,$popup=FALSE){
 
 /* -[ Group id by group name ]------------------- verificare ---------------- */
 // @param $groupName : Name of the group
-// @param $idCompany : Company id
-function api_groupId($groupName,$idCompany=1){
+// @param $idCompany : Company id or company in use
+function api_groupId($groupName,$idCompany=NULL){
+ if($idCompany===NULL){$idCompany=api_company()->id;}
  $group=$GLOBALS['db']->queryUniqueObject("SELECT * FROM accounts_groups WHERE idCompany='".$idCompany."' AND name='".$groupName."'");
  if($group->id){
   return $group->id;
