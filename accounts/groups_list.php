@@ -24,7 +24,6 @@ function content(){
  $table->addHeader("&nbsp;",NULL,"16");
  $table->addHeader(api_text("groups_list-th-group"),"nowarp");
  if($_GET['members']){$table->addHeader(api_text("groups_list-th-description-members"),NULL,"100%");}
- else{$table->addHeader(api_text("groups_list-th-description"),NULL,"100%");}
  $table->addHeader(api_text("groups_list-th-members"),"nowarp text-right");
  $table->addHeader("&nbsp;",NULL,"16");
  // build group table row
@@ -46,7 +45,7 @@ function groups_list_tr($groups,&$table,$level=0){
   if($group->id==$_GET['idGroup']){$tr_class="info";}else{$tr_class=NULL;}
   // make prefix
   $pre=NULL;
-  for($i=0;$i<$level;$i++){$pre.="&nbsp;&nbsp;&nbsp;";}
+  for($i=0;$i<$level;$i++){$pre.="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";}
   // make members list
   if($_GET['members']){
    $members_list=NULL;
@@ -63,7 +62,7 @@ function groups_list_tr($groups,&$table,$level=0){
   // build table fields
   $table->addField(api_link("groups_view.php?idGroup=".$group->id,api_icon('icon-search')));
   $table->addField($pre.$group->label,"nowarp");
-  $table->addField($group->description." ".api_small(api_span(substr($members_list,2),"muted")));
+  if($_GET['members']){$table->addField(api_small(api_span(substr($members_list,2),"muted")));}
   $table->addField(count($group->members),"nowarp text-right");
   $table->addField(api_link("groups_edit.php?idGroup=".$group->id,api_icon('icon-edit')));
   //

@@ -26,6 +26,11 @@ function api_accounts_account($account=NULL){
  $account->mail=$account->account;
  // make firstname
  if(strrpos($account->name," ")!==FALSE){$account->firstname=substr($account->name,0,strrpos($account->name," "));}
+ // make shortname
+ if(strrpos($account->name," ")!==FALSE){
+  $account->shortname=substr($account->name,0,strrpos($account->name," "));
+  $account->shortname.=substr($account->name,strrpos($account->name," "),2).".";
+ }
  // make language ISO
  if($account->language<>"default"){$account->languageISO=substr($account->language,-2);}else{$account->languageISO="EN";}
  // get companies
@@ -366,7 +371,7 @@ function api_accounts_group($group,$subGroups=TRUE){
  }
  // get members
  $group->members=array();
- $members=$GLOBALS['db']->query("SELECT accounts_accounts_join_groups.idAccount FROM accounts_accounts_join_groups JOIN accounts_accounts ON accounts_accounts.id=accounts_accounts_join_groups.idAccount JOIN accounts_accounts_join_companies ON accounts_accounts_join_companies.idAccount=accounts_accounts.id JOIN accounts_roles ON accounts_roles.id = accounts_accounts_join_companies.idRole WHERE accounts_accounts_join_groups.idGroup='".$group->id."' ORDER BY accounts_roles.level DESC,accounts_accounts.name ASC");
+ $members=$GLOBALS['db']->query("SELECT accounts_accounts_join_groups.idAccount FROM accounts_accounts_join_groups JOIN accounts_accounts ON accounts_accounts.id=accounts_accounts_join_groups.idAccount JOIN accounts_accounts_join_companies ON accounts_accounts_join_companies.idAccount=accounts_accounts.id JOIN accounts_roles ON accounts_roles.id=accounts_accounts_join_companies.idRole WHERE accounts_accounts_join_groups.idGroup='".$group->id."' ORDER BY accounts_roles.level DESC,accounts_accounts.name ASC");
  while($member=$GLOBALS['db']->fetchNextObject($members)){
   $group->members[$member->idAccount]=$member->idAccount;
  }

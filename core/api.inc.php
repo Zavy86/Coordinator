@@ -1900,6 +1900,8 @@ function api_checkPermission($module,$action,$alert=FALSE,$admin=TRUE,$idAccount
  while($required_group=$GLOBALS['db']->fetchNextObject($required_groups)){
   // definitions
   $subgroups_array=array();
+  // check if account is associated to the company
+  if($account->companies[$required_group->idCompany]==NULL){continue;}
   // check groups or company level
   if($required_group->idGroup==0){
    // check if account company level >= required level

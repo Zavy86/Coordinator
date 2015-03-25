@@ -5,7 +5,7 @@
 $checkPermission="groups_edit";
 include("template.inc.php");
 
-// build options group DA FARE API
+// build options group DA FARE API <-------------------------------------------- todo
 function options_group($groups,&$form,$level=0,$selected=NULL,$skip=NULL){
  if(!is_array($groups)){return FALSE;}
  foreach($groups as $group){
@@ -45,7 +45,7 @@ function content(){
  $form->addField("text","description",api_text("groups_edit-ff-description"),stripslashes($group->description),"input-xlarge",api_text("groups_edit-ff-description-placeholder"));
  // controls
  $form->addControl("submit",api_text("groups_edit-fc-submit"));
- $form->addControl("button",api_text("groups_edit-fc-cancel"),NULL,"groups_list.php");
+ $form->addControl("button",api_text("groups_edit-fc-cancel"),NULL,"groups_list.php?idGroup=".$group->id);
  if($group->id>0){$form->addControl("button",api_text("groups_edit-fc-delete"),"btn-danger","submit.php?act=group_delete&idGroup=".$group->id,api_text("groups_edit-fc-delete-confirm"));}
  // renderize form
  $form->render();
