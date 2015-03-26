@@ -72,12 +72,11 @@
  <text key="logs_accounts_groupCreated">Il gruppo {2} nella società {1} è stato creato&#xA;&#xA;Descrizione: {3}</text>
  <text key="logs_accounts_groupUpdated">Il gruppo {2} nella società {1} è stato aggiornato&#xA;&#xA;Descrizione: {3}</text>
  <text key="logs_accounts_groupDeleted">Il gruppo {2} nella società {1} è stato eliminato&#xA;&#xA;Descrizione: {3}</text>
-
  <!-- accountCreated -->
- <text key="logs_accounts_accountCreated-label">Nuovo account utente creato</text>
- <text key="logs_accounts_accountCreated-description">Quando viene creato un nuovo account utente</text>
- <text key="logs_accounts_accountCreated-subject">Account - Nuovo account utente {2} creato</text>
- <text key="logs_accounts_accountCreated-message">E' stato creato un nuovo account utente:&#xA;&#xA;Nome: {2}&#xA;Account: {0}</text>
+ <text key="logs_accounts_accountLDAP-label">Nuovo account utente LDAP</text>
+ <text key="logs_accounts_accountLDAP-description">Quando un nuovo utente si registra tramite LDAP</text>
+ <text key="logs_accounts_accountLDAP-subject">Coordinator - Nuovo account utente LDAP {0}</text>
+ <text key="logs_accounts_accountLDAP-message">E' stato creato un nuovo account utente:&#xA;&#xA;Nome: {0}&#xA;Indirizzo mail: {1}&#xA;Account LDAP: {2}</text>
 
  <!-- mails -->
  <text key="mails_accounts_accountCreated-subject">Attivazione nuovo account Coordinator</text>
