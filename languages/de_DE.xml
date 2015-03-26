@@ -75,7 +75,7 @@
 
  <!-- html.class.php -->
  <text key="core-menu-dashboard">Armaturenbrett</text>
- <text key="core-menu-accounts">Profil</text>
+ <text key="core-menu-account">Profil</text>
  <text key="core-menu-accounts">Buchhaltung</text>
  <text key="core-menu-statistics">Statistiken</text>
  <text key="core-menu-settings">Einstellungen</text>
