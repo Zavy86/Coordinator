@@ -81,7 +81,7 @@ function content(){
    $companies_table->addRow();
    $companies_table->addField($main_td,"text-center");
    $companies_table->addField($company->name,"nowarp");
-   $companies_table->addField($company->role->name,"nowarp text-right");
+   $companies_table->addField($company->role->level." &minus; ".$company->role->name,"nowarp text-right");
    $companies_table->addField($del_td,"text-center");
   }
   // get associated companies

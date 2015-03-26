@@ -1904,13 +1904,13 @@ function api_checkPermission($module,$action,$alert=FALSE,$admin=TRUE,$idAccount
   if($account->companies[$required_group->idCompany]==NULL){continue;}
   // check groups or company level
   if($required_group->idGroup==0){
-   // check if account company level >= required level
-   if($account->companies[$required_group->idCompany]->role->level>=$required_group->level){return TRUE;}
+   // check if account company level <= required level
+   if($account->companies[$required_group->idCompany]->role->level<=$required_group->level){return TRUE;}
   }else{
    // check if group is in array account company groups
    if(array_key_exists($required_group->idGroup,$account->companies[$required_group->idCompany]->groups)){
-    // check if account company level >= required level
-    if($account->companies[$required_group->idCompany]->role->level>=$required_group->level){return TRUE;}
+    // check if account company level <= required level
+    if($account->companies[$required_group->idCompany]->role->level<=$required_group->level){return TRUE;}
    }else{
     // retrieve subgroups
     $subgroups=api_accounts_groups($required_group->idCompany,$required_group->idGroup);
@@ -1919,8 +1919,8 @@ function api_checkPermission($module,$action,$alert=FALSE,$admin=TRUE,$idAccount
     foreach($subgroups_array as $subgroup){
      // check if subgroup is in array account company groups
      if(array_key_exists($subgroup,$account->companies[$required_group->idCompany]->groups)){
-      // check if account company level >= required level
-      if($account->companies[$required_group->idCompany]->role->level>=$required_group->level){return TRUE;}
+      // check if account company level <= required level
+      if($account->companies[$required_group->idCompany]->role->level<=$required_group->level){return TRUE;}
      }
     }
    }

@@ -125,6 +125,7 @@
  <text key="permissions_edit-permission-td-group-none">Nessun gruppo abilitato a questa azione</text>
  <text key="permissions_edit-permission-td-group-remove">Rimuovi gruppo</text>
  <text key="permissions_edit-permission-td-group-remove-confirm">Confermi di voler rimuovere il permesso del gruppo sul questa azione?</text>
+ <text key="permissions_edit-permission-td-group-min">Ruolo {0} o superiore</text>
  <text key="permissions_edit-permission-fo-action-select">Seleziona un'azione</text>
  <text key="permissions_edit-permission-fo-action-any">Tutte le azioni</text>
  <text key="permissions_edit-permission-fo-group-select">Seleziona un gruppo</text>

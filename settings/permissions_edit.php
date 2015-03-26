@@ -62,14 +62,17 @@ function content(){
    $permission_groups_array=array();
    $permission_groups=$GLOBALS['db']->query("SELECT settings_permissions_join_accounts_groups.*,accounts_groups.id,accounts_groups.name,accounts_groups.description FROM settings_permissions_join_accounts_groups LEFT JOIN accounts_groups ON accounts_groups.id=settings_permissions_join_accounts_groups.idGroup WHERE settings_permissions_join_accounts_groups.idPermission='".$permission->id."' AND ( settings_permissions_join_accounts_groups.idCompany='".$company->id."' OR accounts_groups.idCompany='".$company->id."' ) ORDER BY name ASC");
    while($permission_group=$GLOBALS['db']->fetchNextObject($permission_groups)){
+    $roles_list=NULL;
+    foreach(api_accounts_roles(NULL,FALSE,"level='".$permission_group->level."'")->results as $role){$roles_list.=", ".$role->name;}
     if($permission_group->id==NULL){
      $label=api_link("submit.php?act=permission_group_remove&module=".$g_module."&idPermission=".$permission->id."&idCompany=".$company->id."&idGroup=0",api_icon("icon-trash",api_text("permissions_edit-permission-td-group-remove")),NULL,NULL,FALSE,api_text("permissions_edit-permission-td-group-remove-confirm"));
-     $label.=" ".api_tag("i",api_text("permissions_edit-permission-td-group-any")." (".$permission_group->level."+)");
+     $label.=" ".api_tag("i",api_text("permissions_edit-permission-td-group-any"));
+     $label.=" (".api_link("#",$permission_group->level."+",api_text("permissions_edit-permission-td-group-min",substr($roles_list,2)),NULL,TRUE).")";
     }else{
      $label=api_link("submit.php?act=permission_group_remove&module=".$g_module."&idPermission=".$permission->id."&idCompany=".$company->id."&idGroup=".$permission_group->id,api_icon("icon-trash",api_text("permissions_edit-permission-td-group-remove")),NULL,NULL,FALSE,api_text("permissions_edit-permission-td-group-remove-confirm"));
      $label.=" ".stripslashes($permission_group->name);
      if(strlen($permission_group->description)){$label.=" &minus; ".stripslashes($permission_group->description);}
-     $label.=" (".$permission_group->level."+)";
+     $label.=" (".api_link("#",$permission_group->level."+",api_text("permissions_edit-permission-td-group-min",substr($roles_list,2)),NULL,TRUE).")";
     }
     $permission_groups_array[$permission_group->idGroup]=$label;
     $enabled_groups.="<br>".$permission_groups_array[$permission_group->idGroup];

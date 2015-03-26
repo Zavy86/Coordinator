@@ -31,12 +31,12 @@ function groups_tree_table(array $groups,$level=0,$father=0){
   foreach($father_obj->members as $member){
    $account=api_accounts_account($member);
    $account_role=$account->companies[$father_obj->idCompany]->role;
-   if($account_role->level>3){
+   if($account_role->level<=4){
     // make element
     $account->leaf_label=$account->name;
-    if($account_role->level>=3){$account->leaf_label=mb_strtoupper($account->leaf_label,"UTF-8");}
-    if($account_role->level>=4){$account->leaf_label=api_tag("strong",$account->leaf_label);}
-    if($account_role->level>=5){$account->leaf_label=api_tag("u",$account->leaf_label);}
+    if($account_role->level<=4){$account->leaf_label=mb_strtoupper($account->leaf_label,"UTF-8");}
+    if($account_role->level<=3){$account->leaf_label=api_tag("strong",$account->leaf_label);}
+    if($account_role->level<=2){$account->leaf_label=api_tag("u",$account->leaf_label);}
     if($account->companies[$father_obj->idCompany]->mainGroup<>$father_obj->id){$account->leaf_label=api_tag("i",$account->leaf_label);}
     $account->leaf_popup=$account->name." &rarr; ".$account_role->level." ".$account_role->name;
     $members_list.="<br>".api_link("accounts_edit.php?idAccount=".$account->id,$account->leaf_label,$account->leaf_popup,"hiddenlink",TRUE,NULL,NULL,"_blank");
@@ -47,7 +47,7 @@ function groups_tree_table(array $groups,$level=0,$father=0){
   echo "  <td colspan='".count($groups)."'>";
   echo "   <div class='leaf'>";
   echo "<span class='group'>";
-  echo api_link("groups_tree.php?idGroup=".$father_obj->id,$father_obj->name,$father_obj->description,NULL,TRUE);
+  echo api_link("groups_view.php?idGroup=".$father_obj->id,$father_obj->name,$father_obj->description,NULL,TRUE);
   echo "</span><br>";
   echo "<span class='members'><hr>".substr($members_list,4)."</span></div>\n";
   echo "  </td>\n";
@@ -75,9 +75,9 @@ function groups_tree_table(array $groups,$level=0,$father=0){
    // make element
    $account->leaf_label=$account->firstname;
    if(!strlen($account->leaf_label)){$account->leaf_label=$account->name;}
-   if($account_role->level>=3){$account->leaf_label=mb_strtoupper($account->leaf_label,"UTF-8");}
-   if($account_role->level>=4){$account->leaf_label=api_tag("strong",$account->leaf_label);}
-   if($account_role->level>=5){$account->leaf_label=api_tag("u",$account->leaf_label);}
+   if($account_role->level<=4){$account->leaf_label=mb_strtoupper($account->leaf_label,"UTF-8");}
+   if($account_role->level<=3){$account->leaf_label=api_tag("strong",$account->leaf_label);}
+   if($account_role->level<=2){$account->leaf_label=api_tag("u",$account->leaf_label);}
    if($account->companies[$group->idCompany]->mainGroup<>$group->id){$account->leaf_label=api_tag("i",$account->leaf_label);}
    $account->leaf_popup=$account->name." &rarr; ".$account_role->level." ".$account_role->name;
    // divide members by level
@@ -85,7 +85,7 @@ function groups_tree_table(array $groups,$level=0,$father=0){
    $members_array[$account_role->level][$account->id]=$account;
   }
   // cycle members level
-  sort($members_array);
+  ksort($members_array);
   foreach($members_array as $members){
    $level_members_list=NULL;
    // cycle level members
@@ -104,7 +104,7 @@ function groups_tree_table(array $groups,$level=0,$father=0){
   if($level==0){$div_class="active";}else{$div_class=NULL;}
   echo "   <div class='leaf ".$div_class."'>";
   echo "<span class='group'>";
-  echo api_link("groups_tree.php?idGroup=".$group->id,$group->name,$group->description,NULL,TRUE);
+  echo api_link("groups_view.php?idGroup=".$group->id,$group->name,$group->description,NULL,TRUE);
   echo "</span><br>";
   echo "<span class='members'>".$members_list."</span></div>\n";
   // sub branchs
