@@ -76,6 +76,13 @@ if($g_submit=="cron"){
 }*/
 
 
+/* -[ Check Maintenance ]---------------------------------------------------- */
+if(api_getOption("maintenance")&&!api_account()->superuser&&api_baseName()<>"login.php"){
+ $alert="&alert=maintenance&alert_class=alert-warning";
+ exit(header("location: ../accounts/login.php?lang=".api_account()->language."&account=".api_account()->login.$alert));
+}
+
+
 /* -[ Check browser ]-------------------------------------------------------- */
 if((strpos($_SERVER['HTTP_USER_AGENT'],'Chrome')==false)
    &&(strpos($_SERVER['HTTP_USER_AGENT'],'Safari')==false)
