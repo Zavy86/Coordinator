@@ -1,8 +1,74 @@
-------------------------------------------------------------------------
------------------------------- 2015.03.11 ------------------------------
-------------------------------------------------------------------------
+--------------------------------------------------------------------------------
+---------------------------------- 2015.03.XX ----------------------------------
+--------------------------------------------------------------------------------
 
-Eseguire le seguenti query per aggiungere i parametri relativi all'SMTP
+# cancellato dai settings il manintenance_description
+
+DELETE FROM `settings_settings` WHERE `code`='maintenance_description'
+
+# Aggiunta tabella di join per le società in modo da rendere un account multisocietà
+
+CREATE TABLE IF NOT EXISTS `accounts_accounts_join_companies` (
+  `idAccount` int(11) unsigned NOT NULL,
+  `idCompany` int(11) unsigned NOT NULL,
+  `main` tinyint(1) unsigned NOT NULL DEFAULT '0',
+  KEY `idAccount` (`idAccount`),
+  KEY `idCompany` (`idCompany`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+ALTER TABLE `accounts_accounts_join_companies`
+  ADD CONSTRAINT `accounts_accounts_join_companies_ibfk_1` FOREIGN KEY (`idAccount`) REFERENCES `accounts_accounts` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `accounts_accounts_join_companies_ibfk_2` FOREIGN KEY (`idCompany`) REFERENCES `accounts_companies` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+# modificata tabella accounts
+
+ALTER TABLE  `accounts_accounts`
+
+ADD  `enabled` TINYINT( 1 ) UNSIGNED NOT NULL DEFAULT  '0' AFTER  `ldapUsername` ,
+ADD  `superuser` TINYINT( 1 ) UNSIGNED NOT NULL DEFAULT  '0' AFTER  `enabled`,
+
+ADD  `addDate` DATETIME NOT NULL AFTER  `ldapUsername` ,
+ADD  `addIdAccount` INT( 11 ) UNSIGNED NOT NULL AFTER  `addDate` ,
+ADD  `updDate` DATETIME NULL AFTER  `addIdAccount`,
+ADD  `updIdAccount` INT( 11 ) UNSIGNED NULL AFTER  `updDate`,
+ADD  `accDate` DATETIME NULL AFTER  `updIdAccount`,
+ADD  `del` TINYINT( 1 ) UNSIGNED NOT NULL DEFAULT  '0'  AFTER  `accDate`
+
+ALTER TABLE  `accounts_accounts`
+DROP  `idCompany`,
+DROP  `registration`,
+DROP  `lastLogin`
+
+# modificata tabella groups
+
+ALTER TABLE  `accounts_groups`
+DROP INDEX  `idGroup`,
+DROP INDEX  `name`
+
+ALTER TABLE  `accounts_groups`
+CHANGE  `idGroup`  `idGroup` INT( 11 ) UNSIGNED NULL DEFAULT NULL
+
+UPDATE `accounts_groups` SET `idGroup`=NULL WHERE `idGroup`='0'
+
+ALTER TABLE  `accounts_groups`
+ADD  `idCompany` INT( 11 ) UNSIGNED NULL DEFAULT NULL AFTER  `id`
+
+ALTER TABLE  `accounts_groups`
+ADD INDEX (  `idCompany` ),
+ADD INDEX (  `idGroup` ),
+ADD INDEX (  `name` )
+
+ALTER TABLE  `accounts_groups`
+ADD FOREIGN KEY (  `idCompany` ) REFERENCES  `coordinator`.`accounts_companies` (`id`) ON DELETE CASCADE ON UPDATE CASCADE ;
+ADD FOREIGN KEY (  `idGroup` ) REFERENCES  `coordinator`.`accounts_groups` (`id`) ON DELETE CASCADE ON UPDATE CASCADE ;
+
+UPDATE `accounts_groups` SET `idCompany`='1'
+
+--------------------------------------------------------------------------------
+---------------------------------- 2015.03.11 ----------------------------------
+--------------------------------------------------------------------------------
+
+# Aggiungere i parametri relativi all'SMTP
 
 INSERT IGNORE INTO `settings_settings` (`code`, `value`) VALUES
 ('smtp', '0'),
@@ -10,6 +76,8 @@ INSERT IGNORE INTO `settings_settings` (`code`, `value`) VALUES
 ('smtp_username',''),
 ('smtp_password',''),
 ('smtp_secure','');
+
+# Modificata la tabella delle mail
 
 ALTER TABLE  `logs_mails`
 CHANGE  `to`  `to` TEXT CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
