@@ -77,7 +77,8 @@ if($g_submit=="cron"){
 
 
 /* -[ Check Maintenance ]---------------------------------------------------- */
-if(api_getOption("maintenance")&&!api_account()->superuser&&api_baseName()<>"login.php"){
+if(api_getOption("maintenance") && !api_account()->superuser &&
+  ( api_baseName()<>"login.php" && api_baseName()<>"submit.php") ){
  $alert="&alert=maintenance&alert_class=alert-warning";
  exit(header("location: ../accounts/login.php?lang=".api_account()->language."&account=".api_account()->login.$alert));
 }
@@ -260,7 +261,13 @@ function api_getOption($code){
 
 /* -[ Get user hostname ]---------------------------------------------------- */
 function api_hostName(){
- return strtoupper(gethostbyaddr($_SERVER['REMOTE_ADDR']));
+ if($_SERVER["HTTP_X_FORWARDED_FOR"]<>""){
+  $proxy=$_SERVER["REMOTE_ADDR"];
+  $host=@gethostbyaddr($_SERVER["HTTP_X_FORWARDED_FOR"]);
+ }else{
+  $host=@gethostbyaddr($_SERVER["REMOTE_ADDR"]);
+ }
+ return strtoupper($host);
 }
 
 
@@ -1846,8 +1853,8 @@ function api_account($idAccount=NULL){
  * @return object company object
  */
 function api_company($company=NULL){
- if(is_numeric($company)){$company=api_accounts_company($company);}
  if($company===NULL){$company=$_SESSION['company'];}
+ if(is_numeric($company)){$company=api_accounts_company($company);}
  if($company->id){return $company;}
  return FALSE;
 }
