@@ -8,18 +8,35 @@ function content(){
  // get objects
  $company=api_accounts_company($_GET['idCompany']);
  $group=api_accounts_group($_GET['idGroup']);
+ // acquire variables
+ $g_max=$_GET['max'];
+ if($g_max<1){$g_max=2;}
+ // build groups organics chart
  if($company->id){
-  groups_tree_table($company->groups);
+  groups_tree_table($company->groups,0,0,$g_max);
  }elseif($group->id){
-  groups_tree_table(array($group),0,$group->idGroup);
+  groups_tree_table(array($group),0,$group->idGroup,$g_max);
  }
 }
 // show groups tree
-function groups_tree_table(array $groups,$level=0,$father=0){
+function groups_tree_table(array $groups,$level=0,$father=0,$max=2){
  // definitions
  $count=0;
  // limit sublevels
- if($level>2){return true;}
+ if($level>$max){
+  echo "<table class='tree'>\n";
+  echo " <tr>\n  <td>\n";
+  echo "   <table><tr><td class='width-50 right'>&nbsp;</td><td class='width-50'>&nbsp;</td></tr></table>\n";
+  echo "  </td>\n </tr>\n";
+  echo " <tr>\n";
+  echo "  <td>";
+  echo "   <div class='leaf'>";
+  echo "<span class='description'>".api_link("groups_view.php?idGroup=".end($groups)->idGroup,api_icon("icon-th-list"))."</span><br>";
+  echo "  </td>\n";
+  echo " </tr>\n";
+  echo "</table>\n";
+  return TRUE;
+ }
  // build tree table
  echo "<table class='tree'>\n";
  // if is set father
@@ -109,7 +126,7 @@ function groups_tree_table(array $groups,$level=0,$father=0){
   echo "<span class='members'>".$members_list."</span></div>\n";
   // sub branchs
   if(count($group->groups)){
-   groups_tree_table($group->groups,($level+1));
+   groups_tree_table($group->groups,($level+1),0,$max);
   }
   // close leaf
   echo "  </td>\n";

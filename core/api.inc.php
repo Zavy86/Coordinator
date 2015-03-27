@@ -713,14 +713,13 @@ function api_parse_csv_file($csv_file,$csv_delimiter=',',$csv_enclosure='"',$hea
   // get max lines
   $max_line_length=defined('MAX_LINE_LENGTH')?MAX_LINE_LENGTH:100000;
   // get haders
-  if($header){$header=fgetcsv($handle,$max_line_length);}
+  if($header){$headers=fgetcsv($handle,$max_line_length,$csv_delimiter,$csv_enclosure);}
   // get rows
   while(($csv_row=fgetcsv($handle,$max_line_length,$csv_delimiter,$csv_enclosure))!==FALSE){
-   if($header==FALSE || count($csv_row)==count($header)){
-    // add entry to row array
-    if($header){$csv_row=array_combine($header,$csv_row);}
-    $csv_rows[]=$csv_row;
-   }else{$csv_error=TRUE;}
+   if($header==TRUE && count($csv_row)<>count($headers)){$csv_error=TRUE;continue;}
+   // add entry to row array
+   if($header){$csv_row=array_combine($headers,$csv_row);}
+   $csv_rows[]=$csv_row;
   }
   // close handles
   fclose($handle);
