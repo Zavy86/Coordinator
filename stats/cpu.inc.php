@@ -34,7 +34,7 @@ $intervalTotal=intval($total-$prevTotal);
 if($intervalTotal>0){$cpu=intval(100*(($intervalTotal-($idle-$prevIdle))/$intervalTotal));}else{$cpu=0;}
 $_SESSION['stats_cpu'][]=$cpu;
 $_SESSION['stats_cpu']=array_splice($_SESSION['stats_cpu'],-31);
-$_SESSION['stats_cpu_timestamp']=date("Y-m-d H:i:s");
+$_SESSION['stats_cpu_timestamp']=api_now();
 // chart dataset definition
 $dataSet=new pData;
 $dataSet->AddPoint($_SESSION['stats_cpu'],"Serie1");

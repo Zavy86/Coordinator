@@ -34,6 +34,10 @@ function content(){
   if($mail->error){$modal_body.="<p class='text-error'>".stripslashes($mail->error)."</p>\n";}
   $modal_body.="<hr>\n<p>".nl2br(strip_tags(stripslashes($mail->message)))."</p>\n";
   $modal->body($modal_body);
+  if($mail->status==1){
+   $modal_footer=api_link("submit.php?act=mails_retry&id=".$mail->id,api_text("mails_list-m-resend"),NULL,"btn");
+   $modal->footer($modal_footer);
+  }
   if($mail->status==2){
    $modal_footer=api_text("mails_list-m-failed")." &nbsp; ";
    $modal_footer.=api_link("submit.php?act=mails_retry&id=".$mail->id,api_text("mails_list-m-retry"),NULL,"btn btn-success");

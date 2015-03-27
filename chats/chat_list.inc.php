@@ -28,8 +28,8 @@
      $chat_account=ltrim($id[1],"0");
     }
     // add li to ul
-    $li="<li><a rel=\"shadowbox;width=360;height=480;\" href='../chats/chat.inc.php?account=".$chat_account."' title='".api_accountName($chat_account)."'>";
-    if($chats_unread>0){$li.="<b> ".api_accountName($chat_account)." (".$chats_unread.")</b>";}else{$li.=api_accountName($chat_account);}
+    $li="<li><a rel=\"shadowbox;width=360;height=480;\" href='../chats/chat.inc.php?account=".$chat_account."' title='".api_account($chat_account)->name."'>";
+    if($chats_unread>0){$li.="<b> ".api_account($chat_account)->name." (".$chats_unread.")</b>";}else{$li.=api_account($chat_account)->name;}
     $li.="</a></li>\n";
     $ul[]=$li;
    }

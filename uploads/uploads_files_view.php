@@ -35,8 +35,8 @@ function content(){
  $dl_file->addElement(api_text("uploads_files_view-dt-size"),$file->size_formatted);
  if($file->description){$dl_file->addElement(api_text("uploads_files_view-dt-description"),$file->description);}
  /*if($file->del){$status_icon="icon-trash";}else{$status_icon="icon-info-sign";}
- if($file->updIdAccount){$status="uploads_files_view-dt-updIdAccount";$account_name=api_accountName($file->updIdAccount);}
-  else{$status="uploads_files_view-dt-addIdAccount";$account_name=api_accountName($file->addIdAccount);}
+ if($file->updIdAccount){$status="uploads_files_view-dt-updIdAccount";$account_name=api_account($file->updIdAccount)->name;}
+  else{$status="uploads_files_view-dt-addIdAccount";$account_name=api_account($file->addIdAccount)->name;}
  $dl_file->addElement(api_text($status),$account_name." &nbsp; ".$file_status_modal->link(api_icon($status_icon)));*/
  // renderize dl
  $dl_file->render();

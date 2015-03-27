@@ -34,7 +34,7 @@ function chat_send(){
   // add new message
   $child=$chat_xml->addChild("message");
   $child->addChild("account",$_SESSION['account']->id);
-  $child->addChild("timestamp",date("Y-m-d H:i:s"));
+  $child->addChild("timestamp",api_now());
   $child->addChild("status","1");
   $child->addChild("text",$p_message);
   // format xml

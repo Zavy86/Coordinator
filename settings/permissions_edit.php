@@ -2,107 +2,149 @@
 /* ------------------------------------------------------------------------- *\
 |* -[ Settings - Permissions Edit ]----------------------------------------- *|
 \* ------------------------------------------------------------------------- */
-$checkPermission="permissions_edit";
+$checkPermission="permissions_manage";
 include("template.inc.php");
 function content(){
- $g_module=$_GET['module'];
- // acquire modules array
+ // definitions
  $modules_array=array();
+ $permissions_array=array();
+ // acquire variables
+ $g_module=$_GET['module'];
+ $g_idCompany=$_GET['idCompany'];
+ // build modules array
  $modules=$GLOBALS['db']->query("SELECT DISTINCT module FROM settings_permissions ORDER BY module ASC");
- while($module=$GLOBALS['db']->fetchNextObject($modules)){$modules_array[]=$module;}
- // acquire groups array
- $groups_array=array((object)array("id"=>"0","name"=>"Tutti i gruppi","description"=>""));
- $groups=$GLOBALS['db']->query("SELECT * FROM accounts_groups ORDER BY idGroup,name ASC");
- while($group=$GLOBALS['db']->fetchNextObject($groups)){$groups_array[]=$group;}
- // acquire grouproles array
- $grouproles_array=array();
- //$grouproles_array=array((object)array("id"=>"0","name"=>"Tutti i ruoli","description"=>""));
- $grouproles=$GLOBALS['db']->query("SELECT * FROM accounts_grouproles ORDER BY id ASC");
- while($grouprole=$GLOBALS['db']->fetchNextObject($grouproles)){$grouproles_array[]=$grouprole;}
- // show modules
- echo "<div class='accordion' id='accordion'>";
- foreach($modules_array as $module){
-  echo "<div class='accordion-group'>\n";
-  echo "<div class='accordion-heading'>\n";
-  echo "<a class='accordion-toggle' data-toggle='collapse' data-parent='#accordion' href='#collapse_".$module->module."'>\n";
-  echo "<b>".strtoupper($module->module)."</b>\n";
-  echo "</a>\n</div>\n";
-  echo "<div id='collapse_".$module->module."' class='accordion-body collapse";
-  if($g_module==$module->module){echo " in";}echo "'>\n";
-  echo "<div class='accordion-inner'>\n";
-  echo "<table class='table table-striped table-hover'>\n";
-  echo "<thead>\n<tr>\n<th>Descrizione</th>\n";
-  echo "<th>Gruppi e ruoli abilitati</th>\n";
-  echo "</tr>\n</thead>\n<tbody>\n"; 
-  $permission_unlocked_count=0;
-  // acquire permissions array
-  $permissions_array=array();
-  $permissions=$GLOBALS['db']->query("SELECT * FROM settings_permissions WHERE module='".$module->module."' ORDER BY id ASC");
+ while($module=$GLOBALS['db']->fetchNextObject($modules)){$modules_array[]=$module->module;}
+ // build permissions array
+ if(strlen($g_module)){
+  $permissions=$GLOBALS['db']->query("SELECT * FROM settings_permissions WHERE module='".$g_module."' ORDER BY id ASC");
   while($permission=$GLOBALS['db']->fetchNextObject($permissions)){$permissions_array[]=$permission;}
-  // show actions
+ }
+ // build modules sidebar
+ $sidebar=new str_sidebar();
+ $sidebar->addHeader(api_text("permissions_edit-modules"));
+ foreach($modules_array as $module){
+  $label=mb_convert_case(mb_strtolower($module,"UTF-8"),MB_CASE_TITLE,"UTF-8");
+  if(strlen($label)==3){$label=mb_strtoupper($module,"UTF-8");}
+  $sidebar->addItem($label,"permissions_edit.php?module=".$module);
+ }
+
+ // build options group    ----------------------------------------------------- da verificare
+ function permissions_edit_options_group($array,$level=0){
+  foreach($array as $group){
+   $pre=NULL;
+   for($i=0;$i<$level;$i++){$pre.="&nbsp;&nbsp;&nbsp;";}
+   $return.="<option value='".$group->id."'>".$pre.$group->label."</option>\n";
+   $return.=permissions_edit_options_group($group->groups,($level+1));
+  }
+  return $return;
+ }
+
+ // build module tabbable
+ $tabbable=new str_tabbable("top");
+ // cycle companies
+ $companies=api_accounts_companies();
+ foreach($companies->results as $company){
+  // get company groups
+  $company_groups=api_accounts_groups($company->id);
+  // build permissions table
+  $permissions_table=new str_table(api_text("permissions_edit-permission-tr-unvalued"));
+  // build permissions table header
+  $permissions_table->addHeader("&nbsp;",NULL,16);
+  $permissions_table->addHeader(api_text("permissions_edit-permission-th-action",$company->name),"nowarp");
+  $permissions_table->addHeader(api_text("permissions_edit-permission-th-group"),NULL,"100%");
+  // cycle permissions
   foreach($permissions_array as $permission){
-   $enabled=FALSE;
-   if(!$permission->locked || $_SESSION['account']->id==1){$permission_unlocked_count++;}
-   echo "<tr>\n<td>";
-   if($permission->locked && $_SESSION['account']->id<>1){echo "<i class='icon-lock'></i> ";}
-   echo $permission->description."</td>\n<td>\n";
-   // get required role by groups
-   foreach($groups_array as $group){
-    $requiredgrouprole=$GLOBALS['db']->queryUniqueValue("SELECT idGrouprole FROM settings_permissions_join_accounts_groups WHERE idPermission='".$permission->id."' AND idGroup='".$group->id."'");
-    if($requiredgrouprole>0){
-     $enabled=TRUE;
-     echo "<div style=\"height:30px;\">";
-     if(!$permission->locked || $_SESSION['account']->id==1){echo "<a class='btn btn-mini' href='submit.php?act=permissions_del&module=".$module->module."&idPermission=".$permission->id."&idGroup=".$group->id."' onclick=\"return confirm('Sei sicuro di voler rimuovere il permesso a questo gruppo?');\"><i class='icon-trash'></i></a> ";}
-     if($group->idGroup==0){$group_name="<strong>".$group->name."</strong>";}
-      else{$group_name=api_groupName($group->idGroup)."&minus;<strong>".$group->name."</strong>";}
-     echo $group_name." &DoubleRightArrow; ".api_grouproleName($requiredgrouprole,TRUE)."</div>\n";
+   // make lock field
+   if($permission->locked){$locked_td=api_icon("icon-lock");}else{$locked_td=NULL;}
+   // make enabled groups
+   $enabled_groups=NULL;
+   // build permissions table rows
+   $permission_groups_array=array();
+   $permission_groups=$GLOBALS['db']->query("SELECT settings_permissions_join_accounts_groups.*,accounts_groups.id,accounts_groups.name,accounts_groups.description FROM settings_permissions_join_accounts_groups LEFT JOIN accounts_groups ON accounts_groups.id=settings_permissions_join_accounts_groups.idGroup WHERE settings_permissions_join_accounts_groups.idPermission='".$permission->id."' AND ( settings_permissions_join_accounts_groups.idCompany='".$company->id."' OR accounts_groups.idCompany='".$company->id."' ) ORDER BY name ASC");
+   while($permission_group=$GLOBALS['db']->fetchNextObject($permission_groups)){
+    $roles_list=NULL;
+    foreach(api_accounts_roles(NULL,FALSE,"level='".$permission_group->level."'")->results as $role){$roles_list.=", ".$role->name;}
+    if($permission_group->id==NULL){
+     $label=api_link("submit.php?act=permission_group_remove&module=".$g_module."&idPermission=".$permission->id."&idCompany=".$company->id."&idGroup=0",api_icon("icon-trash",api_text("permissions_edit-permission-td-group-remove")),NULL,NULL,FALSE,api_text("permissions_edit-permission-td-group-remove-confirm"));
+     $label.=" ".api_tag("i",api_text("permissions_edit-permission-td-group-any"));
+     $label.=" (".api_link("#",$permission_group->level."+",api_text("permissions_edit-permission-td-group-min",substr($roles_list,2)),NULL,TRUE).")";
+    }else{
+     $label=api_link("submit.php?act=permission_group_remove&module=".$g_module."&idPermission=".$permission->id."&idCompany=".$company->id."&idGroup=".$permission_group->id,api_icon("icon-trash",api_text("permissions_edit-permission-td-group-remove")),NULL,NULL,FALSE,api_text("permissions_edit-permission-td-group-remove-confirm"));
+     $label.=" ".stripslashes($permission_group->name);
+     if(strlen($permission_group->description)){$label.=" &minus; ".stripslashes($permission_group->description);}
+     $label.=" (".api_link("#",$permission_group->level."+",api_text("permissions_edit-permission-td-group-min",substr($roles_list,2)),NULL,TRUE).")";
     }
+    $permission_groups_array[$permission_group->idGroup]=$label;
+    $enabled_groups.="<br>".$permission_groups_array[$permission_group->idGroup];
    }
-   if(!$enabled){echo "Azione permessa solo agli amministratori";}
-   echo "</td>\n</tr>\n";
+   // check permissions
+   if(!strlen($enabled_groups)){$enabled_groups="<br>".api_tag("i",api_text("permissions_edit-permission-td-group-none"));}
+   // build table row
+   $permissions_table->addRow();
+   $permissions_table->addField($locked_td);
+   $permissions_table->addField(api_link("#",$permission->description,$permission->action,"hiddenlink",TRUE),"nowarp");
+   $permissions_table->addField(substr($enabled_groups,4));
   }
-  echo "</tbody>\n</table>\n";
-  if($permission_unlocked_count){
-?>
-<form class="form-horizontal" action="submit.php?act=permissions_add" method="post">  
- <input type="hidden" name="module" value="<?php echo $module->module; ?>">
- <select name="idPermission">
-  <option value="0">Seleziona un'azione</option>
-  <option value="-1">Tutte le azioni disponibili</option>
-<?php
- foreach($permissions_array as $permission){
-  if(!$permission->locked || $_SESSION['account']->id==1){
-   echo "<option value='".$permission->id."'> ".$permission->description."</option>\n";
+  // build permissions form
+  $permissions_form=new str_form("submit.php?act=permission_group_add&module=".$g_module."&idCompany=".$company->id,"post","permissions_edit_".$company->id);
+  $permissions_box=api_link("submit.php?act=permission_group_reset&module=".$g_module."&idCompany=".$company->id,api_icon("icon-repeat",api_text("permissions_edit-fc-reset")),NULL,"btn",FALSE,api_text("permissions_edit-fc-reset-confirm",$g_module))."\n";
+  $permissions_box.="<select name='idPermission' class='input-xlarge'>\n";
+  $permissions_box.="<option value=''>".api_text("permissions_edit-permission-fo-action-select")."</option>\n";
+  $permissions_box.="<option value='0'>".api_text("permissions_edit-permission-fo-action-any")."</option>\n";
+  foreach($permissions_array as $permission){
+   if($permission->locked&&api_accounts_account()->id>1){continue;}
+   $permissions_box.="<option value='".$permission->id."'>".stripslashes($permission->description)."</option>\n";
   }
- }
-?>
- </select>
- <select name="idGroup">
-<?php
- foreach($groups_array as $group){
-  $group_name=$group->name;
-  if($group->idGroup>0){$group_name=api_groupName($group->idGroup)."&minus;".$group_name;}
-  echo "<option value='".$group->id."'> ".$group_name;
-  if($group->description){echo " (".$group->description.")";}
-  echo "</option>\n";
- }
-?>
- </select>
- <select name="idGrouprole">
-<?php
- foreach($grouproles_array as $grouprole){
-  echo "<option value='".$grouprole->id."'> ".$grouprole->name;
-  if($grouprole->description){echo " (".$grouprole->description.")";}
-  echo "</option>\n";
- }
-?>
- </select>
- <button type="submit" class="btn"><i class="icon-plus"></i></button>
- <a href='<?php echo "submit.php?act=permissions_reset&module=".$module->module;?>' onclick="return confirm('Sei sicuro di voler resettare i permessi di questo modulo?');">Reset permessi</a>
-</form>
-<?php
+  $permissions_box.="</select>\n";
+  $permissions_box.="<select name='idGroup' class='input-xlarge'>\n";
+  $permissions_box.="<option value=''>".api_text("permissions_edit-permission-fo-group-select")."</option>\n";
+  $permissions_box.="<option value='0'>".api_text("permissions_edit-permission-fo-group-any")."</option>\n";
+  $permissions_box.=permissions_edit_options_group($company_groups->results);
+  $permissions_box.="</select>\n";
+  $permissions_box.="<select name='level' class='input-medium'>\n";
+  $permissions_box.="<option value=''>".api_text("permissions_edit-permission-fo-level-select")."</option>\n";
+  foreach(api_accounts_roles()->results as $role){
+   $label=$role->level." &minus; ".$role->name;
+   if(strlen($role->description)){$label.=" (".$role->description.")";}
+   $permissions_box.="<option value='".$role->level."'>".$label."</option>\n";
+   // ^------------------------------------------------------------------------ usato level al posto di id
   }
-  echo "</div>\n</div>\n</div>\n";
+  $permissions_box.="</select>\n";
+  $permissions_box.="<input type='submit' name='permissions_edit_".$company->id."_submit' class='btn' value='+'>\n";
+  $permissions_form->addCustomField(NULL,$permissions_box);
+  // add company element
+  $tabbable->addTab($company->name,$permissions_table->render(FALSE).$permissions_form->render(FALSE),NULL,TRUE,($company->id==$g_idCompany?TRUE:FALSE));
  }
-}
+ // open split
+ $GLOBALS['html']->split_open();
+ $GLOBALS['html']->split_span(3);
+ // renderize sidebar
+ $sidebar->render();
+ // split page
+ $GLOBALS['html']->split_span(9);
+ // renderize permissions tabbable
+ if(strlen($g_module)){
+  $tabbable->render();
+ }else{
+  echo api_text("permissions_edit-modules-select");
+ }
+ // close split
+ $GLOBALS['html']->split_close();
 ?>
+<script type="text/javascript">
+ $(document).ready(function(){
+<?php
+  foreach($companies->results as $company){
+   echo "  // validation company ".$company->name."\n";
+   echo "  $('form[name=permissions_edit_".$company->id."]').validate({\n";
+   echo "   rules:{\n";
+   echo "    idPermission:{required:true},\n";
+   echo "    idGroup:{required:true},\n";
+   echo "    level:{required:true}\n";
+   echo "   },submitHandler:function(form){form.submit();}\n";
+   echo "  });\n";
+  }
+?>
+ });
+</script>
+<?php } ?>

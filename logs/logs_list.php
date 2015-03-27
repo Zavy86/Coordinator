@@ -52,7 +52,7 @@ function content(){
   $modal->header(strip_tags($log_subject));
   $m_body="<dl>\n";
   $m_body.="<dt>Data</dt><dd>".api_timestampFormat($log->timestamp,api_text("timestamp"))."</dd><br>\n";
-  if($log->idAccount>0){$m_body.="<dt>Account:</dt><dd>".api_accountName($log->idAccount)."</dd><br>\n";}
+  if($log->idAccount>0){$m_body.="<dt>Account:</dt><dd>".api_account($log->idAccount)->name."</dd><br>\n";}
   $m_body.="<dt>Indirizzo IP</dt><dd>".$log->ip."</dd><br>\n"; // gethostbyaddr
   if(strlen($log->link)>0){$m_body.="<dt>Link:</dt><dd><a href='".$GLOBALS['dir'].$log->link."' target='_blank'>".$log->link."</a></dd><br>\n";}
   $m_body.="<dt>Log</dt><dd>".nl2br($log->event)."</dd>\n";
@@ -67,7 +67,7 @@ function content(){
   $table->addField(strtoupper(stripslashes($log->module)),"nowarp");
   $table->addField(stripslashes($log->action),"nowarp");
   $table->addField($modal->link($log_subject));
-  $table->addField(api_accountName($log->idAccount),"nowarp");
+  $table->addField(api_account($log->idAccount)->name,"nowarp");
  }
  // show table
  $table->render();

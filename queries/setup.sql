@@ -10,28 +10,62 @@
 
 CREATE TABLE IF NOT EXISTS `accounts_accounts` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-  `account` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `account` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
   `password` varchar(32) COLLATE utf8_unicode_ci NOT NULL,
   `secret` varchar(32) COLLATE utf8_unicode_ci DEFAULT NULL,
   `name` varchar(25) COLLATE utf8_unicode_ci NOT NULL,
-  `typology` tinyint(1) unsigned NOT NULL DEFAULT '0' COMMENT '0 disabled, 1 administrator, 2 user',
+  `phone` varchar(25) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `ldap` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
   `language` varchar(10) COLLATE utf8_unicode_ci NOT NULL DEFAULT 'default',
-  `idCompany` int(11) unsigned DEFAULT NULL,
-  `registration` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `lastLogin` datetime DEFAULT NULL,
-  `ldapUsername` varchar(25) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `enabled` tinyint(1) unsigned NOT NULL DEFAULT '0',
+  `superuser` tinyint(1) unsigned NOT NULL DEFAULT '0',
+  `addDate` datetime NOT NULL,
+  `addIdAccount` int(11) unsigned NOT NULL,
+  `updDate` datetime DEFAULT NULL,
+  `updIdAccount` int(11) unsigned DEFAULT NULL,
+  `accDate` datetime DEFAULT NULL,
+  `del` tinyint(1) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
-  UNIQUE KEY `account` (`account`),
-  UNIQUE KEY `ldapUsername` (`ldapUsername`),
-  KEY `idCompany` (`idCompany`)
+  UNIQUE KEY `ldap` (`ldap`),
+  KEY `account` (`account`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Dumping data for table `accounts_accounts`
 --
 
-INSERT IGNORE INTO `accounts_accounts` (`id`, `account`, `password`, `secret`, `name`, `typology`, `idCompany`, `registration`, `lastLogin`, `ldapUsername`) VALUES
-('1', 'root', '63a9f0ea7bb98050796b649e85481845', NULL, 'Administrator', 1, NULL, '2009-06-01 10:00:00', NULL, NULL);
+INSERT IGNORE INTO `accounts_accounts` (`id`, `account`, `password`, `secret`, `name`, `phone`, `ldap`, `language`, `enabled`, `superuser`, `addDate`, `addIdAccount`, `del`) VALUES
+(1, 'root', '63a9f0ea7bb98050796b649e85481845', NULL, 'Administrator', NULL, NULL, 'it_IT', 1, 1, '2009-06-01 10:00:00', 1, 0);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `accounts_accounts_join_companies`
+--
+
+CREATE TABLE IF NOT EXISTS `accounts_accounts_join_companies` (
+  `idAccount` int(11) unsigned NOT NULL,
+  `idCompany` int(11) unsigned NOT NULL,
+  `idRole` int(11) unsigned NOT NULL,
+  `main` tinyint(1) unsigned NOT NULL DEFAULT '0',
+  KEY `idAccount` (`idAccount`),
+  KEY `idCompany` (`idCompany`),
+  KEY `idRole` (`idRole`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `accounts_accounts_join_groups`
+--
+
+CREATE TABLE IF NOT EXISTS `accounts_accounts_join_groups` (
+  `idAccount` int(11) unsigned NOT NULL,
+  `idGroup` int(11) unsigned NOT NULL,
+  `main` tinyint(1) unsigned NOT NULL DEFAULT '0',
+  KEY `idAccount` (`idAccount`),
+  KEY `idGroup` (`idGroup`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -44,55 +78,33 @@ CREATE TABLE IF NOT EXISTS `accounts_companies` (
   `company` varchar(25) COLLATE utf8_unicode_ci DEFAULT NULL,
   `division` varchar(25) COLLATE utf8_unicode_ci NOT NULL,
   `name` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `address_address` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `address_zip` varchar(5) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `address_city` varchar(50) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `address_district` varchar(10) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `address_country` varchar(25) COLLATE utf8_unicode_ci DEFAULT NULL,
   `fiscal_name` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
   `fiscal_vat` varchar(25) COLLATE utf8_unicode_ci DEFAULT NULL,
   `fiscal_code` varchar(25) COLLATE utf8_unicode_ci DEFAULT NULL,
   `fiscal_rea` varchar(25) COLLATE utf8_unicode_ci DEFAULT NULL,
   `fiscal_capital` int(11) unsigned NOT NULL DEFAULT '0',
   `fiscal_currency` varchar(3) COLLATE utf8_unicode_ci NOT NULL DEFAULT 'EUR',
-  `address_address` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `address_zip` varchar(5) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `address_city` varchar(50) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `address_district` varchar(10) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `address_country` varchar(25) COLLATE utf8_unicode_ci DEFAULT NULL,
   `phone_office` varchar(25) COLLATE utf8_unicode_ci DEFAULT NULL,
   `phone_mobile` varchar(25) COLLATE utf8_unicode_ci DEFAULT NULL,
   `phone_fax` varchar(25) COLLATE utf8_unicode_ci DEFAULT NULL,
   `mail` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `del` tinyint(1) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+-- --------------------------------------------------------
 
 --
 -- Dumping data for table `accounts_companies`
 --
 
 INSERT IGNORE INTO `accounts_companies` (`id`, `company`, `division`, `name`) VALUES
-(NULL, 'Default Company', 'Default Division', 'Default Company Inc.');
-
--- --------------------------------------------------------
-
---
--- Table structure for table `accounts_grouproles`
---
-
-CREATE TABLE IF NOT EXISTS `accounts_grouproles` (
-  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-  `name` varchar(25) COLLATE utf8_unicode_ci NOT NULL,
-  `description` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `name` (`name`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
-
---
--- Dumping data for table `accounts_grouproles`
---
-
-INSERT IGNORE INTO `accounts_grouproles` (`id`, `name`, `description`) VALUES
-(NULL, 'Consulter', 'External read only role'),
-(NULL, 'Redactor', 'External read and write role'),
-(NULL, 'Employee', 'Employee role'),
-(NULL, 'Leader', 'Leader role'),
-(NULL, 'Manager', 'Manager role');
+(1, 'C001', 'D001', 'Default Company');
 
 -- --------------------------------------------------------
 
@@ -102,54 +114,85 @@ INSERT IGNORE INTO `accounts_grouproles` (`id`, `name`, `description`) VALUES
 
 CREATE TABLE IF NOT EXISTS `accounts_groups` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-  `idGroup` int(11) unsigned NOT NULL DEFAULT '0',
+  `idCompany` int(11) unsigned DEFAULT NULL,
+  `idGroup` int(11) unsigned DEFAULT NULL,
   `name` varchar(25) COLLATE utf8_unicode_ci NOT NULL,
   `description` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `addDate` datetime NOT NULL,
+  `addIdAccount` int(11) unsigned NOT NULL,
+  `updDate` datetime DEFAULT NULL,
+  `updIdAccount` int(11) unsigned DEFAULT NULL,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `name` (`name`),
-  KEY `idGroup` (`idGroup`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+  KEY `idCompany` (`idCompany`),
+  KEY `idGroup` (`idGroup`),
+  KEY `name` (`name`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT='Gruppi';
+
+-- --------------------------------------------------------
 
 --
 -- Dumping data for table `accounts_groups`
 --
 
-INSERT IGNORE INTO `accounts_groups` (`id`, `name`, `description`) VALUES
-(NULL, 'Deafault', 'Default group');
+INSERT IGNORE INTO `accounts_groups` (`id`, `idCompany`, `idGroup`, `name`, `description`, `addDate`, `addIdAccount`) VALUES
+(1, 1, NULL, 'ADM', 'Administrators', '2010-01-01 10:00:00', 1),
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `accounts_groups_join_accounts`
+-- Table structure for table `accounts_roles`
 --
 
-CREATE TABLE IF NOT EXISTS `accounts_groups_join_accounts` (
-  `idGroup` int(11) unsigned NOT NULL DEFAULT '0',
-  `idAccount` int(11) unsigned NOT NULL DEFAULT '0',
-  `idGrouprole` int(11) unsigned NOT NULL DEFAULT '1',
-  `main` tinyint(1) unsigned NOT NULL DEFAULT '0',
-  KEY `idGroup` (`idGroup`),
-  KEY `idAccount` (`idAccount`),
-  KEY `idGrouprole` (`idGrouprole`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+CREATE TABLE IF NOT EXISTS `accounts_roles` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `level` tinyint(3) unsigned NOT NULL DEFAULT '0',
+  `name` varchar(25) COLLATE utf8_unicode_ci NOT NULL,
+  `description` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `addDate` datetime NOT NULL,
+  `addIdAccount` int(11) unsigned NOT NULL,
+  `updDate` datetime DEFAULT NULL,
+  `updIdAccount` int(11) unsigned DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `name` (`name`),
+  KEY `level` (`level`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+--
+-- Dumping data for table `accounts_roles`
+--
+
+INSERT IGNORE INTO `accounts_roles` (`id`, `level`, `name`, `description`, `addDate`, `addIdAccount`) VALUES
+(1, 1, 'Administrator', NULL, '2010-01-01 00:00:00', 1),
+(2, 2, 'Director', NULL, '2010-01-01 00:00:00', 1),
+(3, 3, 'Manager', NULL, '2010-01-01 00:00:00', 1),
+(4, 4, 'Responsible', NULL, '2010-01-01 00:00:00', 1),
+(5, 5, 'Employee', NULL, '2010-01-01 00:00:00', 1),
+(6, 6, 'Assistant', NULL, '2010-01-01 00:00:00', 1),
+(7, 8, 'Consultant', NULL, '2010-01-01 00:00:00', 1);
 
 -- --------------------------------------------------------
 
 --
--- Constraints for table `accounts_accounts`
+-- Constraints for table `accounts_accounts_join_companies`
 --
-
-ALTER TABLE `accounts_accounts`
-  ADD CONSTRAINT `accounts_accounts_ibfk_1` FOREIGN KEY (`idCompany`) REFERENCES `accounts_companies` (`id`) ON DELETE SET NULL ON UPDATE SET NULL;
+ALTER TABLE `accounts_accounts_join_companies`
+  ADD CONSTRAINT `accounts_accounts_join_companies_ibfk_1` FOREIGN KEY (`idAccount`) REFERENCES `accounts_accounts` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `accounts_accounts_join_companies_ibfk_2` FOREIGN KEY (`idCompany`) REFERENCES `accounts_companies` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `accounts_accounts_join_companies_ibfk_3` FOREIGN KEY (`idRole`) REFERENCES `accounts_roles` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
--- Constraints for table `accounts_groups_join_accounts`
+-- Constraints for table `accounts_accounts_join_groups`
 --
+ALTER TABLE `accounts_accounts_join_groups`
+  ADD CONSTRAINT `accounts_accounts_join_groups_ibfk_1` FOREIGN KEY (`idAccount`) REFERENCES `accounts_accounts` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `accounts_accounts_join_groups_ibfk_2` FOREIGN KEY (`idGroup`) REFERENCES `accounts_groups` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
-ALTER TABLE `accounts_groups_join_accounts`
-  ADD CONSTRAINT `accounts_groups_join_accounts_ibfk_1` FOREIGN KEY (`idGroup`) REFERENCES `accounts_groups` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `accounts_groups_join_accounts_ibfk_2` FOREIGN KEY (`idAccount`) REFERENCES `accounts_accounts` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `accounts_groups_join_accounts_ibfk_3` FOREIGN KEY (`idGrouprole`) REFERENCES `accounts_grouproles` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+--
+-- Constraints for table `accounts_groups`
+--
+ALTER TABLE `accounts_groups`
+  ADD CONSTRAINT `accounts_groups_ibfk_1` FOREIGN KEY (`idCompany`) REFERENCES `accounts_companies` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `accounts_groups_ibfk_2` FOREIGN KEY (`idGroup`) REFERENCES `accounts_groups` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- --------------------------------------------------------
 
@@ -252,11 +295,14 @@ CREATE TABLE IF NOT EXISTS `logs_triggers` (
   KEY `action` (`action`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
--- --------------------------------------------------------
+--
+-- Dumping data for table `logs_triggers`
+--
 
---
--- Constraints for dumped tables
---
+INSERT INTO `logs_triggers` (`id`, `trigger`, `module`, `action`, `condition`) VALUES
+(NULL, 'logs_accounts_accountLDAP', 'accounts', 'accountLDAP', NULL);
+
+-- --------------------------------------------------------
 
 --
 -- Constraints for table `logs_subscriptions`
@@ -298,7 +344,7 @@ CREATE TABLE IF NOT EXISTS `settings_menus` (
   `url` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
   `position` int(3) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Dumping data for table `settings_menus`
@@ -312,13 +358,14 @@ INSERT IGNORE INTO `settings_menus` (`id`, `idMenu`, `menu`, `module`, `url`, `p
 -- --------------------------------------------------------
 
 --
--- Struttura della tabella `settings_menus_join_accounts_groups`
+-- Table structure for table `settings_menus_join_accounts_groups`
 --
 
 CREATE TABLE IF NOT EXISTS `settings_menus_join_accounts_groups` (
   `idMenu` int(11) unsigned NOT NULL DEFAULT '0',
   `idGroup` int(11) unsigned NOT NULL DEFAULT '0',
-  KEY `idMenu` (`idMenu`)
+  KEY `idMenu` (`idMenu`),
+  KEY `idGroup` (`idGroup`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- --------------------------------------------------------
@@ -348,7 +395,8 @@ CREATE TABLE IF NOT EXISTS `settings_permissions` (
   `description` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
   `locked` tinyint(1) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
-  KEY `module` (`module`)
+  KEY `module` (`module`),
+  KEY `action` (`action`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
@@ -356,26 +404,26 @@ CREATE TABLE IF NOT EXISTS `settings_permissions` (
 --
 
 INSERT IGNORE INTO `settings_permissions` (`id`, `module`, `action`, `description`, `locked`) VALUES
-(NULL, 'settings', 'settings_edit', 'Manage settings', 1),
-(NULL, 'settings', 'modules_edit', 'Manage modules', 1),
-(NULL, 'settings', 'permissions_edit', 'Manage permissions', 1),
+(NULL, 'settings', 'settings_edit', 'Manage Coordinator settings', 1),
+(NULL, 'settings', 'permissions_manage', 'Manage company groups permissions', 1),
+(NULL, 'settings', 'modules_edit', 'Manage Coordinator modules', 1),
 (NULL, 'settings', 'menus_edit', 'Manage menus', 0),
-(NULL, 'logs', 'logs_list', 'View events log', 0),
+(NULL, 'accounts', 'accounts_view', 'View accounts', 0),
+(NULL, 'accounts', 'accounts_edit', 'Edit accounts', 0),
+(NULL, 'accounts', 'accounts_customize', 'Edit own account and name ', 0),
+(NULL, 'accounts', 'accounts_manage', 'Delete, restore and manage accounts', 1),
+(NULL, 'accounts', 'roles_view', 'View company roles', 0),
+(NULL, 'accounts', 'roles_edit', 'Edit company roles', 0),
+(NULL, 'accounts', 'companies_view', 'View companies', 0),
+(NULL, 'accounts', 'companies_edit', 'Edit companies', 0),
+(NULL, 'accounts', 'companies_delete', 'Delete companies', 1),
+(NULL, 'accounts', 'groups_view', 'View companies groups', 0),
+(NULL, 'accounts', 'groups_edit', 'Edit companies groups', 0),
+(NULL, 'chats', 'chats_chat', 'Use integrated chat', 0),
+(NULL, 'logs', 'logs_list', 'View event logs', 0),
 (NULL, 'logs', 'notifications_send', 'Send notifications', 0),
 (NULL, 'logs', 'notifications_send_all', 'Send notifications to all users', 0),
 (NULL, 'stats', 'stats_server', 'View server stats', 0),
-(NULL, 'accounts', 'accounts_list', 'View accounts list', 0),
-(NULL, 'accounts', 'accounts_add', 'Add an account', 0),
-(NULL, 'accounts', 'accounts_edit', 'Edit an account', 0),
-(NULL, 'accounts', 'accounts_delete', 'Delete an account', 1),
-(NULL, 'accounts', 'groups_list', 'View groups list', 0),
-(NULL, 'accounts', 'groups_add', 'Add a group', 0),
-(NULL, 'accounts', 'groups_edit', 'Edit group', 0),
-(NULL, 'accounts', 'groups_delete', 'Delete a group', 1),
-(NULL, 'accounts', 'companies_list', 'View company list', 0),
-(NULL, 'accounts', 'companies_add', 'Add a company', 0),
-(NULL, 'accounts', 'companies_edit', 'Edit a company', 0),
-(NULL, 'accounts', 'companies_delete', 'Delete a company', 1),
 (NULL, 'database', 'database_view', 'View Coordinator database', 0),
 (NULL, 'uploads', 'uploads_view', 'View uploads', 0),
 (NULL, 'uploads', 'files_edit', 'Edit folders', 0),
@@ -388,10 +436,13 @@ INSERT IGNORE INTO `settings_permissions` (`id`, `module`, `action`, `descriptio
 --
 
 CREATE TABLE IF NOT EXISTS `settings_permissions_join_accounts_groups` (
-  `idPermission` int(11) unsigned NOT NULL DEFAULT '0',
-  `idGroup` int(11) unsigned NOT NULL DEFAULT '0',
-  `idGrouprole` int(11) unsigned NOT NULL DEFAULT '0',
-  KEY `idPermission` (`idPermission`)
+  `idPermission` int(11) unsigned NOT NULL,
+  `idCompany` int(11) unsigned DEFAULT NULL,
+  `idGroup` int(11) unsigned DEFAULT NULL,
+  `level` tinyint(3) unsigned NOT NULL DEFAULT '0',
+  KEY `idPermission` (`idPermission`),
+  KEY `idCompany` (`idCompany`),
+  KEY `idGroup` (`idGroup`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- --------------------------------------------------------
@@ -420,7 +471,6 @@ INSERT IGNORE INTO `settings_settings` (`code`, `value`) VALUES
 ('ldap_host',''),
 ('ldap_userfield',''),
 ('maintenance', '0'),
-('maintenance_description', 'This service is currently undergoing scheduled maintenance. Please try back in 60 minutes. Sorry for the inconvenience.'),
 ('owner', 'Default Company Inc.'),
 ('owner_mail', 'info@defaultcompany.com'),
 ('owner_mail_from', 'Default Company'),
@@ -440,23 +490,12 @@ INSERT IGNORE INTO `settings_settings` (`code`, `value`) VALUES
 -- --------------------------------------------------------
 
 --
--- Dumping data for table `logs_triggers`
---
-
-INSERT INTO `logs_triggers` (`id`, `trigger`, `module`, `action`, `condition`) VALUES
-(NULL, 'logs_accounts_accountCreated', 'accounts', 'accountCreatedLDAP', NULL);
-
--- --------------------------------------------------------
-
---
--- Constraints for dumped tables
---
-
---
 -- Constraints for table `settings_permissions_join_accounts_groups`
 --
 ALTER TABLE `settings_permissions_join_accounts_groups`
-  ADD CONSTRAINT `settings_permissions_join_accounts_groups_ibfk_1` FOREIGN KEY (`idPermission`) REFERENCES `settings_permissions` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+  ADD CONSTRAINT `settings_permissions_join_accounts_groups_ibfk_1` FOREIGN KEY (`idPermission`) REFERENCES `settings_permissions` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `settings_permissions_join_accounts_groups_ibfk_2` FOREIGN KEY (`idCompany`) REFERENCES `accounts_companies` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `settings_permissions_join_accounts_groups_ibfk_3` FOREIGN KEY (`idGroup`) REFERENCES `accounts_groups` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- --------------------------------------------------------
 
@@ -527,10 +566,6 @@ CREATE TABLE IF NOT EXISTS `uploads_uploads` (
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- --------------------------------------------------------
-
---
--- Constraints for dumped tables
---
 
 --
 -- Constraints for table `uploads_folders`

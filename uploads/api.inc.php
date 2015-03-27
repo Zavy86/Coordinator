@@ -94,8 +94,8 @@ function api_uploads_fileStatusModal($file){
  $return->header($file->name);
  // build status body dl
  $dl_body=new str_dl("br","dl-horizontal");
- $dl_body->addElement(api_text("api-uploads-dt-add"),api_text("api-uploads-dd-add",array(api_accountName($file->addIdAccount),api_timestampFormat($file->addDate,api_text("datetime")))));
- if($file->updIdAccount<>NULL){$dl_body->addElement(api_text("api-uploads-dt-upd"),api_text("api-uploads-dd-upd",array(api_accountName($file->updIdAccount),api_timestampFormat($file->updDate,api_text("datetime")))));}
+ $dl_body->addElement(api_text("api-uploads-dt-add"),api_text("api-uploads-dd-add",array(api_account($file->addIdAccount)->name,api_timestampFormat($file->addDate,api_text("datetime")))));
+ if($file->updIdAccount<>NULL){$dl_body->addElement(api_text("api-uploads-dt-upd"),api_text("api-uploads-dd-upd",array(api_account($file->updIdAccount)->name,api_timestampFormat($file->updDate,api_text("datetime")))));}
  if($file->del){$dl_body->addElement("&nbsp;",api_icon("icon-trash")." ".api_text("api-uploads-dd-del"));}
  $return->body($dl_body->render(FALSE));
  return $return;
@@ -148,8 +148,8 @@ function api_uploads_folderStatusModal($folder){
  $return->header($folder->name);
  // build status body dl
  $dl_body=new str_dl("br","dl-horizontal");
- $dl_body->addElement(api_text("api-uploads-dt-add"),api_text("api-uploads-dd-add",array(api_accountName($folder->addIdAccount),api_timestampFormat($folder->addDate,api_text("datetime")))));
- if($folder->updIdAccount<>NULL){$dl_body->addElement(api_text("api-uploads-dt-upd"),api_text("api-uploads-dd-upd",array(api_accountName($folder->updIdAccount),api_timestampFormat($folder->updDate,api_text("datetime")))));}
+ $dl_body->addElement(api_text("api-uploads-dt-add"),api_text("api-uploads-dd-add",array(api_account($folder->addIdAccount)->name,api_timestampFormat($folder->addDate,api_text("datetime")))));
+ if($folder->updIdAccount<>NULL){$dl_body->addElement(api_text("api-uploads-dt-upd"),api_text("api-uploads-dd-upd",array(api_account($folder->updIdAccount)->name,api_timestampFormat($folder->updDate,api_text("datetime")))));}
  if($folder->del){$dl_body->addElement("&nbsp;",api_icon("icon-trash")." ".api_text("api-uploads-dd-del"));}
  $return->body($dl_body->render(FALSE));
  return $return;
@@ -188,8 +188,8 @@ function api_uploads_linkStatusModal($link){
  }else{$typology_dd=api_text("uploads-links-typology-private");}
  $dl_body->addElement(api_text("api-uploads-dt-typology"),$typology_dd);
  $dl_body->addElement(api_text("api-uploads-dt-counter"),api_text("api-uploads-dd-counter",$link->counter));
- $dl_body->addElement(api_text("api-uploads-dt-add"),api_text("api-uploads-dd-add",array(api_accountName($link->addIdAccount),api_timestampFormat($link->addDate,api_text("datetime")))));
- if($link->updIdAccount<>NULL){$dl_body->addElement(api_text("api-uploads-dt-upd"),api_text("api-uploads-dd-upd",array(api_accountName($link->updIdAccount),api_timestampFormat($link->updDate,api_text("datetime")))));}
+ $dl_body->addElement(api_text("api-uploads-dt-add"),api_text("api-uploads-dd-add",array(api_account($link->addIdAccount)->name,api_timestampFormat($link->addDate,api_text("datetime")))));
+ if($link->updIdAccount<>NULL){$dl_body->addElement(api_text("api-uploads-dt-upd"),api_text("api-uploads-dd-upd",array(api_account($link->updIdAccount)->name,api_timestampFormat($link->updDate,api_text("datetime")))));}
  $return->body($dl_body->render(FALSE));
  return $return;
 }

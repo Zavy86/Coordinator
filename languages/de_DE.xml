@@ -3,6 +3,7 @@
 <locale language="DE">
 
  <!-- generals -->
+ <text key="language">Deutsch</text>
  <text key="yes">ja</text>
  <text key="no">nein</text>
  <text key="notfound">nicht gefunden</text>
@@ -54,9 +55,11 @@
  <text key="days">tage</text>
 
  <!-- alerts -->
- <text key="accessDenied"><h4>ZUGRIFF VERWEIGERT</h4>Die Berechtigungen von Ihrem Konto nicht ausreichend sind, um die gewünschte Operation durchzuführen</text>
- <text key="loginFailed">Der benutzername und das passwort stimmen nicht überein</text>
- <text key="loginDisabled">Der von Ihnen eingegebene benutzername deaktiviert ist, wenden Sie sich an Ihren administrator für weitere Informationen</text>
+ <text key="maintenance">Dieser service derzeit werden auf wartung, bitte versuchen sie es in 15 minuten</text>
+ <text key="accessDenied">ZUGRIFF VERWEIGERT</text>
+ <text key="accessDenied-message">Die Berechtigungen von Ihrem Konto nicht ausreichend sind, um die gewünschte Operation durchzuführen</text>
+ <text key="accessDenied-action">(Aktion: {0})</text>
+ <text key="permissionNotFound">Achtung, die Berechtigungen für die aktion {1} von modul {0} nicht konfiguriert wurden</text>
  <text key="newLogs">Es gibt neue Meldungen im Ereignisprotokoll, &lt;a href='../logs/logs_list.php'&gt;blick ereignisse&lt;/a&gt;</text>
  <text key="changeBrowser">Das verwendete scheint nicht volle Unterstützung der HTML5-Format Browser empfehlen wir &lt;a href='http://chrome.google.com' target='_blank'&gt;Google Chrome&lt;/a&gt; or &lt;a href='http://www.apple.com/safari' target='_blank'&gt;Apple Safari&lt;/a&gt;</text>
  <text key="submitFunctionNotFound">Achtung, die Callback-Funktion nicht implementiert wurde, an den Administrator, um weitere Informationen</text>
@@ -72,7 +75,8 @@
 
  <!-- html.class.php -->
  <text key="core-menu-dashboard">Armaturenbrett</text>
- <text key="core-menu-accounts">Koten</text>
+ <text key="core-menu-account">Profil</text>
+ <text key="core-menu-accounts">Buchhaltung</text>
  <text key="core-menu-statistics">Statistiken</text>
  <text key="core-menu-settings">Einstellungen</text>
  <text key="core-menu-logs">Ereignisregister</text>
@@ -93,7 +97,7 @@
  <!-- forms -->
  <text key="form-select">Ausählen</text>
  <text key="form-select-all">Alle</text>
- <text key="form-select-none">Deaktivieren</text>
+ <text key="form-select-none">Filter deaktivieren</text>
  <text key="form-range-from">Von</text>
  <text key="form-range-to">Bis</text>
 

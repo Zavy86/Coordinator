@@ -3,6 +3,7 @@
 <locale language="FR">
 
  <!-- generals -->
+ <text key="language">Français</text>
  <text key="yes">oui</text>
  <text key="no">non</text>
  <text key="notfound">introuvable</text>
@@ -54,9 +55,11 @@
  <text key="days">jours</text>
 
  <!-- alerts -->
- <text key="accessDenied"><h4>ACCES REFUSE</h4>Les autorisations de votre compte ne sont pas suffisantes pour effectuer l'opération souhaitée</text>
- <text key="loginFailed">Le nom d'utilisateur et le mot de passe ne correspondent pas</text>
- <text key="loginDisabled">Le nom d'utilisateur que vous avez entré est désactivé, contactez votre administrateur pour plus d'informations</text>
+ <text key="maintenance">Ce service est actuellement en cours de maintenance, se il vous plaît essayer de retour en 15 minutes</text>
+ <text key="accessDenied">ACCES REFUSE</text>
+ <text key="accessDenied-message">Les autorisations de votre compte ne sont pas suffisantes pour effectuer l'opération souhaitée</text>
+ <text key="accessDenied-action">(Action: {0})</text>
+ <text key="permissionNotFound">Attention, les autorisations pour l'action {1} du module {0} ne ont pas été configuré</text>
  <text key="newLogs">Il ya de nouvelles notifications dans le journal des événements, &lt;a href='../logs/logs_list.php'&gt;voir les événements&lt;/a&gt;</text>
  <text key="changeBrowser">Le navigateur que vous utilisez ne semble pas soutenir pleinement le format HTML5, nous recommandons d'utiliser &lt;a href='http://chrome.google.com' target='_blank'&gt;Google Chrome&lt;/a&gt; o &lt;a href='http://www.apple.com/safari' target='_blank'&gt;Apple Safari&lt;/a&gt;</text>
  <text key="submitFunctionNotFound">Attention, la fonction de rappel n'a pas été mis en œuvre, contactez l'administrateur pour plus d'informations</text>
@@ -72,6 +75,7 @@
 
  <!-- html.class.php -->
  <text key="core-menu-dashboard">Dashboard</text>
+ <text key="core-menu-accounts">Profil</text>
  <text key="core-menu-accounts">Accounts</text>
  <text key="core-menu-statistics">Statistiques</text>
  <text key="core-menu-settings">Paramètres</text>
@@ -93,7 +97,7 @@
  <!-- forms -->
  <text key="form-select">Sélectionner</text>
  <text key="form-select-all">Tous</text>
- <text key="form-select-none">Désélectionner</text>
+ <text key="form-select-none">Désactiver le filtre</text>
  <text key="form-range-from">De</text>
  <text key="form-range-to">À</text>
 

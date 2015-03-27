@@ -28,7 +28,7 @@ function content(){
  if(!count($widgets_array)){
   echo "<h4>".api_text("dashboard-welcome")."</h4>\n";
   echo "<div class='well well-small well-white'>\n";
-  echo api_text("dashboard-welcome-message",api_accountName());
+  echo api_text("dashboard-welcome-message",api_account()->name);
   echo "</div>\n";
   return FALSE;
  }

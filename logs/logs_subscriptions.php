@@ -22,7 +22,7 @@ function content(){
    $form->addTitle(api_text("module-title"));
   }
   // get current subscription status
-  $subscription=$GLOBALS['db']->queryUniqueObject("SELECT * FROM logs_subscriptions WHERE `trigger`='".$trigger->trigger."' AND idAccount='".api_accountId()."'");
+  $subscription=$GLOBALS['db']->queryUniqueObject("SELECT * FROM logs_subscriptions WHERE `trigger`='".$trigger->trigger."' AND idAccount='".api_account()->id."'");
   // make notification title
   if(api_text($trigger->trigger."-description")<>"{".$trigger->trigger."-description}"){
    $notification_title=api_text($trigger->trigger."-label")." ".api_link("#",api_icon("icon-comment"),api_text($trigger->trigger."-description"),NULL,TRUE);

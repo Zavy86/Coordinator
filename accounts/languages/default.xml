@@ -6,124 +6,269 @@
  <text key="module-title">Accounts</text>
 
  <!-- alerts -->
+ <text key="loginFailed">The account and password do not match</text>
+ <text key="loginDisabled">The account {0} is disabled, contact your system administrator for more information</text>
+ <text key="accountNotFound">The account was not found</text>
  <text key="accountCreated">The account {0} has been created, select the groups to which to assign</text>
  <text key="accountUpdated">The account {0} has been updated</text>
- <text key="accountDeleted">The account {0} has been deleted</text>
- <text key="accountInterpreted">You're interpreting the selected account</text>
+ <text key="accountLDAP">The account has been created; an administrator will provide to its activation</text>
+ <text key="accountLDAPError">There was an error during account registration; contact your system administrator.</text>
  <text key="accountCustomized">Your account has been updated</text>
+ <text key="accountChanged">Account mail address was updated</text>
+ <text key="passwordChanged">La password del tuo account è stata aggiornata</text>
+ <text key="accountDeleted">The account {0} has been deleted</text>
+ <text key="accountUndeleted">L'account {0} è stato ripristinato</text>
+ <text key="accountSwitchToAdmin">From this moment you are working with administrator privileges :)</text>
+ <text key="accountSwitchToUser">From this moment you are working with normal user privileges :(</text>
+ <text key="accountInterpreted">You're interpreting the selected account</text>
  <text key="accountPasswordChanged">Your password has been updated</text>
- <text key="accountSwitched1">From this moment you are working with administrator privileges :)</text>
- <text key="accountSwitched2">From this moment you are working with normal user privileges :(</text>
  <text key="accountDebug">Debug disabled</text>
  <text key="accountDebug1">Debug enabled</text>
+ <text key="accountError">There was an error with the account. Please contact your system administrator..</text>
  <text key="passwordRetrived">Your password reset request has been submitted, you will receive a mail shortly</text>
- <text key="passwordResetted">Your password has been restored</text>
- <text key="groupCreated">Group {0} has been created</text>
- <text key="groupUpdated">Group {0} has been updated</text>
- <text key="groupDeleted">Group {0} has been deleted</text>
+ <text key="passwordResetted">Your password has been resetted</text>
+ <text key="roleNotFound">Role was not found</text>
+ <text key="roleCreated">Role {0} has been created</text>
+ <text key="roleUpdated">Role {0} has been updated</text>
+ <text key="roleDeleted">Role {0} has been deleted</text>
+ <text key="companyNotFound">Company was not found</text>
  <text key="companyCreated">Company {0} has been created</text>
  <text key="companyUpdated">Company {0} has been updated</text>
  <text key="companyDeleted">Company {0} has been deleted</text>
+ <text key="groupNotFound">Group was not found</text>
+ <text key="groupCreated">Group {0} has been created</text>
+ <text key="groupUpdated">Group {0} has been updated</text>
+ <text key="groupDeleted">Group {0} has been deleted</text>
+ <text key="groupDuplicate">There was an error saving group; there is already a group named {0} in this society</text>
 
  <!-- logs -->
  <text key="logs_accounts_loginSuccess">User {0} has logged</text>
  <text key="logs_accounts_loginFailed">User {0} has supplied wrong credentials for access</text>
  <text key="logs_accounts_loginError">User {0} has supplied wrong credentials for access</text>
  <text key="logs_accounts_loginDisabled">User access {0} has been blocked</text>
- <text key="logs_accounts_accountCreated">The account {0} has been created</text>
- <text key="logs_accounts_accountUpdated">The account {0} has been updated</text>
- <text key="logs_accounts_accountInterpreted">The user {1} is interpreting the user {3}</text>
- <text key="logs_accounts_accountInterpretedStop">The user {1} does not interpret more user {3}</text>
+ <text key="logs_accounts_accountCreated">>ccount {0} has been created</text>
+ <text key="logs_accounts_accountUpdated">>ccount {0} has been updated</text>
+ <text key="logs_accounts_accountLDAP">>ccount {0} has been created means LDAP&#xA;&#xA;Account LDAP: {2}&#xA;&#xA;Mail address: {1}</text>
+ <text key="logs_accounts_accountDeleted">>ccount {1} has been disabled and deleted</text>
+ <text key="logs_accounts_accountUndeleted">>ccount {1} has been restored</text>
+ <text key="logs_accounts_accountInterpreted">User {1} is interpreting the user {3}</text>
+ <text key="logs_accounts_accountInterpretedStop">User {1} does not interpret more user {3}</text>
  <text key="logs_accounts_accountCustomized">User {0} has customized his profile</text>
- <text key="logs_accounts_accountGrouproleAdded">The account {0} has been added to the group {1}</text>
- <text key="logs_accounts_accountGrouproleMain">The default group for the account {0} is now {1}</text>
- <text key="logs_accounts_accountGrouproleRemoved">The account {0} has been removed to the group {1}</text>
- <text key="logs_accounts_accountSwitchToAdmin">The account {0} became administrator</text>
- <text key="logs_accounts_accountSwitchToUser">The account {0} became user {1}</text>
+ <text key="logs_accounts_accountCompanyAdded">Account {0} has been associated with the company {2}&#xA;&#xA;Role: {4} - {5}</text>
+ <text key="logs_accounts_accountCompanyMainize">Account {0} was set mainly on company {2}</text>
+ <text key="logs_accounts_accountCompanyRemoved">Account {0} has been removed from the company {2}</text>
+ <text key="logs_accounts_accountGroupAdded">Account {0} has been added to group {4}&#xA;&#xA;Company: {2}</text>
+ <text key="logs_accounts_accountGroupMainize">Account {0} was set mainly on group {4}&#xA;&#xA;Company: {2}</text>
+ <text key="logs_accounts_accountGroupRemoved">Account {0} has been removed from group {4}&#xA;&#xA;Company: {2}</text>
+ <text key="logs_accounts_accountSwitchToAdmin">Account {0} became administrator</text>
+ <text key="logs_accounts_accountSwitchToUser">Account {0} became user {1}</text>
  <text key="logs_accounts_accountPasswordRetrieve">The account {0} has requested the reset of their password</text>
  <text key="logs_accounts_accountPasswordResetted">The account password for {0} has been reset</text>
- <text key="logs_accounts_groupCreated">The group {0} has been created&#xA;{1}</text>
- <text key="logs_accounts_groupUpdated">The group {0} has been updated&#xA;{1}</text>
- <text key="logs_accounts_groupDeleted">The group {0} has been deleted&#xA;{1}</text>
+ <text key="logs_accounts_roleCreated">Role {1} has been created&#xA;&#xA;Level: {0}&#xA;Description: {2}</text>
+ <text key="logs_accounts_roleUpdated">Role {1} has been updated&#xA;&#xA;Level: {0}&#xA;Description: {2}</text>
+ <text key="logs_accounts_roleDeleted">Role {1} has been deleted&#xA;&#xA;Level: {0}&#xA;Description: {2}</text>
  <text key="logs_accounts_companyCreated">The company {0} - {1} {2} has been created</text>
  <text key="logs_accounts_companyUpdated">The company {0} - {1} {2} has been updated</text>
- <text key="logs_accounts_accountCreatedLDAP">The account {0} has been created by LDAP&#xA;&#xA;Name: {2}&#xA; LDAP username: {1}</text>
+ <text key="logs_accounts_groupCreated">Group {2} in company {1} has been created&#xA;&#xA;Description: {3}</text>
+ <text key="logs_accounts_groupUpdated">Group {2} in company  {1} has been updated&#xA;&#xA;Description: {3}</text>
+ <text key="logs_accounts_groupDeleted">Group {2} in company  {1} has been deleted&#xA;&#xA;Description: {3}</text>
  <!-- accountCreated -->
- <text key="logs_accounts_accountCreated-label">New user account created</text>
- <text key="logs_accounts_accountCreated-description">When it is created a new user account</text>
- <text key="logs_accounts_accountCreated-subject">Account - New user account {2} created</text>
- <text key="logs_accounts_accountCreated-message">It was created a new user account:&#xA;&#xA;Name: {2}&#xA;Account: {0}</text>
+ <text key="logs_accounts_accountLDAP-label">New user account LDAP</text>
+ <text key="logs_accounts_accountLDAP-description">When a new user registers via LDAP</text>
+ <text key="logs_accounts_accountLDAP-subject">Coordinator - New user account via LDAP {0}</text>
+ <text key="logs_accounts_accountLDAP-message">It was created a new user account:&#xA;&#xA;Name: {0}&#xA;Mail address: {1}&#xA;Account LDAP: {2}</text>
+
+ <!-- mails -->
+ <text key="mails_accounts_accountCreated-subject">New Coordinator account activated</text>
+ <text key="mails_accounts_accountCreated-message">Welcome {0},&#xA; an account was activated for you in Coordinator for the company {2}.&#xA;&#xA;To confirm your subscription and choose a password, use the following address:&#xA;{1}&#xA;&#xA;Remember that this link is usable only for your first access.</text>
+ <text key="mails_accounts_accountCreated-message-ldap">Welcome {0},&#xA; an account was activated for you in Coordinator for the company {2}.&#xA;&#xA;User your system account &lt;i&gt;{1}&lt;/i&gt; to access with the corresponding password at the following address:&#xA;&#xA;{2}</text>
+ <text key="mails_accounts_accountChanged-subject">Modifica indirizzo mail account Coordinator</text>
+ <text key="mails_accounts_accountChanged-message">Hello {0},&#xA; we inform you that the mail address of your Coordinator account for company {2} has been updated in {1}.&#xA;&#xA;If this had not been requested or approved by you please contact your system administrator.</text>
+  <text key="mails_accounts_accountLDAP-subject">New Coordinator account activated</text>
+ <text key="mails_accounts_accountLDAP-message">Welcome {0},&#xA; an account was activated for you in Coordinator for the company {3}.&#xA;&#xA;User your system account &lt;i&gt;{1}&lt;/i&gt; to access with the corresponding password at the following address:&#xA;&#xA;{2}</text>
+ <text key="mails_accounts_passwordRetrieve-subject">Password retrieve account Coordinator</text>
+ <text key="mails_accounts_passwordRetrieve-message">Hello {0},&#xA; we have received your password reset request.&#xA;&#xA;Use the following link to choose a new password:&#xA;{1}&#xA;&#xA;Remember that this link is usable only for this specific session.</text>
+ <text key="mails_accounts_passwordReset-subject">Password reset account Coordinator</text>
+ <text key="mails_accounts_passwordReset-message">Hello {0},&#xA; your password was successful resetted.</text>
+ <text key="mails_accounts_passwordChanged-subject">Password changed account Coordinator</text>
+ <text key="mails_accounts_passwordChanged-message">Hello {0},&#xA; we inform you that the password of your Coordinator account for company {1} has been updated.&#xA;&#xA;If this had not been requested or approved by you please contact your system administrator.</text>
+
+ <!-- account-typologies -->
+ <text key="account-typology-user">Standard user</text>
+ <text key="account-typology-superuser">System administrator</text>
+ <text key="account-typology-disabled">Disabled</text>
+ <text key="account-typology-deleted">Deleted
+
+ <!-- filters -->
+ <text key="filter-company">Company</text>
+ <text key="filter-members">Show group members</text>
+ <text key="filter-companies">Companies</text>
+ <text key="filter-enabled">Enabled accounts</text>
+ <text key="filter-disabled">Disabled accounts</text>
+ <text key="filter-deleted">Show deleted accounts</text></text>
 
  <!-- template.inc.php -->
  <text key="nav-profile">Profile</text>
  <text key="nav-accounts">Accounts</text>
  <text key="nav-groups">Groups</text>
  <text key="nav-companies">Companies</text>
- <text key="nav-add">Add</text>
- <text key="nav-edit">Edit</text>
- <text key="nav-account">Account</text>
- <text key="nav-group">Group</text>
- <text key="nav-company">Company</text>
+ <text key="nav-administration">Administration</text>
+ <text key="nav-roles">Roles</text>
+ <text key="nav-roles-list">Manage roles</text>
+ <text key="nav-roles-add">Add new role</text>
+ <text key="nav-companies-add">Add new company</text>
+ <text key="nav-groups-add">Add new group</text>
+ <text key="nav-accounts-add">Add new user</text>
+
+ <!-- api.inc.php -->
+ <text key="api-account-dt-typology">Typology</text>
+ <text key="api-account-dt-add">Created by</text>
+ <text key="api-account-dd-add">{0}, {1}</text>
+ <text key="api-account-dt-upd">Updated by</text>
+ <text key="api-account-dd-upd">{0}, {1}</text>
+ <text key="api-account-dt-acc">Last access</text>
+ <text key="api-account-dd-acc">{0}</text>
+ <text key="api-account-dd-del">Deleted</text>
+ <text key="api-role-dt-add">Created by</text>
+ <text key="api-role-dd-add">{0}, {1}</text>
+ <text key="api-role-dt-upd">Updated by</text>
+ <text key="api-role-dd-upd">{0}, {1}</text>
+ <text key="api-group-main">Main</text>
+
+ <!-- login.php -->
+ <text key="login-ff-account-placeholder">Account</text>
+ <text key="login-ff-password-placeholder">Password</text>
+ <text key="login-fc-submit">Sign in</text>
+ <text key="login-fc-retrieve">Forgot password?</text>
 
  <!-- accounts_list.php -->
+ <text key="accounts_list-tr-unvalued">There is no account..</text>
  <text key="accounts_list-th-name">Name</text>
- <text key="accounts_list-th-typology">Typology</text>
- <text key="accounts_list-th-company">Company</text>
+ <text key="accounts_list-th-mail">Mail</text>
  <text key="accounts_list-th-account">Account</text>
+ <text key="accounts_list-th-company">Company</text>
+ <text key="accounts_list-th-ldap">LDAP</text>
  <text key="accounts_list-th-lastAccess">Last access</text>
  <text key="accounts_list-td-CompanyNotAssigned">Not assigned</text>
- <text key="accounts_list-tr-unvalued">There is no account..</text>
 
  <!-- accounts_edit.php -->
  <text key="accounts_edit-ff-avatar">Avatar</text>
+ <text key="accounts_edit-fo-enabled">Enabled</text>
  <text key="accounts_edit-ff-name">Name</text>
  <text key="accounts_edit-ff-name-placeholder">Firstname and Lastname</text>
  <text key="accounts_edit-ff-account">Account</text>
  <text key="accounts_edit-ff-account-placeholder">Mail address</text>
- <text key="accounts_edit-ff-typology">Typology</text>
- <text key="accounts_edit-fo-disabled">Disabled</text>
- <text key="accounts_edit-fo-administrator">Administrator</text>
- <text key="accounts_edit-fo-user">User</text>
+ <text key="accounts_edit-ff-mail">Mail address</text>
+ <text key="accounts_edit-ff-ldap">Account</text>
+ <text key="accounts_edit-ff-ldap-placeholder">Username account LDAP</text>
+ <text key="accounts_edit-ff-phone">Phone</text>
+ <text key="accounts_edit-ff-phone-placeholder">Internal, office or mobile</text>
  <text key="accounts_edit-ff-language">Language</text>
- <text key="accounts_edit-ff-company">Company</text>
- <text key="accounts_edit-fo-CompanyNotAssigned">Not assigned</text>
- <text key="accounts_edit-fc-save">Save</text>
+ <text key="accounts_edit-fo-superuser">System administrator</text>
+ <text key="accounts_edit-fc-submit">Save</text>
  <text key="accounts_edit-fc-cancel">Cancel</text>
  <text key="accounts_edit-fc-delete">Delete</text>
- <text key="accounts_edit-fc-delete-confirm">Permanently delete this account?</text>
+ <text key="accounts_edit-fc-delete-confirm">Are you sure you want to disable and delete this account?</text>
+ <text key="accounts_edit-fc-undelete">Restore</text>
  <text key="accounts_edit-fc-interpret">Interpret</text>
  <text key="accounts_edit-fc-interpret-confirm">Interpreting this user you lose your permission. To conclude the interpretation is necessary to interrupt the interpretation or logout and sign in again.</text>
- <text key="accounts_edit-th-group">Group</text>
- <text key="accounts_edit-th-role">Role</text>
- <text key="accounts_edit-td-main">Main</text>
- <text key="accounts_edit-td-mainMake">Make main</text>
- <text key="accounts_edit-td-groupDelete-confirm">Remove this association?</text>
- <text key="accounts_edit-tr-unvalued">No group assigned..</text>
+ <text key="accounts_edit-companies-th-name">Companies</text>
+ <text key="accounts_edit-companies-th-role">Role</text>
+ <text key="accounts_edit-companies-td-main">Main</text>
+ <text key="accounts_edit-companies-td-mainize">Make main</text>
+ <text key="accounts_edit-companies-td-remove">Remove</text>
+ <text key="accounts_edit-companies-td-remove-confirm">Are you sure you want to remove this association?</text>
+ <text key="accounts_edit-companies-tr-unvalued">No assigned company..</text>
+ <text key="accounts_edit-companies-fo-add">Add a company</text>
+ <text key="accounts_edit-groups-th-name">Groups → {0}</text>
+ <text key="accounts_edit-groups-td-main">Main</text>
+ <text key="accounts_edit-groups-td-mainize">Make main</text>
+ <text key="accounts_edit-groups-td-remove">Remove</text>
+ <text key="accounts_edit-groups-td-remove-confirm">Are you sure you want to remove this association?</text>
+ <text key="accounts_edit-groups-tr-unvalued">No group assigned in this company..</text>
+ <text key="accounts_edit-groups-fo-add">Add a group</text>
 
- <!-- groups_list.php -->
- <text key="groups_list-th-group">Group</text>
- <text key="groups_list-th-description">Description</text>
- <text key="groups_list-th-members">Members</text>
- <text key="groups_list-tr-unvalued">There is no group..</text>
+ <!-- accounts_ldap.php -->
+ <text key="accounts_ldap-p-informations">Welcome, please fill out the form below to proceed with the creation of your account.</text>
+ <text key="accounts_ldap-ff-ldap">Account</text>
+ <text key="accounts_ldap-ff-ldap-placeholder">Username account LDAP</text>
+ <text key="accounts_ldap-ff-language">Language</text>
+ <text key="accounts_ldap-ff-account">Mail address</text>
+ <text key="accounts_ldap-ff-firstname">Firstname</text>
+ <text key="accounts_ldap-ff-lastname">Lastname</text>
+ <text key="accounts_ldap-ff-phone">Phone</text>
+ <text key="accounts_ldap-fc-submit">Sign up</text>
+ <text key="accounts_ldap-fc-cancel">Cancel</text>
 
- <!-- groups_edit.php -->
- <text key="groups_edit-ff-group">Group</text>
- <text key="groups_edit-fo-main">Main</text>
- <text key="groups_edit-ff-name">Name</text>
- <text key="groups_edit-ff-name-placeholder">Group name</text>
- <text key="groups_edit-ff-description">Description</text>
- <text key="groups_edit-ff-description-placeholder">Group description</text>
- <text key="groups_edit-fc-save">Save</text>
- <text key="groups_edit-fc-cancel">Cancel</text>
- <text key="groups_edit-fc-delete">Delete</text>
- <text key="groups_edit-fc-delete-confirm">Permanently delete this group?</text>
+ <!-- accounts_customize.php -->
+ <text key="accounts_customize-ff-avatar">Avatar</text>
+ <text key="accounts_customize-ff-avatar-placeholder">Select an image</text>
+ <text key="accounts_customize-ff-name">Name</text>
+ <text key="accounts_customize-ff-name-placeholder">Firstname and lastname</text>
+ <text key="accounts_customize-ff-account">Account</text>
+ <text key="accounts_customize-ff-account-placeholder">Mail address</text>
+ <text key="accounts_customize-ff-password">Password</text>
+ <text key="accounts_customize-ff-password-placeholder">Choose a new password</text>
+ <text key="accounts_customize-ff-confirm">Confirm</text>
+ <text key="accounts_customize-ff-confirm-placeholder">Confirm chosen password</text>
+ <text key="accounts_customize-ff-mail">Mail address</text>
+ <text key="accounts_customize-ff-phone">Phone</text>
+ <text key="accounts_customize-ff-phone-placeholder">Internal, office or mobile</text>
+ <text key="accounts_customize-ff-language">Language</text>
+ <text key="accounts_customize-fc-submit">Save</text>
+ <text key="accounts_customize-fc-cancel">Cancel</text>
+ <text key="accounts_customize-companies-th-name">Comapnies</text>
+ <text key="accounts_customize-companies-th-role">Role</text>
+ <text key="accounts_customize-companies-td-main">Main</text>
+ <text key="accounts_customize-companies-tr-unvalued">No assigned company..</text>
+ <text key="accounts_customize-groups-th-name">Groups → {0}</text>
+ <text key="accounts_customize-groups-td-main">Main</text>
+ <text key="accounts_customize-groups-tr-unvalued">No assigned group in this society..</text>
+
+ <!-- password_retrieve.php -->
+ <text key="password_retrieve-dt-ldap">WARNING</text>
+ <text key="password_retrieve-dd-ldap">If you're using a system account, contact the system administrator.</text>
+ <text key="password_retrieve-ff-account">Account</text>
+ <text key="password_retrieve-ff-account-placeholder">Insert your mail address</text>
+ <text key="password_retrieve-fc-submit">Reset password</text>
+ <text key="password_retrieve-fc-cancel">Cancel</text>
+
+ <!-- password_reset.php -->
+ <text key="password_reset-dt-name">Name</text>
+ <text key="password_reset-dt-account">Account</text>
+ <text key="password_reset-ff-password">Password</text>
+ <text key="password_reset-ff-password-placeholder">Chose a new password</text>
+ <text key="password_reset-ff-confirm">Confirm</text>
+ <text key="password_reset-ff-confirm-placeholder">Confirm your chosen password</text>
+ <text key="password_reset-fc-submit">Submit</text>
+ <text key="password_reset-fc-cancel">Cancel</text>
+
+ <!-- roles_list.php -->
+ <text key="roles_list-tr-unvalued">There is no role..</text>
+ <text key="roles_list-th-level">Level</text>
+ <text key="roles_list-th-name">Name</text>
+ <text key="roles_list-th-description">Description</text>
+
+ <!-- roles_edit.php -->
+ <text key="roles_edit-ff-level">Level</text>
+ <text key="roles_edit-ff-name">Role</text>
+ <text key="roles_edit-ff-name-placeholder">Role name</text>
+ <text key="roles_edit-ff-description">Description</text>
+ <text key="roles_edit-ff-description-placeholder">Role description</text>
+ <text key="roles_edit-fc-submit">Save</text>
+ <text key="roles_edit-fc-cancel">Cancel</text>
+ <text key="roles_edit-fc-delete">Delete</text>
+ <text key="roles_edit-fc-delete-confirm">Are you sure you want to permanently delete this role?</text>
 
  <!-- companies_list.php -->
+ <text key="companies_list-tr-unvalued">There is no company..</text>
  <text key="companies_list-th-company">Company</text>
  <text key="companies_list-th-name">Name</text>
  <text key="companies_list-th-fiscal_name">Fiscal name</text>
  <text key="companies_list-th-members">Members</text>
- <text key="companies_list-tr-unvalued">There is no company..</text>
+
+ <!-- companies_view.php -->
+ <text key="companies_view-name">Company</text>
 
  <!-- companies_edit.php -->
  <text key="companies_edit-ff-company">Company</text>
@@ -152,5 +297,27 @@
  <text key="companies_edit-fc-cancel">Cancel</text>
  <text key="companies_edit-fc-delete">Delete</text>
  <text key="companies_edit-fc-delete-confirm">Permanently delete this company?</text>
+
+ <!-- groups_list.php -->
+ <text key="groups_list-dt-warning">Warning</text>
+ <text key="groups_list-dd-company">Select a company means the filters.</text>
+ <text key="groups_list-th-group">Group</text>
+ <text key="groups_list-th-description">Description</text>
+ <text key="groups_list-th-description-members">Descrizione and members</text>
+ <text key="groups_list-th-members">Members</text>
+ <text key="groups_list-tr-unvalued">There is no group in this company..</text>
+
+ <!-- groups_edit.php -->
+ <text key="groups_edit-ff-company">Company</text>
+ <text key="groups_edit-ff-group">Group</text>
+ <text key="groups_edit-fo-main">Main</text>
+ <text key="groups_edit-ff-name">Name</text>
+ <text key="groups_edit-ff-name-placeholder">Group name</text>
+ <text key="groups_edit-ff-description">Description</text>
+ <text key="groups_edit-ff-description-placeholder">Group description</text>
+ <text key="groups_edit-fc-submit">Save</text>
+ <text key="groups_edit-fc-cancel">Cancel</text>
+ <text key="groups_edit-fc-delete">Delete</text>
+ <text key="groups_edit-fc-delete-confirm">Are you sure you want to permanently delete this group?</text>
 
 </locale>
