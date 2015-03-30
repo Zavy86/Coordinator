@@ -66,7 +66,7 @@ function account_login(){
    $account=$GLOBALS['db']->queryUniqueObject("SELECT * FROM accounts_accounts WHERE ldap='".$p_account."'");
    if(!$account->id){
     // authentication successful but account does not exist
-    exit(header("location: account_ldap.php?lang=".$p_language."&account=".$p_account));
+    exit(header("location: accounts_ldap.php?lang=".$p_language."&account=".$p_account));
    }
   }
  }else{
