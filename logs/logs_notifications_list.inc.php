@@ -10,7 +10,7 @@
  // notifications header
  echo "<li class='nav-header'>".api_text("notifications_list-li-notifications")."</li>\n";
  // check permission to send notifications
- if(api_checkPermission("logs","sendnotifications")){
+ if(api_checkPermission("logs","notifications_send")){
   echo "<li><a href='../logs/logs_notifications_send.php'>".api_text("notifications_list-li-send")."</a></li>\n";
   echo "<li class='divider'></li>\n";
  }
