@@ -260,12 +260,16 @@ function api_getOption($code){
 
 
 /* -[ Get user hostname ]---------------------------------------------------- */
-function api_hostName(){
- if($_SERVER["HTTP_X_FORWARDED_FOR"]<>""){
-  $proxy=$_SERVER["REMOTE_ADDR"];
-  $host=@gethostbyaddr($_SERVER["HTTP_X_FORWARDED_FOR"]);
+function api_hostName($ipaddr=NULL){
+ if($ipaddr===NULL){
+  if($_SERVER["HTTP_X_FORWARDED_FOR"]<>""){
+   $proxy=$_SERVER["REMOTE_ADDR"];
+   $host=@gethostbyaddr($_SERVER["HTTP_X_FORWARDED_FOR"]);
+  }else{
+   $host=@gethostbyaddr($_SERVER["REMOTE_ADDR"]);
+  }
  }else{
-  $host=@gethostbyaddr($_SERVER["REMOTE_ADDR"]);
+  $host=@gethostbyaddr($ipaddr);
  }
  return strtoupper($host);
 }
