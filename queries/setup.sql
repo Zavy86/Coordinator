@@ -135,7 +135,7 @@ CREATE TABLE IF NOT EXISTS `accounts_groups` (
 --
 
 INSERT IGNORE INTO `accounts_groups` (`id`, `idCompany`, `idGroup`, `name`, `description`, `addDate`, `addIdAccount`) VALUES
-(1, 1, NULL, 'ADM', 'Administrators', '2010-01-01 10:00:00', 1),
+(1, 1, NULL, 'ADM', 'Administrators', '2010-01-01 10:00:00', 1);
 
 -- --------------------------------------------------------
 
@@ -404,30 +404,30 @@ CREATE TABLE IF NOT EXISTS `settings_permissions` (
 --
 
 INSERT IGNORE INTO `settings_permissions` (`id`, `module`, `action`, `description`, `locked`) VALUES
-(NULL, 'settings', 'settings_edit', 'Manage Coordinator settings', 1),
-(NULL, 'settings', 'permissions_manage', 'Manage company groups permissions', 1),
-(NULL, 'settings', 'modules_edit', 'Manage Coordinator modules', 1),
-(NULL, 'settings', 'menus_edit', 'Manage menus', 0),
-(NULL, 'accounts', 'accounts_view', 'View accounts', 0),
-(NULL, 'accounts', 'accounts_edit', 'Edit accounts', 0),
-(NULL, 'accounts', 'accounts_customize', 'Edit own account and name ', 0),
-(NULL, 'accounts', 'accounts_manage', 'Delete, restore and manage accounts', 1),
-(NULL, 'accounts', 'roles_view', 'View company roles', 0),
-(NULL, 'accounts', 'roles_edit', 'Edit company roles', 0),
-(NULL, 'accounts', 'companies_view', 'View companies', 0),
-(NULL, 'accounts', 'companies_edit', 'Edit companies', 0),
-(NULL, 'accounts', 'companies_delete', 'Delete companies', 1),
-(NULL, 'accounts', 'groups_view', 'View companies groups', 0),
-(NULL, 'accounts', 'groups_edit', 'Edit companies groups', 0),
-(NULL, 'chats', 'chats_chat', 'Use integrated chat', 0),
-(NULL, 'logs', 'logs_list', 'View event logs', 0),
-(NULL, 'logs', 'notifications_send', 'Send notifications', 0),
-(NULL, 'logs', 'notifications_send_all', 'Send notifications to all users', 0),
-(NULL, 'stats', 'stats_server', 'View server stats', 0),
-(NULL, 'database', 'database_view', 'View Coordinator database', 0),
-(NULL, 'uploads', 'uploads_view', 'View uploads', 0),
-(NULL, 'uploads', 'files_edit', 'Edit folders', 0),
-(NULL, 'uploads', 'folders_edit', 'Edit files', 0);
+(1, 'settings', 'settings_edit', 'Manage Coordinator settings', 1),
+(2, 'settings', 'permissions_manage', 'Manage company groups permissions', 1),
+(3, 'settings', 'modules_edit', 'Manage Coordinator modules', 1),
+(4, 'settings', 'menus_edit', 'Manage menus', 0),
+(5, 'accounts', 'accounts_view', 'View accounts', 0),
+(6, 'accounts', 'accounts_edit', 'Edit accounts', 0),
+(7, 'accounts', 'accounts_customize', 'Edit own account and name ', 0),
+(8, 'accounts', 'accounts_manage', 'Delete, restore and manage accounts', 1),
+(9, 'accounts', 'roles_view', 'View company roles', 0),
+(10, 'accounts', 'roles_edit', 'Edit company roles', 0),
+(11, 'accounts', 'companies_view', 'View companies', 0),
+(12, 'accounts', 'companies_edit', 'Edit companies', 0),
+(13, 'accounts', 'companies_delete', 'Delete companies', 1),
+(14, 'accounts', 'groups_view', 'View companies groups', 0),
+(15, 'accounts', 'groups_edit', 'Edit companies groups', 0),
+(16, 'chats', 'chats_chat', 'Use integrated chat', 0),
+(17, 'logs', 'logs_list', 'View event logs', 0),
+(18, 'logs', 'notifications_send', 'Send notifications', 0),
+(19, 'logs', 'notifications_send_all', 'Send notifications to all users', 0),
+(20, 'stats', 'stats_server', 'View server stats', 0),
+(21, 'database', 'database_view', 'View Coordinator database', 0),
+(22, 'uploads', 'uploads_view', 'View uploads', 0),
+(23, 'uploads', 'files_edit', 'Edit folders', 0),
+(24, 'uploads', 'folders_edit', 'Edit files', 0);
 
 -- --------------------------------------------------------
 
