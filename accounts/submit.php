@@ -252,7 +252,7 @@ function account_save_ldap(){
  $p_phone=$_POST['phone'];
  $p_language=$_POST['language'];
  // set name
- $f_name=ucwords(strtolower($p_lastname))." ".ucwords(strtolower($p_firstname));
+ $f_name=ucwords(strtolower($p_firstname))." ".ucwords(strtolower($p_lastname));
  // check if not exist
  if(strlen($p_ldap)>0 && !$GLOBALS['db']->countOf("accounts_accounts","ldap='".$p_ldap."'")){
   // build query
