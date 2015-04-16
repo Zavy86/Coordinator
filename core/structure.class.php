@@ -488,6 +488,7 @@ class str_navigation{
    echo " <!-- search -->\n";
    echo " <form action='".api_baseName()."' method='get' name='nav-search'>\n";
    echo "  <li class='search pull-right'>\n";
+   echo "   <input type='hidden' name='filtered' value='1'>\n";
    // get params
    if(count($this->get)>0){
     $gets=NULL;
@@ -499,8 +500,9 @@ class str_navigation{
    }
    // show input
    echo "   <div class='input-append'>\n";
+   //       <<<<<<<<<<<<<<------------------------------------------------------ FILTRI DISATTIVATI DALLA RICERCA
    // load filters
-   foreach($this->filters as $filter){
+   /*foreach($this->filters as $filter){
     // switch filter type
     switch($filter->type){
      // multiple filters have array results
@@ -521,7 +523,7 @@ class str_navigation{
      default:
       if($_GET[$filter->name]<>NULL){echo "    <input type='hidden' name='".$filter->name."' value='".$_GET[$filter->name]."'>\n";}
     }
-   }
+   }*/
    echo "    <input type='text' name='q' class='input-large' placeholder='Ricerca' value='".$_GET['q']."'>\n";
    if($_GET['q']<>NULL){echo "    <a class='btn' href='".api_baseName()."?nav-search-submit=reset".$this->filtersGet()."&q='><i class='icon-remove-sign'></i></a>\n";}
    echo "    <button type='submit' name='nav-search-submit' class='btn'><i class='icon-search'></i></button>\n";
