@@ -1885,10 +1885,11 @@ function api_walkGroupsRecursively($groups,&$array){
  * @param string $action module action to check
  * @param booelan $alert show unauthorized alert box
  * @param booelan $admin permit admin bypass
+ * @param booelan $subgroups check in subgroups
  * @param integer $idAccount account to check or self
  * @return boolean
  */
-function api_checkPermission($module,$action,$alert=FALSE,$admin=TRUE,$idAccount=NULL){
+function api_checkPermission($module,$action,$alert=FALSE,$admin=TRUE,$subgroups=TRUE,$idAccount=NULL){
  if(!strlen($module)||!strlen($action)){return NULL;}
  // if account is 0 return null
  if($idAccount===0 || $idAccount==="0"){return NULL;}
@@ -1929,15 +1930,18 @@ function api_checkPermission($module,$action,$alert=FALSE,$admin=TRUE,$idAccount
     // check if account company level <= required level
     if($account->companies[$required_group->idCompany]->role->level<=$required_group->level){return TRUE;}
    }else{
-    // retrieve subgroups
-    $subgroups=api_accounts_groups($required_group->idCompany,$required_group->idGroup);
-    api_walkGroupsRecursively($subgroups->results,$subgroups_array);
     // check subgroups
-    foreach($subgroups_array as $subgroup){
-     // check if subgroup is in array account company groups
-     if(array_key_exists($subgroup,$account->companies[$required_group->idCompany]->groups)){
-      // check if account company level <= required level
-      if($account->companies[$required_group->idCompany]->role->level<=$required_group->level){return TRUE;}
+    if($subgroups){
+     // retrieve subgroups
+     $subgroups=api_accounts_groups($required_group->idCompany,$required_group->idGroup);
+     api_walkGroupsRecursively($subgroups->results,$subgroups_array);
+     // check subgroups
+     foreach($subgroups_array as $subgroup){
+      // check if subgroup is in array account company groups
+      if(array_key_exists($subgroup,$account->companies[$required_group->idCompany]->groups)){
+       // check if account company level <= required level
+       if($account->companies[$required_group->idCompany]->role->level<=$required_group->level){return TRUE;}
+      }
      }
     }
    }
