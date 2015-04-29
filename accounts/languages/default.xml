@@ -20,7 +20,8 @@
  <text key="accountUndeleted">L'account {0} è stato ripristinato</text>
  <text key="accountSwitchToAdmin">From this moment you are working with administrator privileges :)</text>
  <text key="accountSwitchToUser">From this moment you are working with normal user privileges :(</text>
- <text key="accountInterpreted">You're interpreting the selected account</text>
+ <text key="accountInterpreted">You are interpreting account {0}</text>
+ <text key="accountInterpretedStop">You are no longer interpreting account {0}</text>
  <text key="accountPasswordChanged">Your password has been updated</text>
  <text key="accountDebug">Debug disabled</text>
  <text key="accountDebug1">Debug enabled</text>
