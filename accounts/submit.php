@@ -463,7 +463,7 @@ function account_interpret_stop(){
  $log=api_log(API_LOG_NOTICE,"accounts","accountInterpretedStop",
   "{logs_accounts_accountInterpretedStop|".api_account()->id."|".api_account()->name."|".$interpreted."|".api_account($interpreted)->name."}");
  // redirect
- $alert="?alert=accountInterpreted&alert_class=alert-success&idLog=".$log->id;
+ $alert="?alert=accountInterpretedStop&alert_class=alert-success&alert_parameters=".api_account($interpreted)->name."&idLog=".$log->id;
  exit(header("location: accounts_customize.php".$alert));
 }
 

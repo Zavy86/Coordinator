@@ -21,6 +21,7 @@
  <text key="accountSwitchToAdmin">Da questo momento stai operando con i privilegi di amministratore, ogni porta ti sarà aperta.. :)</text>
  <text key="accountSwitchToUser">Da questo momento stai operando con i privilegi di un normalissimo utente.. :(</text>
  <text key="accountInterpreted">Stai interpretando l'utente {0}</text>
+ <text key="accountInterpretedStop">Non stai più interpretando l'utente {0}</text>
  <text key="accountPasswordChanged">La tua password è stata aggiornata</text>
  <text key="accountDebug">Debug disabilitato</text>
  <text key="accountDebug1">Debug abilitato</text>
