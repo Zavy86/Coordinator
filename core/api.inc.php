@@ -9,6 +9,8 @@ global $path;                   // base path of web root directory
 global $dir;                    // directory of web application
 global $alert;                  // alerts global variable
 global $locale;                 // array with translation
+global $script_timer;           // script timer
+$script_timer=api_getmicrotime();
 include("../config.inc.php");   // include the configuration file
 include("html.class.php");      // include the html class
 include("structure.class.php"); // include structure classes
@@ -1294,6 +1296,23 @@ function api_logNotificationTriggers($module,$action,$event,$id,$link){
  }
  // return notifications array
  return $notifications_array;
+}
+
+
+
+
+/* --------------------------  N U O V E    A P I  -------------------------- */
+
+
+/**
+ * Get Micro Time
+ *
+ * @return float intial seconds
+ */
+function api_getmicrotime(){
+ list($usec,$sec)=explode(" ",microtime());
+ $seconds=((float)$usec+(float)$sec);
+ return $seconds;
 }
 
 

@@ -323,7 +323,17 @@ public function footer($wiki_link=NULL,$copyright=TRUE){
      }
     ?>
 
-    <span class="muted credit pull-right">Copyright 2009-<?php echo date("Y");?> &copy; <a href="http://www.coordinator.it" target="_blank">Coordinator</a> - All Rights Reserved <?php if(api_accountGroupMember(1)){echo " - Queries: ".$GLOBALS['db']->nbQueries;} ?></span>
+    <span class="muted credit pull-right">
+     Copyright 2009-<?php echo date("Y");?> &copy; <a href="http://www.coordinator.it" target="_blank">Coordinator</a> - All Rights Reserved
+     <?php
+      if(api_accountGroupMember(1)){
+       $script_timer_end=api_getmicrotime();
+       $script_timer_execution=number_format($script_timer_end-$GLOBALS['script_timer'],2,",",".");
+       echo " - Execution time: ".$script_timer_execution. " secs";
+       echo " - Queries: ".$GLOBALS['db']->nbQueries;
+      }
+     ?>
+    </span>
 
    </footer>
   </div><!-- /row -->
@@ -426,8 +436,12 @@ public function footer($wiki_link=NULL,$copyright=TRUE){
  <?php
   // debug
   if($_SESSION["account"]->debug){
-   echo "<br><br>";
-   pre_var_dump("Total executed queries: ".$GLOBALS['db']->nbQueries);
+   $script_timer_end=api_getmicrotime();
+   $script_timer_execution=number_format($script_timer_end-$GLOBALS['script_timer'],2,",",".");
+   echo "<br><hr><center>";
+   echo "Script Execution time: ".$script_timer_execution. " secs";
+   echo " - Total executed queries: ".number_format($GLOBALS['db']->nbQueries,0,",",".");
+   echo "</center>";
   }
  ?>
 
