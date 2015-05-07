@@ -333,7 +333,7 @@ function permission_group_add(){
   $permissions_array[]=$GLOBALS['db']->queryUniqueObject("SELECT * FROM settings_permissions WHERE id='".$g_idPermission."'");
  }
  // get group
- if($g_idGroup<>0){$group=api_accounts_group($g_idGroup);}else{$group=new stdClass();}
+ if($g_idGroup<>0){$group=api_accounts_group($g_idGroup,FALSE);}else{$group=new stdClass();}
  // check objects
  if(!$company->id){echo api_text("companyNotFound");return FALSE;}
  if($g_idGroup<>0&&!$group->id){echo api_text("groupNotFound");return FALSE;}
@@ -386,7 +386,7 @@ function permission_group_remove(){
  $company=api_accounts_company($_GET['idCompany']);
  // acquire variables
  $g_idGroup=$_GET['idGroup'];
- if($g_idGroup<>0){$group=api_accounts_group($g_idGroup);}else{$group=new stdClass();}
+ if($g_idGroup<>0){$group=api_accounts_group($g_idGroup,FALSE);}else{$group=new stdClass();}
  // check objects
  if(!$permission->id){echo api_text("permissionNotFound");return FALSE;}
  if($permission->locked&&api_accounts_account()->id>1){echo api_text("permissionLocked");return FALSE;}

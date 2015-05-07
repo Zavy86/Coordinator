@@ -517,7 +517,7 @@ function api_groupId($groupName,$idCompany=NULL){
 // @param $idAccount : ID of the account
 // @param $subgroups : Check also in subgroups
 function api_accountGrouprole($idGroup,$idAccount=NULL,$subGroups=FALSE){
- $group=api_accounts_group($idGroup);
+ $group=api_accounts_group($idGroup,$subGroups);
  $account=api_account($idAccount);
  if(!$group->id||!$account->id){return FALSE;}
  // check if group is in array account company groups
@@ -1986,7 +1986,7 @@ function api_accountGroupMember($idGroup,$idAccount=NULL,$subGroups=TRUE){
  // definitions
  $subgroups_array=array();
  // get objects
- $group=api_accounts_group($idGroup);
+ $group=api_accounts_group($idGroup,$subGroups);
  $account=api_accounts_account($idAccount);
  // checks
  if(!$group->id||!$account->id){return FALSE;}
