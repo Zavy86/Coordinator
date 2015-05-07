@@ -323,7 +323,7 @@ public function footer($wiki_link=NULL,$copyright=TRUE){
      }
     ?>
 
-    <span class="muted credit pull-right">Copyright 2009-<?php echo date("Y");?> &copy; <a href="http://www.coordinator.it" target="_blank">Coordinator</a> - All Rights Reserved</span>
+    <span class="muted credit pull-right">Copyright 2009-<?php echo date("Y");?> &copy; <a href="http://www.coordinator.it" target="_blank">Coordinator</a> - All Rights Reserved <?php if(api_accountGroupMember(1)){echo " - Queries: ".$GLOBALS['db']->nbQueries;} ?></span>
 
    </footer>
   </div><!-- /row -->
@@ -422,6 +422,14 @@ public function footer($wiki_link=NULL,$copyright=TRUE){
  <noscript><p><img src="http://<?php echo $piwik_server;?>/piwik.php?idsite=<?php echo $piwik_siteid;?>" style="border:0" alt="" /></p></noscript>
  <!-- End Piwik Code -->
  <?php } ?>
+
+ <?php
+  // debug
+  if($_SESSION["account"]->debug){
+   echo "<br><br>";
+   pre_var_dump("Total executed queries: ".$GLOBALS['db']->nbQueries);
+  }
+ ?>
 
 </body>
 </html>
