@@ -348,7 +348,7 @@ function api_accounts_roles($search=NULL,$pagination=FALSE,$where=NULL){
  * @param boolean $subGroups load also sub groups
  * @return object group object
  */
-function api_accounts_group($group,$subGroups=FALSE){
+function api_accounts_group($group,$subGroups=TRUE){
  // get group object
  if(is_numeric($group)){$group=$GLOBALS['db']->queryUniqueObject("SELECT * FROM accounts_groups WHERE id='".$group."'");}
  if(!$group->id){return FALSE;}
