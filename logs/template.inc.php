@@ -12,7 +12,7 @@ $navigation=new str_navigation((api_baseName()=="logs_list.php"||api_baseName()=
 if(api_checkPermission($module_name,"logs_list")){
  $navigation->addTab(api_text("nav-logs"),"logs_list.php");
 }
-if($_SESSION['account']->typology==1){
+if(api_account()->administrator){
  $navigation->addTab(api_text("nav-mails"),"logs_mails_list.php");
 }
 $navigation->addTab(api_text("nav-notifications"),"logs_notifications_list.php?s=1");
