@@ -2,8 +2,6 @@
 /* -------------------------------------------------------------------------- *\
 |* -[ Logs - Subscriptions ]------------------------------------------------- *|
 \* -------------------------------------------------------------------------- */
-// refresh dashboard every 5 min
-header("Refresh:300;url=".$_SERVER["PHP_SELF"]);
 include("template.inc.php");
 function content(){
  // definitions
