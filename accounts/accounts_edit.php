@@ -150,7 +150,7 @@ function content(){
     // build company row
     $groups_table->addRow();
     $groups_table->addField($main_td,"text-center");
-    $groups_table->addField($group->path.$group->label);
+    $groups_table->addField($group->path.api_link("groups_view.php?idGroup=".$group->id,$group->label,NULL,"hiddenlink",FALSE,NULL,NULL,"_blank"));
     $groups_table->addField($del_td,"text-center");
    }
    // link table
