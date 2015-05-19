@@ -13,12 +13,12 @@
 <body>
 <div>
 <?php
- if($_SESSION['account']->administrator){echo "<center><small>".api_text("chats-lastAccess",api_timestampFormat(api_account($g_idAccount)->lastLogin,api_text("datetime")))."</small></center>";}
+ if(api_account()->administrator){echo "<center><small>".api_text("chats-lastAccess",api_timestampFormat(api_account($g_idAccount)->accDate,api_text("datetime")))."</small></center>";}
  // generate file path
- if($_SESSION['account']->id<$g_idAccount){
-  $file_path="chats/".str_pad($_SESSION['account']->id,11,"0",STR_PAD_LEFT)."-".str_pad($g_idAccount,11,"0",STR_PAD_LEFT).".xml";
+ if(api_account()->id<$g_idAccount){
+  $file_path="chats/".str_pad(api_account()->id,11,"0",STR_PAD_LEFT)."-".str_pad($g_idAccount,11,"0",STR_PAD_LEFT).".xml";
  }else{
-  $file_path="chats/".str_pad($g_idAccount,11,"0",STR_PAD_LEFT)."-".str_pad($_SESSION['account']->id,11,"0",STR_PAD_LEFT).".xml";
+  $file_path="chats/".str_pad($g_idAccount,11,"0",STR_PAD_LEFT)."-".str_pad(api_account()->id,11,"0",STR_PAD_LEFT).".xml";
  }
  // die if not exist
  if(!file_exists($file_path)){die();}
@@ -53,7 +53,7 @@
   // show message
   echo "<div class='message'>".nl2br(stripslashes($message->text))."</div>\n";
  }
- if($last_id==$_SESSION['account']->id){
+ if($last_id==api_account()->id){
   if($last_read){
    echo "<div class='status'>Letto</div>\n";
   }else{
