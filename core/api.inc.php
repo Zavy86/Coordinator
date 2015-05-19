@@ -56,6 +56,7 @@ if($g_submit=="cron"){
     $GLOBALS['dir']."accounts/index.php",
     $GLOBALS['dir']."chats/chat.inc.php",
     $GLOBALS['dir']."chats/chat_list.inc.php",
+    $GLOBALS['dir']."chats/chat_edit.inc.php",
     $GLOBALS['dir']."chats/chat_counter.inc.php",
     $GLOBALS['dir']."logs/logs_notifications_list.inc.php",
     $GLOBALS['dir']."logs/logs_notifications_counter.inc.php");
