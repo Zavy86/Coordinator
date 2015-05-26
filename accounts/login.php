@@ -23,7 +23,7 @@ $html->header(NULL,NULL,FALSE);
 $form=new str_form("submit.php?act=account_login&lang=".$g_language,"post","login");
 $form->addField("text","account",NULL,$g_account,NULL,api_text("login-ff-account-placeholder"));
 $form->addField("password","password",NULL,NULL,NULL,api_text("login-ff-password-placeholder"));
-$login_controls="<input type='submit' class='btn btn-primary' value=\"".api_text("login-fc-submit")."\">\n";
+$login_controls="<input type='submit' id='login_submit' class='btn btn-primary' value=\"".api_text("login-fc-submit")."\">\n";
 $login_controls.="<span>&nbsp;<a href='password_retrieve.php?lang=".$g_language."'>".api_text("login-fc-retrieve")."</a></span>\n";
 $form->addCustomField(NULL,$login_controls);
 // open login div
@@ -48,6 +48,8 @@ echo "</div>\n";
    },
    submitHandler:function(form){form.submit();}
   });
+  $("form[name='login']").submit(function(){$("#login_submit").attr("disabled","disabled");});
+  $("form[name='login']").change(function(){$("#login_submit").removeAttr("disabled");});
  });
 </script>
 <?php
