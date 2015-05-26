@@ -104,6 +104,8 @@ function account_login(){
     // enable administrator only for root (superuser can switch after login)
     if($account->id==1){$_SESSION['account']->administrator=TRUE;}
     else{$_SESSION['account']->administrator=FALSE;}
+    // load account permissions
+    $_SESSION['permissions']=api_loadAccountPermission();
     // update last access and ldap password if set
     $GLOBALS['db']->execute("UPDATE accounts_accounts SET accDate='".api_now()."'".$password_update_query." WHERE id='".$account->id."'");
     // log event
@@ -432,9 +434,11 @@ function account_interpret(){
  // set session to account
  $_SESSION['account']=$account;
  // update session language
- $_SESSION['language']=$account->language;
+ $_SESSION['language']=api_account()->language;
  // update session company
- $_SESSION['company']=$account->companies[$account->mainCompany];
+ $_SESSION['company']=api_account()->companies[api_account()->mainCompany];
+ // update account permissions
+ $_SESSION['permissions']=api_loadAccountPermission();
  // log
  $log=api_log(API_LOG_WARNING,"accounts","accountInterpreted",
   "{logs_accounts_accountInterpreted|".$interpreter."|".api_account($interpreter)->name."|".api_account()->id."|".api_account()->name."}");
@@ -456,9 +460,11 @@ function account_interpret_stop(){
  $_SESSION['account']=$account;
  $_SESSION['account']->administrator=TRUE;
  // update session language
- $_SESSION['language']=$account->language;
+ $_SESSION['language']=api_account()->language;
  // update session company
- $_SESSION['company']=$account->companies[$account->mainCompany];
+ $_SESSION['company']=api_account()->companies[api_account()->mainCompany];
+ // update account permissions
+ $_SESSION['permissions']=api_loadAccountPermission();
  // log
  $log=api_log(API_LOG_NOTICE,"accounts","accountInterpretedStop",
   "{logs_accounts_accountInterpretedStop|".api_account()->id."|".api_account()->name."|".$interpreted."|".api_account($interpreted)->name."}");
