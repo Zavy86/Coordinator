@@ -1899,6 +1899,67 @@ function api_walkGroupsRecursively($groups,&$array){
 
 
 /**
+ * Load Account Permission
+ *
+ * @return permissions array
+ */
+function api_loadAccountPermission(){
+ // definitions
+ $permissions_array=array();
+ // get permissions
+ $permissions=$GLOBALS['db']->query("SELECT * FROM settings_permissions ORDER BY module ASC,action ASC");
+ while($permission=$GLOBALS['db']->fetchNextObject($permissions)){
+  // retrieve required groups
+  $query="SELECT settings_permissions_join_accounts_groups.*,
+   IFNULL(settings_permissions_join_accounts_groups.idCompany,accounts_groups.idCompany) as idCompany,
+   IFNULL(settings_permissions_join_accounts_groups.idGroup,'0') AS idGroup
+   FROM settings_permissions_join_accounts_groups
+   LEFT JOIN accounts_groups ON accounts_groups.id=settings_permissions_join_accounts_groups.idGroup
+   WHERE settings_permissions_join_accounts_groups.idPermission='".$permission->id."'";
+  $required_groups=$GLOBALS['db']->query($query);
+  while($required_group=$GLOBALS['db']->fetchNextObject($required_groups)){
+   // definitions
+   $permitted=FALSE;
+   $subgroups_array=array();
+   // check if account is associated to the company
+   if(api_account()->companies[$required_group->idCompany]==NULL){continue;}
+   // check groups or company level
+   if($required_group->idGroup==0){
+    // check if account company level <= required level
+    if(api_account()->companies[$required_group->idCompany]->role->level<=$required_group->level){$permitted=TRUE;}
+   }else{
+    // check if group is in array account company groups
+    if(array_key_exists($required_group->idGroup,api_account()->companies[$required_group->idCompany]->groups)){
+     // check if account company level <= required level
+     if(api_account()->companies[$required_group->idCompany]->role->level<=$required_group->level){$permitted=TRUE;}
+    }
+   }
+   if($permitted){
+    $permissions_array[$permission->module][$permission->action]=TRUE;
+    continue;
+   }
+   // retrieve subgroups
+   $subgroups=api_accounts_groups($required_group->idCompany,$required_group->idGroup);
+   api_walkGroupsRecursively($subgroups->results,$subgroups_array);
+   // check subgroups
+   foreach($subgroups_array as $subgroup){
+    // check if subgroup is in array account company groups
+    if(array_key_exists($subgroup,api_account()->companies[$required_group->idCompany]->groups)){
+     // check if account company level <= required level
+     if(api_account()->companies[$required_group->idCompany]->role->level<=$required_group->level){$permitted=TRUE;}
+    }
+   }
+   if($permitted){
+    $permissions_array[$permission->module]["inherited"][$permission->action]=TRUE;
+    continue;
+   }
+  }
+ }
+ return $permissions_array;
+}
+
+
+/**
  * Check Permission
  *
  * @param string $module coordinator module
@@ -1914,10 +1975,18 @@ function api_checkPermission($module,$action,$alert=FALSE,$admin=TRUE,$subgroups
  // if account is 0 return null
  if($idAccount===0 || $idAccount==="0"){return NULL;}
  // if account is root return always true
- //if(api_account()->id==1 && $admin==TRUE){return TRUE;} // -------------------
  if($idAccount==1 && $admin==TRUE){return TRUE;}
- // if admin and account is superuser return always true
+ if(api_account()->id==1 && $admin==TRUE){return TRUE;}
+ // if admin and account is superuser in administrator mode return always true
  if($admin==TRUE && $idAccount===NULL && api_account()->administrator){return TRUE;}
+ // if logged account use session permissions
+ if($idAccount===NULL){
+  if(array_key_exists($module,$_SESSION['permissions'])){
+   if(array_key_exists($action,$_SESSION['permissions'][$module])){return TRUE;}
+   if($subgroups){if(array_key_exists($action,$_SESSION['permissions'][$module]["inherited"])){return TRUE;}}
+  }
+  return FALSE;
+ }
  // retrieve the permission id
  $idPermission=$GLOBALS['db']->queryUniqueValue("SELECT id FROM settings_permissions WHERE module='".$module."' AND action='".$action."'");
  // check permission
@@ -1925,6 +1994,7 @@ function api_checkPermission($module,$action,$alert=FALSE,$admin=TRUE,$subgroups
   echo api_alert_box(api_text("permissionNotFound",array(api_tag("i",$module),api_tag("i",$action))),NULL,"alert-warning");
   return FALSE;
  }
+ // ---------------------------------------------------------------------------- vecchio sistema ancora in uso per utente diverso da colui che è loggato (valutare se si può ottimizzare)
  // get account object
  $account=api_accounts_account($idAccount);
  // retrieve required groups
@@ -1967,6 +2037,7 @@ function api_checkPermission($module,$action,$alert=FALSE,$admin=TRUE,$subgroups
    }
   }
  }
+ // ----------------------------------------------------------------------------
  if($alert){echo api_alert_box(api_text("accessDenied-message")." ".api_text("accessDenied-action",api_tag("i",$action)),api_text("accessDenied"),"alert-error");}
  return FALSE;
 }
@@ -1982,7 +2053,7 @@ function api_checkPermissionShowModule($module,$admin=TRUE){
  if(!strlen($module)){return NULL;}
  // if account is root return always true
  if(api_account()->id==1 && $admin==TRUE){return TRUE;}
- // if account typology is administrator return always true
+ // if admin and account is superuser in administrator mode return always true
  if(api_account()->administrator && $admin==TRUE){return TRUE;}
  // retrieve all module permissions
  $permissions=$GLOBALS['db']->query("SELECT * FROM settings_permissions WHERE module='".$module."'");
