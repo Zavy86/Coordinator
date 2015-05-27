@@ -409,7 +409,7 @@ function api_accounts_groups($idCompany,$idGroup=NULL,$where=NULL){
  // conditions
  if(strlen($where)>0){$query_where="( ".$query_where." ) AND ( ".$where." )";}
  // order
- $query_order=api_queryOrder("accounts_groups.name ASC");
+ $query_order=" ORDER BY accounts_groups.name ASC";
  // build query
  $return->query="SELECT ".$query_fields." FROM ".$query_table." WHERE ".$query_where.$query_order;
  // execute query
