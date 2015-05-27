@@ -1985,52 +1985,52 @@ function api_checkPermission($module,$action,$alert=FALSE,$admin=TRUE,$subgroups
    if(array_key_exists($action,$_SESSION['permissions'][$module])){return TRUE;}
    if($subgroups){if(array_key_exists($action,$_SESSION['permissions'][$module]["inherited"])){return TRUE;}}
   }
-  return FALSE;
- }
- // retrieve the permission id
- $idPermission=$GLOBALS['db']->queryUniqueValue("SELECT id FROM settings_permissions WHERE module='".$module."' AND action='".$action."'");
- // check permission
- if(!$idPermission){
-  echo api_alert_box(api_text("permissionNotFound",array(api_tag("i",$module),api_tag("i",$action))),NULL,"alert-warning");
-  return FALSE;
- }
- // ---------------------------------------------------------------------------- vecchio sistema ancora in uso per utente diverso da colui che è loggato (valutare se si può ottimizzare)
- // get account object
- $account=api_accounts_account($idAccount);
- // retrieve required groups
- $query="SELECT settings_permissions_join_accounts_groups.*,
-  IFNULL(settings_permissions_join_accounts_groups.idCompany,accounts_groups.idCompany) as idCompany,
-  IFNULL(settings_permissions_join_accounts_groups.idGroup,'0') AS idGroup
-  FROM settings_permissions_join_accounts_groups
-  LEFT JOIN accounts_groups ON accounts_groups.id=settings_permissions_join_accounts_groups.idGroup
-  WHERE settings_permissions_join_accounts_groups.idPermission='".$idPermission."'";
- $required_groups=$GLOBALS['db']->query($query);
- while($required_group=$GLOBALS['db']->fetchNextObject($required_groups)){
-  // definitions
-  $subgroups_array=array();
-  // check if account is associated to the company
-  if($account->companies[$required_group->idCompany]==NULL){continue;}
-  // check groups or company level
-  if($required_group->idGroup==0){
-   // check if account company level <= required level
-   if($account->companies[$required_group->idCompany]->role->level<=$required_group->level){return TRUE;}
-  }else{
-   // check if group is in array account company groups
-   if(array_key_exists($required_group->idGroup,$account->companies[$required_group->idCompany]->groups)){
+ }else{
+  // retrieve the permission id
+  $idPermission=$GLOBALS['db']->queryUniqueValue("SELECT id FROM settings_permissions WHERE module='".$module."' AND action='".$action."'");
+  // check permission
+  if(!$idPermission){
+   echo api_alert_box(api_text("permissionNotFound",array(api_tag("i",$module),api_tag("i",$action))),NULL,"alert-warning");
+   return FALSE;
+  }
+  // ---------------------------------------------------------------------------- vecchio sistema ancora in uso per utente diverso da colui che è loggato (valutare se si può ottimizzare)
+  // get account object
+  $account=api_accounts_account($idAccount);
+  // retrieve required groups
+  $query="SELECT settings_permissions_join_accounts_groups.*,
+   IFNULL(settings_permissions_join_accounts_groups.idCompany,accounts_groups.idCompany) as idCompany,
+   IFNULL(settings_permissions_join_accounts_groups.idGroup,'0') AS idGroup
+   FROM settings_permissions_join_accounts_groups
+   LEFT JOIN accounts_groups ON accounts_groups.id=settings_permissions_join_accounts_groups.idGroup
+   WHERE settings_permissions_join_accounts_groups.idPermission='".$idPermission."'";
+  $required_groups=$GLOBALS['db']->query($query);
+  while($required_group=$GLOBALS['db']->fetchNextObject($required_groups)){
+   // definitions
+   $subgroups_array=array();
+   // check if account is associated to the company
+   if($account->companies[$required_group->idCompany]==NULL){continue;}
+   // check groups or company level
+   if($required_group->idGroup==0){
     // check if account company level <= required level
     if($account->companies[$required_group->idCompany]->role->level<=$required_group->level){return TRUE;}
    }else{
-    // check subgroups
-    if($subgroups){
-     // retrieve subgroups
-     $subgroups=api_accounts_groups($required_group->idCompany,$required_group->idGroup);
-     api_walkGroupsRecursively($subgroups->results,$subgroups_array);
+    // check if group is in array account company groups
+    if(array_key_exists($required_group->idGroup,$account->companies[$required_group->idCompany]->groups)){
+     // check if account company level <= required level
+     if($account->companies[$required_group->idCompany]->role->level<=$required_group->level){return TRUE;}
+    }else{
      // check subgroups
-     foreach($subgroups_array as $subgroup){
-      // check if subgroup is in array account company groups
-      if(array_key_exists($subgroup,$account->companies[$required_group->idCompany]->groups)){
-       // check if account company level <= required level
-       if($account->companies[$required_group->idCompany]->role->level<=$required_group->level){return TRUE;}
+     if($subgroups){
+      // retrieve subgroups
+      $subgroups=api_accounts_groups($required_group->idCompany,$required_group->idGroup);
+      api_walkGroupsRecursively($subgroups->results,$subgroups_array);
+      // check subgroups
+      foreach($subgroups_array as $subgroup){
+       // check if subgroup is in array account company groups
+       if(array_key_exists($subgroup,$account->companies[$required_group->idCompany]->groups)){
+        // check if account company level <= required level
+        if($account->companies[$required_group->idCompany]->role->level<=$required_group->level){return TRUE;}
+       }
       }
      }
     }
