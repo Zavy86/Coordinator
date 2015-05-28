@@ -179,10 +179,7 @@ function api_text_boolean($boolean){
 
 /* -[ Die ]------------------------------------------------------------------ */
 function api_die($error=""){
- switch($error){
-  case "accessDenied":$url="<a href='index.php?alert=accessDenied&alert_class=alert-error'>";break;
-  default:$url="<a href='index.php'>";
- }
+ $url="<a href='index.php?alert=".$error."&alert_class=alert-error'>";
  $die="<html><head><style type='text/css'>body{background:black;color:green;}a{color:green;text-decoration:none;}a:hover{color:#00CC00;}strong{color:#00CC00;}</style></head>";
  $die.="<body><center><br><strong>SYSTEM FAILURE !</strong><br><br><br>";
  $die.="<em>\"Have you ever had a dream, Neo, that you were so sure was real?<br>";
