@@ -208,9 +208,9 @@ class str_navigation{
    }
   }
   if($text<>NULL){
-   $return="<p><a href='".api_baseName()."?resetFilters=1' style='color:#ffffff;text-decoration:none;'><span class='label'>&times; ".api_text("filters-filters").":</span></a> ".substr(str_replace("*","%",$text),1)."</p>\n";
+   $return="<p><a href='".api_baseName()."?filtered=1' style='color:#ffffff;text-decoration:none;'><span class='label'>&times; ".api_text("filters-filters").":</span></a> ".substr(str_replace("*","%",$text),1)."</p>\n";
   }else{
-   if($unvalued<>NULL){$unvalued="<p><a href='".api_baseName()."?resetFilters=1' style='color:#ffffff;text-decoration:none;'><span class='label'>&times; ".api_text("filters-filters").":</span></a> <span class='label label-inverse'>".$unvalued."</span></p>\n";}
+   if($unvalued<>NULL){$unvalued="<p><a href='".api_baseName()."?filtered=1' style='color:#ffffff;text-decoration:none;'><span class='label'>&times; ".api_text("filters-filters").":</span></a> <span class='label label-inverse'>".$unvalued."</span></p>\n";}
    $return=$unvalued;
   }
   return $return;
