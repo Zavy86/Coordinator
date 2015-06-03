@@ -173,6 +173,8 @@ public function header($title="",$nav="dashboard",$navbar=TRUE){
 
      <ul class="nav pull-right">
 
+      <?php if($GLOBALS['initial_module']<>"index"){ ?><li><a href="<?php echo $GLOBALS['dir']."index/index.php";?>"><i class="icon-home"></i></a></li> <?php } ?>
+
       <?php if(api_checkPermission("chats","chats_chat")){ ?>
 
       <li class="dropdown">

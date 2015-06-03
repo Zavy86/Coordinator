@@ -10,6 +10,7 @@ global $dir;                    // directory of web application
 global $alert;                  // alerts global variable
 global $locale;                 // array with translation
 global $script_timer;           // script timer
+global $initial_module;         // initial module to load
 $script_timer=api_getmicrotime();
 include("../config.inc.php");   // include the configuration file
 include("html.class.php");      // include the html class
@@ -17,6 +18,8 @@ include("structure.class.php"); // include structure classes
 include("db.class.php");        // include the database class
 // include core api+
 include_once("../accounts/api.inc.php");
+// check for initial module
+if(!strlen($initial_module)){$initial_module="index";}
 // load core language file
 api_loadLocaleFile("../");
 // build class

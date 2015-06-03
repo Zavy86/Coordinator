@@ -3,6 +3,7 @@
 /* -[ Core parameter ]------------------------------------------------------- */
 $path="/var/www";
 $dir="/coordinator/";
+$initial_module="index";
 
 /* -[ Database parameter ]--------------------------------------------------- */
 $db_host="hostname";
