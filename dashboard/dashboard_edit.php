@@ -102,7 +102,7 @@ function content(){
  }
  $form->addFieldOption(12,"12 / 12",($selected_widget->span==12)?TRUE:FALSE);
  $form->addField("select","refresh",api_text("edit-ff-refresh"),NULL,"input-medium");
- if($_SESSION['account']->typology==1){
+ if($_SESSION['account']->administrator==1){
   $form->addFieldOption(5000,api_text("edit-fo-secs","5"),($selected_widget->refresh==5000)?TRUE:FALSE);
   $form->addFieldOption(10000,api_text("edit-fo-secs","10"),($selected_widget->refresh==10000)?TRUE:FALSE);
   $form->addFieldOption(30000,api_text("edit-fo-secs","30"),($selected_widget->refresh==30000)?TRUE:FALSE);
