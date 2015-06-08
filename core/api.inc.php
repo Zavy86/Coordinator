@@ -9,8 +9,8 @@ global $path;                   // base path of web root directory
 global $dir;                    // directory of web application
 global $alert;                  // alerts global variable
 global $locale;                 // array with translation
-global $script_timer;           // script timer
 global $initial_module;         // initial module to load
+global $script_timer;           // script timer
 $script_timer=api_getmicrotime();
 include("../config.inc.php");   // include the configuration file
 include("html.class.php");      // include the html class
