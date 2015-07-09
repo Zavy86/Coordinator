@@ -1818,7 +1818,7 @@ function api_mailer_process($mail){
    $mailer->SMTPAuth=FALSE;
   }
   // secure
-  switch(strtolower(api_getOption("smtp_username"))){
+  switch(strtolower(api_getOption("smtp_secure"))){
    case "tls":$mailer->SMTPSecure="tls";break;
    case "ssl":$mailer->SMTPSecure="ssl";break;
   }
