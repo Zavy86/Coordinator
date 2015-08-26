@@ -26,16 +26,14 @@ public function header($title="",$nav="dashboard",$navbar=TRUE){
  <link href="<?php echo $GLOBALS['dir']."core/bootstrap/css/bootstrap.min.css";?>" rel="stylesheet">
  <link href="<?php echo $GLOBALS['dir']."core/bootstrap/css/bootstrap-custom.css";?>" rel="stylesheet">
  <link href="<?php echo $GLOBALS['dir']."core/bootstrap/css/bootstrap-responsive.css";?>" rel="stylesheet">
- <link href="<?php echo $GLOBALS['dir']."core/template.css";?>" rel="stylesheet">
-
  <link href="<?php echo $GLOBALS['dir']."core/bootstrap-datetimepicker/css/bootstrap-datetimepicker.min.css";?>" rel="stylesheet">
  <link href="<?php echo $GLOBALS['dir']."core/bootstrap-markdown/css/bootstrap-markdown.min.css";?>" rel="stylesheet">
  <link href="<?php echo $GLOBALS['dir']."core/bootstrap-select2/select2.css";?>" rel="stylesheet">
  <link href="<?php echo $GLOBALS['dir']."core/bootstrap-slider/css/bootstrap-slider.min.css";?>" rel="stylesheet">
  <link href="<?php echo $GLOBALS['dir']."core/bootstrap-wysihtml5/css/bootstrap-wysihtml5.css";?>" rel="stylesheet">
  <link href="<?php echo $GLOBALS['dir']."core/bootstrap-tagsinput/css/bootstrap-tagsinput.css";?>" rel="stylesheet">
-
  <link href="<?php echo $GLOBALS['dir']."core/shadowbox/shadowbox.css";?>" rel="stylesheet">
+ <link href="<?php echo $GLOBALS['dir']."core/template.css";?>" rel="stylesheet">
 
  <!-- Javascript -->
  <!--<script src="<?php echo $GLOBALS['dir']."core/jquery/jquery-1.8.0.min.js";?>" type="text/javascript"></script> -->

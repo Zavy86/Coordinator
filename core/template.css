@@ -1,5 +1,11 @@
 /* -[ template.css ]-------------------------------------------------------- */
 
+@media print {
+  a[href]:after {
+    content: none !important;
+  }
+}
+
 footer{font-size:12px;}
 
 footer .credit a{color:#333333;}
