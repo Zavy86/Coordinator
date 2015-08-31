@@ -31,6 +31,8 @@ function api_accounts_account($account=NULL){
   $account->shortname=substr($account->name,0,strrpos($account->name," "));
   $account->shortname.=substr($account->name,strrpos($account->name," "),2).".";
  }
+ // make initials
+ $account->initials=strtoupper(substr($account->name,0,1).substr($account->name,strrpos($account->name," ")+1,1));
  // make language ISO
  if($account->language<>"default"){$account->languageISO=substr($account->language,-2);}else{$account->languageISO="EN";}
  // get companies
