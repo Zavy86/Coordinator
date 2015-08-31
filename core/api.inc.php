@@ -1156,6 +1156,7 @@ function api_file_delete($idFile,$table="uploads_uploads",$path=NULL){
 // @string $id : link id
 function api_link($url,$label,$title=NULL,$class=NULL,$popup=FALSE,$confirm=NULL,$style=NULL,$target="_self",$id=NULL){
  if($url==NULL){return FALSE;}
+ if($id==NULL){$id=rand(111,999);}
  $return="<a id=\"link_".$id."\" href=\"".$url."\" class='".$class."' style=\"".$style."\"";
  if($popup){
   $return.=" data-toggle='popover' data-placement='top' data-content=\"".$title."\"";
@@ -1674,7 +1675,7 @@ function api_sound($sound="alarm"){
  */
 function api_image($image,$class=NULL,$width=NULL,$height=NULL,$refresh=FALSE){
  if($refresh){$refresh="?".rand(1000,9999);}
- $image_tag="<img src='".$image.$refresh."' class='".$class."' width='".$width."' height='".$height."'>\n";
+ $image_tag="<img src='".$image.$refresh."' class='".$class."' width='".$width."' height='".$height."'>";
  return $image_tag;
 }
 
