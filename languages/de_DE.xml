@@ -12,6 +12,7 @@
  <text key="show">show</text>
  <text key="all">alle</text>
  <text key="undefined">nicht definiert</text>
+ <text key="search">suche</text>
  <text key="noresults">keine ergebnisse gefunden..</text>
 
  <!-- timestamp -->

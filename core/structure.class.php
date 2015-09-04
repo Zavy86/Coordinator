@@ -524,7 +524,7 @@ class str_navigation{
       if($_GET[$filter->name]<>NULL){echo "    <input type='hidden' name='".$filter->name."' value='".$_GET[$filter->name]."'>\n";}
     }
    }*/
-   echo "    <input type='text' name='q' class='input-large' placeholder='Ricerca' value='".$_GET['q']."'>\n";
+   echo "    <input type='text' name='q' class='input-large' placeholder='".ucfirst(api_text("search"))."' value='".$_GET['q']."'>\n";
    if($_GET['q']<>NULL){echo "    <a class='btn' href='".api_baseName()."?nav-search-submit=reset".$this->filtersGet()."&q='><i class='icon-remove-sign'></i></a>\n";}
    echo "    <button type='submit' name='nav-search-submit' class='btn'><i class='icon-search'></i></button>\n";
    echo "   </div>\n  </li>\n </form><!-- /search -->\n";
