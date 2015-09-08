@@ -93,6 +93,7 @@ if(api_getOption("maintenance") && !api_account()->superuser &&
 /* -[ Check browser ]-------------------------------------------------------- */
 if((strpos($_SERVER['HTTP_USER_AGENT'],'Chrome')==false)
    &&(strpos($_SERVER['HTTP_USER_AGENT'],'Safari')==false)
+   &&(strpos($_SERVER['HTTP_USER_AGENT'],'Firefox')==false)
    &&(strpos($_SERVER['HTTP_USER_AGENT'],'MSIE 10')==false)
    &&(strpos($_SERVER['HTTP_USER_AGENT'],'11')==false)){
  $GLOBALS['alert']->alert="changeBrowser";
