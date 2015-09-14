@@ -154,37 +154,40 @@ div.pagination ul li.null a{border-left:none;border-top:none;border-bottom:none;
 .hiddenlink{color:#000;}
 
 .btn-index{
- background: #fff;
- border-bottom: 1px solid #dedede;
- border-radius: 16px;
- -webkit-border-radius: 16px;
- -moz-border-radius: 16px;
+ background:#fff;
+ border-bottom:1px solid #dedede;
+ border-radius:16px;
+ -webkit-border-radius:16px;
+ -moz-border-radius:16px;
 }
 
-
-/* Bootstrap code examples
--------------------------------------------------- */
-
-.flag-well {
-  position: relative;
-  margin: 0 0 15px 0;
-  padding: 19px 19px 0 19px;
-  border-left: 1px solid #ddd;
-  -webkit-border-top-left-radius: 4px;
-     -moz-border-top-left-radius: 4px;
-          border-top-left-radius: 4px;
+.ellipsis{
+ display:inline-block;
+ overflow:hidden;
+ text-overflow:ellipsis;
+ white-space:nowrap;
 }
 
-.flag-well .title {
-  position: absolute;
-  top: -1px;
-  left: -1px;
-  padding: 3px 7px;
-  font-size: 12px;
-  background-color: #f5f5f5;
-  border: 1px solid #ddd;
-  color: #9da0a4;
-  -webkit-border-radius: 4px 0 4px 0;
-     -moz-border-radius: 4px 0 4px 0;
-          border-radius: 4px 0 4px 0;
+.flag-well{
+ position:relative;
+ margin:0 0 15px 0;
+ padding:19px 19px 0 19px;
+ border-left:1px solid #ddd;
+ -webkit-border-top-left-radius:4px;
+ -moz-border-top-left-radius:4px;
+ border-top-left-radius:4px;
+}
+
+.flag-well .title{
+ position:absolute;
+ top:-1px;
+ left:-1px;
+ padding:3px 7px;
+ font-size:12px;
+ background-color:#f5f5f5;
+ border:1px solid #ddd;
+ color:#9da0a4;
+ -webkit-border-radius:4px 0 4px 0;
+ -moz-border-radius:4px 0 4px 0;
+ border-radius:4px 0 4px 0;
 }
