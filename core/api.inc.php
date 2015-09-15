@@ -373,6 +373,7 @@ function api_folder_icon($size=128,$float=NULL){
 // @param $language : language conversion
 function api_timestampFormat($timestamp,$format="Y-m-d H:i",$language=NULL){
  if($timestamp==NULL){return NULL;}
+ if($timestamp=="0000-00-00 00:00:00"){return NULL;}
  if(!strlen($language)){$language=$_SESSION['language'];}
  $datetime=new DateTime($timestamp);
  $return=$datetime->format($format);
