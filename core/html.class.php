@@ -354,6 +354,7 @@ public function footer($wiki_link=NULL,$copyright=TRUE){
  <script src="<?php echo $GLOBALS['dir']."core/bootstrap-slider/js/bootstrap-slider.min.js";?>" type="text/javascript"></script>
 
  <?php if(api_checkPermission("chats","chats_chat")){ ?>
+
  <script type="text/javascript">
   $(document).ready(function(){
    // active popovers
@@ -407,6 +408,7 @@ public function footer($wiki_link=NULL,$copyright=TRUE){
    });
   });
  </script>
+
  <?php } ?>
 
  <?php
