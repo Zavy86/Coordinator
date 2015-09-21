@@ -89,6 +89,7 @@
  <text key="core-menu-debugEnable">Abilita Debug</text>
  <text key="core-menu-debugDisable">Disabilita Debug</text>
  <text key="core-menu-logout">Esci</text>
+ <text key="core-footer-manual">Hai bisogno di aiuto? Consulta la {0}documentazione{1} del modulo.</text>
 
  <!-- filters -->
  <text key="filters-filters">Filtri</text>
