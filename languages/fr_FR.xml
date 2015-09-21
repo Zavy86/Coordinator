@@ -89,6 +89,7 @@
  <text key="core-menu-debugEnable">Activer Debug</text>
  <text key="core-menu-debugDisable">Désactiver Debug</text>
  <text key="core-menu-logout">Déconnexion</text>
+ <text key="core-footer-manual">Avoir besoin d'aide? Consultez la {0}documentation{1} du module.</text>
 
  <!-- filters -->
  <text key="filters-filters">Filtres</text>

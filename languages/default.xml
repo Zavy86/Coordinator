@@ -70,6 +70,7 @@
  <text key="core-menu-debugEnable">Enable Debug</text>
  <text key="core-menu-debugDisable">Disable Debug</text>
  <text key="core-menu-logout">Logout</text>
+ <text key="core-footer-manual">Need help? Consult the module's {0}documentation{1}.</text>
 
  <!-- filters -->
  <text key="filters-filters">Filters</text>
