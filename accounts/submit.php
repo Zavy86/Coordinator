@@ -204,6 +204,11 @@ function account_save(){
   $log=api_log(API_LOG_NOTICE,"accounts","accountUpdated",
    "{logs_accounts_accountUpdated|".$p_name."|".$p_account."|".$p_ldap."}",
    $account->id,"accounts/accounts_edit.php?idAccount=".$account->id);
+  // if account was disabled remove notifications
+  if(!$p_enabled){
+   $GLOBALS['db']->execute("DELETE FROM logs_subscriptions WHERE idAccount='".$account->id."'");
+   $GLOBALS['db']->execute("UPDATE logs_notifications SET status='3' WHERE idAccount='".$account->id."'");
+  }
   // redirect
   $alert="&alert=accountUpdated&alert_class=alert-success&alert_parameters=".$p_name."&idLog=".$log->id;
   exit(header("location: accounts_edit.php?idAccount=".$account->id.$alert));
