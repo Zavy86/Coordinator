@@ -109,7 +109,7 @@ function account_login(){
     // update last access and ldap password if set
     $GLOBALS['db']->execute("UPDATE accounts_accounts SET accDate='".api_now()."'".$password_update_query." WHERE id='".$account->id."'");
     // log event
-    $log=api_log(API_LOG_NOTICE,"accounts","loginSuccess",
+    api_log(API_LOG_NOTICE,"accounts","loginSuccess",
      "{logs_accounts_loginSuccess|".$account->login."|".$account->name."}",
      $account->id,"accounts/accounts_edit.php?idAccount=".$account->id);
     // redirect
@@ -117,10 +117,10 @@ function account_login(){
    }
   }else{
    // login disabled
-   $log=api_log(API_LOG_WARNING,"accounts","loginDisabled",
+   api_log(API_LOG_WARNING,"accounts","loginDisabled",
     "{logs_accounts_loginDisabled|".$account->login."|".$account->name."}",
     $account->id,"accounts/accounts_edit.php?idAccount=".$account->id);
-   $alert="&alert=loginDisabled&alert_class=alert-warning&alert_parameters=".$account->login."&idLog=".$log->id;
+   $alert="&alert=loginDisabled&alert_class=alert-warning&alert_parameters=".$account->login;
    exit(header("location: login.php?lang=".$account->language."&account=".$account->login.$alert));
   }
  }else{
@@ -137,15 +137,15 @@ function account_login(){
   }
   // logs
   if($account->id){
-   $log=api_log(API_LOG_NOTICE,"accounts","loginFailed",
+   api_log(API_LOG_NOTICE,"accounts","loginFailed",
     "{logs_accounts_loginFailed|".$account->account."|".$account->name."}",
     $account->id,"accounts/accounts_edit.php?idAccount=".$account->id);
   }else{
-   $log=api_log(API_LOG_WARNING,"accounts","loginError",
+   api_log(API_LOG_WARNING,"accounts","loginError",
     "{logs_accounts_loginError|".$p_account."}");
   }
   // redirect
-  $alert="&alert=loginFailed&alert_class=alert-warning&idLog=".$log->id;
+  $alert="&alert=loginFailed&alert_class=alert-warning";
   exit(header("location: login.php?lang=".$account->language."&account=".$account->login.$alert));
  }
 }
