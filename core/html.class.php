@@ -101,70 +101,73 @@ public function header($title="",$nav="dashboard",$navbar=TRUE){
 
      <ul class="nav">
 
-      <li<?php if($nav=="dashboard"){echo " class=\"active\"";} ?>><a href="<?php echo $GLOBALS['dir']."dashboard/index.php";?>"><?php echo api_text("core-menu-dashboard"); ?></a></li>
+      <li class="<?php if($nav=="dashboard"){echo "active";} ?>"><a href="<?php echo $GLOBALS['dir']."dashboard/index.php";?>"><?php echo api_text("core-menu-dashboard"); ?></a></li>
 
       <?php
-       // definitions
-       $menu_count=0;
-       // menu
-       $menu_array=array();
-       $secondary_menu_array=array();
-       // admin menu shortcut array
-       $admin_menu_array=array();
-       // acquire main menu
-       $menus=$GLOBALS['db']->query("SELECT * FROM settings_menus WHERE idMenu='1' ORDER BY position ASC");
-       while($menu=$GLOBALS['db']->fetchNextObject($menus)){
-        //if(api_checkMenuPermission($menu->id,FALSE)){
-        if(api_checkPermissionShowModule($menu->module,FALSE)){
-         $menu_count++;
-         if($menu_count<8){$menu_array[]=$menu;}else{$secondary_menu_array[]=$menu;}
-        }elseif($_SESSION['account']->administrator){
-         $admin_menu_array[]=$menu;
+       // get menus
+       function html_get_menus($idMenu=1,$level=0){
+        $menus_array=array();
+        // get menu objects
+        $menus=$GLOBALS['db']->query("SELECT * FROM settings_menus WHERE idMenu='".$idMenu."' ORDER BY position ASC");
+        while($menu=$GLOBALS['db']->fetchNextObject($menus)){
+         // if menu is module check permissions to show
+         if($menu->module){if(!api_checkPermissionShowModule($menu->module)){continue;}}
+         // build submenu objects array
+         $menu->submenus=array();
+         $menu->submenus=html_get_menus($menu->id,($level+1));
+         // if menu is not module and submenus is null
+         if(!$menu->module && !count($menu->submenus)){continue;}
+         // list of modules in menu for active class
+         $menu->modules=array();
+         if($menu->module){$menu->modules[]=$menu->module;}
+         foreach($menu->submenus as $submenu){if($submenu->module){$menu->modules[]=$submenu->module;}}
+         // add menu to array
+         $menus_array[$menu->id]=$menu;
+        }
+        return $menus_array;
+       }
+       // print spaces in html source
+       function html_print_menu_spaces($level){for($i=0;$i<=$level;$i++){echo "      ";}}
+       // print menus
+       function html_print_menu($menus_array,$nav,$level=0){
+        // cycle menus
+        foreach($menus_array as $menu){
+         // open item
+         echo "<li class=\"";
+         if(in_array($nav,$menu->modules)){echo "active ";}
+         // check and open submenus
+         if(count($menu->submenus)){
+          // check for first level menu
+          if($level==0){
+           echo "dropdown\">";
+           echo "<a href='#' class='dropdown-toggle' data-toggle='dropdown'>";
+           echo stripslashes($menu->menu)." <b class='caret'></b></a>\n";
+           html_print_menu_spaces($level);
+           echo "<ul class='dropdown-menu'>\n";
+          }else{
+           echo "dropdown-submenu\">";
+           echo "<a href='#'>".stripslashes($menu->menu)."</a>\n";
+           html_print_menu_spaces($level);
+           echo "<ul class='dropdown-menu'>\n";
+          }
+          // print submenus
+          html_print_menu($menu->submenus,$nav,($level+1));
+          html_print_menu_spaces($level);
+          // close submenu
+          echo "</ul>\n";
+          html_print_menu_spaces($level);
+         }else{
+          // print item
+          echo "\"><a href='".$GLOBALS['dir'].$menu->module."/".$menu->url."'>".stripslashes($menu->menu)."</a>";
+         }
+         // close item
+         echo "</li>\n";
         }
        }
-       // show menu
-       foreach($menu_array as $menu){
-        echo "<li class=\"";
-        $submenus=$GLOBALS['db']->countOf("settings_menus","idMenu='".$menu->id."'");
-        if($nav==$menu->module){echo "active";}
-        if($submenus==0){
-         echo "\"><a href='".$GLOBALS['dir'].$menu->module."/".$menu->url."'>".stripslashes($menu->menu)."</a>";
-        }else{
-         echo " dropdown\">";
-         echo "<a href='#' class='dropdown-toggle' data-toggle='dropdown'>";
-         echo stripslashes($menu->menu)." <b class='caret'></b></a>\n";
-         // submenus
-         echo "<ul class='dropdown-menu'>\n";
-         $submenus=$GLOBALS['db']->query("SELECT * FROM settings_menus WHERE idMenu='".$menu->id."' ORDER BY position ASC");
-         while($submenu=$GLOBALS['db']->fetchNextObject($submenus)){
-          echo "<li><a href='".$GLOBALS['dir'].$submenu->module."/".$submenu->url."'>".stripslashes($submenu->menu)."</a></li>";
-         }
-         echo "</ul>\n";
-        }
-        echo "</li>\n";
-       }
-       // show secondary menu
-       if(count($secondary_menu_array)>0){
-        echo "<li class='dropdown'><a href='#' class='dropdown-toggle' data-toggle='dropdown'>";
-        echo api_icon('icon-th')." <b class='caret'></b></a>\n";
-         echo "<ul class='dropdown-menu'>\n";
-         foreach($secondary_menu_array as $menu){
-          echo "<li><a href='".$GLOBALS['dir'].$menu->module."/".$menu->url."'>".stripslashes($menu->menu)."</a></li>";
-         }
-         echo "</ul>\n";
-        echo "</li>\n";
-       }
-       // show admin menu shortcut
-       if($_SESSION['account']->administrator && count($admin_menu_array)>0){
-        echo "<li class='dropdown'><a href='#' class='dropdown-toggle' data-toggle='dropdown'>";
-        echo api_icon('icon-th')." <b class='caret'></b></a>\n";
-         echo "<ul class='dropdown-menu'>\n";
-         foreach($admin_menu_array as $menu){
-          echo "<li><a href='".$GLOBALS['dir'].$menu->module."/".$menu->url."'>".stripslashes($menu->menu)."</a></li>";
-         }
-         echo "</ul>\n";
-        echo "</li>\n";
-       }
+       // get menus
+       $menus_array=html_get_menus();
+       // print menus
+       html_print_menu($menus_array,$nav);
       ?>
 
      </ul>
@@ -304,6 +307,14 @@ public function header($title="",$nav="dashboard",$navbar=TRUE){
   <div class="row-fluid"><?php api_alert(); ?></div>
 
 <?php
+
+
+
+       //pre_var_dump($menus_array);
+
+
+
+
 }
 
 /* -[ Footer ]--------------------------------------------------------------- */
