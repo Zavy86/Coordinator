@@ -5,6 +5,7 @@
 include("template.inc.php");
 function content(){
  // menu array
+ global $menu_array;
  $menu_array=array();
  // dashboard menu
  $dashboard=new stdClass();
@@ -12,16 +13,31 @@ function content(){
  $dashboard->icon=$GLOBALS['dir']."dashboard/icon.png";
  $dashboard->menu=api_text("index-dashboard");
  $menu_array[]=$dashboard;
- // main menu
+ // index menu function
+ function index_menus($idMenu){
+  $menus=$GLOBALS['db']->query("SELECT * FROM settings_menus WHERE idMenu='".$idMenu."' ORDER BY position ASC");
+  while($menu=$GLOBALS['db']->fetchNextObject($menus)){
+   index_menus($menu->id);
+   if(api_checkPermissionShowModule($menu->module)){
+   if(!file_exists("../".$menu->module."/icon.png")){continue;}
+    $menu->url=$GLOBALS['dir'].$menu->module."/".$menu->url;
+    $menu->icon=$GLOBALS['dir'].$menu->module."/icon.png";
+    $GLOBALS['menu_array'][]=$menu;
+   }
+  }
+ }
+ // get main menu
+ index_menus(1);
+ /*// main menu
  $main_menu=$GLOBALS['db']->query("SELECT * FROM settings_menus WHERE idMenu='1' ORDER BY position ASC");
  while($menu=$GLOBALS['db']->fetchNextObject($main_menu)){
-  if(api_account()->administrator || api_checkPermissionShowModule($menu->module,FALSE)){
+  if(api_checkPermissionShowModule($menu->module)){
    if(!file_exists("../".$menu->module."/icon.png")){continue;}
    $menu->url=$GLOBALS['dir'].$menu->module."/".$menu->url;
    $menu->icon=$GLOBALS['dir'].$menu->module."/icon.png";
    $menu_array[]=$menu;
   }
- }
+ }*/
  // link menu
  $links_menu=$GLOBALS['db']->query("SELECT * FROM settings_menus WHERE idMenu='2' ORDER BY position ASC");
  while($menu=$GLOBALS['db']->fetchNextObject($links_menu)){
