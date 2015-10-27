@@ -280,7 +280,7 @@ function module_git_clone(){
  $p_dir=$_POST['dir'];
  $p_branch=$_POST['branch'];
  // execute shell commands
- $output.=exec('whoami')."@".exec('hostname').shell_exec("cd ".$GLOBALS['path']." ; cd ".$GLOBALS['dir']." ; pwd ; git clone ".$p_url." ".$p_dir." ; cd ".$p_dir." ; pwd ; git checkout ".$p_branch);
+ $output.=exec('whoami')."@".exec('hostname').shell_exec("cd ".$GLOBALS['path'].$GLOBALS['dir']." ; pwd ; git clone ".$p_url." ".$p_dir." ; cd ".$p_dir." ; pwd ; git checkout ".$p_branch);
  // log event
  $log=api_log(API_LOG_NOTICE,"settings","moduleGitClone",
   "{logs_settings_moduleGitClone|".$p_dir."|".$output."}",
