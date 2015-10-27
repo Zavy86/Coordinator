@@ -2,6 +2,7 @@
 
 /* -[ Global parameter ]----------------------------------------------------- */
 session_start();
+ini_set('display_errors',0);    // disable errors
 global $debug;                  // debug variable
 global $html;                   // html structure resource
 global $db;                     // database resource
@@ -1984,10 +1985,12 @@ function api_checkPermission($module,$action,$alert=FALSE,$admin=TRUE,$subgroups
  if($admin==TRUE && $idAccount===NULL && api_account()->administrator){return TRUE;}
  // if logged account use session permissions
  if($idAccount===NULL){
-  if(array_key_exists($module,$_SESSION['permissions'])){
-   if(array_key_exists($action,$_SESSION['permissions'][$module])){return TRUE;}
-   if($subgroups){if(array_key_exists($action,$_SESSION['permissions'][$module]["inherited"])){return TRUE;}}
-  }
+  if(is_array($_SESSION['permissions'])){
+   if(array_key_exists($module,$_SESSION['permissions'])){
+    if(array_key_exists($action,$_SESSION['permissions'][$module])){return TRUE;}
+    if($subgroups){if(array_key_exists($action,$_SESSION['permissions'][$module]["inherited"])){return TRUE;}}
+   }
+  }  
  }else{
   // retrieve the permission id
   $idPermission=$GLOBALS['db']->queryUniqueValue("SELECT id FROM settings_permissions WHERE module='".$module."' AND action='".$action."'");
