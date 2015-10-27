@@ -33,8 +33,8 @@ if($ldap){
   // check and get result
   if($s_account==strtolower($results[0][strtolower(api_getOption("ldap_userfield"))][0])){
    $ldap_mail=strtolower($results[0]["mail"][0]);
-   $ldap_firsname=ucfirst(strtolower($results[0]["sn"][0]));
-   $ldap_lastname=ucfirst(strtolower($results[0]["givenname"][0]));
+   $ldap_lastname=ucfirst(strtolower($results[0]["sn"][0]));
+   $ldap_firstname=ucfirst(strtolower($results[0]["givenname"][0]));
    $ldap_phone=strtolower($results[0]["telephonenumber"][0]);
   }
  }
@@ -43,13 +43,13 @@ if($ldap){
 $form=new str_form("submit.php?act=account_save_ldap","post","accounts_ldap");
 $form->addField("text","ldap",api_text("accounts_ldap-ff-ldap"),$s_account,"input-large",api_text("accounts_ldap-ff-ldap-placeholder"),FALSE,NULL,NULL,(strlen($s_account)?TRUE:FALSE));
 $form->addField("text","account",api_text("accounts_ldap-ff-account"),$ldap_mail,"input-xlarge");
-$form->addField("text","firstname",api_text("accounts_ldap-ff-firstname"),$ldap_firsname,"input-large");
+$form->addField("text","firstname",api_text("accounts_ldap-ff-firstname"),$ldap_firstname,"input-large");
 $form->addField("text","lastname",api_text("accounts_ldap-ff-lastname"),$ldap_lastname,"input-large");
 $form->addField("text","phone",api_text("accounts_ldap-ff-phone"),$ldap_phone,"input-medium");
 $form->addControl("submit",api_text("accounts_ldap-fc-submit"));
 $form->addControl("button",api_text("accounts_ldap-fc-cancel"),NULL,"login.php");
 $form->addField("select","language",api_text("accounts_ldap-ff-language"),NULL,"input-medium");
-foreach(api_language_availables() as $key=>$language){$form->addFieldOption($key,$language." (".$key.")",($key==$account->language?TRUE:FALSE));}
+foreach(api_language_availables() as $key=>$language){$form->addFieldOption($key,$language." (".$key.")",($key=="default"?TRUE:FALSE));}
 // show informations
 echo api_tag("p",api_text("accounts_ldap-p-informations"))."<br>\n";
 // renderize form
