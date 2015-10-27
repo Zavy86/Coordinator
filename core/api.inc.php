@@ -2085,7 +2085,9 @@ function api_accountGroupMember($idGroup,$idAccount=NULL,$subGroups=TRUE){
  // checks
  if(!$group->id||!$account->id){return FALSE;}
  // check if group is in array account company groups
- if(array_key_exists($group->id,$account->companies[$group->idCompany]->groups)){return TRUE;}
+ if(is_array($account->companies[$group->idCompany]->groups)){
+  if(array_key_exists($group->id,$account->companies[$group->idCompany]->groups)){return TRUE;}
+ }
  // subgroups
  if($subGroups){
   // retrieve subgroups
@@ -2094,7 +2096,9 @@ function api_accountGroupMember($idGroup,$idAccount=NULL,$subGroups=TRUE){
   // check subgroups
   foreach($subgroups_array as $subgroup){
    // check if subgroup is in array account company groups
-   if(array_key_exists($subgroup,$account->companies[$group->idCompany]->groups)){return TRUE;}
+   if(is_array($account->companies[$group->idCompany]->groups)){
+    if(array_key_exists($subgroup,$account->companies[$group->idCompany]->groups)){return TRUE;}
+   }
   }
  }
  return FALSE;
