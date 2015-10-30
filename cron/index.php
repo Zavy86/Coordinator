@@ -28,17 +28,20 @@ if($handle_dir=opendir("../")){
  closedir($handle_dir);
 }
 // include all-time cron
+if($_SESSION['account']->debug){pre_var_dump($cron_alltime_path,"print","Always");}
 foreach($cron_alltime_path as $alltime_path){
  if(file_exists($alltime_path)){include $alltime_path;}
 }
 // include daily cron
-if(date("H")==0 && (int)date("i")<5){
+if($_SESSION['account']->debug){pre_var_dump($cron_daily_path,"print","Daily");}
+if((date("H")==0 && (int)date("i")<5) || $_SESSION['account']->debug){
  foreach($cron_daily_path as $daily_path){
   if(file_exists($daily_path)){include $daily_path;}
  }
 }
 // include weekly cron on sunday
-if(date("w")==0 && date("H")==0 && (int)date("i")<5){
+if($_SESSION['account']->debug){pre_var_dump($cron_weekly_path,"print","Weekly");}
+if((date("w")==0 && date("H")==0 && (int)date("i")<5) || $_SESSION['account']->debug){
  foreach($cron_weekly_path as $weekly_path){
   if(file_exists($weekly_path)){include $weekly_path;}
  }
