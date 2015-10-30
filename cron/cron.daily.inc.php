@@ -5,7 +5,6 @@
 require_once("../core/api.inc.php");
 if(api_basePath()<>$GLOBALS['dir']."cron"){api_die();}
 
-
 /* -[ Delete Old Sended Mail ]----------------------------------------------- */
 $log="CRON - DELETE OLD SENDED MAIL\n";
 $count=$GLOBALS['db']->countOf("logs_mails","status='1' AND sendDate < DATE(NOW() - INTERVAL 1 MONTH)");

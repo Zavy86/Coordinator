@@ -2,7 +2,6 @@
 
 /* -[ Global parameter ]----------------------------------------------------- */
 session_start();
-ini_set('display_errors',0);    // disable errors
 global $debug;                  // debug variable
 global $html;                   // html structure resource
 global $db;                     // database resource
@@ -32,6 +31,8 @@ $db=new DB($db_host,$db_user,$db_pass,$db_name);
 if($_SESSION['account']->debug){
  error_reporting(E_ALL & ~E_NOTICE);
  ini_set('display_errors',1);
+}else{
+ ini_set('display_errors',0); 
 }
 
 /* -[ Check Session or Token ]----------------------------------------------- */
