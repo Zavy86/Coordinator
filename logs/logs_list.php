@@ -64,7 +64,7 @@ function content(){
   // build table fields
   $table->addField($modal->link(api_icon($td_icon),"nowarp"));
   $table->addField(api_timestampFormat($log->timestamp,api_text("datetime")),"nowarp");
-  $table->addField(strtoupper(stripslashes($log->module)),"nowarp");
+  $table->addField(stripslashes($log->module),"nowarp");
   $table->addField(stripslashes($log->action),"nowarp");
   $table->addField($modal->link($log_subject));
   $table->addField(api_account($log->idAccount)->name,"nowarp");
