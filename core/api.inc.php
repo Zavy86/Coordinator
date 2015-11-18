@@ -32,7 +32,7 @@ if($_SESSION['account']->debug){
  error_reporting(E_ALL & ~E_NOTICE);
  ini_set('display_errors',1);
 }else{
- ini_set('display_errors',0); 
+ ini_set('display_errors',0);
 }
 
 /* -[ Check Session or Token ]----------------------------------------------- */
@@ -1991,7 +1991,7 @@ function api_checkPermission($module,$action,$alert=FALSE,$admin=TRUE,$subgroups
     if(array_key_exists($action,$_SESSION['permissions'][$module])){return TRUE;}
     if($subgroups){if(array_key_exists($action,$_SESSION['permissions'][$module]["inherited"])){return TRUE;}}
    }
-  }  
+  }
  }else{
   // retrieve the permission id
   $idPermission=$GLOBALS['db']->queryUniqueValue("SELECT id FROM settings_permissions WHERE module='".$module."' AND action='".$action."'");
