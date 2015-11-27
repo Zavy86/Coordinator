@@ -328,12 +328,10 @@ public function footer($wiki_link=NULL,$copyright=TRUE){
    <!-- Footer -->
    <footer>
 
-    <?php if(file_exists("manual.pdf")){echo "<span class='help'>".api_text("core-footer-manual",array("<a href='manual.pdf' target='_blank'>","</a>"))."</span>";} ?>
-
     <?php
-     if(strlen($wiki_link)>0){
-      echo "<span class='help'>Hai bisogno di aiuto? Consulta il <a href='../wiki/wiki_view.php?path=".$wiki_link."' target='_blank'>manuale</a> di questo modulo</span>";
-     }
+     if(file_exists("manuals/".api_account()->language.".pdf")){$manual_link="manuals/".api_account()->language.".pdf";}
+     elseif(file_exists("manuals/default.pdf")){$manual_link="manuals/default.pdf";}
+     if(strlen($manual_link)){echo "<span class='help'>".api_text("core-footer-manual",array("<a href='".$manual_link."' target='_blank'>","</a>"))."</span>";}
     ?>
 
     <span class="muted credit pull-right">
