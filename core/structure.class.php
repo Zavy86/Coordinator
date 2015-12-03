@@ -704,11 +704,14 @@ class str_table{
  protected $th_array;
  protected $tr_array;
 
- /* -[ Construct ]----------------------------------------------------------- */
- // @string $unvalued : text to show if no results
- // @boolean $sortable : show headers sortable link (true) or not
- // @string $get : additional get parameters for sortable link (&key=value)
- // @string $class : table css class
+ /**
+ * Table construct
+ * @param string $unvalued text to show if no results
+ * @param boolean $sortable show headers sortable link (true) or not
+ * @param string $get additional get parameters for sortable link (&key=value)
+ * @param string $class table css class
+ * @return boolean
+ */
  public function __construct($unvalued=NULL,$sortable=FALSE,$get=NULL,$class=NULL){
   $this->unvalued=$unvalued;
   $this->sortable=$sortable;
@@ -720,11 +723,15 @@ class str_table{
   return TRUE;
  }
 
- /* -[ Add Header ]---------------------------------------------------------- */
- // @string $name : column header name
- // @string $class : column header css class
- // @string $width : column header width
- // @integer $colspan : column span
+ /**
+ * Add table header
+ * @param string $name column header name
+ * @param string $class column header css class
+ * @param string $width column header width
+ * @param string $order query field for order
+ * @param integer $colspan : column span
+ * @return boolean
+ */
  public function addHeader($name,$class=NULL,$width=NULL,$order=NULL,$colspan=1){
   if(strlen($name)==0){return FALSE;}
   $th=new stdClass();
@@ -737,8 +744,11 @@ class str_table{
   return TRUE;
  }
 
- /* -[ Add Row ]------------------------------------------------------------- */
- // @string $class : row css class
+ /**
+ * Add table row
+ * @param string $class row css class
+ * @return boolean
+ */
  public function addRow($class=NULL){
   $this->current_row++;
   $this->tr_array[$this->current_row]=new stdClass();
@@ -747,10 +757,13 @@ class str_table{
   return TRUE;
  }
 
- /* -[ Add Field ]----------------------------------------------------------- */
- // @string $content : field content
- // @string $class : field css class
- // @integer $colspan : column span
+ /**
+ * Add table row
+ * @param string $content field content
+ * @param string $class field css class
+ * @param integer $colspan column span
+ * @return boolean
+ */
  function addField($content,$class=NULL,$colspan=1){
   $td=new stdClass();
   $td->content=$content;
@@ -841,12 +854,15 @@ class str_form{
  protected $ff_array;
  protected $fc_array;
 
- /* -[ Construct ]----------------------------------------------------------- */
- // @string $action : form action url
- // @boolean $method : get, post
- // @string $name : form name
- // @string $class : form css class
- // @boolean $controlGroup : show control-group
+ /**
+ * Form construct
+ * @param string $action form action url
+ * @param string $method form method ( get | post )
+ * @param string $name form name
+ * @param string $class form css class
+ * @param boolean $controlGroup show control-group
+ * @return boolean
+ */
  public function __construct($action,$method="get",$name="form",$class="form-horizontal",$controlGroup=TRUE){
   if(strlen($action)==0 || !in_array(strtolower($method),array("get","post"))){return FALSE;}
   $this->action=$action;
@@ -861,17 +877,20 @@ class str_form{
   return TRUE;
  }
 
- /* -[ Add Field ]----------------------------------------------------------- */
- // @string $type : hidden, text, password, checkbox, radio, select, multiselect, textarea, file, range, date, datetime, daterange, datetimerange
- // @string $name : name of the form input (spaces not allowed)
- // @string $label : label for the field
- // @string $value : default value
- // @string $class : input css class
- // @string $placeholder : placeholder message
- // @boolean $disabled : disable input field (true) or not
- // @integer $rows : number of textarea rows
- // @string $append : append text
- // @boolean $readonly : readonly input field (true) or not
+ /**
+ * Add Field
+ * @param string $type hidden, text, password, checkbox, radio, select, multiselect, textarea, file, range, date, datetime, daterange, datetimerange
+ * @param string $name name of the form input (spaces not allowed)
+ * @param string $label label for the field
+ * @param string $value default value
+ * @param string $class input css class
+ * @param string $placeholder placeholder message
+ * @param boolean $disabled disable input field (true) or not
+ * @param integer $rows number of textarea rows
+ * @param string $append append text
+ * @param boolean $readonly readonly input field (true) or not
+ * @return boolean
+ */
  function addField($type,$name,$label=NULL,$value=NULL,$class=NULL,$placeholder=NULL,$disabled=FALSE,$rows=7,$append=NULL,$readonly=FALSE){
   if(!in_array(strtolower($type),array("hidden","text","password","checkbox","radio","select","multiselect","textarea","file","slider","range","date","datetime","daterange","datetimerange"))){return FALSE;}
   if(strlen($name)==0){return FALSE;}
@@ -913,11 +932,14 @@ class str_form{
   return TRUE;
  }
 
- /* -[ Add Field Options ]--------------------------------------------------- */
- // @string $value : option value
- // @string $label : label for the field option
- // @boolean $checked : checked or selected field option (true) or not
- // @boolean $disabled : disable field option (true) or not
+ /**
+ * Add Field Option
+ * @param string $value default value
+ * @param string $label label for the field option
+ * @param boolean $checked checked or selected field option (true) or not
+ * @param boolean $disabled disable input field option (true) or not
+ * @return boolean
+ */
  function addFieldOption($value,$label,$checked=FALSE,$disabled=FALSE){
   if(strlen($label)==0){return FALSE;}
   $fo=new stdClass();
@@ -930,13 +952,16 @@ class str_form{
   return TRUE;
  }
 
- /* -[ Form Control ]-------------------------------------------------------- */
- // @string $type : submit, reset, button, link
- // @string $label : label for the control
- // @string $class : input css class
- // @string $url : link url
- // @string $confirm : confirmation message to approve if not null
- // @boolean $disabled : disable control (true) or not
+ /**
+ * Add Form Control
+ * @param string $type submit, reset, button, link
+ * @param string $label label for the control
+ * @param string $class input css class
+ * @param string $url link url
+ * @param string $confirm confirmation message to approve if not null
+ * @param boolean $disabled disable control (true) or not
+ * @return boolean
+ */
  function addControl($type,$label,$class=NULL,$url=NULL,$confirm=NULL,$disabled=FALSE){
   if(strlen($type)==0 || strlen($label)==0){return FALSE;}
   $fc=new stdClass();
@@ -1435,9 +1460,12 @@ class str_dl{
  protected $separator;
  protected $elements_array;
 
- /* -[ Contruct ]------------------------------------------------------------ */
- // @string $separator : default elements separator null, hr, br
- // @string $class : dynamic list css class
+ /**
+ * Dynamic List construct
+ * @param string $separator default elements separator null, hr, br
+ * @param string $class dynamic list css class ( null | dl-horizontal )
+ * @return boolean
+ */
  public function __construct($separator=NULL,$class=NULL){
   if(!in_array(strtolower($separator),array(NULL,"hr","br"))){return FALSE;}
   $this->class=$class;
@@ -1446,11 +1474,14 @@ class str_dl{
   return TRUE;
  }
 
- /* -[ Add Element ]--------------------------------------------------------- */
- // @string $label : label of the dynamic list
- // @string $label : value of the dynamic list
- // @string $separator : null, hr, br
- // @string $class : element css class
+ /**
+ * Add Element
+ * @param string $label label of the dynamic list
+ * @param string $value value of the dynamic list
+ * @param string $separator null, hr, br
+ * @param string $class element css class
+ * @return boolean
+ */
  public function addElement($label,$value,$separator="default",$class=NULL){
   if(!in_array(strtolower($separator),array(NULL,"default","hr","br"))){return FALSE;}
   if($separator=="default"){$separator=$this->separator;}

@@ -141,9 +141,12 @@ function api_loadLocaleFile($path=NULL,$language=NULL){
 }
 
 
-/* -[ Text Translation ]----------------------------------------------------- */
-// @param $key : Text key
-// @param $parameters : String or array
+/**
+* Text Translation
+* @param string $key text key
+* @param string|array $parameters parameters to include into text
+* @return string text translated
+*/
 function api_text($key,$parameters=NULL){
  // get text by key from locale array
  $text=$GLOBALS['locale'][$key];
@@ -232,7 +235,10 @@ function api_alert(){
 }
 
 
-/* -[ Base name path ]------------------------------------------------------- */
+/**
+* Base name path
+* @return string file name of script
+*/
 function api_baseName(){
  $path_parts=pathinfo($_SERVER['PHP_SELF']);
  return $path_parts['basename'];
@@ -369,11 +375,14 @@ function api_folder_icon($size=128,$float=NULL){
 }
 
 
-/* -[ Timestamp Format ]----------------------------------------------------- */
-// @param $timestamp : MySql timestamp
-// @param $format : datetime format
-// @param $language : language conversion
-function api_timestampFormat($timestamp,$format="Y-m-d H:i",$language=NULL){
+/**
+* Timestamp Format
+* @param string $timestamp MySql datetime
+* @param string $format datetime format ( php date format or language key )
+* @param string $language language conversion
+* @return string formatted date time
+*/
+function api_timestampFormat($timestamp,$format="Y-m-d H:i:s",$language=NULL){
  if($timestamp==NULL){return NULL;}
  if($timestamp=="0000-00-00 00:00:00"){return NULL;}
  if(!strlen($language)){$language=$_SESSION['language'];}
@@ -943,9 +952,11 @@ function api_restoreMysqlDump($file){
 }
 
 
-
-/* -[ Query Order ]---------------------------------------------------------- */
-// @string $default : default order fields and methods
+/**
+* Query Order
+* @param string $default default order fields and methods
+* @return string order by query
+*/
 function api_queryOrder($default=NULL){
  // acquire variables
  $query_order_field=$_GET['of'];
@@ -969,8 +980,10 @@ function api_includeModule($module){
  api_loadLocaleFile("../".$module."/");
 }
 
-/* -[ Load Module API, Languages and Required Modules ]---------------------- */
-// @array $modules_required : modules name to be included
+/**
+* Load Module API, Languages and Required Modules
+* @param array $modules_required modules name to be included
+*/
 function api_loadModule($modules_required=NULL){
  // include module api
  if(file_exists("api.inc.php")){include_once("api.inc.php");}
@@ -1147,17 +1160,19 @@ function api_file_delete($idFile,$table="uploads_uploads",$path=NULL){
  }
 }
 
-
-/* -[ Link ]----------------------------------------------------------------- */
-// @string $url : url to link
-// @string $label : label for link
-// @string $title : title for link
-// @string $class : url css class
-// @booelan $popup : show popup label
-// @string $confirm : show confirm alert
-// @string $style : manual styles tag
-// @string $target : target window
-// @string $id : link id
+/**
+* Link
+* @param string $url url to link
+* @param string $label label for link
+* @param string $title title for link
+* @param string $class link css class
+* @param booelan $popup show popup title
+* @param string $confirm show confirm alert box
+* @param string $style manual styles tag
+* @param string $target target window
+* @param string $id link id or random created
+* @return string link
+*/
 function api_link($url,$label,$title=NULL,$class=NULL,$popup=FALSE,$confirm=NULL,$style=NULL,$target="_self",$id=NULL){
  if($url==NULL){return FALSE;}
  if($id==NULL){$id=rand(111,999);}
@@ -1195,19 +1210,22 @@ function api_textParse($string){
 }
 
 
-/* -[ LOG ]------------------------------------------------------------------ */
-// Log an event
 // &define typologies
 define("API_LOG_NOTICE",1);
 define("API_LOG_WARNING",2);
 define("API_LOG_ERROR",3);
-// @integer $typology : notification typology (use defined constant)
-// @string $module : module name
-// @string $action : module action
-// @string $event : event to log
-// @integer $key : item id or key
-// @string $link : link to the event item
-// @return : object with notification #subject and #message
+
+/**
+* Log an event
+*
+* @param integer $typology notification typology (use defined constant)
+* @param string $module module name
+* @param string $action module action
+* @param string $event event to log
+* @param integer $key item id or key
+* @param string $link link to the event item
+* @return object notification object
+*/
 function api_log($typology,$module,$action,$event,$key=NULL,$link=NULL){
  if($typology<1 || $typology>3 || $module==NULL || $action==NULL){return FALSE;}
  // definitions
