@@ -18,7 +18,7 @@ class str_accordion{
 
  /** @var integer $id Accordion ID */
  protected $id;
- /** @var string $class Flag well css class */
+ /** @var string $class Accordion css class */
  protected $class;
  /** @var array $elements_array Array of flag well elements */
  protected $elements_array;
@@ -37,7 +37,7 @@ class str_accordion{
  }
 
  /**
-  * Accordion Add element
+  * Add accordion element
   *
   * @param string $label Label of element
   * @param string $content Element content
