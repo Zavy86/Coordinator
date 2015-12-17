@@ -94,7 +94,7 @@ class str_modal{
   * Renderize modal window object
   *
   * @param boolean $echo Echo HTML source code or return
-  * @return void | string HTML source code
+  * @return void|string HTML source code
   */
  function render($echo=TRUE){
   if(!strlen($this->body)>0){return FALSE;}

@@ -117,7 +117,7 @@ class str_table{
   * Renderize table object
   *
   * @param boolean $echo Echo HTML source code or return
-  * @return void | string HTML source code
+  * @return void|string HTML source code
   */
  function render($echo=TRUE){
   // open table
