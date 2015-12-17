@@ -4,10 +4,12 @@
 
 class HTML{
 
-/* -[ Header ]--------------------------------------------------------------- */
-// @param $title  : The title of the page
-// @param $nav    : The tab of the navigation bar
-// @param $navbar : TRUE Visible, FALSE Invisible
+/**
+* HTML Header
+* @param string $title the page title
+* @param string $nav the active tab in the navigation bar
+* @param boolean $navbar TRUE visible, FALSE invisible
+*/
 public function header($title="",$nav="dashboard",$navbar=TRUE){
  if($title<>""){$title=$title." - ".api_getOption('title');}else{$title=api_getOption('title');}
 ?>
