@@ -16,6 +16,8 @@
  */
 class str_flagwell{
 
+ /** @var integer $id Flag well ID */
+ protected $id;
  /** @var string $title Flag well title */
  protected $title;
  /** @var string $class Flag well css class */
@@ -32,6 +34,7 @@ class str_flagwell{
   */
  public function __construct($title,$class=NULL){
   if(strlen($title)==0){return FALSE;}
+  $this->id="flagwell_".rand(10000,99999);
   $this->title=$title;
   $this->class=$class;
   return TRUE;
@@ -57,7 +60,7 @@ class str_flagwell{
   */
  public function render($echo=TRUE){
   $return="\n<!-- flag-well -->\n";
-  $return.="<div class='flag-well ".$this->class."'>\n";
+  $return.="<div id='".$this->id."' class='flag-well ".$this->class."'>\n";
   $return.=" <span class='title'>".$this->title."</span>\n";
   $return.=" <div class='flag-well-content'>\n".$this->content."\n </div>\n";
   $return.="</div><!-- /flag-well -->\n";
