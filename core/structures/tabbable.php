@@ -21,7 +21,7 @@ class str_tabbable{
  private $current_tab;
  /** @var string $class Tabbable css class */
  protected $class;
- /** @var string $position Tabs position */
+ /** @var string $position Tabs navigation position */
  protected $position;
  /** @var integer $selected Selected tab index */
  protected $selected;
@@ -36,7 +36,7 @@ class str_tabbable{
   * @return object tabbable object
   */
  public function __construct($position="top",$class=NULL){
-  $this->id="accordion_".rand(10000,99999);
+  $this->id="tabbable_".rand(10000,99999);
   $this->class=$class;
   $this->position=$position;
   $this->selected=0;
