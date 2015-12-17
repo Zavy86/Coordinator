@@ -1,21 +1,40 @@
 <?php
+/**
+ * Coordinator API
+ *
+ * Long Description
+ *
+ * @package      Coordinator\API
+ * @author       Manuel Zavatta <manuel.zavatta@gmail.com>
+ */
 
 /* -[ Global parameter ]----------------------------------------------------- */
 session_start();
-global $debug;                  // debug variable
-global $html;                   // html structure resource
-global $db;                     // database resource
-global $path;                   // base path of web root directory
-global $dir;                    // directory of web application
-global $alert;                  // alerts global variable
-global $locale;                 // array with translation
-global $initial_module;         // initial module to load
-global $script_timer;           // script timer
+global $debug;                     // debug variable
+global $html;                      // html structure resource
+global $db;                        // database resource
+global $path;                      // base path of web root directory
+global $dir;                       // directory of web application
+global $alert;                     // alerts global variable
+global $locale;                    // array with translation
+global $initial_module;            // initial module to load
+global $script_timer;              // script timer
 $script_timer=api_getmicrotime();
-include("../config.inc.php");   // include the configuration file
-include("html.class.php");      // include the html class
-include("structure.class.php"); // include structure classes
-include("db.class.php");        // include the database class
+include_once("../config.inc.php"); // include the configuration file
+include_once("html.class.php");    // include the html class
+include_once("db.class.php");      // include the database class
+// include structures
+include_once("structures/accordion.class.php");
+include_once("structures/dl.class.php");
+include_once("structures/flagwell.class.php");
+include_once("structures/form.class.php");
+include_once("structures/modal.class.php");
+include_once("structures/navigation.class.php");
+include_once("structures/pagination.class.php");
+include_once("structures/sidebar.class.php");
+include_once("structures/splitted.class.php");
+include_once("structures/tabbable.class.php");
+include_once("structures/table.class.php");
 // include core api+
 include_once("../accounts/api.inc.php");
 // check for initial module
