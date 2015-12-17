@@ -24,7 +24,7 @@ class str_table{
  protected $sortable;
  /** @var string $get Additional get parameters for sortable link */
  protected $get;
- /** @var string $class table css class */
+ /** @var string $class Table css class */
  protected $class;
  /** @var array $th_array Array of table headers */
  protected $th_array;
@@ -117,7 +117,7 @@ class str_table{
   * Renderize table object
   *
   * @param boolean $echo Echo HTML source code or return
-  * @return void|string HTML source code
+  * @return void | string HTML source code
   */
  function render($echo=TRUE){
   // open table
