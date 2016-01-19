@@ -1489,6 +1489,22 @@ function pre_var_dump($variable,$echo="print",$label=NULL){
  echo "</pre>";
 }
 
+/**
+ * Upper Case Names
+ *
+ * @param string $string name string
+ * @param array $delimiters delimiter characters
+ * @return string upper cased name
+ */
+ function api_ucnames($string,$delimiters=array('-','\'',',')){
+  $return=ucwords(strtolower($string));
+  foreach($delimiters as $delimiter){
+   if(strpos($return,$delimiter)!==false){
+    $return=implode($delimiter,array_map('ucfirst',explode($delimiter,$return)));
+   }
+  }
+  return $return;
+ }
 
 /**
  * Format a Phone Number
