@@ -48,9 +48,10 @@ $db=new DB($db_host,$db_user,$db_pass,$db_name);
 
 /* -[ Check Debug ]---------------------------------------------------------- */
 if($_SESSION['account']->debug){
- error_reporting(E_ALL & ~E_NOTICE);
+ error_reporting(E_ALL & ~E_NOTICE & ~E_STRICT & ~E_WARNING & ~E_DEPRECATED);
  ini_set('display_errors',1);
 }else{
+ error_reporting(E_ALL & ~E_NOTICE & ~E_STRICT & ~E_WARNING & ~E_DEPRECATED);
  ini_set('display_errors',0);
 }
 
