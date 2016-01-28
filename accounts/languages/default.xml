@@ -98,7 +98,7 @@
  <text key="account-typology-user">Standard user</text>
  <text key="account-typology-superuser">System administrator</text>
  <text key="account-typology-disabled">Disabled</text>
- <text key="account-typology-deleted">Deleted
+ <text key="account-typology-deleted">Deleted</text>
 
  <!-- filters -->
  <text key="filter-company">Company</text>
@@ -106,7 +106,7 @@
  <text key="filter-companies">Companies</text>
  <text key="filter-enabled">Enabled accounts</text>
  <text key="filter-disabled">Disabled accounts</text>
- <text key="filter-deleted">Show deleted accounts</text></text>
+ <text key="filter-deleted">Show deleted accounts</text>
 
  <!-- template.inc.php -->
  <text key="nav-profile">Profile</text>
