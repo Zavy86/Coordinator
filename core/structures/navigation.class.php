@@ -285,9 +285,10 @@ class str_navigation{
     case "daterange":
     case "datetimerange":
      $query_filter="(";
-     if($_GET[$filter->name."_from"]<>NULL){$query_filter.=$filter->name.">='".$_GET[$filter->name."_from"]."'";}
+     if($filter->type=="daterange"){$filter_name="SUBSTR(".$filter->name.",1,10)";}else{$filter_name=$filter->name;}
+     if($_GET[$filter->name."_from"]<>NULL){$query_filter.=$filter_name.">='".$_GET[$filter->name."_from"]."'";}
      if($_GET[$filter->name."_from"]<>NULL && $_GET[$filter->name."_to"]<>NULL){$query_filter.=" AND ";}
-     if($_GET[$filter->name."_to"]<>NULL){$query_filter.=$filter->name."<='".$_GET[$filter->name."_to"]."'";}
+     if($_GET[$filter->name."_to"]<>NULL){$query_filter.=$filter_name."<='".$_GET[$filter->name."_to"]."'";}
      $query_filter.=")";
      if($query_filter=="()"){$query_filter=NULL;}
      break;
@@ -344,9 +345,10 @@ class str_navigation{
    case "daterange":
    case "datetimerange":
     $query_filter="(";
-    if($_GET[$filter->name."_from"]<>NULL){$query_filter.=$field.">='".$_GET[$filter->name."_from"]."'";}
+     if($filter->type=="daterange"){$field_name="SUBSTR(".$filter->name.",1,10)";}else{$field_name=$filter->name;}
+    if($_GET[$filter->name."_from"]<>NULL){$query_filter.=$field_name.">='".$_GET[$filter->name."_from"]."'";}
     if($_GET[$filter->name."_from"]<>NULL && $_GET[$filter->name."_to"]<>NULL){$query_filter.=" AND ";}
-    if($_GET[$filter->name."_to"]<>NULL){$query_filter.=$field."<='".$_GET[$filter->name."_to"]."'";}
+    if($_GET[$filter->name."_to"]<>NULL){$query_filter.=$field_name."<='".$_GET[$filter->name."_to"]."'";}
     $query_filter.=")";
     if($query_filter=="()"){$query_filter=NULL;}
     break;
