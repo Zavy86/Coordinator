@@ -25,6 +25,7 @@ public function header($title="",$nav="dashboard",$navbar=TRUE){
  <title><?php echo $title; ?></title>
 
  <!-- Stylesheet -->
+ <link href="<?php echo $GLOBALS['dir']."core/pace-loader/pace.flash.css";?>" rel="stylesheet">
  <link href="<?php echo $GLOBALS['dir']."core/bootstrap/css/bootstrap.min.css";?>" rel="stylesheet">
  <link href="<?php echo $GLOBALS['dir']."core/bootstrap/css/bootstrap-custom.css";?>" rel="stylesheet">
  <link href="<?php echo $GLOBALS['dir']."core/bootstrap/css/bootstrap-responsive.css";?>" rel="stylesheet">
@@ -35,10 +36,10 @@ public function header($title="",$nav="dashboard",$navbar=TRUE){
  <link href="<?php echo $GLOBALS['dir']."core/bootstrap-wysihtml5/css/bootstrap-wysihtml5.css";?>" rel="stylesheet">
  <link href="<?php echo $GLOBALS['dir']."core/bootstrap-tagsinput/css/bootstrap-tagsinput.css";?>" rel="stylesheet">
  <link href="<?php echo $GLOBALS['dir']."core/shadowbox/shadowbox.css";?>" rel="stylesheet">
- <link href="<?php echo $GLOBALS['dir']."core/pace-loader/pace.flash.css";?>" rel="stylesheet">
  <link href="<?php echo $GLOBALS['dir']."core/template.css";?>" rel="stylesheet">
 
  <!-- Javascript -->
+ <script src="<?php echo $GLOBALS['dir']."core/pace-loader/pace.min.js";?>" type="text/javascript"></script>
  <script src="<?php echo $GLOBALS['dir']."core/jquery/jquery-1.11.1.min.js";?>" type="text/javascript"></script>
  <script src="<?php echo $GLOBALS['dir']."core/jquery/jquery.validate-1.13.0.min.js";?>" type="text/javascript"></script>
  <script src="<?php echo $GLOBALS['dir']."core/jquery/jquery.validate-1.13.0.am.js";?>" type="text/javascript"></script>
@@ -48,9 +49,6 @@ public function header($title="",$nav="dashboard",$navbar=TRUE){
  <script src="<?php echo $GLOBALS['dir']."core/jquery/jquery.wysihtml5-0.3.0.min.js";?>" type="text/javascript"></script>
  <script src="<?php echo $GLOBALS['dir']."core/jquery/jquery.chained-0.9.10.min.js";?>" type="text/javascript"></script><script src="<?php echo $GLOBALS['dir']."core/jquery/jquery.chained-0.9.10.min.js";?>" type="text/javascript"></script>
  <script src="<?php echo $GLOBALS['dir']."core/jquery/jquery.chained.remote-0.9.10.min.js";?>" type="text/javascript"></script>
-
- <script src="<?php echo $GLOBALS['dir']."core/pace-loader/pace.min.js";?>" type="text/javascript"></script>
-
  <script src="<?php echo $GLOBALS['dir']."core/shadowbox/shadowbox.js";?>" type="text/javascript"></script>
  <script type="text/javascript">
   Shadowbox.init();
