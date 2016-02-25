@@ -380,11 +380,11 @@ class str_navigation{
   // show filters
   if(count($this->filters)>0){
    // reset session filters
-   if($_GET['resetFilters']){unset($_SESSION['filters'][api_baseName()]);}
+   if($_GET['resetFilters']){unset($_SESSION['filters'][api_baseModule()][api_baseName()]);}
    // store session filters
-   if($_GET['filtered']){$_SESSION['filters'][api_baseName()]=$_GET;}
+   if($_GET['filtered']){$_SESSION['filters'][api_baseModule()][api_baseName()]=$_GET;}
    // load session filters if exist
-   if(isset($_SESSION['filters'][api_baseName()])){$_GET=array_merge($_SESSION['filters'][api_baseName()],$_GET);}
+   if(isset($_SESSION['filters'][api_baseModule()][api_baseName()])){$_GET=array_merge($_SESSION['filters'][api_baseModule()][api_baseName()],$_GET);}
    // build filter form modal body
    $modal_filter_body=new str_form(api_baseName(),"get","filters");
    $modal_filter_body->addField("hidden","filtered",NULL,"1");
