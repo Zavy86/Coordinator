@@ -28,7 +28,7 @@ if(api_baseName()=="accounts_list.php"){
  // deleted
  $navigation->addFilter("checkbox","del","&nbsp;",array(1=>api_text("filter-deleted")));
  // if not filtered load default filters
- if($_GET['resetFilters']||($_GET['filtered']<>1 && $_SESSION['filters'][api_baseName()]['filtered']<>1)){$_GET['enabled']=1;}
+ if($_GET['resetFilters']||($_GET['filtered']<>1 && $_SESSION['filters'][api_baseModule()][api_baseName()]['filtered']<>1)){$_GET['enabled']=1;}
 }
 // groups filters
 if(api_baseName()=="groups_list.php"){
@@ -42,7 +42,7 @@ if(api_baseName()=="groups_list.php"){
  // show members
  $navigation->addFilter("checkbox","members","&nbsp;",array(1=>api_text("filter-members")));
  // if not filtered load default filters
- if($_GET['resetFilters']||($_GET['filtered']<>1 && $_SESSION['filters'][api_baseName()]['filtered']<>1)){$_GET['company']=$_SESSION['company']->id;}
+ if($_GET['resetFilters']||($_GET['filtered']<>1 && $_SESSION['filters'][api_baseModule()][api_baseName()]['filtered']<>1)){$_GET['company']=$_SESSION['company']->id;}
 }
 $navigation->addTab(api_text("nav-profile"),"accounts_customize.php");
 if(api_checkPermission("accounts","accounts_view")){$navigation->addTab(api_text("nav-accounts"),"accounts_list.php");}
