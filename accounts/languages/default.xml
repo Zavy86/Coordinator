@@ -139,6 +139,7 @@
  <!-- login.php -->
  <text key="login-ff-account-placeholder">Account</text>
  <text key="login-ff-password-placeholder">Password</text>
+ <text key="login-fo-language-default">Language: User's default</text>
  <text key="login-fc-submit">Sign in</text>
  <text key="login-fc-retrieve">Forgot password?</text>
 

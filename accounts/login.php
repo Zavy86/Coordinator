@@ -23,8 +23,21 @@ $html->header(NULL,NULL,FALSE);
 $form=new str_form("submit.php?act=account_login&lang=".$g_language,"post","login");
 $form->addField("text","account",NULL,$g_account,NULL,api_text("login-ff-account-placeholder"));
 $form->addField("password","password",NULL,NULL,NULL,api_text("login-ff-password-placeholder"));
-$login_controls="<input type='submit' id='login_submit' class='btn btn-primary' value=\"".api_text("login-fc-submit")."\">\n";
-$login_controls.="<span>&nbsp;<a href='password_retrieve.php?lang=".$g_language."'>".api_text("login-fc-retrieve")."</a></span>\n";
+// language custom field
+$login_controls.="<select name='language' id='login_input_language' class='input-small' onchange=\"javascript:location.href='login.php?lang='+this.value;\">\n";
+// default (load user default language
+$login_controls.="<option value='' id='login_input_language_option_default'>".api_text("login-fo-language-default")."</option>\n";
+// cycle available languages
+foreach(api_language_availables() as $key=>$language){
+ $login_controls.="<option value='".$key."' id='login_input_language_option_".$key."'";
+ if($key==$g_language){$login_controls.="selected";}
+ $login_controls.=">".$language."</option>\n";
+}
+$login_controls.="</select>\n";
+// submit button
+$login_controls.="<input type='submit' id='login_submit' class='btn btn-primary' value=\"".api_text("login-fc-submit")."\">\n";
+// password retrieve
+$login_controls.=api_tag("span","&nbsp;".api_link("password_retrieve.php?lang=".$g_language,api_text("login-fc-retrieve")));
 $form->addCustomField(NULL,$login_controls);
 // open login div
 echo "<div class='login-form'>\n";
