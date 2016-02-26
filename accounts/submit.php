@@ -50,7 +50,8 @@ switch($act){
  */
 function account_login(){
  // acquire variables
- $p_language=$_GET['language'];
+ $g_language=$_GET['language'];
+ $p_language=$_POST['language'];
  $p_account=addslashes($_POST['account']);
  $p_password=$_POST['password'];
  $s_url=$_SESSION['external_redirect'];
@@ -68,7 +69,7 @@ function account_login(){
     // authentication successful but account does not exist
     $_SESSION['newldap_account']=$p_account;
     $_SESSION['newldap_password']=$p_password;
-    exit(header("location: accounts_ldap.php?lang=".$p_language));
+    exit(header("location: accounts_ldap.php?lang=".$g_language));
    }
   }
  }else{
@@ -101,6 +102,8 @@ function account_login(){
     $_SESSION['account']=api_accounts_account($account->id);
     // update session language
     $_SESSION['language']=$account->language;
+    // use choised language
+    if(strlen($p_language)){$_SESSION['language']=$p_language;}
     // update session company
     $_SESSION['company']=api_account()->companies[api_account()->mainCompany];
     // enable administrator only for root (superuser can switch after login)
