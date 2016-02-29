@@ -102,8 +102,13 @@ function account_login(){
     $_SESSION['account']=api_accounts_account($account->id);
     // update session language
     $_SESSION['language']=$account->language;
-    // use choised language
-    if(strlen($p_language)){$_SESSION['language']=$p_language;}
+    // use choised language and set cookies
+    if(strlen($p_language)){
+     $_SESSION['language']=$p_language;
+     setcookie("language",$p_language,time()+(60*60*24*30));
+    }else{
+     setcookie("language",$account->language,time()+(60*60*24*30));
+    }
     // update session company
     $_SESSION['company']=api_account()->companies[api_account()->mainCompany];
     // enable administrator only for root (superuser can switch after login)

@@ -8,7 +8,7 @@ api_loadModule();
 $g_language=$_GET['lang'];
 $g_account=$_GET['account'];
 // store selected language in cookie or load
-if(isset($g_language)){setcookie("language",$g_language,time()+60*60*24*30);}else{$g_language=$_COOKIE['language'];}
+if(isset($g_language)){setcookie("language",$g_language,time()+(60*60*24*30));}else{$g_language=$_COOKIE['language'];}
 // load language file
 if(strlen($g_language)){
  api_loadLocaleFile("../",$g_language);
