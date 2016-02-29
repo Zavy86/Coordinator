@@ -366,12 +366,17 @@ public function footer($wiki_link=NULL,$copyright=TRUE){
  <script src="<?php echo $GLOBALS['dir']."core/bootstrap-tagsinput/js/bootstrap-tagsinput.min.js";?>" type="text/javascript"></script>
  <script src="<?php echo $GLOBALS['dir']."core/bootstrap-slider/js/bootstrap-slider.min.js";?>" type="text/javascript"></script>
 
- <?php if(api_checkPermission("chats","chats_chat")){ ?>
-
  <script type="text/javascript">
   $(document).ready(function(){
    // active popovers
    $("[data-toggle=popover]").popover({trigger:"hover"});
+  });
+ </script>
+
+ <?php if(api_checkPermission("chats","chats_chat")){ ?>
+
+ <script type="text/javascript">
+  $(document).ready(function(){
    // refresh notifications every 1 minutes
    var refreshNotificationsCounter=setInterval(function(){
     $.get("../logs/logs_notifications_counter.inc.php",function(data){
