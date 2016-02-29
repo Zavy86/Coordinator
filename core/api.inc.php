@@ -459,7 +459,7 @@ function api_timestampDifference($timestamp_a,$timestamp_b,$format="S"){
   case "Y":$result=$seconds/31536000;break;
   default:$result=$seconds;
  }
- return number_format($result,2);
+ return number_format($result,2,".","");
 }
 
 /* -[ Timestamp Difference Format ]------------------------------------------ */
