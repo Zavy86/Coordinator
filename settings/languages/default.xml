@@ -88,7 +88,7 @@
  <text key="modules-git_pull-confirm">Performing this operation will lose any local changes made ​​to the source code of the modules installed and Coordinator; will all be in sync with the latest release available. Are you sure you want to continue?</text>
  <text key="modules-git_clone">Install via GIT Clone</text>
 
- <!-- modules_edit.inc.php -->
+ <!-- modules_git_clone.php -->
  <text key="modules_git_clone-ff-url">URL</text>
  <text key="modules_git_clone-ff-url-placeholder">https://github.com/Zavy86/Coordinator</text>
  <text key="modules_git_clone-ff-dir">Directory</text>
@@ -112,6 +112,27 @@
  <text key="menus-fc-delete-confirm">Are you sure you want to delete this menu?</text>
  <text key="menus-fc-cancel">Cancel</text>
  <text key="menus-fc-permissions">Permissions</text>
+ <text key="menus-fc-languages">Translations</text>
+
+ <!-- menus_permissions.php -->
+ <text key="menus_permissions-tr-unvalued">All groups enabled</text>
+ <text key="menus_permissions-th-groups">Enabled groups</text>
+ <text key="menus_permissions-td-delete-confirm">Are you sure you want to delete this permission?</text>
+ <text key="menus_permissions-ff-idGroup">Group</text>
+ <text key="menus_permissions-ff-idGroup-select">Select a group</text>
+ <text key="menus_permissions-fc-submit">Submit</text>
+ <text key="menus_permissions-fc-cancel">Exit</text>
+
+ <!-- menus_languages.php -->
+ <text key="menus_languages-tr-unvalued">There are no translations to display..</text>
+ <text key="menus_languages-th-language">Language</text>
+ <text key="menus_languages-th-translation">Translation</text>
+ <text key="menus_languages-td-delete-confirm">Are you sure you want to delete this translation?</text>
+ <text key="menus_languages-ff-language">Language</text>
+ <text key="menus_languages-ff-language-select">Select a language</text>
+ <text key="menus_languages-ff-name">Translation</text>
+ <text key="menus_languages-fc-submit">Submit</text>
+ <text key="menus_languages-fc-cancel">Exit</text>
 
  <!-- permissions_edit.php -->
  <text key="permissions_edit-modules">Modules</text>

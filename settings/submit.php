@@ -14,12 +14,10 @@ switch($act){
  case "module_remove":module_remove();break; // -- to check
  case "module_git_pull":module_git_pull();break; // -- to check
  case "module_git_clone":module_git_clone();break; // -- to check
-
  // permissions
  case "permission_group_add":permission_group_add();break;
  case "permission_group_remove":permission_group_remove();break;
  case "permission_group_reset":permission_group_reset();break;
-
  // menus
  case "menu_save":menu_save();break;  // -- to check
  case "menu_move_up":menu_move("up");break; // -- to check
@@ -27,6 +25,8 @@ switch($act){
  case "menu_delete":menu_delete();break; // -- to check
  case "menu_permission_add":menu_permission_add();break; // -- to check
  case "menu_permission_delete":menu_permission_delete();break; // -- to check
+ case "menu_language_save":menu_language_save();break;  // -- to check
+ case "menu_language_delete":menu_language_delete();break;  // -- to check
  // default
  default:
   $alert="?alert=submitFunctionNotFound&alert_class=alert-warning&act=".$act;
@@ -493,7 +493,7 @@ function menu_save(){
   if(is_uploaded_file($_FILES['file']['tmp_name'])){move_uploaded_file($_FILES['file']['tmp_name'],"../uploads/uploads/links/".$g_id.".png");}
  }
  // redirect
- exit(header("location: menus_edit.php?idMenu=".$p_idMenu.$alert));
+ exit(header("location: menus_edit.php?idMenu=".$p_idMenu.$alert)); //."&id=".$g_id
 }
 
 /* -[ Menu Move ]------------------------------------------------------------ */
@@ -593,6 +593,55 @@ function menu_permission_delete(){
  }
  // redirect
  header("location: menus_permissions.php?id=".$g_id."&idMenu=".$g_idMenu);
+}
+
+
+/* -[ Menu Language Save ]--------------------------------------------------- */
+function menu_language_save(){
+ if(!api_checkPermission("settings","menu_edit")){api_die("accessDenied");}
+ // acquire variables
+ $g_id=$_GET['id'];
+ if($g_id>0){$menu=$GLOBALS['db']->queryUniqueObject("SELECT * FROM settings_menus WHERE id='".$g_id."'");}
+ $g_idLanguage=$_GET['idLanguage'];
+ if($g_idLanguage>0){$translation=$GLOBALS['db']->queryUniqueObject("SELECT * FROM settings_menus_languages WHERE id='".$g_idLanguage."'");}
+ $p_language=$_POST['language'];
+ $p_name=addslashes($_POST['name']);
+ // build query
+ if($translation->id>0){
+  $query="UPDATE settings_menus_languages SET
+   language='".$p_language."',
+   name='".$p_name."'
+   WHERE id='".$g_idLanguage."'";
+  // execute query
+  $GLOBALS['db']->execute($query);
+  // alert
+  $alert="&alert=languageUpdated&alert_class=alert-success";
+ }else{
+  $query="INSERT INTO settings_menus_languages
+   (idMenu,language,name) VALUES
+   ('".$menu->id."','".$p_language."','".$p_name."')";
+  // execute query
+  $GLOBALS['db']->execute($query);
+  // alert
+  $alert="&alert=languageCreated&alert_class=alert-success";
+ }
+ // redirect
+ exit(header("location: menus_languages.php?id=".$g_id."&idMenu=".$menu->idMenu));
+}
+
+/* -[ Menu Language Delete ]------------------------------------------------- */
+function menu_language_delete(){
+ if(!api_checkPermission("settings","menu_edit")){api_die("accessDenied");}
+ // acquire variables
+ $g_id=$_GET['id'];
+ $g_idMenu=$_GET['idMenu'];
+ $g_idLanguage=$_GET['idLanguage'];
+ // check
+ if($g_id>0 && $g_idLanguage>0){
+  $GLOBALS['db']->execute("DELETE FROM settings_menus_languages WHERE id='".$g_idLanguage."'");
+ }
+ // redirect
+ exit(header("location: menus_languages.php?id=".$g_id."&idMenu=".$g_idMenu));
 }
 
 ?>
