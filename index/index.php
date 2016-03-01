@@ -34,6 +34,9 @@ function content(){
  // link menu
  $links_menu=$GLOBALS['db']->query("SELECT * FROM settings_menus WHERE idMenu='2' ORDER BY position ASC");
  while($menu=$GLOBALS['db']->fetchNextObject($links_menu)){
+  // get translated name
+  $translation=$GLOBALS['db']->queryUniqueObject("SELECT * FROM settings_menus_languages WHERE idMenu='".$menu->id."' AND language='".$_SESSION['language']."'");
+  if($translation->id){$menu->menu=$translation->name;}
   if(!api_account()->administrator){
    if($GLOBALS['db']->countOf("settings_menus_join_accounts_groups","idMenu='".$menu->id."'")>0){
     $enabled=FALSE;
