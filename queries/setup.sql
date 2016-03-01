@@ -358,6 +358,20 @@ INSERT IGNORE INTO `settings_menus` (`id`, `idMenu`, `menu`, `module`, `url`, `p
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `settings_menus_languages`
+--
+
+CREATE TABLE IF NOT EXISTS `settings_menus_languages` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `idMenu` int(11) NOT NULL DEFAULT '0',
+  `language` varchar(5) COLLATE utf8_unicode_ci NOT NULL,
+  `name` varchar(25) COLLATE utf8_unicode_ci NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `settings_menus_join_accounts_groups`
 --
 

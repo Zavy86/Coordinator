@@ -73,7 +73,7 @@
  <text key="settings-fc-submit">Salva impostazioni</text>
  <text key="settings-fc-cron">Rigenera Cron Token</text>
 
- <!-- modules_edit.inc.php -->
+ <!-- modules_edit.php -->
  <text key="modules-th-module">Modulo</text>
  <text key="modules-th-version">Versione</text>
  <text key="modules-th-description">Descrizione</text>
@@ -88,7 +88,7 @@
  <text key="modules-git_pull-confirm">Eseguendo questa operazione perderai ogni modifica locale eseguita al codice sorgente di Coordinator e dei moduli installati; verranno tutti sincronizzati con l'ultima release disponibile. Confermi di voler continuare?</text>
  <text key="modules-git_clone">Installa tramite GIT Clone</text>
 
- <!-- modules_edit.inc.php -->
+ <!-- modules_git_clone.php -->
  <text key="modules_git_clone-ff-url">URL</text>
  <text key="modules_git_clone-ff-url-placeholder">https://github.com/Zavy86/Coordinator</text>
  <text key="modules_git_clone-ff-dir">Directory</text>
@@ -112,6 +112,27 @@
  <text key="menus-fc-delete-confirm">Sei sicuro di voler eliminare questo menu?</text>
  <text key="menus-fc-cancel">Annulla</text>
  <text key="menus-fc-permissions">Permessi</text>
+ <text key="menus-fc-languages">Traduzioni</text>
+
+ <!-- menus_permissions.php -->
+ <text key="menus_permissions-tr-unvalued">Tutti i gruppi abilitati..</text>
+ <text key="menus_permissions-th-groups">Gruppi abilitati</text>
+ <text key="menus_permissions-td-delete-confirm">Sei sicuro di voler eliminare questo permesso?</text>
+ <text key="menus_permissions-ff-idGroup">Gruppo</text>
+ <text key="menus_permissions-ff-idGroup-select">Seleziona un gruppo</text>
+ <text key="menus_permissions-fc-submit">Salva</text>
+ <text key="menus_permissions-fc-cancel">Chiudi</text>
+
+ <!-- menus_languages.php -->
+ <text key="menus_languages-tr-unvalued">Non ci sono traduzioni da visualizzare..</text>
+ <text key="menus_languages-th-language">Lingua</text>
+ <text key="menus_languages-th-translation">Traduzione</text>
+ <text key="menus_languages-td-delete-confirm">Sei sicuro di voler eliminare questa traduzione?</text>
+ <text key="menus_languages-ff-language">Lingua</text>
+ <text key="menus_languages-ff-language-select">Seleziona una lingua</text>
+ <text key="menus_languages-ff-name">Traduzione</text>
+ <text key="menus_languages-fc-submit">Salva</text>
+ <text key="menus_languages-fc-cancel">Chiudi</text>
 
  <!-- permissions_edit.php -->
  <text key="permissions_edit-modules">Moduli</text>

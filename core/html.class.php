@@ -112,6 +112,9 @@ public function header($title="",$nav="dashboard",$navbar=TRUE){
         // get menu objects
         $menus=$GLOBALS['db']->query("SELECT * FROM settings_menus WHERE idMenu='".$idMenu."' ORDER BY position ASC");
         while($menu=$GLOBALS['db']->fetchNextObject($menus)){
+         // get translated name
+         $translation=$GLOBALS['db']->queryUniqueObject("SELECT * FROM settings_menus_languages WHERE idMenu='".$menu->id."' AND language='".$_SESSION['language']."'");
+         if($translation->id){$menu->menu=$translation->name;}
          // if menu is module check permissions to show
          if($menu->module){if(!api_checkPermissionShowModule($menu->module)){continue;}}
          // build submenu objects array
