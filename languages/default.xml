@@ -13,6 +13,7 @@
  <text key="all">all</text>
  <text key="undefined">undefined</text>
  <text key="search">search</text>
+ <text key="move">Move row</text>
  <text key="noresults">no results found..</text>
 
  <!-- timestamp -->
