@@ -53,6 +53,18 @@ class DB{
   $this->debug($debug, $query);
  }
 
+ // ---[ Query the database but and return instead of die ]--------------------
+ // @param $query : The query.
+ // @param $debug : If true, it output the query and the resulting table.
+ // @return : Return null if executed or error
+ function executeAndReturnError($query,$debug=-1){
+  if($query==NULL){return FALSE;}
+  $query=$this->clearQuery($query);
+  $this->nbQueries++;
+  if(!mysql_query($query,$this->connector)){return mysql_error();}
+  return NULL;
+ }
+
  // ---[ Convenient method for mysql_fetch_object() ]--------------------------
  // @param $result : The ressource returned by query()
  //                  If NULL, the last result returned by query() will be used.
