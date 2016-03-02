@@ -171,6 +171,36 @@ div.pagination ul li.null a{border-left:none;border-top:none;border-bottom:none;
  white-space:nowrap;
 }
 
+.sorted_table tr td i.icon-move{cursor:pointer;}
+
+.sorted_table tr.placeholder{
+  display:block;
+  background:#3A87AD;
+  position:relative;
+  margin:0;
+  padding:0;
+  border:none;
+}
+
+.sorted_table tr.placeholder:before{
+  content:"";
+  position:absolute;
+  width:0;
+  height:0;
+  border:5px solid transparent;
+  border-left-color:#3A87AD;
+  margin-top:-5px;
+  left:-5px;
+  border-right:none;
+}
+
+.dragged{
+ position:absolute;
+ top:0;
+ opacity:0.5;
+ z-index:2000;
+}
+
 .flag-well{
  position:relative;
  margin:0 0 15px 0;
