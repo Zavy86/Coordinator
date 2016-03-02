@@ -13,6 +13,7 @@
  <text key="all">tous</text>
  <text key="undefined">indéfini</text>
  <text key="search">recherche</text>
+ <text key="move">Déplacer la ligne</text>
  <text key="noresults">aucun résultat trouvé..</text>
 
  <!-- timestamp -->
