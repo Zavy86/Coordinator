@@ -18,6 +18,8 @@ class str_table{
 
  /** @var integer $current_row Current row index */
  private $current_row=0;
+ /** @var string $id Table id randomly generated */
+ protected $id;
  /** @var string $unvalued Text to show if no results */
  protected $unvalued;
  /** @var boolean $sortable Show headers sortable link */
@@ -26,6 +28,14 @@ class str_table{
  protected $get;
  /** @var string $class Table css class */
  protected $class;
+ /** @var boolean $movable Movable rows */
+ protected $movable;
+ /** @var string $move_table Table name for move function */
+ protected $move_table;
+ /** @var string $position_field Field name for position */
+ protected $position_field;
+ /** @var string $grouping_field Field name for grouping position */
+ protected $grouping_field;
  /** @var array $th_array Array of table headers */
  protected $th_array;
  /** @var array $tr_array Array of table rows */
@@ -38,13 +48,24 @@ class str_table{
   * @param boolean $sortable Show headers sortable link
   * @param string $get Additional get parameters for sortable link in format &key=value
   * @param string $class Table css class
+  * @param string $move_table Table name for move function
+  * @param string $position_field Field name for position
+  * @param string $grouping_field Field name for grouping position
   * @return boolean
   */
- public function __construct($unvalued=NULL,$sortable=FALSE,$get=NULL,$class=NULL){
+ public function __construct($unvalued=NULL,$sortable=FALSE,$get=NULL,$class=NULL,$move_table=NULL,$position_field="position",$grouping_field=NULL){
+  $this->id="table_".rand(1000,9999);
   $this->unvalued=$unvalued;
   $this->sortable=$sortable;
   $this->get=$get;
   $this->class=$class;
+  if(strlen($move_table)){
+   $this->movable=TRUE;
+   $this->move_table=$move_table;
+   $this->position_field=$position_field;
+   $this->grouping_field=$grouping_field;
+   $this->class="sorted_table ".$this->class;
+  }
   $this->current_row=0;
   $this->th_array=array();
   $this->tr_array=array();
@@ -88,7 +109,7 @@ class str_table{
  }
 
  /**
-  * Add table row
+  * Add table field
   *
   * @param string $content Field content
   * @param string $class Field css class
@@ -98,6 +119,23 @@ class str_table{
  function addField($content,$class=NULL,$colspan=1){
   $td=new stdClass();
   $td->content=$content;
+  $td->class=$class;
+  $td->colspan=$colspan;
+  $this->tr_array[$this->current_row]->fields[]=$td;
+  return TRUE;
+ }
+
+ /**
+  * Add table movable field
+  *
+  * @param string $id row id to move
+  * @param string $class Field css class
+  * @param integer $colspan Column span
+  * @return boolean
+  */
+ function addFieldMovable($id,$class=NULL,$colspan=1){
+  $td=new stdClass();
+  $td->content="<i class='icon-move' title='".api_text("move")."' style='' rowid='".$id."'></i>";
   $td->class=$class;
   $td->colspan=$colspan;
   $this->tr_array[$this->current_row]->fields[]=$td;
@@ -122,7 +160,7 @@ class str_table{
  function render($echo=TRUE){
   // open table
   $return="<!-- table -->\n";
-  $return.="<table class='table table-striped table-hover table-condensed ".$this->class."'>\n";
+  $return.="<table id='".$this->id."' class='table table-striped table-hover table-condensed ".$this->class."'>\n";
   // open head
   if(is_array($this->th_array)){
    $return.="<thead>\n <tr>\n";
@@ -169,6 +207,48 @@ class str_table{
   $return.="</tbody>\n";
   // close table
   $return.="</table>\n<!-- /table -->\n\n";
+  // movable table jquery
+  if($this->movable){
+   $return.="<!-- table-move-script -->
+<script type=\"text/javascript\">
+ $(document).ready(function(){
+  // Sortable rows
+  $('#".$this->id."').sortable({
+    containerSelector:'table',
+    itemPath:'> tbody',
+    itemSelector:'tr',
+    handle:'i.icon-move',
+    placeholder:'<tr class=\placeholder\/>',
+    onDrop:function(\$item,container,_super,event){
+     rowid=$(\$item).find('i.icon-move')[0]['attributes']['rowid']['value'];
+     position=\$item[0]['rowIndex'];
+     console.log('id: '+rowid+' moved in position: '+position);
+     console.log(\$item);
+     // ajax request container
+     var request;
+     // abort any pending request
+     if(request){request.abort();}
+     // execute ajax post
+     request=$.ajax({
+      url:'../jsons/str_table.json.inc.php?act=row_move&table=".$this->move_table."&rowid='+rowid+'&position='+position+'&field=".$this->position_field."&grouping=".$this->grouping_field."',
+      type:'post',
+      dataType:'html'
+     });
+     // log ajax post success
+     request.done(function(response,textStatus,jqXHR){
+      console.log('AJAX Success');
+     });
+     // log ajax post error
+     request.fail(function(xhr,textStatus,thrownError){
+      console.error('AJAX Error: '+textStatus,thrownError);
+     });
+     // execute visual move effect
+     _super(\$item, container);
+    }
+  });
+});
+</script>\n<!-- /table-move-script -->\n\n";
+  }
   if($echo){echo $return;return TRUE;}else{return $return;}
  }
 
