@@ -65,6 +65,7 @@ function content(){
  }
  // build table
  $table=new str_table(api_text("modules-tr-unvalued"),TRUE);
+ $table->addHeaderCheckbox("nowarp");
  $table->addHeader(api_text("modules-th-module"),"nowarp");
  $table->addHeader(api_text("modules-th-version"),"nowarp text-center");
  $table->addHeader(api_text("modules-th-description"),NULL,"100%");
@@ -93,15 +94,18 @@ function content(){
   // build table row
   $table->addRow($tr_class);
   // build table fields
+  $table->addFieldCheckbox($module->name,"nowarp");
   $table->addField($module->name,"nowarp");
   $table->addField($module->version,"nowarp text-center");
   $table->addField($module->description);
   $table->addField($td,"nowarp");
  }
+ // add checkbox actions
+ $table->addCheckboxesAction("git_pull","submit.php?act=module_git_pull");
  // show table
  $table->render();
- // git pull
- echo api_link("submit.php?act=module_git_pull",api_text("modules-git_pull"),NULL,"btn btn-primary",FALSE,api_text("modules-git_pull-confirm"))."\n";
+// git pull
+ echo api_link("#",api_text("modules-git_pull"),NULL,"btn btn-primary",FALSE,NULL,NULL,"_self",$table->getCheckboxesActionLinkId("git_pull"))."\n";
  echo api_link("modules_git_clone.php",api_text("modules-git_clone"),NULL,"btn")."\n";
 }
 ?>

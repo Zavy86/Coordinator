@@ -242,6 +242,8 @@ function module_git_pull(){
  if(!api_checkPermission("settings","modules_edit")){api_die("accessDenied");}
  // definitions
  $modules_cloned=array();
+ // acquire variables
+ $selected_modules=$_POST['table_rows'];
  // check if coordinator is installed via git
  if(is_dir("../.git")){$modules_cloned[]="coordinator";}
  // check for modules cloned with git
@@ -255,7 +257,7 @@ function module_git_pull(){
  // disabled for localhost and 127.0.0.1
  if($_SERVER['HTTP_HOST']<>"localhost" && $_SERVER['HTTP_HOST']<>"127.0.0.1"){
   foreach($modules_cloned as $module){
-   if($module=="coordinator"){$module=NULL;}
+   if($module=="coordinator"){$module=NULL;}else{if(!in_array($module,$selected_modules)){continue;}}
    $output.=exec('whoami')."@".exec('hostname').":".shell_exec("cd ".$GLOBALS['path'].$GLOBALS['dir'].$module." ; pwd ; git stash ; git stash clear ; git pull")."\n\n";
   }
   // log event
