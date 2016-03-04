@@ -1195,8 +1195,8 @@ function api_file_delete($idFile,$table="uploads_uploads",$path=NULL){
 */
 function api_link($url,$label,$title=NULL,$class=NULL,$popup=FALSE,$confirm=NULL,$style=NULL,$target="_self",$id=NULL){
  if($url==NULL){return FALSE;}
- if($id==NULL){$id=rand(111,999);}
- $return="<a id=\"link_".$id."\" href=\"".$url."\" class='".$class."' style=\"".$style."\"";
+ if($id==NULL){$id="link_".rand(111,999);}
+ $return="<a id=\"".$id."\" href=\"".$url."\" class='".$class."' style=\"".$style."\"";
  if($popup){
   $return.=" data-toggle='popover' data-placement='top' data-content=\"".$title."\"";
  }elseif($title<>NULL){
