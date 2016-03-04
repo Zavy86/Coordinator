@@ -24,6 +24,8 @@ class str_table{
  protected $unvalued;
  /** @var boolean $sortable Show headers sortable link */
  protected $sortable;
+ /** @var boolean $checkboxes Selectable rows */
+ protected $checkboxes;
  /** @var string $get Additional get parameters for sortable link */
  protected $get;
  /** @var string $class Table css class */
@@ -40,6 +42,8 @@ class str_table{
  protected $th_array;
  /** @var array $tr_array Array of table rows */
  protected $tr_array;
+ /** @var array $checkboxes_actions Array of checkboxes actions */
+ protected $checkboxes_actions;
 
  /**
   * Table class
@@ -95,6 +99,26 @@ class str_table{
  }
 
  /**
+  * Add table checkbox header
+  *
+  * @param string $class Column header css class
+  * @param string $width Column header width
+  * @param integer $colspan Column span
+  * @return boolean
+  */
+ function addHeaderCheckbox($class=NULL,$width=NULL,$colspan=1){
+  $th=new stdClass();
+  $th->name="<input type='checkbox' name='table_rows_select' id='".$this->id."_select_rows' title='".api_text("table-row-select-all")."'>";
+  $th->class=$class;
+  $th->width=$width;
+  $th->order=NULL;
+  $th->colspan=$colspan;
+  $this->th_array[]=$th;
+  $this->checkboxes=TRUE;
+  return TRUE;
+ }
+
+ /**
   * Add table row
   *
   * @param string $class Row css class
@@ -135,11 +159,54 @@ class str_table{
   */
  function addFieldMovable($id,$class=NULL,$colspan=1){
   $td=new stdClass();
-  $td->content="<i class='icon-move' title='".api_text("move")."' style='' rowid='".$id."'></i>";
+  $td->content="<i class='icon-move' title='".api_text("table-row-move")."' rowid='".$id."'></i>";
   $td->class=$class;
   $td->colspan=$colspan;
   $this->tr_array[$this->current_row]->fields[]=$td;
   return TRUE;
+ }
+
+ /**
+  * Add table checkbox field
+  *
+  * @param string $id row id to check
+  * @param string $class Field css class
+  * @param integer $colspan Column span
+  * @return boolean
+  */
+ function addFieldCheckbox($id,$class=NULL,$colspan=1){
+  $td=new stdClass();
+  $td->content="<input type='checkbox' name='table_rows[]' id='".$this->id."_row_".$id."' title='".api_text("table-row-select")."' value='".$id."'>";
+  $td->class=$class;
+  $td->colspan=$colspan;
+  $this->tr_array[$this->current_row]->fields[]=$td;
+  $this->checkboxes=TRUE;
+  return TRUE;
+ }
+
+ /**
+  * Add checkboxes action
+  *
+  * @param string $act action id (alphanumeric)
+  * @param string $url link url to call
+  * @return boolean
+  */
+ function addCheckboxesAction($act,$url){
+  $action=new stdClass();
+  $action->act=$act;
+  $action->url=$url;
+  $this->checkboxes_actions[$act]=$action;
+  return TRUE;
+ }
+
+ /**
+  * Get checkboxes action link ID
+  *
+  * @param string $act action id to get
+  * @return string
+  */
+ function getCheckboxesActionLinkId($act){
+  return $this->id."_action_".$this->checkboxes_actions[$act]->act;
  }
 
  /**
@@ -212,7 +279,7 @@ class str_table{
    $return.="<!-- table-move-script -->
 <script type=\"text/javascript\">
  $(document).ready(function(){
-  // Sortable rows
+  // sortable rows
   $('#".$this->id."').sortable({
     containerSelector:'table',
     itemPath:'> tbody',
@@ -248,6 +315,59 @@ class str_table{
   });
 });
 </script>\n<!-- /table-move-script -->\n\n";
+  }
+  // movable table jquery
+  if($this->checkboxes){
+   $return.="<!-- table-checkboxes-script -->
+<script type=\"text/javascript\">
+ $(document).ready(function(){
+  // select all checkboxes
+  $('#".$this->id."_select_rows').change(function(){
+   $('input[name=\"table_rows[]\"]').not(this).prop('checked',this.checked);
+  });\n";
+   // build action dynamic forms
+   foreach($this->checkboxes_actions as $action){
+    $return.="  // action_".$action->act."
+  $('#".$this->id."_action_".$action->act."').click(function(event){
+   event.preventDefault();
+   var newForm=jQuery('<form>',{
+    'action':'".$action->url."',
+    'method':'post'
+   });
+   // get checked rows
+   var checked=false;
+   $('input[name=\"table_rows[]\"]:checked').each(function(){
+    checked=true;
+    newForm.append(jQuery('<input>',{
+     'name':'table_rows[]',
+     'value':$(this).val(),
+     'type':'hidden'
+    }));
+   });
+   // submit form
+   if(checked){newForm.submit();}
+  });\n";
+   }
+   $return.="  // check if at least one checkboxes is checked
+  $('input[name=\"table_rows[]\"],input[name=\"table_rows_select\"]').change(function(){
+   var checked=false;
+   $('input[name=\"table_rows[]\"]:checked').each(function(){checked=true;});
+   if(checked){\n";
+   foreach($this->checkboxes_actions as $action){
+    $return.="    $('#".$this->id."_action_".$action->act."').removeClass('disabled');\n";
+   }
+   $return.="   }else{\n";
+   foreach($this->checkboxes_actions as $action){
+    $return.="    $('#".$this->id."_action_".$action->act."').addClass('disabled');\n";
+   }
+   $return.="   }
+  });
+  // disable all checkbox actions buttons\n";
+   foreach($this->checkboxes_actions as $action){
+    $return.="  $('#".$this->id."_action_".$action->act."').addClass('disabled');\n";
+   }
+   $return.=" });
+</script>\n<!-- /table-checkboxes-script -->\n\n";
   }
   if($echo){echo $return;return TRUE;}else{return $return;}
  }
