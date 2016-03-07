@@ -13,7 +13,9 @@
  <text key="all">tous</text>
  <text key="undefined">indéfini</text>
  <text key="search">recherche</text>
- <text key="move">Déplacer la ligne</text>
+ <text key="table-row-move">Déplacer la ligne</text>
+ <text key="table-row-select">Sélectionnez la ligne</text>
+ <text key="table-row-select-all">Sélectionnez toutes les lignes</text>
  <text key="noresults">aucun résultat trouvé..</text>
 
  <!-- timestamp -->
