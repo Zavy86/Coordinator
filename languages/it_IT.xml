@@ -13,7 +13,9 @@
  <text key="all">tutto</text>
  <text key="undefined">non definito</text>
  <text key="search">ricerca</text>
- <text key="move">Sposta riga</text>
+ <text key="table-row-move">Sposta riga</text>
+ <text key="table-row-select">Seleziona riga</text>
+ <text key="table-row-select-all">Seleziona tutte le righe</text>
  <text key="noresults">nessun risultato trovato..</text>
 
  <!-- timestamp -->
