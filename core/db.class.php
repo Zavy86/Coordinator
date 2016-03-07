@@ -26,6 +26,7 @@ class DB{
   if(stripos($query,"select")!==FALSE){return $query;}
   $search=array("``","''",'""');
   $query=str_replace($search,"DEFAULT",$query);
+  $query=str_replace("\DEFAULT","'",$query); /* @fixme fix last ' bug */
   return $query;
  }
 
