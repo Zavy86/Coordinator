@@ -171,7 +171,7 @@ div.pagination ul li.null a{border-left:none;border-top:none;border-bottom:none;
  white-space:nowrap;
 }
 
-.sorted_table tr td i.icon-move{cursor:pointer;}
+.sorted_table tr td i.icon-resize-vertical{cursor:pointer;}
 
 .sorted_table tr.placeholder{
   display:block;

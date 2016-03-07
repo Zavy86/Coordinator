@@ -13,7 +13,9 @@
  <text key="all">alle</text>
  <text key="undefined">nicht definiert</text>
  <text key="search">suche</text>
- <text key="move">Verschieben reihe</text>
+ <text key="table-row-move">Verschieben reihe</text>
+ <text key="table-row-select">Wählen sie die zeile</text>
+ <text key="table-row-select-all">Wählen sie alle zeilen</text>
  <text key="noresults">keine ergebnisse gefunden..</text>
 
  <!-- timestamp -->

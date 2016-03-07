@@ -13,7 +13,9 @@
  <text key="all">all</text>
  <text key="undefined">undefined</text>
  <text key="search">search</text>
- <text key="move">Move row</text>
+ <text key="table-row-move">Move row</text>
+ <text key="table-row-select">Select row</text>
+ <text key="table-row-select-all">Select all rows</text>
  <text key="noresults">no results found..</text>
 
  <!-- timestamp -->

@@ -159,7 +159,7 @@ class str_table{
   */
  function addFieldMovable($id,$class=NULL,$colspan=1){
   $td=new stdClass();
-  $td->content="<i class='icon-move' title='".api_text("table-row-move")."' rowid='".$id."'></i>";
+  $td->content="<i class='icon-resize-vertical' title='".api_text("table-row-move")."' rowid='".$id."'></i>";
   $td->class=$class;
   $td->colspan=$colspan;
   $this->tr_array[$this->current_row]->fields[]=$td;
@@ -284,10 +284,10 @@ class str_table{
     containerSelector:'table',
     itemPath:'> tbody',
     itemSelector:'tr',
-    handle:'i.icon-move',
+    handle:'i.icon-resize-vertical',
     placeholder:'<tr class=\placeholder\/>',
     onDrop:function(\$item,container,_super,event){
-     rowid=$(\$item).find('i.icon-move')[0]['attributes']['rowid']['value'];
+     rowid=$(\$item).find('i.icon-resize-vertical')[0]['attributes']['rowid']['value'];
      position=\$item[0]['rowIndex'];
      console.log('id: '+rowid+' moved in position: '+position);
      console.log(\$item);
