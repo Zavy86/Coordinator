@@ -26,6 +26,7 @@ public function header($title="",$nav="dashboard",$navbar=TRUE){
 
  <!-- Stylesheet -->
  <link href="<?php echo $GLOBALS['dir']."core/pace-loader/pace.flash.css";?>" rel="stylesheet">
+ <link href="<?php echo $GLOBALS['dir']."core/codemirror/lib/codemirror.css";?>" rel="stylesheet">
  <link href="<?php echo $GLOBALS['dir']."core/bootstrap/css/bootstrap.min.css";?>" rel="stylesheet">
  <link href="<?php echo $GLOBALS['dir']."core/bootstrap/css/bootstrap-custom.css";?>" rel="stylesheet">
  <link href="<?php echo $GLOBALS['dir']."core/bootstrap/css/bootstrap-responsive.css";?>" rel="stylesheet">
@@ -40,6 +41,7 @@ public function header($title="",$nav="dashboard",$navbar=TRUE){
 
  <!-- Javascript -->
  <script src="<?php echo $GLOBALS['dir']."core/pace-loader/pace.min.js";?>" type="text/javascript"></script>
+ <script src="<?php echo $GLOBALS['dir']."core/codemirror/lib/codemirror.js";?>" type="text/javascript"></script>
  <script src="<?php echo $GLOBALS['dir']."core/jquery/jquery-1.11.1.min.js";?>" type="text/javascript"></script>
  <script src="<?php echo $GLOBALS['dir']."core/jquery/jquery.validate-1.13.0.min.js";?>" type="text/javascript"></script>
  <script src="<?php echo $GLOBALS['dir']."core/jquery/jquery.validate-1.13.0.am.js";?>" type="text/javascript"></script>
