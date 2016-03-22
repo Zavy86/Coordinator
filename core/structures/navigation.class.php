@@ -491,7 +491,8 @@ class str_navigation{
     }
     echo "</li>\n";
    }
-  }// search bar
+  }
+  // search bar
   if($this->search){
    echo " <!-- search -->\n";
    echo " <form action='".api_baseName()."' method='get' name='nav-search'>\n";
