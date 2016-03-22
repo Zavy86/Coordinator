@@ -24,19 +24,20 @@ class DB{
  // @return : The query cleared
  function clearQuery($query){
   if(stripos($query,"select")!==FALSE){return $query;}
-  /*$search=array("``","''",'""');
+  $search=array("``","''",'""');
   $query=str_replace($search,"DEFAULT",$query);
-  $query=str_replace("\DEFAULT","'",$query);*/ /* @fixme fix last ' bug */
+  $query=str_replace("\DEFAULT","'",$query); /* @fixme fix last ' bug */
   return $query;
  }
 
  // ---[ Query the database ]--------------------------------------------------
  // @param $query : The query.
+ // @param $clear : If true, clear the query.
  // @param $debug : If true, it output the query and the resulting table.
  // @return : The result of the query, to use with fetchNextObject().
- function query($query,$debug=-1){
+ function query($query,$clear=TRUE,$debug=-1){
   if($query==NULL){return FALSE;}
-  $query=$this->clearQuery($query);
+  if($clear){$query=$this->clearQuery($query);}
   $this->nbQueries++;
   $this->lastResult=mysql_query($query,$this->connector) or $this->debugAndDie($query);
   $this->debug($debug,$query,$this->lastResult);
@@ -45,10 +46,11 @@ class DB{
 
  // ---[ Query the database but do not return nor store result ]---------------
  // @param $query : The query.
+ // @param $clear : If true, clear the query.
  // @param $debug : If true, it output the query and the resulting table.
- function execute($query,$debug=-1){
+ function execute($query,$clear=TRUE,$debug=-1){
   if($query==NULL){return FALSE;}
-  $query=$this->clearQuery($query);
+  if($clear){$query=$this->clearQuery($query);}
   $this->nbQueries++;
   mysql_query($query,$this->connector) or $this->debugAndDie($query);
   $this->debug($debug, $query);
