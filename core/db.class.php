@@ -24,9 +24,9 @@ class DB{
  // @return : The query cleared
  function clearQuery($query){
   if(stripos($query,"select")!==FALSE){return $query;}
-  $search=array("``","''",'""');
+  /*$search=array("``","''",'""');
   $query=str_replace($search,"DEFAULT",$query);
-  $query=str_replace("\DEFAULT","'",$query); /* @fixme fix last ' bug */
+  $query=str_replace("\DEFAULT","'",$query);*/ /* @fixme fix last ' bug */
   return $query;
  }
 
