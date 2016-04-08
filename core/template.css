@@ -224,3 +224,21 @@ div.pagination ul li.null a{border-left:none;border-top:none;border-bottom:none;
  -moz-border-radius:4px 0 4px 0;
  border-radius:4px 0 4px 0;
 }
+
+.modal-large{
+ position:fixed;
+ top:10%;
+ left:50%;
+ z-index:1050;
+ width:800px;
+ margin-left:-400px;
+}
+
+.modal-small{
+ position:fixed;
+ top:10%;
+ left:50%;
+ z-index:1100;
+ width:400px;
+ margin-left:-200px;
+}
