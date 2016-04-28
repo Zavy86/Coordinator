@@ -61,6 +61,8 @@
  <text key="settings-ff-ldap_domain">Domain</text>
  <text key="settings-ff-ldap_userfield">Userfield</text>
  <text key="settings-ff-ldap_group">Group</text>
+ <text key="settings-ff-ldap_cache_pwd">Cache</text>
+ <text key="settings-ff-ldap_cache_pwd-label">Abilita salvataggio password in cache</text>
  <text key="settings-ff-smtp">SMTP</text>
  <text key="settings-ff-smtp-label">Abilita invio mail tramite SMTP</text>
  <text key="settings-ff-smtp_host">Host</text>

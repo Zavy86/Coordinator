@@ -60,6 +60,7 @@ function settings_save(){
  if(isset($_POST['ldap_domain'])){$GLOBALS['db']->execute("UPDATE settings_settings SET value='".addslashes($_POST['ldap_domain'])."' WHERE code='ldap_domain'");}
  if(isset($_POST['ldap_userfield'])){$GLOBALS['db']->execute("UPDATE settings_settings SET value='".addslashes($_POST['ldap_userfield'])."' WHERE code='ldap_userfield'");}
  if(isset($_POST['ldap_group'])){$GLOBALS['db']->execute("UPDATE settings_settings SET value='".addslashes($_POST['ldap_group'])."' WHERE code='ldap_group'");}
+ if($_POST['ldap_cache_pwd']){$GLOBALS['db']->execute("UPDATE settings_settings SET value='1' WHERE code='ldap_cache_pwd'");}else{$GLOBALS['db']->execute("UPDATE settings_settings SET value='0' WHERE code='ldap_cache_pwd'");}
  // smtp
  if($_POST['smtp']){$GLOBALS['db']->execute("UPDATE settings_settings SET value='1' WHERE code='smtp'");}else{$GLOBALS['db']->execute("UPDATE settings_settings SET value='0' WHERE code='smtp'");}
  if(isset($_POST['smtp_host'])){$GLOBALS['db']->execute("UPDATE settings_settings SET value='".addslashes($_POST['smtp_host'])."' WHERE code='smtp_host'");}
