@@ -86,7 +86,7 @@ function account_login(){
     break;
    case "ldap":
     $account->login=$account->ldap;
-    $password_update_query=",password='".md5($p_password)."'";
+    if(api_getOption("ldap_cache_pwd")){$password_update_query=",password='".md5($p_password)."'";}
     break;
   }
   // check enable
