@@ -54,6 +54,8 @@ function content(){
  $form->addField("text","ldap_domain",api_text("settings-ff-ldap_domain"),api_getOption("ldap_domain"),"input-xlarge");
  $form->addField("text","ldap_userfield",api_text("settings-ff-ldap_userfield"),api_getOption("ldap_userfield"),"input-xlarge");
  $form->addField("text","ldap_group",api_text("settings-ff-ldap_group"),api_getOption("ldap_group"),"input-xlarge");
+ $form->addField("checkbox","ldap_cache_pwd",api_text("settings-ff-ldap_cache_pwd"));
+ $form->addFieldOption(1,api_text("settings-ff-ldap_cache_pwd-label"),(api_getOption("ldap_cache_pwd"))?TRUE:FALSE);
  $form->addSeparator();
  // smtp
  $form->addField("checkbox","smtp",api_text("settings-ff-smtp"));
