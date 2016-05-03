@@ -269,7 +269,11 @@ class str_table{
    }
   }
   // show no value text
-  if(!count($this->tr_array) && $this->unvalued<>NULL){$return.="<tr><td colspan=".count($this->th_array).">".$this->unvalued."</td></tr>\n";}
+  if(!count($this->tr_array) && $this->unvalued<>NULL){
+   $colspan_count=0;
+   foreach($this->th_array as $th){$colspan_count+=$th->colspan;}
+   $return.="<tr><td colspan=".$colspan_count.">".$this->unvalued."</td></tr>\n";
+  }
   // close body
   $return.="</tbody>\n";
   // close table
