@@ -57,7 +57,7 @@ class str_table{
   * @param string $grouping_field Field name for grouping position
   * @return boolean
   */
- public function __construct($unvalued=NULL,$sortable=FALSE,$get=NULL,$class=NULL,$move_table=NULL,$position_field="position",$grouping_field=NULL){
+ public function __construct($unvalued=NULL,$sortable=FALSE,$get=NULL,$class=NULL,$move_table=NULL,$position_field="order",$grouping_field=NULL){
   $this->id="table_".rand(1000,9999);
   $this->unvalued=$unvalued;
   $this->sortable=$sortable;
