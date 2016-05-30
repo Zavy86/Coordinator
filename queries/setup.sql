@@ -340,7 +340,7 @@ CREATE TABLE IF NOT EXISTS `settings_menus` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `idMenu` int(11) NOT NULL DEFAULT '0',
   `menu` varchar(25) COLLATE utf8_unicode_ci NOT NULL,
-  `module` varchar(25) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `module` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
   `url` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
   `position` int(3) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
@@ -389,7 +389,7 @@ CREATE TABLE IF NOT EXISTS `settings_menus_join_accounts_groups` (
 --
 
 CREATE TABLE IF NOT EXISTS `settings_modules` (
-  `module` varchar(25) COLLATE utf8_unicode_ci NOT NULL,
+  `module` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `version` varchar(10) COLLATE utf8_unicode_ci NOT NULL DEFAULT '1.0.0',
   `title` varchar(50) COLLATE utf8_unicode_ci NOT NULL,
   `description` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
@@ -404,7 +404,7 @@ CREATE TABLE IF NOT EXISTS `settings_modules` (
 
 CREATE TABLE IF NOT EXISTS `settings_permissions` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-  `module` varchar(25) COLLATE utf8_unicode_ci NOT NULL,
+  `module` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `action` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `description` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
   `locked` tinyint(1) unsigned NOT NULL DEFAULT '0',
