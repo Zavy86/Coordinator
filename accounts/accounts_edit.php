@@ -33,6 +33,12 @@ function content(){
    $account_form->addField("hidden","ldap",NULL,stripslashes($account->ldap));
   }
  }
+ // custom account fields
+ if(is_array($GLOBALS['custom_fields']['accounts'])){
+  foreach($GLOBALS['custom_fields']['accounts'] as $field){
+   $account_form->addField("text",$field,strtoupper($field),$account->{$field},"input-large");
+  }
+ }
  // phone
  $account_form->addField("text","phone",api_text("accounts_edit-ff-phone"),$account->phone,"input-medium",api_text("accounts_edit-ff-phone-placeholder"));
  // language
