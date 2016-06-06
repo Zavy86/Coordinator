@@ -186,6 +186,13 @@ function account_save(){
  $p_language=addslashes($_POST['language']);
  $p_enabled=$_POST['enabled'];
  $p_superuser=$_POST['superuser'];
+ // custom account fields
+ $custom_fields=array();
+ if(is_array($GLOBALS['custom_fields']['accounts'])){
+  foreach($GLOBALS['custom_fields']['accounts'] as $field){
+   if(isset($_POST[$field])){$custom_fields[$field]=addslashes($_POST[$field]);}
+  }
+ }
  // check duplicates
  if(($p_account<>$account->account)||(strlen($p_ldap)&&$p_ldap<>$account->ldap)){
   if($GLOBALS['db']->countOf("accounts_accounts","id<>'".$account->id."' AND account LIKE '".$p_account."'") ||
@@ -202,8 +209,9 @@ function account_save(){
    name='".$p_name."',
    ldap='".$p_ldap."',
    phone='".$p_phone."',
-   language='".$p_language."',
-   enabled='".$p_enabled."',
+   language='".$p_language."',";
+  foreach($custom_fields as $field=>$value){$query.=$field."='".$value."',";}
+  $query.="enabled='".$p_enabled."',
    superuser='".$p_superuser."',
    updDate='".api_now()."',
    updIdAccount='".api_account()->id."'
@@ -226,10 +234,12 @@ function account_save(){
   // make secret random string
   if(!api_getOption("ldap")||!strlen($p_ldap)){$secret=api_randomString(32);}
   // build query
-  $query="INSERT INTO accounts_accounts
-   (account,password,secret,name,ldap,phone,language,addDate,addIdAccount) VALUES
-   ('".$p_account."','".md5(api_randomString(10))."','".$secret."','".$p_name."',
-    '".$p_ldap."','".$p_phone."','".$p_language."','".api_now()."','".api_account()->id."')";
+  $query="INSERT INTO accounts_accounts (account,password,secret,name,ldap,phone,language,addDate,addIdAccount";
+  foreach($custom_fields as $field=>$value){$query.=",".$field;}
+  $query.=") VALUES ('".$p_account."','".md5(api_randomString(10))."','".$secret."','".$p_name."',
+    '".$p_ldap."','".$p_phone."','".$p_language."','".api_now()."','".api_account()->id."'";
+  foreach($custom_fields as $field=>$value){$query.=",'".$value."'";}
+  $query.=")";
   // execute query
   $GLOBALS['db']->execute($query);
   // set id to last inserted id
