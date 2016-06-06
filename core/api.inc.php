@@ -18,6 +18,7 @@ global $dir;                       // directory of web application
 global $alert;                     // alerts global variable
 global $locale;                    // array with translation
 global $initial_module;            // initial module to load
+global $custom_fields;             // custom fields
 global $script_timer;              // script timer
 $script_timer=api_getmicrotime();
 include_once("../config.inc.php"); // include the configuration file
