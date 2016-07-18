@@ -512,7 +512,7 @@ class str_form{
   // multiselect scripts
   $return.="<script type='text/javascript'>\n";
   $return.=" function ".$this->name."_selectToggle(name,selected){\n";
-  $return.="  $('#'+name+' option').each(function(){ $(this).attr('selected',selected); });\n";
+  $return.="  $('#'+name+' option').each(function(){ $(this).prop('selected',selected); });\n";
   $return.=" };\n";
   $return.="</script>\n\n";
   // show controls
