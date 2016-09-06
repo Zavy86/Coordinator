@@ -71,6 +71,10 @@ dl dt{
  font-weight: normal;
 }
 
+dl dt.dl_table{
+ padding-top:4px;
+}
+
 label.control-label{
  font-size: 0.75em;
  text-transform: uppercase;
