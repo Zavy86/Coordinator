@@ -94,7 +94,7 @@ class str_dl{
   foreach($this->elements_array as $index=>$element){
    switch($element->type){
     case "element":
-     $return.=" <dt>".$element->label."</dt><dd class='".$element->class."'>".$element->value."</dd>";
+     $return.=" <dt class='".$element->class."'>".$element->label."</dt><dd class='".$element->class."'>".$element->value."</dd>";
      if($element->separator<>NULL && $this->elements_array[$index+1]->type=="element"){$return.="<".$element->separator.">\n";}else{$return.="\n";}
      break;
     case "separator":
