@@ -498,6 +498,35 @@ function api_timestampDateFromWeek($week,$year){
  return $return;
 }
 
+/**
+ * Date Years
+ *
+ * @param string $years_from start year
+ * @param string $years_to end year, if null current year
+ * @return array $years_array array of years
+ */
+function api_date_years($years_from,$years_to=NULL){
+ $years_array=array();
+ if(!$years_to){$years_to=date("Y");}
+ for($year=$years_to;$year>=$years_from;$year--){$years_array[$year]=$year;}
+ return $years_array;
+}
+
+/**
+ * Date Months
+ *
+ * @param string $month_from start month, if null january
+ * @param string $month_to end month, if null december
+ * @return array $months_array array of years
+ */
+function api_date_months($month_from=NULL,$month_to=NULL){
+ $months_array=array();
+ if(!$month_from){$month_from=1;}
+ if(!$month_to){$month_to=12;}
+ $locale_months=array(1=>api_text("month-january"),2=>api_text("month-february"),3=>api_text("month-march"),4=>api_text("month-april"),5=>api_text("month-may"),6=>api_text("month-june"),7=>api_text("month-july"),8=>api_text("month-august"),9=>api_text("month-september"),10=>api_text("month-october"),11=>api_text("month-november"),12=>api_text("month-december"));
+ for($month=$month_from;$month<=$month_to;$month++){$months_array[$month]=$locale_months[$month];}
+ return $months_array;
+}
 
 /* -[ Random Generator ]----------------------------------------------------- */
 // @param $size : Numbers of characters
