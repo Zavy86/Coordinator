@@ -7,6 +7,7 @@
 
  <!-- alerts -->
  <text key="loginFailed">L'account e la password inseriti non corrispondono</text>
+ <text key="loginFailedSSO">La sessione è scaduta..</text>
  <text key="loginDisabled">L'account {0} risulta disabilitato, contatta l'amministratore di sistema per maggiori informazioni</text>
  <text key="accountNotFound">L'account non è stato trovato</text>
  <text key="accountCreated">L'account {0} è stato creato, seleziona i gruppi a cui assegnarlo</text>
@@ -46,6 +47,7 @@
  <text key="logs_accounts_loginSuccess">L'utente {0} ha eseguito l'accesso</text>
  <text key="logs_accounts_loginFailed">L'utente {0} ha fornito le credenziali errate per l'accesso</text>
  <text key="logs_accounts_loginError">L'utente {0} ha fornito le credenziali errate per l'accesso</text>
+ <text key="logs_accounts_loginErrorSSO">L'utente {0} ha tentato di accedere da una sessione scaduta</text>
  <text key="logs_accounts_loginDisabled">L'accesso dell'utente {0} è stato bloccato</text>
  <text key="logs_accounts_accountCreated">L'account {0} è stato creato</text>
  <text key="logs_accounts_accountUpdated">L'account {0} è stato aggiornato</text>
