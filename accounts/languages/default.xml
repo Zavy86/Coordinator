@@ -7,6 +7,7 @@
 
  <!-- alerts -->
  <text key="loginFailed">The account and password do not match</text>
+ <text key="loginFailedSSO">Session expired..</text>
  <text key="loginDisabled">The account {0} is disabled, contact your system administrator for more information</text>
  <text key="accountNotFound">The account was not found</text>
  <text key="accountCreated">The account {0} has been created, select the groups to which to assign</text>
@@ -46,6 +47,7 @@
  <text key="logs_accounts_loginSuccess">User {0} has logged</text>
  <text key="logs_accounts_loginFailed">User {0} has supplied wrong credentials for access</text>
  <text key="logs_accounts_loginError">User {0} has supplied wrong credentials for access</text>
+ <text key="logs_accounts_loginErrorSSO">User {0} tried to access from an expired session</text>
  <text key="logs_accounts_loginDisabled">User access {0} has been blocked</text>
  <text key="logs_accounts_accountCreated">>ccount {0} has been created</text>
  <text key="logs_accounts_accountUpdated">>ccount {0} has been updated</text>

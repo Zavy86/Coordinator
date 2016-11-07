@@ -7,6 +7,7 @@ api_loadModule();
 $act=$_GET['act'];
 switch($act){
  // accounts
+ case "account_sso":account_sso();break;
  case "account_login":account_login();break;
  case "account_logout":account_logout();break;
  case "account_save":account_save();break;
@@ -44,6 +45,69 @@ switch($act){
   exit(header("location: index.php".$alert));
 }
 
+
+/**
+ * Account SSO
+ */
+function account_sso(){
+ // acquire variables
+ $g_account=$_GET['sso_account'];
+ $g_hash=$_GET['sso_hash'];
+ // calculate hash
+ $calculated_hash=md5($g_account.date("YmdHi"));
+ // check hash
+ if($calculated_hash===$g_hash){
+  // get account
+  $account=$GLOBALS['db']->queryUniqueObject("SELECT * FROM accounts_accounts WHERE ldap='".$g_account."'");
+ }
+ // check account
+ if($account->id){
+  // login successful
+  $account->login=$account->account;
+  // check enable
+  if($account->enabled){
+   // check maintenance
+   if(!$account->superuser && api_getOption("maintenance")){
+    $alert="&alert=maintenance&alert_class=alert-warning";
+    exit(header("location: login.php?lang=".$account->language."&account=".$account->login.$alert));
+   }else{
+    session_destroy();
+    session_start();
+    // get account object
+    $_SESSION['account']=api_accounts_account($account->id);
+    // update session language
+    $_SESSION['language']=$account->language;
+    // update session company
+    $_SESSION['company']=api_account()->companies[api_account()->mainCompany];
+    $_SESSION['account']->administrator=FALSE;
+    // load account permissions
+    $_SESSION['permissions']=api_loadAccountPermission();
+    // update last access
+    $GLOBALS['db']->execute("UPDATE accounts_accounts SET accDate='".api_now()."' WHERE id='".$account->id."'");
+    // log event
+    api_log(API_LOG_NOTICE,"accounts","loginSuccessSSO",
+     "{logs_accounts_loginSuccessSSO|".$account->login."|".$account->name."}",
+     $account->id,"accounts/accounts_edit.php?idAccount=".$account->id);
+    // redirect
+    exit(header("location: ../index.php"));
+   }
+  }else{
+   // login disabled
+   api_log(API_LOG_WARNING,"accounts","loginDisabled",
+    "{logs_accounts_loginDisabled|".$account->login."|".$account->name."}",
+    $account->id,"accounts/accounts_edit.php?idAccount=".$account->id);
+   $alert="&alert=loginDisabled&alert_class=alert-warning&alert_parameters=".$account->login;
+   exit(header("location: login.php?lang=".$account->language."&account=".$account->login.$alert));
+  }
+ }else{
+  // logs
+  api_log(API_LOG_WARNING,"accounts","loginErrorSSO",
+   "{logs_accounts_loginErrorSSO|".$g_account."}");
+ }
+ // redirect
+ $alert="?alert=loginFailedSSO&alert_class=alert-warning";
+ exit(header("location: login.php".$alert));
+}
 
 /**
  * Account Login
