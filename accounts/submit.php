@@ -117,7 +117,7 @@ function account_login(){
  $g_language=$_GET['language'];
  $p_language=$_POST['language'];
  $p_account=addslashes($_POST['account']);
- $p_password=$_POST['password'];
+ $p_password=utf8_decode($_POST['password']);
  $s_url=$_SESSION['external_redirect'];
  // if account is not an email
  if(strpos($p_account,"@")==FALSE && $p_account<>"root" && api_getOption('ldap')){
