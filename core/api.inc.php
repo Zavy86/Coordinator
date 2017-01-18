@@ -463,6 +463,19 @@ function api_timestampDifference($timestamp_a,$timestamp_b,$format="S"){
  return number_format($result,2,".","");
 }
 
+/**
+* Timestamp Difference From
+* @param string $from start date
+* @param string $difference difference in textual form ("+1 day","-1 month,..)
+* @param string $format timestamp format
+* @return string formatted timestamp difference
+*/
+function api_timestampDifferenceFrom($from,$difference,$format="Y-m-d H:i:s"){
+ $date = new DateTime($from);
+ $date->modify($difference);
+ return $date->format($format);
+}
+
 /* -[ Timestamp Difference Format ]------------------------------------------ */
 // @integere $seconds : differences in seconds
 function api_timestampDifferenceFormat($difference,$showSeconds=TRUE){
