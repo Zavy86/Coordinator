@@ -6,40 +6,79 @@
  <text key="module-title">Dashboard</text>
 
  <!-- alerts -->
- <text key="widgetCreated">The widget has been added</text>
- <text key="widgetUpdated">The widget has been updated</text>
- <text key="widgetMoved">The widget has been moved</text>
- <text key="widgetRemoved">The widget has been removed</text>
- <text key="widgetError">There was an error with the widget</text>
+    <text key="widgetCreated">The widget has been added</text>
+    <text key="widgetUpdated">The widget has been updated</text>
+    <text key="widgetMoved">The widget has been moved</text>
+    <text key="widgetRemoved">The widget has been removed</text>
+    <text key="widgetError">There was an error with the widget</text>
+ <text key="tileCreated">The tile has been added</text>
+ <text key="tileUpdated">The tile has been updated</text>
+ <text key="tileDeleted">The tile has been removed</text>
+ <text key="tileBackgroundDeleted">The tile background has been removed</text>
+ <text key="tileError">There was an error with the tile</text>
+
+ <!-- template.inc.php -->
+ <text key="nav-dashboard-edit">Customize</text>
 
  <!-- dashboard.php -->
- <text key="dashboard-welcome">Welcome</text>
- <text key="dashboard-welcome-message">Welcome {0} in Coordinator!</text>
+ <text key="dashboard-welcome">Welcome {0} in Coordinator!</text>
+ <text key="dashboard-unvalued">Add your favorites tiles by pressing the star in the modules..</text>
 
  <!-- dashboard_edit.php -->
- <text key="edit-addWidget">Add Widget</text>
- <text key="edit-editWidget">Edit Widget</text>
- <text key="edit-tr-unvalued">There are no widgets enabled..</text>
- <text key="edit-th-span">Span</text>
- <text key="edit-th-title">Widget</text>
- <text key="edit-th-module">Module</text>
- <text key="edit-th-parameters">Parameters</text>
- <text key="edit-th-refresh">Refresh</text>
- <text key="edit-ff-widget">Widget</text>
- <text key="edit-fo-selectWidget">Select a widget</text>
- <text key="edit-fo-noWidgets">There are no widgets available..</text>
- <text key="edit-ff-span">Span</text>
- <text key="edit-ff-parameters">Parameters</text>
- <text key="edit-ff-parameters-placeholder">&amp;key=value</text>
- <text key="edit-ff-refresh">Refresh</text>
- <text key="edit-fo-secs">{0} seconds</text>
- <text key="edit-fo-min">{0} minute</text>
- <text key="edit-fo-mins">{0} minutes</text>
- <text key="edit-fo-hour">{0} hour</text>
- <text key="edit-fo-hours">{0} hours</text>
- <text key="edit-fc-submit">Save</text>
- <text key="edit-fc-cancel">Cancel</text>
- <text key="edit-fc-remove">Remove</text>
- <text key="edit-fc-remove-confirm">Remove this widget from your dashboard?</text>
+ <text key="dashboard-edit-addTile">Add Tile</text>
+ <text key="dashboard-edit-editTile">Edit Tile</text>
+ <text key="dashboard-edit-tr-unvalued">There are no tiles to show..</text>
+ <text key="dashboard-edit-th-size">Size</text>
+ <text key="dashboard-edit-th-label">Label</text>
+ <text key="dashboard-edit-th-module">Module</text>
+ <text key="dashboard-edit-th-url">URL</text>
+ <text key="dashboard-edit-ff-size">Size</text>
+ <text key="dashboard-edit-ff-label">Label</text>
+ <text key="dashboard-edit-ff-label-placeholder">Tile label</text>
+ <text key="dashboard-edit-ff-description">Description</text>
+ <text key="dashboard-edit-ff-description-placeholder">Tile description</text>
+ <text key="dashboard-edit-ff-url">URL</text>
+ <text key="dashboard-edit-ff-url-placeholder">http://www.coordinator.it</text>
+ <text key="dashboard-edit-ff-target">Target</text>
+ <text key="dashboard-edit-ff-target-placeholder">Link html target</text>
+ <text key="dashboard-edit-ff-icon">Icon</text>
+ <text key="dashboard-edit-ff-icon-placeholder">Pick an icon</text>
+ <text key="dashboard-edit-ff-background">Background</text>
+ <text key="dashboard-edit-ff-background-delete">Remove background</text>
+ <text key="dashboard-edit-ff-background-delete-confirm">Are you sure you want to delete this background?</text>
+ <text key="dashboard-edit-fc-submit">Save</text>
+ <text key="dashboard-edit-fc-cancel">Cancel</text>
+ <text key="dashboard-edit-fc-remove">Remove</text>
+ <text key="dashboard-edit-fc-remove-confirm">Are you sure you want to remove this tile from your dashboard?</text>
+ <text key="dashboard-edit-fc-close">Close</text>
+
+
+    <!-- old @todo cancellare dopo verifiche -->
+
+    <!-- dashboard_edit.php -->
+    <text key="edit-addWidget">Add Widget</text>
+    <text key="edit-editWidget">Edit Widget</text>
+    <text key="edit-tr-unvalued">There are no widgets enabled..</text>
+    <text key="edit-th-span">Span</text>
+    <text key="edit-th-title">Widget</text>
+    <text key="edit-th-module">Module</text>
+    <text key="edit-th-parameters">Parameters</text>
+    <text key="edit-th-refresh">Refresh</text>
+    <text key="edit-ff-widget">Widget</text>
+    <text key="edit-fo-selectWidget">Select a widget</text>
+    <text key="edit-fo-noWidgets">There are no widgets available..</text>
+    <text key="edit-ff-span">Span</text>
+    <text key="edit-ff-parameters">Parameters</text>
+    <text key="edit-ff-parameters-placeholder">&amp;key=value</text>
+    <text key="edit-ff-refresh">Refresh</text>
+    <text key="edit-fo-secs">{0} seconds</text>
+    <text key="edit-fo-min">{0} minute</text>
+    <text key="edit-fo-mins">{0} minutes</text>
+    <text key="edit-fo-hour">{0} hour</text>
+    <text key="edit-fo-hours">{0} hours</text>
+    <text key="edit-fc-submit">Save</text>
+    <text key="edit-fc-cancel">Cancel</text>
+    <text key="edit-fc-remove">Remove</text>
+    <text key="edit-fc-remove-confirm">Remove this widget from your dashboard?</text>
 
 </locale>
