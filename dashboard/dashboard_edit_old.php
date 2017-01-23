@@ -80,7 +80,7 @@ function content(){
   $table->addField($widget->module,"nowarp");
   $table->addField($widget->parameters,"nowarp");
   $table->addField($refresh,"nowarp text-right");
-  $table->addField("<a href='dashboard_edit.php?id=".$widget->id."'>".api_icon("icon-edit")."</a>","nowarp");
+  $table->addField("<a href='dashboard_edit_old.php?id=".$widget->id."'>".api_icon("icon-edit")."</a>","nowarp");
  }
  // build form
  $form=new str_form("submit.php?act=widget_save&id=".$selected_widget->id,"post","dashboard_edit");
@@ -116,7 +116,7 @@ function content(){
  $form->addFieldOption(3600000,api_text("edit-fo-hour","1"),($selected_widget->refresh==3600000)?TRUE:FALSE);
  $form->addFieldOption(7200000,api_text("edit-fo-hours","2"),($selected_widget->refresh==7200000)?TRUE:FALSE);
  $form->addControl("submit",api_text("edit-fc-submit"));
- $form->addControl("button",api_text("edit-fc-cancel"),NULL,"dashboard_edit.php");
+ $form->addControl("button",api_text("edit-fc-cancel"),NULL,"dashboard_edit_old.php");
  if($selected_widget->id){
   $form->addControl("button",api_text("edit-fc-remove"),"btn-danger","submit.php?act=widget_remove&id=".$selected_widget->id,api_text("edit-fc-remove-confirm"));
  }

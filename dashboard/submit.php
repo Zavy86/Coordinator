@@ -5,6 +5,12 @@
 include('../core/api.inc.php');
 $act=$_GET['act'];
 switch($act){
+ // tiles
+ case "tile_save":tile_save();break;
+ case "tile_delete":tile_delete();break;
+ case "tile_background_delete":tile_background_delete();break;
+
+ /* old */
  // widgets
  case "widget_save":widget_save();break;
  case "widget_move_up":widget_move("up");break;
@@ -16,6 +22,107 @@ switch($act){
   header("location: index.php".$alert);
 }
 
+
+/**
+ * Tile salve
+ */
+function tile_save(){
+ // acquire variables
+ $g_idTile=$_GET['idTile'];
+ $g_redirect=$_GET['redirect'];
+ if(!$g_redirect){$g_redirect="dashboard_edit.php";}
+ $element=json_decode($_GET['element']);
+ // check for element
+ if($element->url){
+  $p_size=addslashes($element->size);
+  $p_label=addslashes($element->label);
+  $p_description=addslashes($element->description);
+  $p_module=addslashes($element->module);
+  $p_url=addslashes($element->url);
+  $p_icon=addslashes($element->icon);
+ }else{
+  $p_size=addslashes($_REQUEST['size']);
+  $p_label=addslashes($_REQUEST['label']);
+  $p_description=addslashes($_REQUEST['description']);
+  $p_module=addslashes($_REQUEST['module']);
+  $p_url=addslashes($_REQUEST['url']);
+  $p_target=addslashes($_REQUEST['target']);
+  $p_icon=addslashes($_REQUEST['icon']);
+ }
+ // check for insert or update
+ if($g_idTile){
+  // build update query
+  $query="UPDATE `settings_dashboards` SET
+   `size`='".$p_size."',
+   `label`='".$p_label."',
+   `description`='".$p_description."',
+   `module`='".$p_module."',
+   `url`='".$p_url."',
+   `target`='".$p_target."',
+   `icon`='".$p_icon."'
+   WHERE `id`='".$g_idTile."'";
+  // execute query
+  $GLOBALS['db']->execute($query);
+ }else{
+  // calculate position
+  $position=$GLOBALS['db']->countOf("settings_dashboards","`idAccount`='".api_account()->id."'");
+  // build insert query
+  $query="INSERT INTO `settings_dashboards`
+   (`idAccount`,`order`,`size`,`label`,`description`,`module`,`url`,`target`,`icon`) VALUES
+   ('".api_account()->id."','".($position+1)."','".$p_size."','".$p_label."','".$p_description."',
+    '".$p_module."','".$p_url."','".$p_target."','".$p_icon."')";
+  // execute query
+  $GLOBALS['db']->execute($query);
+  // get last insert id
+  $g_idTile=$GLOBALS['db']->lastInsertedId();
+ }
+ // upload background
+ if(intval($_FILES['background']['size'])>0 && $_FILES['background']['error']==UPLOAD_ERR_OK){
+  if(!is_dir("../uploads/uploads/dashboard")){mkdir("../uploads/uploads/dashboard",0777,TRUE);}
+  if(file_exists("../uploads/uploads/dashboard/".$g_idTile.".jpg")){unlink("../uploads/uploads/dashboard/".$g_idTile.".jpg");}
+  if(is_uploaded_file($_FILES['background']['tmp_name'])){move_uploaded_file($_FILES['background']['tmp_name'],"../uploads/uploads/dashboard/".$g_idTile.".jpg");}
+ }
+ // redirect
+ exit(header("location: ".$g_redirect));
+}
+
+/**
+ * Tile delete
+ */
+function tile_delete(){
+ // acquire variables
+ $g_idTile=$_GET['idTile'];
+ $g_redirect=$_GET['redirect'];
+ if(!$g_redirect){$g_redirect="dashboard_edit.php";}
+ // get tile position
+ $order=$GLOBALS['db']->queryUniqueValue("SELECT `order` FROM `settings_dashboards` WHERE `id`='".$g_idTile."'");
+ if($order>0){
+  // remove tile
+  echo $GLOBALS['db']->execute("DELETE FROM `settings_dashboards` WHERE `id`='".$g_idTile."'");
+  // moves back tiles located after
+  echo $GLOBALS['db']->execute("UPDATE `settings_dashboards` SET `order`=`order`-1 WHERE `order`>'".$order."' AND `idAccount`='".api_account()->id."'");
+  // delete background
+  if(file_exists("../uploads/uploads/dashboard/".$g_idTile.".jpg")){unlink("../uploads/uploads/dashboard/".$g_idTile.".jpg");}
+ }
+ //redirect
+ exit(header("location: ".$g_redirect));
+}
+
+/**
+ * Tile background delete
+ */
+function tile_background_delete(){
+ // acquire variables
+ $g_idTile=$_GET['idTile'];
+ // delete background
+ if(file_exists("../uploads/uploads/dashboard/".$g_idTile.".jpg")){unlink("../uploads/uploads/dashboard/".$g_idTile.".jpg");}
+ // alert and redirect
+ $alert="?alert=tileBackgroundDeleted&alert_class=alert-warning";
+ exit(header("location: dashboard_edit.php".$alert));
+}
+
+
+/* old */
 
 /* -[ Widget Save  ]--------------------------------------------------------- */
 function widget_save(){
@@ -36,7 +143,7 @@ function widget_save(){
   $GLOBALS['db']->execute($query);
   // redirect
   $alert="?alert=widgetUpdated&alert_class=alert-success";
-  header("location: dashboard_edit.php".$alert);
+  header("location: dashboard_edit_old.php".$alert);
  }else{
   // calculate position
   $position=$GLOBALS['db']->countOf("settings_dashboards","idAccount='".$_SESSION['account']->id."'");
@@ -52,7 +159,7 @@ function widget_save(){
   $GLOBALS['db']->execute($query);
   // redirect
   $alert="?alert=widgetCreated&alert_class=alert-success";
-  header("location: dashboard_edit.php".$alert);
+  header("location: dashboard_edit_old.php".$alert);
  }
 }
 
@@ -86,11 +193,11 @@ function widget_move($to){
   // alert and redirect
   if($moved){$alert="?alert=widgetMoved&alert_class=alert-success";}
    else{$alert="?alert=widgetError&alert_class=alert-error";}
-  exit(header("location: dashboard_edit.php".$alert));
+  exit(header("location: dashboard_edit_old.php".$alert));
  }else{
   // redirect
   $alert="?alert=widgetError&alert_class=alert-error";
-  exit(header("location: dashboard_edit.php".$alert));
+  exit(header("location: dashboard_edit_old.php".$alert));
  }
 }
 
@@ -108,10 +215,10 @@ function widget_remove(){
   echo $GLOBALS['db']->execute("UPDATE settings_dashboards SET position=position-1 WHERE position>'".$position."' AND idAccount='".$_SESSION['account']->id."'");
   // redirect
   $alert="?alert=widgetRemoved&alert_class=alert-warning";
-  exit(header("location: dashboard_edit.php".$alert));
+  exit(header("location: dashboard_edit_old.php".$alert));
  }else{
   // redirect
   $alert="?alert=widgetError&alert_class=alert-error";
-  exit(header("location: dashboard_edit.php".$alert));
+  exit(header("location: dashboard_edit_old.php".$alert));
  }
 }
