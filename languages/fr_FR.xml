@@ -106,4 +106,8 @@
  <text key="form-range-from">De</text>
  <text key="form-range-to">À</text>
 
+ <!-- dashboard.php -->
+ <text key="dashboard-tile-add">Voulez-vous vraiment ajouter cette tuile dans votre dashboard?</text>
+ <text key="dashboard-tile-remove">Voulez-vous vraiment supprimer cette tuile de votre dashboard?</text>
+
 </locale>

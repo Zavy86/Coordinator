@@ -87,4 +87,8 @@
  <text key="form-range-from">From</text>
  <text key="form-range-to">To</text>
 
+ <!-- dashboard.php -->
+ <text key="dashboard-tile-add">Are you sure you want to add this tile into your dashboard?</text>
+ <text key="dashboard-tile-remove">Are you sure you want to remove this tile from your dashboard?</text>
+
 </locale>
