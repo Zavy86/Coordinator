@@ -27,6 +27,7 @@ public function header($title="",$nav="dashboard",$navbar=TRUE){
  <!-- Stylesheet -->
  <link href="<?php echo $GLOBALS['dir']."core/pace-loader/pace.flash.css";?>" rel="stylesheet">
  <link href="<?php echo $GLOBALS['dir']."core/codemirror/lib/codemirror.css";?>" rel="stylesheet">
+ <link href="<?php echo $GLOBALS['dir']."core/font-awesome/css/font-awesome.min.css";?>" rel="stylesheet">
  <link href="<?php echo $GLOBALS['dir']."core/bootstrap/css/bootstrap.min.css";?>" rel="stylesheet">
  <link href="<?php echo $GLOBALS['dir']."core/bootstrap/css/bootstrap-custom.css";?>" rel="stylesheet">
  <link href="<?php echo $GLOBALS['dir']."core/bootstrap/css/bootstrap-responsive.css";?>" rel="stylesheet">
@@ -38,6 +39,7 @@ public function header($title="",$nav="dashboard",$navbar=TRUE){
  <link href="<?php echo $GLOBALS['dir']."core/bootstrap-wysihtml5/css/bootstrap-wysihtml5.css";?>" rel="stylesheet">
  <link href="<?php echo $GLOBALS['dir']."core/bootstrap-tagsinput/css/bootstrap-tagsinput.css";?>" rel="stylesheet">
  <link href="<?php echo $GLOBALS['dir']."core/bootstrap-colorpicker/css/bootstrap-colorpicker.css";?>" rel="stylesheet">
+ <link href="<?php echo $GLOBALS['dir']."core/bootstrap-fontawesomepicker/css/fontawesome-iconpicker.min.css";?>" rel="stylesheet">
  <link href="<?php echo $GLOBALS['dir']."core/shadowbox/shadowbox.css";?>" rel="stylesheet">
  <link href="<?php echo $GLOBALS['dir']."core/template.css";?>" rel="stylesheet">
 
@@ -215,6 +217,11 @@ public function header($title="",$nav="dashboard",$navbar=TRUE){
       </li>
 
       <?php
+       // reset module language
+       api_loadModule();
+      ?>
+
+      <?php
        // show support link in menu bar
        // require module workflows -> https://github.com/Zavy86/Coordinator-Workflows
        if(file_exists("../workflows/module.inc.php")){
@@ -328,7 +335,7 @@ public function header($title="",$nav="dashboard",$navbar=TRUE){
 }
 
 /* -[ Footer ]--------------------------------------------------------------- */
-public function footer($wiki_link=NULL,$copyright=TRUE){
+public function footer($copyright=TRUE){
 ?>
 
 <?php if($copyright){ ?>
@@ -374,6 +381,7 @@ public function footer($wiki_link=NULL,$copyright=TRUE){
  <script src="<?php echo $GLOBALS['dir']."core/bootstrap-tagsinput/js/bootstrap-tagsinput.min.js";?>" type="text/javascript"></script>
  <script src="<?php echo $GLOBALS['dir']."core/bootstrap-slider/js/bootstrap-slider.min.js";?>" type="text/javascript"></script>
  <script src="<?php echo $GLOBALS['dir']."core/bootstrap-colorpicker/js/bootstrap-colorpicker.min.js";?>" type="text/javascript"></script>
+ <script src="<?php echo $GLOBALS['dir']."core/bootstrap-fontawesomepicker/js/fontawesome-iconpicker.min.js";?>" type="text/javascript"></script>
 
  <script type="text/javascript">
   $(document).ready(function(){
@@ -425,7 +433,7 @@ public function footer($wiki_link=NULL,$copyright=TRUE){
    });
    // select2 chat_idAccountTo redirect
    $("#chat_idAccountTo").change(function(){
-    $('#modalNew').modal('hide')
+    $('#modalNew').modal('hide');
     Shadowbox.open({
      content:"../chats/chat.inc.php?account="+$("#chat_idAccountTo").val(),
      player:"iframe",
