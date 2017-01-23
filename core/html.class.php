@@ -41,7 +41,7 @@ public function header($title="",$nav="dashboard",$navbar=TRUE){
  <link href="<?php echo $GLOBALS['dir']."core/bootstrap-colorpicker/css/bootstrap-colorpicker.css";?>" rel="stylesheet">
  <link href="<?php echo $GLOBALS['dir']."core/bootstrap-fontawesomepicker/css/fontawesome-iconpicker.min.css";?>" rel="stylesheet">
  <link href="<?php echo $GLOBALS['dir']."core/shadowbox/shadowbox.css";?>" rel="stylesheet">
- <link href="<?php echo $GLOBALS['dir']."core/template.css";?>" rel="stylesheet">
+ <link href="<?php echo $GLOBALS['dir']."core/template.css?v=0.0.86";?>" rel="stylesheet">
 
  <!-- Javascript -->
  <script src="<?php echo $GLOBALS['dir']."core/pace-loader/pace.min.js";?>" type="text/javascript"></script>
