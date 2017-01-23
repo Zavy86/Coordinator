@@ -139,7 +139,7 @@ class str_dashboard{
     case "element":
      // check if tile is starred if not in dashboard
      if(api_baseModule()<>"dashboard"){
-      $starred_tile_id=$GLOBALS['db']->queryUniqueValue("SELECT id FROM `settings_dashboards2` WHERE `idAccount`='".api_account()->id."' AND `module`='".api_baseModule()."' AND `url`='".$element->url."'");
+      $starred_tile_id=$GLOBALS['db']->queryUniqueValue("SELECT id FROM `settings_dashboards` WHERE `idAccount`='".api_account()->id."' AND `module`='".api_baseModule()."' AND `url`='".$element->url."'");
       // make starred link
       if($starred_tile_id>0){
        $starred_link=api_link("../dashboard/submit.php?act=tile_delete&idTile=".$starred_tile_id."&redirect=../".api_baseModule()."/".api_baseName(),api_icon("icon-star"),NULL,NULL,FALSE,api_text("dashboard-tile-remove"));
