@@ -377,6 +377,10 @@ class str_navigation{
   // open navigation
   echo "<!-- navigation-tabs -->\n";
   echo "<ul class='nav nav-tabs ".$this->class."'>\n";
+  // show title
+  echo " <li class='title'>".api_text("module-title")."</li>\n";
+  // show dashboard if exist
+  if(file_exists("dashboard.php")){echo " <li class='".(api_baseName()=="dashboard.php"?"active":NULL)."'><a href='dashboard.php' class='hiddenlink'>".api_icon("fa-th-large")."</a></li>\n";}
   // show filters
   if(count($this->filters)>0){
    // reset session filters

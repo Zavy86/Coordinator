@@ -106,4 +106,8 @@
  <text key="form-range-from">Von</text>
  <text key="form-range-to">Bis</text>
 
+ <!-- dashboard.php -->
+ <text key="dashboard-tile-add">Möchten sie diese fliese in ihrem dashboard wirklich hinzufügen?</text>
+ <text key="dashboard-tile-remove">Möchten sie diese kachel wirklich aus ihrem dashboard entfernen?</text>
+
 </locale>

@@ -96,32 +96,11 @@ code {white-space:normal;color:#005580;}
 .text-right,td.text-right,th.text-right{text-align:right;}
 .text-justify,td.text-justify,th.text-justify{text-align:justify;}
 
-
 table.table-condensed td,table.table-condensed th{padding-left:10px;padding-right:10px;}
 
 .nowarp{white-space:nowrap;}
 
 span.id{font-family:"Lucida Console","Monaco",monospace;}
-
-.wiki{margin-top:-10px;}
-.wiki p{text-align:justify;}
-
-.wiki-title{font-weight:bold;}
-.wiki-path{font-size:12px;color:#333;}
-
-.wiki-metadata{font-size:12px;color:#333;}
-
-.wiki img{
-  width:24em;
-  padding:4px;
-  cursor:pointer;
-  background-color:#fff;
-  border:1px solid #ccc;
-  border:1px solid rgba(0, 0, 0, 0.2);
-  -webkit-box-shadow:0 1px 3px rgba(0, 0, 0, 0.1);
-  -moz-box-shadow:0 1px 3px rgba(0, 0, 0, 0.1);
-  box-shadow:0 1px 3px rgba(0, 0, 0, 0.1);
-}
 
 .highlight{border-bottom:1px solid #eecc33;}
 
@@ -245,4 +224,192 @@ div.pagination ul li.null a{border-left:none;border-top:none;border-bottom:none;
  z-index:1100;
  width:400px;
  margin-left:-200px;
+}
+
+.nav-tabs li.title{
+ padding:12px;
+ margin-right:2px;
+ line-height:14px;
+ font-size:20px;
+}
+
+.dashboard{}
+
+.dashboard-container{
+	width:100%;
+ overflow:auto;
+}
+
+.dashboard-container-title{
+ margin-bottom:18px;
+ padding-bottom:10px;
+ border-bottom:1px solid #dddddd;
+}
+
+.dashboard-container-label{
+ padding-left:12px;
+ font-size:20px;
+}
+
+.dashboard-container-description{
+ color:#666666;
+ font-size:14px;
+ margin-top:3px;
+}
+
+.dashboard-element{
+ position:relative;
+ float:left;
+ color:#393939;
+ margin-right:20px;
+ margin-bottom:20px;
+ border:1px solid #aaaaaa;
+ border-radius:3px;
+ -webkit-border-radius:3px;
+ -moz-border-radius:3px;
+ box-shadow:inset 0 1px 1px rgba(0,0,0,0.05);
+ -webkit-box-shadow:inset 0 1px 1px rgba(0,0,0,0.05);
+ -moz-box-shadow:inset 0 1px 1px rgba(0,0,0,0.05);
+ background-size:cover;
+ background-color:#f0f0f0;
+ background-image:linear-gradient(to bottom,#ffffff,#f0f0f0);
+ background-image:-webkit-gradient(linear,top,bottom,from(#ffffff),to(#f0f0f0));
+ background-image:-webkit-linear-gradient(top,#ffffff,#f0f0f0);
+ background-image:-moz-linear-gradient(top,#ffffff,#f0f0f0);
+ background-image:-o-linear-gradient(top,#ffffff,#f0f0f0);
+ background-image:linear-gradient(to bottom,#ffffff,#f0f0f0);
+}
+
+.dashboard-element:link{
+ text-decoration:none;
+}
+
+.dashboard-element:hover{
+ color:#000000;
+ cursor:pointer;
+ border:1px solid #606060;
+ background-color:#e0e0e0;
+ background-image:linear-gradient(to bottom,#ffffff,#e0e0e0);
+ background-image:-webkit-gradient(linear,top,bottom,from(#ffffff),to(#e0e0e0));
+ background-image:-webkit-linear-gradient(top,#ffffff,#e0e0e0);
+ background-image:-moz-linear-gradient(top,#ffffff,#e0e0e0);
+ background-image:-o-linear-gradient(top,#ffffff,#e0e0e0);
+ background-image:linear-gradient(to bottom,#ffffff,#e0e0e0);
+}
+
+.dashboard-element:active{
+ cursor:pointer;
+ text-decoration:none;
+ border:1px solid #606060;
+ background-color:#f0f0f0;
+ background-image:linear-gradient(to bottom,#ffffff,#d0d0d0);
+ background-image:-webkit-gradient(linear,top,bottom,from(#ffffff),to(#d0d0d0));
+ background-image:-webkit-linear-gradient(top,#ffffff,#d0d0d0);
+ background-image:-moz-linear-gradient(top,#ffffff,#d0d0d0);
+ background-image:-o-linear-gradient(top,#ffffff,#d0d0d0);
+ background-image:linear-gradient(to bottom,#ffffff,#d0d0d0);
+}
+
+.dashboard-element-size-1x1{
+ width:170px;
+ height:170px;
+}
+
+.dashboard-element-size-2x1{
+ width:360px;
+ height:170px;
+}
+
+.dashboard-element-size-3x1{
+ width:555px;
+ height:170px;
+}
+
+.dashboard-element-size-4x1{
+ width:745px;
+ height:170px;
+}
+
+.dashboard-element-size-5x1{
+ width:940px;
+ height:170px;
+}
+
+.dashboard-element-size-6x1{
+ width:1130px;
+ height:170px;
+}
+
+.dashboard-element-label{
+ font-weight:bolder;
+ padding:5px 7px 0 7px;
+ margin:0;
+}
+
+.dashboard-element-description{
+ padding:0 7px 5px 7px;
+}
+
+.dashboard-element-background-alpha{
+ background:rgba(255,255,255,0.6);
+}
+
+.dashboard-element-icon{
+ position:absolute;
+ text-align:left;
+ font-size:48px;
+ color:#393939;
+ bottom:7px;
+ left:7px;
+}
+
+.dashboard-element-counter{
+ position:absolute;
+ text-align:right;
+ font-size:64px;
+ bottom:24px;
+ right:5px;
+}
+
+.dashboard-element-disabled{
+ color:#999999;
+ background-color:#f0f0f0;
+ background-image:none;
+}
+
+.dashboard-element-disabled:hover{
+ color:#999999;
+ cursor:not-allowed;
+ background-color:#f0f0f0;
+ background-image:none;
+}
+
+.dashboard-element-disabled .dashboard-element-icon{
+ color:#999999;
+}
+
+
+
+
+
+/* old */
+
+.wiki{margin-top:-10px;}
+.wiki p{text-align:justify;}
+
+.wiki-title{font-weight:bold;}
+.wiki-path{font-size:12px;color:#333;}
+
+.wiki-metadata{font-size:12px;color:#333;}
+
+.wiki img{
+  width:24em;
+  padding:4px;
+  cursor:pointer;
+  background-color:#fff;
+  border:1px solid #ccc;
+  border:1px solid rgba(0, 0, 0, 0.2);
+  -webkit-box-shadow:0 1px 3px rgba(0, 0, 0, 0.1);
+  -moz-box-shadow:0 1px 3px rgba(0, 0, 0, 0.1);
+  box-shadow:0 1px 3px rgba(0, 0, 0, 0.1);
 }

@@ -106,4 +106,8 @@
  <text key="form-range-from">Da</text>
  <text key="form-range-to">A</text>
 
+ <!-- dashboard.php -->
+ <text key="dashboard-tile-add">Confermi di voler aggiungere questa mattonella alla tua bacheca?</text>
+ <text key="dashboard-tile-remove">Confermi di voler rimuovere questa mattonella dalla tua bacheca?</text>
+
 </locale>

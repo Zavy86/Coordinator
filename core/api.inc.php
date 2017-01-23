@@ -26,6 +26,7 @@ include_once("html.class.php");    // include the html class
 include_once("db.class.php");      // include the database class
 // include structures
 include_once("structures/accordion.class.php");
+include_once("structures/dashboard.class.php");
 include_once("structures/dl.class.php");
 include_once("structures/flagwell.class.php");
 include_once("structures/form.class.php");
@@ -1491,7 +1492,8 @@ function api_logHistoryParse($timestamp,$account,$status_from=NULL,$status_to=NU
  */
 function api_icon($icon,$title=NULL,$style=NULL){
  if($icon==NULL){return FALSE;}
- $return="<i class='".$icon."' title='".$title."' style='".$style."'></i>";
+ if(substr($icon,0,2)=="fa"){$icon="fa ".$icon;}
+ $return="<i class='".$icon."' title='".$title."' style='".$style."' aria-hidden='true'></i>";
  return $return;
 }
 

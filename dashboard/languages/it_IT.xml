@@ -6,40 +6,80 @@
  <text key="module-title">Bacheca</text>
 
  <!-- alerts -->
- <text key="widgetCreated">The widget has been added</text>
- <text key="widgetUpdated">The widget has been updated</text>
- <text key="widgetMoved">The widget has been moved</text>
- <text key="widgetRemoved">The widget has been removed</text>
- <text key="widgetError">There was an error with the widget</text>
+     <text key="widgetCreated">Il widget è stato aggiunto</text>
+     <text key="widgetUpdated">Il widget è stato aggiornato</text>
+     <text key="widgetMoved">Il widget è stato spostato</text>
+     <text key="widgetRemoved">Il widget è stato rimosso</text>
+     <text key="widgetError">Si è verificato un errore con il widget</text>
+ <text key="tileCreated">La mattonella è stata aggiunta</text>
+ <text key="tileUpdated">La mattonella è stata aggiornata</text>
+ <text key="tileDeleted">La mattonella è stata rimossa</text>
+ <text key="tileBackgroundDeleted">L'immagine di sfondo della mattonella è stata eliminata</text>
+ <text key="tileError">Si è verificato un errore con la mattonella</text>
+
+ <!-- template.inc.php -->
+ <text key="nav-dashboard-edit">Personalizza</text>
 
  <!-- dashboard.php -->
- <text key="dashboard-welcome">Benvenuto</text>
- <text key="dashboard-welcome-message">Benvenuto {0} in Coordinator!</text>
+ <text key="dashboard-welcome">Benvenuto {0} in Coordinator!</text>
+ <text key="dashboard-unvalued"> </text>
+ <!--<text key="dashboard-unvalued">Aggiungi i collegamenti ai moduli che utilizzi frequentemente premendo le stelline..</text> -->
 
  <!-- dashboard_edit.php -->
- <text key="edit-addWidget">Add Widget</text>
- <text key="edit-editWidget">Edit Widget</text>
- <text key="edit-tr-unvalued">There are no widgets enabled..</text>
- <text key="edit-th-span">Span</text>
- <text key="edit-th-title">Widget</text>
- <text key="edit-th-module">Module</text>
- <text key="edit-th-parameters">Parameters</text>
- <text key="edit-th-refresh">Refresh</text>
- <text key="edit-ff-widget">Widget</text>
- <text key="edit-fo-selectWidget">Select a widget</text>
- <text key="edit-fo-noWidgets">There are no widgets available..</text>
- <text key="edit-ff-span">Span</text>
- <text key="edit-ff-parameters">Parameters</text>
- <text key="edit-ff-parameters-placeholder">&amp;key=value</text>
- <text key="edit-ff-refresh">Refresh</text>
- <text key="edit-fo-secs">{0} seconds</text>
- <text key="edit-fo-min">{0} minute</text>
- <text key="edit-fo-mins">{0} minutes</text>
- <text key="edit-fo-hour">{0} hour</text>
- <text key="edit-fo-hours">{0} hours</text>
- <text key="edit-fc-submit">Save</text>
- <text key="edit-fc-cancel">Cancel</text>
- <text key="edit-fc-remove">Remove</text>
- <text key="edit-fc-remove-confirm">Remove this widget from your dashboard?</text>
+ <text key="dashboard-edit-addTile">Aggiungi Mattonella</text>
+ <text key="dashboard-edit-editTile">Modifica Mattonella</text>
+ <text key="dashboard-edit-tr-unvalued">Non sono presenti mattonelle da visualizzare..</text>
+ <text key="dashboard-edit-th-size">Dimensione</text>
+ <text key="dashboard-edit-th-label">Etichetta</text>
+ <text key="dashboard-edit-th-module">Modulo</text>
+ <text key="dashboard-edit-th-url">URL</text>
+ <text key="dashboard-edit-ff-size">Dimensione</text>
+ <text key="dashboard-edit-ff-label">Etichetta</text>
+ <text key="dashboard-edit-ff-label-placeholder">Etichetta mattonella</text>
+ <text key="dashboard-edit-ff-description">Descrizione</text>
+ <text key="dashboard-edit-ff-description-placeholder">Descrizione mattonella</text>
+ <text key="dashboard-edit-ff-url">URL</text>
+ <text key="dashboard-edit-ff-url-placeholder">http://www.coordinator.it</text>
+ <text key="dashboard-edit-ff-target">Target</text>
+ <text key="dashboard-edit-ff-target-placeholder">Target html del collegamento</text>
+ <text key="dashboard-edit-ff-icon">Icona</text>
+ <text key="dashboard-edit-ff-icon-placeholder">Seleziona un'icona</text>
+ <text key="dashboard-edit-ff-background">Sfondo</text>
+ <text key="dashboard-edit-ff-background-delete">Rimuovi sfondo</text>
+ <text key="dashboard-edit-ff-background-delete-confirm">Confermi di voler eliminare questo sfondo?</text>
+ <text key="dashboard-edit-fc-submit">Salva</text>
+ <text key="dashboard-edit-fc-cancel">Annulla</text>
+ <text key="dashboard-edit-fc-remove">Elimina</text>
+ <text key="dashboard-edit-fc-remove-confirm">Confermi di voler rimuovere questa mattonella dalla tua dashboard?</text>
+ <text key="dashboard-edit-fc-close">Chiudi</text>
+
+
+    <!-- old @todo cancellare dopo verifiche -->
+
+    <!-- dashboard_edit.php -->
+    <text key="edit-addWidget">Add Widget</text>
+    <text key="edit-editWidget">Edit Widget</text>
+    <text key="edit-tr-unvalued">There are no widgets enabled..</text>
+    <text key="edit-th-span">Span</text>
+    <text key="edit-th-title">Widget</text>
+    <text key="edit-th-module">Module</text>
+    <text key="edit-th-parameters">Parameters</text>
+    <text key="edit-th-refresh">Refresh</text>
+    <text key="edit-ff-widget">Widget</text>
+    <text key="edit-fo-selectWidget">Select a widget</text>
+    <text key="edit-fo-noWidgets">There are no widgets available..</text>
+    <text key="edit-ff-span">Span</text>
+    <text key="edit-ff-parameters">Parameters</text>
+    <text key="edit-ff-parameters-placeholder">&amp;key=value</text>
+    <text key="edit-ff-refresh">Refresh</text>
+    <text key="edit-fo-secs">{0} seconds</text>
+    <text key="edit-fo-min">{0} minute</text>
+    <text key="edit-fo-mins">{0} minutes</text>
+    <text key="edit-fo-hour">{0} hour</text>
+    <text key="edit-fo-hours">{0} hours</text>
+    <text key="edit-fc-submit">Save</text>
+    <text key="edit-fc-cancel">Cancel</text>
+    <text key="edit-fc-remove">Remove</text>
+    <text key="edit-fc-remove-confirm">Remove this widget from your dashboard?</text>
 
 </locale>
