@@ -156,7 +156,7 @@ class str_dashboard{
      }
      // make background css style
      if(file_exists($element->background)){
-      $background_style=" style='background-image:url(\"".$element->background."\")'";
+      $background_style=" style='background-image:url(\"".$element->background."?rand=".rand(0,999)."\")'";
       $background_class="dashboard-element-background-alpha";
      }else{
       $background_style=NULL;
