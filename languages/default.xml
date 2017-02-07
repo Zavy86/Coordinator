@@ -86,6 +86,8 @@
  <text key="form-select-none">Disable filter</text>
  <text key="form-range-from">From</text>
  <text key="form-range-to">To</text>
+ <text key="form-daterange-from">From</text>
+ <text key="form-daterange-to">Until</text>
 
  <!-- dashboard.php -->
  <text key="dashboard-tile-add">Are you sure you want to add this tile into your dashboard?</text>

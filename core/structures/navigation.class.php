@@ -345,7 +345,7 @@ class str_navigation{
    case "daterange":
    case "datetimerange":
     $query_filter="(";
-     if($filter->type=="daterange"){$field_name="SUBSTR(".$filter->name.",1,10)";}else{$field_name=$filter->name;}
+     if($filter->type=="daterange"){$field_name="SUBSTR(".$field.",1,10)";}else{$field_name=$field;}
     if($_GET[$filter->name."_from"]<>NULL){$query_filter.=$field_name.">='".$_GET[$filter->name."_from"]."'";}
     if($_GET[$filter->name."_from"]<>NULL && $_GET[$filter->name."_to"]<>NULL){$query_filter.=" AND ";}
     if($_GET[$filter->name."_to"]<>NULL){$query_filter.=$field_name."<='".$_GET[$filter->name."_to"]."'";}

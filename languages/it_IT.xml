@@ -105,6 +105,8 @@
  <text key="form-select-none">Disabilita filtro</text>
  <text key="form-range-from">Da</text>
  <text key="form-range-to">A</text>
+ <text key="form-daterange-from">Dal</text>
+ <text key="form-daterange-to">Al</text>
 
  <!-- dashboard.php -->
  <text key="dashboard-tile-add">Confermi di voler aggiungere questa mattonella alla tua bacheca?</text>

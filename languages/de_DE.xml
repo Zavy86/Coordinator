@@ -105,6 +105,8 @@
  <text key="form-select-none">Filter deaktivieren</text>
  <text key="form-range-from">Von</text>
  <text key="form-range-to">Bis</text>
+ <text key="form-daterange-from">Ab</text>
+ <text key="form-daterange-to">Bis</text>
 
  <!-- dashboard.php -->
  <text key="dashboard-tile-add">Möchten sie diese fliese in ihrem dashboard wirklich hinzufügen?</text>

@@ -227,7 +227,7 @@ class str_table{
  function render($echo=TRUE){
   // open table
   $return="<!-- table -->\n";
-  $return="<div class='table-responsive'>\n";
+  $return.="<div class='table-responsive'>\n";
   $return.="<table id='".$this->id."' class='table table-striped table-hover table-condensed ".$this->class."'>\n";
   // open head
   if(is_array($this->th_array)){

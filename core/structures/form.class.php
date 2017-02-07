@@ -34,6 +34,8 @@ class str_form{
  protected $ff_array;
  /** @var array $fc_array Array of form control objects */
  protected $fc_array;
+ /** @var array $typologies_available Array of available form field typologies */
+ public $typologies_available;
 
  /**
   * Form structure class
@@ -56,6 +58,7 @@ class str_form{
   $this->current_field=-1;
   $this->ff_array=array();
   $this->fc_array=array();
+  $this->typologies_available=array("hidden","text","password","checkbox","radio","select","multiselect","textarea","file","slider","range","date","datetime","daterange","datetimerange");
   return TRUE;
  }
 
@@ -75,7 +78,7 @@ class str_form{
   * @return boolean
   */
  function addField($type,$name,$label=NULL,$value=NULL,$class=NULL,$placeholder=NULL,$disabled=FALSE,$rows=7,$append=NULL,$readonly=FALSE){
-  if(!in_array(strtolower($type),array("hidden","text","password","checkbox","radio","select","multiselect","textarea","file","slider","range","date","datetime","daterange","datetimerange"))){return FALSE;}
+  if(!in_array(strtolower($type),$this->typologies_available)){return FALSE;}
   if(strlen($name)==0){return FALSE;}
   $this->current_field++;
   $ff=new stdClass();
