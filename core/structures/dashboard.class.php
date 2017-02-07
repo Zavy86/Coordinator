@@ -143,9 +143,11 @@ class str_dashboard{
       // make starred link
       if($starred_tile_id>0){
        $starred_link=api_link("../dashboard/submit.php?act=tile_delete&idTile=".$starred_tile_id."&redirect=../".api_baseModule()."/".api_baseName(),api_icon("icon-star"),NULL,NULL,FALSE,api_text("dashboard-tile-remove"));
-      }else{
+      }elseif($element->enabled){
        $element->module=api_baseModule();
        $starred_link=api_link("../dashboard/submit.php?act=tile_save&redirect=../".api_baseModule()."/".api_baseName()."&element=".urlencode(json_encode($element)),api_icon("icon-star-empty"),NULL,NULL,FALSE,api_text("dashboard-tile-add"));
+      }else{
+       $starred_link=NULL;
       }
      }
      // make hyperlink reference
