@@ -65,7 +65,10 @@
    // check if row exist
    if($return->object->id<>$return->rowid){$return->errors[]=json_errors(201,"Row not found");}
    // make grouping query
-   if(strlen($return->grouping)){$return->grouping_query=" AND `".$return->grouping."`='".$return->object->{$return->grouping}."'";}
+   if(strlen($return->grouping)){
+    if($return->object->{$return->grouping}){$return->grouping_query=" AND `".$return->grouping."`='".$return->object->{$return->grouping}."'";}
+    else{$return->grouping_query=" AND `".$return->grouping."` IS NULL";}
+   }
    // get max position available
    $return->position_max=$GLOBALS['db']->queryUniqueValue("SELECT `".$return->field."` FROM `".$return->table."` ORDER BY `".$return->field."` DESC");
    // check if position isn't greater than max position available

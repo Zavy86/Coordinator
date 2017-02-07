@@ -65,6 +65,10 @@ th{
  padding-top:0;
 }
 
+tr.deleted td{
+ text-decoration:line-through;
+}
+
 dl dt{
  font-size: 0.75em;
  text-transform: uppercase;
@@ -247,14 +251,15 @@ div.pagination ul li.null a{border-left:none;border-top:none;border-bottom:none;
 }
 
 .dashboard-container-label{
- padding-left:12px;
  font-size:20px;
+ padding-left:12px;
 }
 
 .dashboard-container-description{
  color:#666666;
  font-size:14px;
  margin-top:3px;
+ padding-left:12px;
 }
 
 .dashboard-element{

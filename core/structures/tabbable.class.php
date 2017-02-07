@@ -71,9 +71,10 @@ class str_tabbable{
  /**
   * Renderize tabbable object
   *
-  * @return boolean
+  * @param boolean $echo Echo HTML source code or return
+  * @return void|string HTML source code
   */
- function render(){
+ function render($echo=TRUE ){
   // make position
   switch($this->position){
    case "right":$position_class="tabs-right";break;
@@ -82,76 +83,80 @@ class str_tabbable{
    default:$position_class=NULL;break;
   }
   // open tabbable
-  echo "<!-- tabbable -->\n";
-  echo "<div class='tabbable ".$position_class." ".$this->class."'>\n";
+  $return="<!-- tabbable -->\n";
+  $return.="<div class='tabbable ".$position_class." ".$this->class."'>\n";
   // renderize navigation and content
   if($this->position=="bottom"){
-   $this->render_content();
-   echo "<br>\n";
-   $this->render_navigation();
+   $return.=$this->render_content($echo);
+   $return.="<br>\n";
+   $return.=$this->render_navigation($echo);
   }else{
-   $this->render_navigation();
-   $this->render_content();
+   $return.=$this->render_navigation($echo);
+   $return.=$this->render_content($echo);
   }
   // close tabbable
-  echo "</div><!-- /tabbable -->\n\n";
-  return TRUE;
+  $return.="</div><!-- /tabbable -->\n\n";
+  if($echo){echo $return;return TRUE;}else{return $return;}
  }
 
  /**
   * Renderize tabbable navigation
   *
-  * @return boolean
+  * @param boolean $echo Echo HTML source code or return
+  * @return void|string HTML source code
   */
- function render_navigation(){
+ function render_navigation($echo=TRUE){
+  //make position class
+  if($this->position=="left"){$position_class=" text-right";}else{$position_class=NULL;}
   // open navigation
-  echo " <!-- navigation-tabs -->\n";
-  echo " <ul class='nav nav-tabs'>\n";
+  $return=" <!-- navigation-tabs -->\n";
+  $return.=" <ul class='nav nav-tabs".$position_class."'>\n";
   // show tabs
   if(is_array($this->tabs_array)){
    // show field
    foreach($this->tabs_array as $key=>$tab){
     if(!is_object($tab)){continue;}
-    echo "  <li class='";
-    if($key==$this->selected){echo "active ";}
-    if(!$tab->enabled){echo "disabled ";}
-    echo $tab->class."'>";
+    $return.="  <li class='";
+    if($key==$this->selected){$return.="active ";}
+    if(!$tab->enabled){$return.="disabled ";}
+    $return.=$tab->class."'>";
     // check url
-    if(!$tab->enabled){echo "<a href='#'";}
-    else{echo "<a href='#tab".$key."' data-toggle='tab'";}
+    if(!$tab->enabled){$return.="<a href='#'";}
+    else{$return.="<a href='#tab".$key."' data-toggle='tab'";}
     // show label
-    echo ">".$tab->label."</a>";
-    echo "</li>\n";
+    $return.=">".$tab->label."</a>";
+    $return.="</li>\n";
    }
   }
   // close navigation
-  echo " </ul><!-- /navigation-tabs -->\n\n";
-  return TRUE;
+  $return.=" </ul><!-- /navigation-tabs -->\n\n";
+  if($echo){echo $return;return TRUE;}else{return $return;}
  }
 
  /**
   * Renderize tabbable content
   *
-  * @return boolean
+  * @param boolean $echo Echo HTML source code or return
+  * @return void|string HTML source code
   */
- function render_content(){
+ function render_content($echo=TRUE){
   // open content
-  echo " <!-- content-tabs -->\n";
-  echo " <div class='tab-content'>\n";
+  $return=" <!-- content-tabs -->\n";
+  $return.=" <div class='tab-content'>\n";
   // show content tabs
   if(is_array($this->tabs_array)){
    foreach($this->tabs_array as $key=>$tab){
     if(!is_object($tab)){continue;}
-    echo "  <div class='tab-pane ";
-    if($key==$this->selected){echo "active ";}
-    echo $tab->class."' id='tab".$key."'>";
-    echo $tab->content;
-    echo "</div>\n";
+    $return.="  <div class='tab-pane ";
+    if($key==$this->selected){$return.="active ";}
+    $return.=$tab->class."' id='tab".$key."'>";
+    $return.=$tab->content;
+    $return.="</div>\n";
    }
   }
   // close content
-  echo " </div><!-- /content-tabs -->\n\n";
-  return TRUE;
+  $return.=" </div><!-- /content-tabs -->\n\n";
+  if($echo){echo $return;return TRUE;}else{return $return;}
  }
 
 }

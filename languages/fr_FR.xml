@@ -105,6 +105,8 @@
  <text key="form-select-none">Désactiver le filtre</text>
  <text key="form-range-from">De</text>
  <text key="form-range-to">À</text>
+ <text key="form-daterange-from">A partir de</text>
+ <text key="form-daterange-to">Jusqu'à</text>
 
  <!-- dashboard.php -->
  <text key="dashboard-tile-add">Voulez-vous vraiment ajouter cette tuile dans votre dashboard?</text>

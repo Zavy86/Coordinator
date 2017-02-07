@@ -137,6 +137,16 @@ function api_deprecatedAlert($function,$new=NULL){
  return FALSE;
 }
 
+/**
+ * Redirect function
+ *
+ * @param string $location location url
+ */
+function api_redirect($location){
+ if($_SESSION["account"]->debug){die(api_link($location,$location));}
+ exit(header("location: ".$location));
+}
+
 
 /* -[ Load Locale Files ]---------------------------------------------------- */
 // @param $path : Path of locale if not default
@@ -444,6 +454,19 @@ function api_timestampFormatThreeDigit(&$string){
  $string=substr($string,0,3);
 }
 
+/* -[ Timestamp Dates form Week ]-------------------------------------------- */
+// @param $week : week number (from 1 to 52)
+// @param $year : year in YYYY format
+// return  : Array of date from [0] and date to [1]
+function api_timestampDateFromWeek($week,$year){
+ $day=new DateTime();
+ $day->setISODate($year,$week);
+ $return[0]=$day->format('Y-m-d');
+ $day->modify('+6 days');
+ $return[1]=$day->format('Y-m-d');
+ return $return;
+}
+
 /* -[ Timestamp difference ]------------------------------------------------- */
 // @param $timestamp_a : MySql timestamp from
 // @param $timestamp_b : MySql timestamp to
@@ -499,17 +522,141 @@ function api_timestampDifferenceFormat($difference,$showSeconds=TRUE){
  return substr($return,0,-2);
 }
 
-/* -[ Timestamp Dates form Week ]-------------------------------------------- */
-// @param $week : week number (from 1 to 52)
-// @param $year : year in YYYY format
-// return  : Array of date from [0] and date to [1]
-function api_timestampDateFromWeek($week,$year){
- $day=new DateTime();
- $day->setISODate($year,$week);
- $return[0]=$day->format('Y-m-d');
- $day->modify('+6 days');
- $return[1]=$day->format('Y-m-d');
- return $return;
+/**
+ *
+ * @param type $date1
+ * @param type $date2
+ * @param array $working_days array of working days number 1-7
+ * @param array $working_hours array of starting and ending working hours 0-23
+ * @return int
+ */
+function api_timestampDifferenceWorkingSeconds($date_from,$date_to,$working_days=array(1,2,3,4,5),$working_hours=array(8.5,17.5)) {
+ // convert date in unix time
+ $date1=strtotime($date_from);
+ $date2=strtotime($date_to);
+ // check for equals
+ if($date1==$date2){return 0;}
+ // check for first date
+ if($date1<$date2){
+  $sign=1;
+ }else{
+  // invert dates
+  $tmp_date=$date1;
+  $date1=$date2;
+  $date2=$tmp_date;
+  $sign=-1;
+ }
+ // check working days and hours arrays
+ if(!count($working_days)){$working_days = array(1,2,3,4,5);} // from monday to friday
+ if(count($working_hours)<>2){$working_hours = array(8.5, 17.5);} // from 08:30 to 17:30
+ // definitions
+ $days=0;
+ $seconds=0;
+ $current_date = $date1;
+ $beg_h=floor($working_hours[0]);
+ $beg_m=($working_hours[0]*60)%60;
+ $end_h=floor($working_hours[1]);
+ $end_m=($working_hours[1]*60)%60;
+ /** @todo sistemare function */
+ // setup the very next first working timestamp
+ if (!in_array(date('w',$current_date) , $working_days)) {
+  // the current day is not a working day
+  // the current timestamp is set at the begining of the working day
+  $current_date = mktime( $beg_h, $beg_m, 0, date('n',$current_date), date('j',$current_date), date('Y',$current_date) );
+  // search for the next working day
+  while ( !in_array(date('w',$current_date) , $working_days) ) {
+   $current_date += 24*3600; // next day
+  }
+  //pre_var_dump("000 next first working timestamp ".date("Y-m-d H:i:s",$current_date)." - ".$current_date);
+ } else {
+  // check if the current timestamp is inside working hours
+  $date0 = mktime( $beg_h, $beg_m, 0, date('n',$current_date), date('j',$current_date), date('Y',$current_date) );
+  //pre_var_dump("001 date0 ".date("Y-m-d H:i:s",$date0)." - ".$date0);
+  // it's before working hours, let's update it
+  if ($current_date<$date0){
+   $current_date = $date0;
+   //pre_var_dump("002 it's before ".date("Y-m-d H:i:s",$current_date)." - ".$current_date);
+  }
+  $date3 = mktime( $end_h, $end_m, 59, date('n',$current_date), date('j',$current_date), date('Y',$current_date) );
+  //pre_var_dump("003 date3 ".date("Y-m-d H:i:s",$date3)." - ".$date3);
+  if ($current_date>$date3) {
+   // outch ! it's after working hours, let's find the next working day
+   $current_date += 24*3600; // the day after
+   // and set timestamp as the begining of the working day
+   $current_date = mktime( $beg_h, $beg_m, 0, date('n',$current_date), date('j',$current_date), date('Y',$current_date) );
+   while ( !in_array(date('w',$current_date) , $working_days) ) {
+    $current_date += 24*3600; // next day
+   }
+   //pre_var_dump("004 it's after ".date("Y-m-d H:i:s",$current_date)." - ".$current_date);
+  }
+ }
+ // so, $current_date is now the first working timestamp available...
+ //pre_var_dump("!005 first time stamp available ".date("Y-m-d H:i:s",$current_date)." - ".$current_date);
+ // if first time stamp available is major of date2 return 0
+ if($current_date>$date2){
+  //pre_var_dump("005-major first time stamp available ".date("Y-m-d H:i:s",$current_date)." major of end date (date2) - return seconds: 0");
+  return 0;   /** @todo perche??? */
+ }
+ // if first time stamp available is the same day of date2
+ if(date("Y-m-d",$current_date)==date("Y-m-d",$date2)){
+  // calculate only seconds (no days)
+  // if date2 is major of end of working day set date2 to end of working day
+  $date3 = mktime( $end_h, $end_m, 59, date('n',$date2), date('j',$date2), date('Y',$date2) );
+  if ($date2>$date3) {
+   $date2=$date3;
+   //pre_var_dump("005-major-end end date (date2) major end of working day set date2 to: ".date("Y-m-d H:i:s",$date2));
+  }else{
+   //pre_var_dump("005-minor-end date2 to: ".date("Y-m-d H:i:s",$date2));
+  }
+  $seconds=$date2-$current_date+1;
+  //pre_var_dump("005-same first time stamp available ".date("Y-m-d H:i:s",$current_date)." same day of end date (date2) ".date("Y-m-d H:i:s",$date2)." - return seconds: ".$seconds);
+  return $seconds;
+ }
+ // calculate the number of seconds from current timestamp to the end of the working day
+ $date0 = mktime( $end_h, $end_m, 59, date('n',$current_date), date('j',$current_date), date('Y',$current_date) );
+ //pre_var_dump("005-2 fine primo giorno lavorativo (date0) ".date("Y-m-d H:i:s",$date0));
+ // check if date2 major end of first working day
+ if($date2>$date0){
+  // add seconds from current date to end hour of current date
+  $seconds = $date0-$current_date+1;
+  //pre_var_dump("006-min data fine (date2) ".date("Y-m-d H:i:s",$date2)." maggiore di fine primo giorno lavorativo (date0) ".date("Y-m-d H:i:s",$date0)." secondi attuali: ".$seconds);
+ }else{
+  //pre_var_dump("006-mag data fine (date2) ".date("Y-m-d H:i:s",$date2)." minore di fine primo giorno lavorativo (date0) ".date("Y-m-d H:i:s",$date0)." secondi attuali: ".$seconds);
+ }
+ // calculate the number of days from the current day to the end day
+ $date3 = mktime( $beg_h, $beg_m, 0, date('n',$date2), date('j',$date2), date('Y',$date2) );
+ while ( $current_date < $date3 ) {
+  $current_date += 24*3600; // next day
+  if (in_array(date('w',$current_date) , $working_days) ) {$days++;} // it's a working day
+ }
+ if ($days>0) {$days--;} //because we've allready count the first day (in $seconds)
+ //pre_var_dump("007 da first timestamp available (vedi sopra) all'ultimo giorno richiesto ".date("Y-m-d H:i:s",$date3)." - giorni: ".$days." in secondi: ".($days*32400));
+ //pre_var_dump("008 current_date attuale ".date("Y-m-d H:i:s",$current_date));
+ // check if end's timestamp is inside working hours
+ $date0 = mktime( $beg_h, $beg_m, 0, date('n',$date2), date('j',$date2), date('Y',$date2) );
+ //pre_var_dump("009 controlla se data finale (date2) ".date("Y-m-d H:i:s",$date2)." è minore di inizio ultimo giorno (date0) ".date("Y-m-d H:i:s",$date0));
+ if ($date2<$date0) {
+  // it's before, so nothing more !
+ //pre_var_dump("010-1 data fine (date2) ".date("Y-m-d H:i:s",$date2)." minore di inizio ultimo giorno (date0) ".date("Y-m-d H:i:s",$date0)." secondi da aggiungere 0 - giorni tot: ".$days." - secondi tot: ".$seconds);
+ } else {
+  // is it after ?
+  $date3 = mktime( $end_h, $end_m, 59, date('n',$date2), date('j',$date2), date('Y',$date2) );
+  //pre_var_dump("010-2 controlla se data fine (date2) ".date("Y-m-d H:i:s",$date2)." è maggiore di data finale ultimo giorno (date3) ".date("Y-m-d H:i:s",$date3));
+  if ($date2>$date3) {
+   //pre_var_dump("010-3 modifica (date2) uguale a (date3)".date("Y-m-d H:i:s",$date3));
+   $date2=$date3;
+  }
+  // calculate the number of seconds from current timestamp to the final timestamp
+  $tmp = $date2-$date0+1;
+  //pre_var_dump("011 tmp ".$tmp);
+  $seconds += $tmp;
+  //pre_var_dump("012 data fine (date2) ".date("Y-m-d H:i:s",$date2)." maggiore di inizio ultimo giorno (date0) ".date("Y-m-d H:i:s",$date0)." secondi da aggiungere ".$tmp." - secondi tot: ".$seconds);
+ }
+ // add working days calculated in seconds
+ $seconds += 3600*($working_hours[1]-$working_hours[0])*$days;
+ $seconds=$sign * $seconds; // to get hours
+ //pre_var_dump("013 secondi totali ".$seconds." - ore totali: ".($seconds/3600)." - giorni totali: ".($seconds/3600/9));
+ return $seconds;
 }
 
 /**
@@ -1709,7 +1856,8 @@ function api_alert_box($message,$title=NULL,$class=NULL){
  * @return string content into a tag
  */
 function api_tag($tag,$text,$class=NULL){
- if(!strlen($tag)||!strlen($text)){return FALSE;}
+ if(!strlen($text)){return FALSE;}
+ if(!strlen($tag)){return $text;}
  if(strlen($class)){$class=" class='".$class."'";}
  $html="<".$tag.$class.">".$text."</".$tag.">";
  return $html;
