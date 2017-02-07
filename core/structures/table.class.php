@@ -350,6 +350,7 @@ class str_table{
      'type':'hidden'
     }));
    });
+   $('body').append(newForm);
    // submit form
    if(checked){newForm.submit();}
   });\n";
