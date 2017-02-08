@@ -341,6 +341,7 @@ function account_save_ldap(){
  $p_firstname=addslashes($_POST['firstname']);
  $p_lastname=addslashes($_POST['lastname']);
  $p_phone=$_POST['phone'];
+ $p_note=$_POST['note'];
  $p_language=$_POST['language'];
  // set name
  $f_name=ucwords(strtolower($p_lastname))." ".ucwords(strtolower($p_firstname));
@@ -348,9 +349,9 @@ function account_save_ldap(){
  if(strlen($p_ldap)>0 && !$GLOBALS['db']->countOf("accounts_accounts","ldap='".$p_ldap."'")){
   // build query
   $query="INSERT INTO accounts_accounts
-   (account,password,name,phone,ldap,language,addDate,addIdAccount) VALUES
+   (account,password,name,phone,ldap,language,enabled,addDate,addIdAccount) VALUES
    ('".$p_account."','".md5(api_randomString(10))."','".$f_name."','".$p_phone."',
-    '".$p_ldap."','".$p_language."','".api_now()."','1')";
+    '".$p_ldap."','".$p_language."','1','".api_now()."','1')";
   // execute query
   $GLOBALS['db']->execute($query);
   // retrieve last inserted id
@@ -370,13 +371,14 @@ function account_save_ldap(){
    api_loadLocaleFile("../accounts/");
   }
   // check for workflow module
-  if(file_exists("../workflows/api.inc.php")){
-   require_once("../workflows/api.inc.php");
-   if(function_exists(api_workflows_workflowAdd)){
+  if(file_exists("../helpdesk/api.inc.php")){
+   require_once("../helpdesk/api.inc.php");
+   if(function_exists(api_ticket_open)){
     $w_subject="New Coordinator account activated for ".$f_name;
     $w_description="New Coordinator account activated to be enabled.";
-    // create workflow ticket
-    api_workflows_workflowAdd($w_subject,$w_description,$f_name,$p_phone,NULL,3,$q_idAccount);
+    if($p_note){$w_description.="\n\n".$p_note;}
+    // open a ticket
+    api_ticket_open($w_subject,$w_description,$f_name,$p_phone,$q_idAccount);
    }
   }
   $alert="&alert=accountLDAP&alert_class=alert-success";
