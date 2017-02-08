@@ -46,10 +46,12 @@ $form->addField("text","account",api_text("accounts_ldap-ff-account"),$ldap_mail
 $form->addField("text","firstname",api_text("accounts_ldap-ff-firstname"),$ldap_firstname,"input-large");
 $form->addField("text","lastname",api_text("accounts_ldap-ff-lastname"),$ldap_lastname,"input-large");
 $form->addField("text","phone",api_text("accounts_ldap-ff-phone"),$ldap_phone,"input-medium");
+$form->addField("text","note",api_text("accounts_ldap-ff-note"),NULL,"input-xxlarge",api_text("accounts_ldap-ff-note-placeholder"));
 $form->addControl("submit",api_text("accounts_ldap-fc-submit"));
 $form->addControl("button",api_text("accounts_ldap-fc-cancel"),NULL,"login.php");
 $form->addField("select","language",api_text("accounts_ldap-ff-language"),NULL,"input-medium");
-foreach(api_language_availables() as $key=>$language){$form->addFieldOption($key,$language." (".$key.")",($key=="default"?TRUE:FALSE));}
+$form->addFieldOption("",api_text("accounts_ldap-fo-language-select"));
+foreach(api_language_availables() as $key=>$language){$form->addFieldOption($key,$language." (".$key.")");}
 // show informations
 echo api_tag("p",api_text("accounts_ldap-p-informations"))."<br>\n";
 // renderize form
@@ -63,6 +65,7 @@ $form->render();
     ldap:{required:true},
     firstname:{required:true,minlength:2},
     lastname:{required:true,minlength:2},
+    language:{required:true}
     account:{email:true}
    },
    submitHandler:function(form){form.submit();}
