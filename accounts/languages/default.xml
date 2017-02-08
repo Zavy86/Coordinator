@@ -196,11 +196,14 @@
  <text key="accounts_ldap-p-informations">Welcome, please fill out the form below to proceed with the creation of your account.</text>
  <text key="accounts_ldap-ff-ldap">Account</text>
  <text key="accounts_ldap-ff-ldap-placeholder">Username account LDAP</text>
- <text key="accounts_ldap-ff-language">Language</text>
  <text key="accounts_ldap-ff-account">Mail address</text>
  <text key="accounts_ldap-ff-firstname">Firstname</text>
  <text key="accounts_ldap-ff-lastname">Lastname</text>
  <text key="accounts_ldap-ff-phone">Phone</text>
+ <text key="accounts_ldap-ff-note">Note</text>
+ <text key="accounts_ldap-ff-note-placeholder">Enter your department and notes..</text>
+ <text key="accounts_ldap-ff-language">Language</text>
+ <text key="accounts_ldap-fo-language-select">Select language</text>
  <text key="accounts_ldap-fc-submit">Sign up</text>
  <text key="accounts_ldap-fc-cancel">Cancel</text>
 

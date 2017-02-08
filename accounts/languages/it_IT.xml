@@ -196,11 +196,14 @@
  <text key="accounts_ldap-p-informations">Benvenuto/a, compila il seguente modulo per procedere con la creazione del tuo account.</text>
  <text key="accounts_ldap-ff-ldap">Account</text>
  <text key="accounts_ldap-ff-ldap-placeholder">Username account LDAP</text>
- <text key="accounts_ldap-ff-language">Lingua</text>
  <text key="accounts_ldap-ff-account">Indirizzo mail</text>
  <text key="accounts_ldap-ff-firstname">Cognome</text>
  <text key="accounts_ldap-ff-lastname">Nome</text>
  <text key="accounts_ldap-ff-phone">Telefono</text>
+ <text key="accounts_ldap-ff-note">Note</text>
+ <text key="accounts_ldap-ff-note-placeholder">Inserisci il tuo reparto ed eventuali note..</text>
+ <text key="accounts_ldap-ff-language">Lingua</text>
+ <text key="accounts_ldap-fo-language-select">Seleziona una lingua</text>
  <text key="accounts_ldap-fc-submit">Registrati</text>
  <text key="accounts_ldap-fc-cancel">Annulla</text>
 
