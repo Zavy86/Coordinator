@@ -74,7 +74,7 @@ class str_tabbable{
   * @param boolean $echo Echo HTML source code or return
   * @return void|string HTML source code
   */
- function render($echo=TRUE ){
+ function render($echo=TRUE){
   // make position
   switch($this->position){
    case "right":$position_class="tabs-right";break;
@@ -130,7 +130,7 @@ class str_tabbable{
   }
   // close navigation
   $return.=" </ul><!-- /navigation-tabs -->\n\n";
-  if($echo){echo $return;return TRUE;}else{return $return;}
+  if($echo){echo $return;}else{return $return;}
  }
 
  /**
@@ -156,7 +156,7 @@ class str_tabbable{
   }
   // close content
   $return.=" </div><!-- /content-tabs -->\n\n";
-  if($echo){echo $return;return TRUE;}else{return $return;}
+  if($echo){echo $return;}else{return $return;}
  }
 
 }
