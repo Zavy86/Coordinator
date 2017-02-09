@@ -225,10 +225,10 @@ public function header($title="",$nav="dashboard",$navbar=TRUE){
       <?php
        // show support link in menu bar
        // require module workflows -> https://github.com/Zavy86/Coordinator-Workflows
-       if(file_exists("../workflows/module.inc.php")){
+       if(file_exists("../helpdesk/module.inc.php")){
         echo "<li";
-        if(api_baseName()=="workflows_search.php"||api_baseName()=="workflows_add.php"){echo " class=\"active\"";}
-        echo "><a href='".$GLOBALS['dir']."workflows/workflows_search.php?idCategory=1' title='".ucfirst(api_text("support"))."'>";
+        if(api_baseName()=="tickets_open.php"||api_baseName()=="tickets_add.php"){echo " class=\"active\"";}
+        echo "><a href='".$GLOBALS['dir']."helpdesk/tickets_open.php' title='".ucfirst(api_text("support"))."'>";
         echo "<img src='".$GLOBALS['dir']."core/images/icons/support.png' style='margin-top:-2px'></a></li>";
        }
       ?>
@@ -240,51 +240,41 @@ public function header($title="",$nav="dashboard",$navbar=TRUE){
        <ul class="dropdown-menu">
         <li class="nav-header"><?php echo $_SESSION['account']->name;?></li>
         <li><a href="<?php echo $GLOBALS['dir']."accounts/index.php";?>"><?php echo api_text("core-menu-account"); ?></a></li>
-        <?php if(api_checkPermission("accounts","accounts_view")){echo "<li><a href=\"".$GLOBALS['dir']."accounts/index.php\">".api_text("core-menu-accounts")."</a></li>";} ?>
-        <?php if(api_checkPermission("stats","stats_server")){echo "<li><a href=\"".$GLOBALS['dir']."stats/index.php\">".api_text("core-menu-statistics")."</a></li>";} ?>
-        <?php if(api_checkPermission("settings","settings_edit")||api_checkPermission("settings","permissions_manage")){echo "<li><a href=\"".$GLOBALS['dir']."settings/index.php\">".api_text("core-menu-settings")."</a></li>";} ?>
-
-        <?php
-         /*
-         if(api_checkPermission("wiki","wiki_view")){
-          if($GLOBALS['db']->queryUniqueObject("SELECT * FROM wiki_pages WHERE path='".api_baseModule()."'")){
-           echo "<li><a href=\"".$GLOBALS['dir']."wiki/wiki_view.php?page=".api_baseModule()."\">Documentazione</a></li>";
-          }else{
-           echo "<li><a href=\"".$GLOBALS['dir']."wiki/index.php\">Documentazione</a></li>";
-          }
-         }
-        */
-        ?>
-
-        <?php if(api_checkPermission("logs","logs_list")){echo "<li><a href=\"".$GLOBALS['dir']."logs/logs_list.php\">".api_text("core-menu-logs")."</a></li>";} ?>
-        <?php //if(api_checkPermission("saprfc","saprfc_list")){echo "<li><a href=\"".$GLOBALS['dir']."saprfc/index.php\">SAP RFC</a></li>";} ?>
-
-        <?php if(api_checkPermission("database","database_view")){echo "<li><a href=\"".$GLOBALS['dir']."database/index.php\">".api_text("core-menu-database")."</a></li>";} ?>
-
+        <?php if(api_checkPermission("accounts","accounts_view")){echo "<li><a href=\"".$GLOBALS['dir']."accounts/index.php\">".api_text("core-menu-accounts")."</a></li>\n";} ?>
+        <?php if(api_checkPermission("stats","stats_server")){echo "<li><a href=\"".$GLOBALS['dir']."stats/index.php\">".api_text("core-menu-statistics")."</a></li>\n";} ?>
+        <?php if(api_checkPermission("settings","settings_edit")||api_checkPermission("settings","permissions_manage")){echo "<li><a href=\"".$GLOBALS['dir']."settings/index.php\">".api_text("core-menu-settings")."</a></li>\n";} ?>
+        <?php if(api_checkPermission("logs","logs_list")){echo "<li><a href=\"".$GLOBALS['dir']."logs/logs_list.php\">".api_text("core-menu-logs")."</a></li>\n";} ?>
+        <?php if(api_checkPermission("database","database_view")){echo "<li><a href=\"".$GLOBALS['dir']."database/index.php\">".api_text("core-menu-database")."</a></li>\n";} ?>
         <li><a href="<?php echo $GLOBALS['dir']."dashboard/dashboard_edit.php";?>"><?php echo api_text("core-menu-dashboard-edit"); ?></a></li>
 
         <?php
 
          if($_SESSION['account']->interpreter){
-          echo "<li><a href='".$GLOBALS['dir']."accounts/submit.php?act=account_interpret_stop'>".api_text("core-menu-interpretStop")."</a></li>";
+
          }
 
          if($_SESSION['account']->superuser){
           echo "<li class='divider'></li>\n";
           if($_SESSION['account']->debug){
-           echo "<li><a href='".$GLOBALS['dir']."accounts/submit.php?act=account_debug_disable'>".api_text("core-menu-debugDisable")."</a></li>";
+           echo "<li><a href='".$GLOBALS['dir']."accounts/submit.php?act=account_debug_disable'>".api_text("core-menu-debugDisable")."</a></li>\n";
           }else{
-           echo "<li><a href='".$GLOBALS['dir']."accounts/submit.php?act=account_debug_enable'>".api_text("core-menu-debugEnable")."</a></li>";
+           echo "<li><a href='".$GLOBALS['dir']."accounts/submit.php?act=account_debug_enable'>".api_text("core-menu-debugEnable")."</a></li>\n";
           }
           if(!$_SESSION['account']->administrator){
-           echo "<li><a href='".$GLOBALS['dir']."accounts/submit.php?act=account_switch_to_admin'>".api_text("core-menu-becomeAdministrator")."</a></li>";
+           echo "<li><a href='".$GLOBALS['dir']."accounts/submit.php?act=account_switch_to_admin'>".api_text("core-menu-becomeAdministrator")."</a></li>\n";
           }elseif($_SESSION['account']->id>1){
-           echo "<li><a href='".$GLOBALS['dir']."accounts/submit.php?act=account_switch_to_user'>".api_text("core-menu-becomeUser")."</a></li>";
+           echo "<li><a href='".$GLOBALS['dir']."accounts/submit.php?act=account_switch_to_user'>".api_text("core-menu-becomeUser")."</a></li>\n";
           }
          }
+
+         echo "<li class='divider'></li>\n";
+
+         if(!$_SESSION['account']->interpreter){
+          echo "<li><a href='".$GLOBALS['dir']."accounts/submit.php?act=account_logout'>".api_text("core-menu-logout")."</a></li>\n";
+         }else{
+          echo "<li><a href='".$GLOBALS['dir']."accounts/submit.php?act=account_interpret_stop'>".api_text("core-menu-interpretStop")."</a></li>\n";
+         }
         ?>
-        <li class="divider"></li>
-        <li><a href="<?php echo $GLOBALS['dir']."accounts/submit.php?act=account_logout";?>"><?php echo api_text("core-menu-logout"); ?></a></li>
        </ul>
       </li>
 
