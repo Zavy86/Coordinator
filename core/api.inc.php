@@ -2078,9 +2078,9 @@ function api_mailer_process($mail){
  // sender
  if(!strlen($mail->from)){$mail->from=api_getOption('owner_mail');}
  if(!strlen($mail->sender)){$mail->sender=api_getOption('owner_mail_from');}
- $mailer->From=stripslashes($mail->from);
- $mailer->FromName=stripslashes($mail->sender);
  $mailer->From=api_getOption('owner_mail');
+ $mailer->FromName=stripslashes($mail->sender);
+ $mailer->addReplyTo(stripslashes($mail->from));
  // receivers
  if(count($to_array)){foreach($to_array as $to){$mailer->addAddress(trim(stripslashes($to)));}}
  if(count($cc_array)){foreach($cc_array as $cc){$mailer->addCC(trim(stripslashes($cc)));}}
