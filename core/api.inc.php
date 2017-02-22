@@ -524,8 +524,8 @@ function api_timestampDifferenceFormat($difference,$showSeconds=TRUE){
 
 /**
  *
- * @param type $date1
- * @param type $date2
+ * @param type $date_from
+ * @param type $date_to
  * @param array $working_days array of working days number 1-7
  * @param array $working_hours array of starting and ending working hours 0-23
  * @return int
@@ -2080,7 +2080,7 @@ function api_mailer_process($mail){
  if(!strlen($mail->sender)){$mail->sender=api_getOption('owner_mail_from');}
  $mailer->From=stripslashes($mail->from);
  $mailer->FromName=stripslashes($mail->sender);
- $mailer->addReplyTo(stripslashes($mail->from));
+ $mailer->From=api_getOption('owner_mail');
  // receivers
  if(count($to_array)){foreach($to_array as $to){$mailer->addAddress(trim(stripslashes($to)));}}
  if(count($cc_array)){foreach($cc_array as $cc){$mailer->addCC(trim(stripslashes($cc)));}}
