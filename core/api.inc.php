@@ -2045,7 +2045,7 @@ function api_mailer($to,$message,$subject="",$html=FALSE,$from_mail="",$from_nam
 function api_mailer_process($mail){
  // get object
  if(is_numeric($mail)){$mail=$GLOBALS['db']->queryUniqueObject("SELECT * FROM logs_mails WHERE id='".$mail."'");}
- if(!$mail->id){return FALSE;}
+ if(!isset($mail->id)){return FALSE;}
  // definitions
  $to_array=explode(";",$mail->to);
  $cc_array=explode(";",$mail->cc);
@@ -2099,11 +2099,21 @@ function api_mailer_process($mail){
  }
  // sendmail
  $sended=$mailer->send();
- // update status
- if(!$sended){$f_status="2";$f_error=$mailer->ErrorInfo;}else{$f_status="1";}
- $GLOBALS['db']->execute("UPDATE `logs_mails` SET `status`='".$f_status."',`sendDate`='".api_now()."',`error`='".$f_error."' WHERE id='".$mail->id."'");
- // return
- return $sended;
+ // check result for mailer
+ if($mail->id>0){
+  // update status
+  if(!$sended){$f_status="2";$f_error=$mailer->ErrorInfo;}else{$f_status="1";}
+  $GLOBALS['db']->execute("UPDATE `logs_mails` SET `status`='".$f_status."',`sendDate`='".api_now()."',`error`='".$f_error."' WHERE id='".$mail->id."'");
+  // return
+  return $sended;
+ }
+ // check result for manual calls
+ if($mail->id==0){
+  // return ok or error
+  if(!$sended){return $mailer->ErrorInfo;}else{return "ok";}
+ }
+ // in other case return false
+ return FALSE;
 }
 
 
