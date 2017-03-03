@@ -280,7 +280,7 @@ class DB{
  // ---[ Get the id of the very last inserted row ]----------------------------
  // @return : The id of the very last inserted row (in any table).
  function lastInsertedId(){
-  return mysql_insert_id();
+  return mysql_insert_id($this->connector);
  }
 
  // ---[ Close the connexion with the database server ]------------------------
