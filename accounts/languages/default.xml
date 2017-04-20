@@ -231,6 +231,7 @@
  <text key="accounts_customize-groups-th-name">Groups → {0}</text>
  <text key="accounts_customize-groups-td-main">Main</text>
  <text key="accounts_customize-groups-tr-unvalued">No assigned group in this society..</text>
+ <text key="accounts_customize-modal-title">Take a photo</text>
 
  <!-- password_retrieve.php -->
  <text key="password_retrieve-dt-ldap">WARNING</text>
