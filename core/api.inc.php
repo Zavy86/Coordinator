@@ -1654,7 +1654,7 @@ function api_icon($icon,$title=NULL,$style=NULL){
  * @return object
  */
 function api_webservice_wsdl($wsdl,$username=NULL,$password=NULL){
- if(!file_exists("../core/nusoap/wsdl/".$wsdl)){return FALSE;}
+ if(!file_exists("../core/nusoap/wsdl/".$wsdl)){echo "ERROR WSDL: ".$wsdl." not found";return FALSE;}
  // initialize webservice
  require_once("../core/nusoap/nusoap.php");
  $nusoap_client=new nusoap_client("../core/nusoap/wsdl/".$wsdl,TRUE);

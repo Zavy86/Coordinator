@@ -6,9 +6,13 @@ include("template.inc.php");
 function content(){
  // get objects
  $account=api_accounts_account();
+ // build webcam modal
+ $webcam_modal=new str_modal("webcam");
+ $webcam_modal->header("accounts_customize-modal-title");
+ $webcam_modal->body("<div id='buttons'><button id='start'>".api_icon("icon-off")."</button><button id='snap'>".api_icon("icon-camera")."</button><button id='upload'>".api_icon("icon-ok")."</button><br><br><button id='discard'>".api_icon("icon-repeat")."</button></div><div id='live'><video id='video' width='320' height='240' autoplay></video><div id='square'></div></div><div id='photo'><canvas id='canvas' width='200' height='200'></canvas></div>");
  // build account dynamic list
  $account_dl=new str_dl("br","dl-horizontal");
- $account_dl->addElement(api_text("accounts_customize-ff-avatar"),api_image($account->avatar,"img-polaroid",125,NULL,TRUE));
+ $account_dl->addElement(api_text("accounts_customize-ff-avatar"),api_image($account->avatar,"img-polaroid",125,NULL,TRUE)." ".$webcam_modal->link(api_icon("icon-camera"),"btn"));
  // build account form
  $account_form=new str_form("submit.php?act=account_customize&idAccount=".$account->id,"post","accounts_customize");
  $account_form->addField("file","avatar","&nbsp;",NULL,"input-large",api_text("accounts_customize-ff-avatar-placeholder"));
@@ -85,6 +89,8 @@ function content(){
  }
  // close split
  $GLOBALS['html']->split_close();
+ // renderize webcam modal
+ $webcam_modal->render();
  // debug
  if($_SESSION["account"]->debug){pre_var_dump($account,"print","account");}
 ?>
@@ -104,5 +110,116 @@ function content(){
    submitHandler:function(form){form.submit();}
   });
  });
+ /* webcam scripts */
+ window.addEventListener("DOMContentLoaded",function(){
+  // Elements for taking the snapshot
+  var video=document.getElementById('video');
+  var canvas=document.getElementById('canvas');
+  var context=canvas.getContext('2d');
+  var video=document.getElementById('video');
+  var errBack=function(e){console.log('An error has occurred!',e);};
+  $("#snap").hide();
+  $("#photo").hide();
+  $("#discard").hide();
+  $("#upload").hide();
+  // trigger start
+  document.getElementById("start").addEventListener("click",function(){
+   $("#start").hide();
+   $("#snap").show();
+   // get access to the camera
+   if(navigator.mediaDevices && navigator.mediaDevices.getUserMedia){
+    //navigator.mediaDevices.getUserMedia({video:true}).then(function(stream){
+    navigator.mediaDevices.getUserMedia({video:{width:640,height:480}}).then(function(stream){
+     video.src=window.URL.createObjectURL(stream);
+     video.play();
+    });
+   }else if(navigator.getUserMedia){ // Standard
+    navigator.getUserMedia({video:{width:640,height:480}},function(stream){
+     video.src=stream;
+     video.play();
+    },errBack);
+   }else if(navigator.webkitGetUserMedia){ // WebKit-prefixed
+    navigator.webkitGetUserMedia({video:{width:640,height:480}},function(stream){
+     video.src=window.webkitURL.createObjectURL(stream);
+     video.play();
+    },errBack);
+   }else if(navigator.mozGetUserMedia){ // Mozilla-prefixed
+    navigator.mozGetUserMedia({video:{width:640,height:480}},function(stream){
+     video.src=window.URL.createObjectURL(stream);
+     video.play();
+    },errBack);
+   }
+  });
+  // trigger photo take
+  document.getElementById("snap").addEventListener("click",function(){
+   context.drawImage(video,120,40,400,400,0,0,200,200);
+   $("#photo").show();
+   $("#live").hide();
+   $("#discard").show();
+   $("#snap").hide();
+   $("#upload").show();
+  });
+  // trigger pgoto discard
+  document.getElementById("discard").addEventListener("click",function(){
+	   $("#photo").hide();
+    $("#live").show();
+    $("#discard").hide();
+    $("#snap").show();
+    $("#upload").hide();
+  });
+  // upload the photo
+  document.getElementById("upload").addEventListener("click",function(){
+   var dataURL=canvas.toDataURL("image/jpeg",1);
+   console.log("save photo");
+   $.ajax({
+    url:"submit.php?act=account_customize_webcam",
+    type:"POST",
+    data:{
+     imgBase64:dataURL,
+     idAccount:<?php echo $account->id?>
+    }
+   }).done(function(msg){
+    console.log("saved");
+    window.location.replace("accounts_customize.php");
+   });
+  });
+ },false);
 </script>
+<style>
+ #buttons{
+  float:left;
+  margin-right:10px;
+ }
+ #live{
+  position:relative;
+  float:left;
+  width:320px;
+  height:240px;
+  border:1px solid #333333;
+  z-index:1000;
+ }
+ #live #square{
+  position:relative;
+  top:-225px;
+  left:60px;
+  width:200px;
+  height:200px;
+  border:2px dashed red;
+  z-index:1200;
+ }
+ #video{
+  position:relative;
+  top:0;
+  left:0;
+  z-index:1100;
+ }
+ #photo{
+  position:relative;
+  float:left;
+  width:200px;
+  height:200px;
+  border:1px solid #333333;
+  z-index:1000;
+ }
+</style>
 <?php } ?>

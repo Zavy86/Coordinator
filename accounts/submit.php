@@ -13,6 +13,7 @@ switch($act){
  case "account_save":account_save();break;
  case "account_save_ldap":account_save_ldap();break;
  case "account_customize":account_customize();break;
+ case "account_customize_webcam":account_customize_webcam();break;
  case "account_delete":account_delete("delete");break;
  case "account_undelete":account_delete("undelete");break;
  case "account_interpret":account_interpret();break;
@@ -467,6 +468,25 @@ function account_customize(){
 
  // redirect
  exit(header("location: accounts_customize.php".$alert));
+}
+
+/**
+ * Account Customize
+ */
+function account_customize_webcam(){
+ // acquire variables
+ $rawData=$_POST['imgBase64'];
+ $idAccount=$_POST['idAccount'];
+ $filteredData=explode(',',$rawData);
+ $unencoded=base64_decode($filteredData[1]);
+ // write out image
+ $fp=fopen("../uploads/uploads/accounts/avatar_".$idAccount.".jpg","w");
+ fwrite($fp,$unencoded);
+ fclose($fp);
+ // scale avatar to 125x125 and convert it to jpg
+ //api_avatarResize("../uploads/uploads/accounts/avatar_".$account->id.".jpg","../uploads/uploads/accounts/avatar_".$account->id.".jpg",125,125);
+ // redirect
+ //exit(header("location: accounts_customize.php"));
 }
 
 /**
