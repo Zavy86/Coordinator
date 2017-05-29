@@ -58,6 +58,7 @@ public function header($title="",$nav="dashboard",$navbar=TRUE){
  <script src="<?php echo $GLOBALS['dir']."core/jquery/jquery.chained.remote-0.9.10.min.js";?>" type="text/javascript"></script>
  <script src="<?php echo $GLOBALS['dir']."core/jquery/jquery.sortable-0.9.13.js";?>" type="text/javascript"></script>
  <script src="<?php echo $GLOBALS['dir']."core/shadowbox/shadowbox.js";?>" type="text/javascript"></script>
+ <script src="<?php echo $GLOBALS['dir']."core/peity/js/peity-3.2.1.min.js";?>" type="text/javascript"></script>
  <script type="text/javascript">
   Shadowbox.init();
   //Shadowbox.init({onClose:function(){ window.location.reload();}}); // eseguire reload solo se chiudo la chat
