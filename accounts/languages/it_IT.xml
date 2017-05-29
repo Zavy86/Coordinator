@@ -231,6 +231,7 @@
  <text key="accounts_customize-groups-th-name">Gruppi → {0}</text>
  <text key="accounts_customize-groups-td-main">Principale</text>
  <text key="accounts_customize-groups-tr-unvalued">Nessuna gruppo assegnato in questa società..</text>
+ <text key="accounts_customize-modal-title">Scatta una foto</text>
 
  <!-- password_retrieve.php -->
  <text key="password_retrieve-dt-ldap">ATTENZIONE</text>
