@@ -8,7 +8,7 @@ function content(){
  $account=api_accounts_account();
  // build webcam modal
  $webcam_modal=new str_modal("webcam");
- $webcam_modal->header("accounts_customize-modal-title");
+ $webcam_modal->header(api_text("accounts_customize-modal-title"));
  $webcam_modal->body("<div id='buttons'><button id='start'>".api_icon("icon-off")."</button><button id='snap'>".api_icon("icon-camera")."</button><button id='upload'>".api_icon("icon-ok")."</button><br><br><button id='discard'>".api_icon("icon-repeat")."</button></div><div id='live'><video id='video' width='320' height='240' autoplay></video><div id='square'></div></div><div id='photo'><canvas id='canvas' width='200' height='200'></canvas></div>");
  // build account dynamic list
  $account_dl=new str_dl("br","dl-horizontal");
