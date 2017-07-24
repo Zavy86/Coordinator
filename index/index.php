@@ -46,7 +46,7 @@ function content(){
    }
   }
   if(strlen($menu->module)>0){$menu->url="../".$menu->module."/".$menu->url;}
-  if(substr($menu->url,0,7)=="http://"){$menu->external=TRUE;}
+  if(substr($menu->url,0,4)=="http"){$menu->external=TRUE;}
   $menu->icon=$GLOBALS['dir']."uploads/uploads/links/".$menu->id.".png";
   $menu_array[]=$menu;
  }

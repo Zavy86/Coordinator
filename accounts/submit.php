@@ -317,10 +317,10 @@ function account_save(){
   api_loadLocaleFile("../accounts/",$p_language);
   // sendmail
   if(api_getOption("ldap") && strlen($p_ldap)){
-   $access_link="http://".$_SERVER['SERVER_NAME'].$GLOBALS['dir']."accounts/login.php?lang=".$p_language."&account=".$p_ldap;
+   $access_link=($_SERVER["HTTPS"]?"https://":"http://").$_SERVER['SERVER_NAME'].$GLOBALS['dir']."accounts/login.php?lang=".$p_language."&account=".$p_ldap;
    $mail_content=api_text("mails_accounts_accountCreated-message-ldap",array($p_name,$p_ldap,$access_link,api_getOption("owner")));}
   else{
-   $activation_link="http://".$_SERVER['SERVER_NAME'].$GLOBALS['dir']."accounts/password_reset.php?account=".$p_account."&key=".$secret;
+   $activation_link=($_SERVER["HTTPS"]?"https://":"http://").$_SERVER['SERVER_NAME'].$GLOBALS['dir']."accounts/password_reset.php?account=".$p_account."&key=".$secret;
    $mail_content=api_text("mails_accounts_accountCreated-message",array($p_name,$activation_link,api_getOption("owner")));
   }
   if($q_idAccount>0){api_mailer($p_account,$mail_content,api_text("mails_accounts_accountCreated-subject"));}
@@ -365,7 +365,7 @@ function account_save_ldap(){
   if(strlen($p_account)>0){
    // load user language file for mail
    api_loadLocaleFile("../accounts/",$p_language);
-   $access_link="http://".$_SERVER['SERVER_NAME'].$GLOBALS['dir']."accounts/login.php?lang=".$p_language."&account=".$p_ldap;
+   $access_link=($_SERVER["HTTPS"]?"https://":"http://").$_SERVER['SERVER_NAME'].$GLOBALS['dir']."accounts/login.php?lang=".$p_language."&account=".$p_ldap;
    // sendmail
    api_mailer($p_account,api_text("mails_accounts_accountLDAP-message",array($f_name,$p_ldap,$access_link,api_getOption("owner"))),api_text("mails_accounts_accountLDAP-subject"));
    // restore language
@@ -803,7 +803,7 @@ function password_retrieve(){
  // load user language file for mail
  api_loadLocaleFile("../accounts/",$account->language);
  // sendmail
- $activation_link="http://".$_SERVER['SERVER_NAME'].$GLOBALS['dir']."accounts/password_reset.php?account=".$account->account."&key=".$secret;
+ $activation_link=($_SERVER["HTTPS"]?"https://":"http://").$_SERVER['SERVER_NAME'].$GLOBALS['dir']."accounts/password_reset.php?account=".$account->account."&key=".$secret;
  api_mailer($p_account,api_text("mails_accounts_passwordRetrieve-message",array($account->name,$activation_link)),api_text("mails_accounts_passwordRetrieve-subject"));
  // redirect
  $alert="&alert=passwordRetrived&alert_class=alert-success&idLog=".$log->id;

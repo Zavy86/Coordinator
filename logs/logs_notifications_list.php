@@ -45,8 +45,8 @@ function content(){
   $m_body="<p>".api_text("notifications_list-m-timestamp",api_timestampFormat($notification->timestamp,api_text("datetime")))."</p>\n";
   $m_body.="<hr>\n<p>".nl2br(stripslashes($notification->message))."</p>\n";
   if($notification->link<>NULL){
-   if(substr($notification->link,0,7)<>"http://"){
-    $url="http://".$_SERVER['SERVER_NAME'].$GLOBALS['dir'].$notification->link;
+   if(substr($notification->link,0,4)<>"http"){
+    $url=($_SERVER["HTTPS"]?"https://":"http://").$_SERVER['SERVER_NAME'].$GLOBALS['dir'].$notification->link;
    }else{
     $url=$notification->link;
    }
