@@ -88,7 +88,7 @@ if($g_submit=="cron"){
     $GLOBALS['dir']."logs/logs_notifications_list.inc.php",
     $GLOBALS['dir']."logs/logs_notifications_counter.inc.php");
    if(!in_array($_SERVER['REQUEST_URI'],$url_skip)){
-    $_SESSION['external_redirect']="http://".$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'];
+    $_SESSION['external_redirect']=($_SERVER["HTTPS"]?"https://":"http://").$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'];
    }
    // redirect to login page
    header("location: ".$GLOBALS['dir']."accounts/login.php");
@@ -1513,7 +1513,7 @@ function api_logNotificationTriggers($module,$action,$event,$id,$link){
     // send mail
     if($subscription->mail){
      $notification->mail=TRUE;
-     if(substr($link,0,4)<>"http"){$mail_link="http://".$_SERVER['SERVER_NAME'].$GLOBALS['dir'].$link;}
+     if(substr($link,0,4)<>"http"){$mail_link=($_SERVER["HTTPS"]?"https://":"http://").$_SERVER['SERVER_NAME'].$GLOBALS['dir'].$link;}
      else{$mail_link=$link;}
      $mail_message=$notification->message."<br>\n"."Link: <a href='".$mail_link."'>".$mail_link."</a>";
      if(api_account()->id>1){
