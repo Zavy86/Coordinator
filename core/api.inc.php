@@ -1658,6 +1658,7 @@ function api_webservice_wsdl($wsdl,$username=NULL,$password=NULL){
  // initialize webservice
  require_once("../core/nusoap/nusoap.php");
  $nusoap_client=new nusoap_client("../core/nusoap/wsdl/".$wsdl,TRUE);
+ //$nusoap_client=new nusoap_client("../core/nusoap/wsdl/".$wsdl,TRUE,NULL,NULL,NULL,NULL,0,3600); /* timeout 1 ora */
  if($username<>NULL){$nusoap_client->setCredentials($username,$password);}
  // return nusoap client
  return $nusoap_client;
