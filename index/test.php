@@ -4,7 +4,7 @@
 \* -------------------------------------------------------------------------- */
 include("template.inc.php");
 function content(){
- // check exe parameter
+ // check parameter
  if(!$_GET["exe"]){die("TEST DIE");}else{pre_var_dump("TEST STARTED");}
  // build mail object
  $mail=new stdClass();
