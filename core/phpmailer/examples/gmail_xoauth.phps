@@ -9,7 +9,7 @@ date_default_timezone_set('Etc/UTC');
 
 require '../PHPMailerAutoload.php';
 
-//Load dependnecies from composer
+//Load dependencies from composer
 //If this causes an error, run 'composer install'
 require '../vendor/autoload.php';
 
@@ -43,8 +43,8 @@ $mail->SMTPAuth = true;
 //Set AuthType
 $mail->AuthType = 'XOAUTH2';
 
-//User Email to use for SMTP authentication - Use the same Email used in Google Developer Console
-$mail->oauthUserEmail = "someone@gmail.com";
+//User Email to use for SMTP authentication - user who gave consent to our app
+$mail->oauthUserEmail = "from@gmail.com";
 
 //Obtained From Google Developer Console
 $mail->oauthClientId = "RANDOMCHARS-----duv1n2.apps.googleusercontent.com";
