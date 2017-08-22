@@ -2074,6 +2074,9 @@ function api_mailer_process($mail){
   switch(strtolower(api_getOption("smtp_secure"))){
    case "tls":$mailer->SMTPSecure="tls";break;
    case "ssl":$mailer->SMTPSecure="ssl";break;
+   default:
+    $mailer->SMTPSecure=NULL;
+    $mailer->SMTPAutoTLS=FALSE;
   }
  }
  // sender
