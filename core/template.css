@@ -99,6 +99,7 @@ code {white-space:normal;color:#005580;}
 .text-center,td.text-center,th.text-center{text-align:center;}
 .text-right,td.text-right,th.text-right{text-align:right;}
 .text-justify,td.text-justify,th.text-justify{text-align:justify;}
+.text-code{font-family:monospace}
 
 table.table-condensed td,table.table-condensed th{padding-left:10px;padding-right:10px;}
 
