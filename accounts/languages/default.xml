@@ -63,8 +63,8 @@
  <text key="logs_accounts_accountGroupAdded">Account {0} has been added to group {4}&#xA;&#xA;Company: {2}</text>
  <text key="logs_accounts_accountGroupMainize">Account {0} was set mainly on group {4}&#xA;&#xA;Company: {2}</text>
  <text key="logs_accounts_accountGroupRemoved">Account {0} has been removed from group {4}&#xA;&#xA;Company: {2}</text>
- <text key="logs_accounts_accountSwitchToAdmin">Account {0} became administrator</text>
- <text key="logs_accounts_accountSwitchToUser">Account {0} became user {1}</text>
+ <text key="logs_accounts_accountSwitchToAdmin">Account {1} became administrator</text>
+ <text key="logs_accounts_accountSwitchToUser">Account {1} became user {1}</text>
  <text key="logs_accounts_accountPasswordRetrieve">The account {0} has requested the reset of their password</text>
  <text key="logs_accounts_accountPasswordResetted">The account password for {0} has been reset</text>
  <text key="logs_accounts_roleCreated">Role {1} has been created&#xA;&#xA;Level: {0}&#xA;Description: {2}</text>
