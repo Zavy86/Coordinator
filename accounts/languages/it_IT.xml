@@ -63,8 +63,8 @@
  <text key="logs_accounts_accountGroupAdded">L'account {0} è stato aggiunto al gruppo {4}&#xA;&#xA;Società: {2}</text>
  <text key="logs_accounts_accountGroupMainize">L'account {0} è stato impostato principalmente sul gruppo {4}&#xA;&#xA;Società: {2}</text>
  <text key="logs_accounts_accountGroupRemoved">L'account {0} è stato rimosso dal gruppo {4}&#xA;&#xA;Società: {2}</text>
- <text key="logs_accounts_accountSwitchToAdmin">L'account {0} si è trasformato in amministratore</text>
- <text key="logs_accounts_accountSwitchToUser">L'account {0} si è trasformato in utente</text>
+ <text key="logs_accounts_accountSwitchToAdmin">L'account {1} si è trasformato in amministratore</text>
+ <text key="logs_accounts_accountSwitchToUser">L'account {1} si è trasformato in utente</text>
  <text key="logs_accounts_accountPasswordRetrieve">L'account {0} ha richiesto il reset della propria password</text>
  <text key="logs_accounts_accountPasswordResetted">La password dell'account {0} è stata resettata</text>
  <text key="logs_accounts_roleCreated">Il ruolo {1} è stato creato&#xA;&#xA;Livello: {0}&#xA;Descrizione: {2}</text>
