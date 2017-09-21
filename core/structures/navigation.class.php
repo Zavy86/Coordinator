@@ -184,7 +184,7 @@ class str_navigation{
      }else{*/
       if(is_array($_GET[$filter->name])){
        foreach($_GET[$filter->name] as $g_option){
-        $text_filter.=", ".trim(str_replace($filter->options[$g_option]));
+        $text_filter.=", ".trim(str_replace("&nbsp;"," ",$filter->options[$g_option]));
        }
       }
       $value=substr($text_filter,2);
