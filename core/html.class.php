@@ -225,7 +225,7 @@ public function header($title="",$nav="dashboard",$navbar=TRUE){
 
       <?php
        // show support link in menu bar
-       // require module workflows -> https://github.com/Zavy86/Coordinator-Workflows
+       // require module helpdesk
        if(file_exists("../helpdesk/module.inc.php")){
         echo "<li";
         if(api_baseName()=="tickets_open.php"||api_baseName()=="tickets_add.php"){echo " class=\"active\"";}
