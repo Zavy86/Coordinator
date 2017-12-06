@@ -509,12 +509,12 @@ class str_navigation{
      $gets="&".$get."=".$_GET[$get];
      echo "   <input type='hidden' name='".$get."' value='".$_GET[$get]."'>\n";
     }
-    $gets=substr($gets,1);
+    //$gets=substr($gets,1);
    }
    // show input
    echo "   <div class='input-append'>\n";
    echo "    <input type='text' id='structure_search' name='q' class='input-large' placeholder='".ucfirst(api_text("search"))."' value='".$_GET['q']."'>\n";
-   if($_GET['q']<>NULL){echo "    <a class='btn' href='".api_baseName()."?nav-search-submit=reset".$this->filtersGet()."&q='><i class='icon-remove-sign'></i></a>\n";}
+   if($_GET['q']<>NULL){echo "    <a class='btn' href='".api_baseName()."?nav-search-submit=reset".$this->filtersGet().$gets."&q='><i class='icon-remove-sign'></i></a>\n";}
    echo "    <button type='submit' name='nav-search-submit' class='btn'><i class='icon-search'></i></button>\n";
    echo "   </div>\n  </li>\n </form><!-- /search -->\n";
   }
