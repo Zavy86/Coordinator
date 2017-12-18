@@ -24,6 +24,13 @@ function content(){
   $account_form->addField("password","password",api_text("accounts_customize-ff-password"),NULL,"input-large",api_text("accounts_customize-ff-password-placeholder"));
   $account_form->addField("password","confirm",api_text("accounts_customize-ff-confirm"),NULL,"input-large",api_text("accounts_customize-ff-confirm-placeholder"));
  }
+ // custom account fields
+ if(is_array($GLOBALS['custom_fields']['accounts'])){
+  foreach($GLOBALS['custom_fields']['accounts'] as $field){
+   if(!$account->{$field}){continue;}
+   $account_form->addField("text",$field,strtoupper(str_replace("_"," ",$field)),$account->{$field},"input-large",null,true); /* @todo check for disabled method */
+  }
+ }
  $account_form->addField("text","phone",api_text("accounts_customize-ff-phone"),$account->phone,"input-medium",api_text("accounts_customize-ff-phone-placeholder"));
  $account_form->addField("select","language",api_text("accounts_customize-ff-language"),NULL,"input-medium");
  foreach(api_language_availables() as $key=>$language){$account_form->addFieldOption($key,$language." (".$key.")",($key==$account->language?TRUE:FALSE));}

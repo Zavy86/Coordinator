@@ -36,7 +36,7 @@ function content(){
  // custom account fields
  if(is_array($GLOBALS['custom_fields']['accounts'])){
   foreach($GLOBALS['custom_fields']['accounts'] as $field){
-   $account_form->addField("text",$field,strtoupper($field),$account->{$field},"input-large");
+   $account_form->addField("text",$field,strtoupper(str_replace("_"," ",$field)),$account->{$field},"input-large");
   }
  }
  // phone
