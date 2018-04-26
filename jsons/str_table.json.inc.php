@@ -74,7 +74,11 @@
    // check if position isn't greater than max position available
    if($return->position_max<$return->position){$return->errors[]=json_errors(202,"Position not available");}
    // check for direction
-   if($return->position>$return->object->{$return->field}){
+   if(!$return->object->{$return->field}){
+    $return->action="new";
+    $return->queries[]="UPDATE `".$return->table."` SET `".$return->field."`=`".$return->field."`+'1' WHERE `".$return->field."`>='".$return->position."' AND `".$return->field."`<>'0'".$return->grouping_query;
+    $return->queries[]="UPDATE `".$return->table."` SET `".$return->field."`='".$return->position."' WHERE `id`='".$return->object->id."'";
+   }elseif($return->position>$return->object->{$return->field}){
     $return->action="increment";
     $return->queries[]="UPDATE `".$return->table."` SET `".$return->field."`=`".$return->field."`-'1' WHERE `".$return->field."`>'".$return->object->{$return->field}."' AND `".$return->field."`<='".$return->position."' AND `".$return->field."`<>'0'".$return->grouping_query;
     $return->queries[]="UPDATE `".$return->table."` SET `".$return->field."`='".$return->position."' WHERE `id`='".$return->object->id."'";
