@@ -310,7 +310,7 @@ class str_table{
      // log ajax post success
      request.done(function(response,textStatus,jqXHR){
       console.log('AJAX Success');
-      /*console.log(response); @debug enable for debug */
+      /*console.log(response); /** @debug enable for debug */
      });
      // log ajax post error
      request.fail(function(xhr,textStatus,thrownError){
