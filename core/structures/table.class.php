@@ -243,7 +243,10 @@ class str_table{
       if($_GET['om']==0){$return.=api_icon("icon-circle-arrow-down",NULL,"margin-top:-0.5px;")."&nbsp;";}
       if($_GET['om']==1){$return.=api_icon("icon-circle-arrow-up",NULL,"margin-top:-0.5px;")."&nbsp;";}
      }
-     $return.="<a href='".api_baseName()."?of=".$th->order."&om=".$order.$this->get."'>";
+     // get limit
+     $limit=$_GET['l'];
+     // build url
+     $return.="<a href='".api_baseName()."?of=".$th->order."&om=".$order.$this->get."&l=".$limit."'>";
     }
     $return.=$th->name;
     if($this->sortable){$return.="</a>";}
