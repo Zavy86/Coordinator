@@ -100,10 +100,6 @@ function account_sso(){
    $alert="&alert=loginDisabled&alert_class=alert-warning&alert_parameters=".$account->login;
    exit(header("location: login.php?lang=".$account->language."&account=".$account->login.$alert));
   }
- }else{
-  // logs
-  api_log(API_LOG_WARNING,"accounts","loginErrorSSO",
-   "{logs_accounts_loginErrorSSO|".$g_account."}");
  }
  // redirect
  $alert="?alert=loginFailedSSO&alert_class=alert-warning";
