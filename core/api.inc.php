@@ -454,6 +454,20 @@ function api_timestampFormatThreeDigit(&$string){
  $string=substr($string,0,3);
 }
 
+/* -[ Timestamp Format Seconds to Time ]------------------------------------- */
+function api_timestampFormatSecondsToTime($seconds,$showSeconds=true){
+ if(!$seconds){return false;}
+ $time=null;
+ $h=floor($seconds/3600);
+ $m=floor($seconds/60%60);
+ $s=floor($seconds%60);
+ if($h){$time.=sprintf("%02d:",$h);}
+ if($h || $m){$time.=sprintf("%02d:",$m);}
+ if($showSeconds || $seconds<60){$time.=sprintf("%02d:",$s);}
+ $return=substr($time,0,-1);
+ return $return;
+}
+
 /* -[ Timestamp Dates form Week ]-------------------------------------------- */
 // @param $week : week number (from 1 to 52)
 // @param $year : year in YYYY format
@@ -501,7 +515,7 @@ function api_timestampDifferenceFrom($from,$difference,$format="Y-m-d H:i:s"){
 }
 
 /* -[ Timestamp Difference Format ]------------------------------------------ */
-// @integere $seconds : differences in seconds
+// @integer $seconds : differences in seconds
 function api_timestampDifferenceFormat($difference,$showSeconds=TRUE){
  if($difference==NULL){return FALSE;}
  $return=NULL;
