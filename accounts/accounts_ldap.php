@@ -32,10 +32,10 @@ if($ldap){
   $results=ldap_get_entries($ldap,$search);
   // check and get result
   if($s_account==strtolower($results[0][strtolower(api_getOption("ldap_userfield"))][0])){
-   $ldap_mail=strtolower($results[0]["mail"][0]);
-   $ldap_lastname=ucfirst(strtolower($results[0]["sn"][0]));
-   $ldap_firstname=ucfirst(strtolower($results[0]["givenname"][0]));
-   $ldap_phone=strtolower($results[0]["telephonenumber"][0]);
+   $ldap_mail=utf8_encode(strtolower($results[0]["mail"][0]));
+   $ldap_lastname=utf8_encode(ucfirst(strtolower($results[0]["sn"][0])));
+   $ldap_firstname=utf8_encode(ucfirst(strtolower($results[0]["givenname"][0])));
+   $ldap_phone=utf8_encode(strtolower($results[0]["telephonenumber"][0]));
   }
  }
 }
