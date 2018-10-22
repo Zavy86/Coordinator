@@ -54,10 +54,19 @@ function account_sso(){
  // acquire variables
  $g_account=$_GET['sso_account'];
  $g_hash=$_GET['sso_hash'];
+ // make timestamps
+ $timestamp=date("YmdHi");
+ $timestamp_pre=(string)(date("YmdHi")-1);
+ $timestamp_post=(string)(date("YmdHi")+1);
  // calculate hash
- $calculated_hash=md5($g_account.date("YmdHi"));
+ $calculated_hashes=array();
+ $calculated_hashes[$timestamp_pre]=md5($g_account.$timestamp_pre);
+ $calculated_hashes[$timestamp]=md5($g_account.$timestamp);
+ $calculated_hashes[$timestamp_post]=md5($g_account.$timestamp_post);
+ // debug
+ //pre_var_dump($calculated_hash);
  // check hash
- if($calculated_hash===$g_hash){
+ if(in_array($g_hash,$calculated_hashes)){
   // get account
   $account=$GLOBALS['db']->queryUniqueObject("SELECT * FROM accounts_accounts WHERE ldap='".$g_account."'");
  }
