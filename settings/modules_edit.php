@@ -104,7 +104,7 @@ function content(){
  $table->addCheckboxesAction("git_pull","submit.php?act=module_git_pull");
  // show table
  $table->render();
-// git pull
+ // git pull
  echo api_link("#",api_text("modules-git_pull"),NULL,"btn btn-primary",FALSE,NULL,NULL,"_self",$table->getCheckboxesActionLinkId("git_pull"))."\n";
  echo api_link("modules_git_clone.php",api_text("modules-git_clone"),NULL,"btn")."\n";
 }
