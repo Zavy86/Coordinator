@@ -2383,9 +2383,53 @@ function api_accountGroupMember($idGroup,$idAccount=NULL,$subGroups=TRUE){
  return FALSE;
 }
 
-
-
-
+/**
+ * WSRFC API
+ *
+ * @param string $wsrfc WSRFC Configuration [ default | development | production ]
+ * @param string $function Function Module
+ * @param array $input Function Input Parameters
+ * @param string $username SAP Username
+ * @param string $password SAP Password
+ * @return boolean
+ */
+function api_wsrfc($wsrfc,$function,$input,$username=null,$password=null){
+ // include configuration
+ require("../config.inc.php");
+ // check for sap token configuration
+ if(!is_array($sap_wsrfc[$wsrfc])){return false;}
+ // get from token
+ $url=$sap_wsrfc[$wsrfc]['url'];
+ $token=$sap_wsrfc[$wsrfc]['token'];
+ // check for authentication
+ if(!$username){$username=$sap_wsrfc[$wsrfc]['username'];}
+ if(!$password){$password=$sap_wsrfc[$wsrfc]['password'];}
+ // build post data
+ $post_data=array(
+     "token"=>$token,
+     "username"=>$username,
+     "password"=>$password,
+     "function"=>$function,
+     "input"=>$input,
+     "verbose"=>1
+ );
+ // build http options
+ $options=array(
+  'http'=>array(
+   'header'=>"Content-type: application/x-www-form-urlencoded\r\n",
+   'method'=>'POST',
+   'content'=>http_build_query($post_data),
+  ),
+ );
+ // make stram context
+ $context=stream_context_create($options);
+ // get from http
+ $response=file_get_contents($url,false,$context);
+ // decode result
+ $return=json_decode($response,true);
+ // return
+ return $return;
+}
 
 
 
