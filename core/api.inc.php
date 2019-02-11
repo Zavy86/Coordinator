@@ -2393,7 +2393,7 @@ function api_accountGroupMember($idGroup,$idAccount=NULL,$subGroups=TRUE){
  * @param string $password SAP Password
  * @return boolean
  */
-function api_wsrfc($wsrfc,$function,$input,$username=null,$password=null){
+function api_wsrfc($wsrfc,$function,$input,$username=null,$password=null,$verbose=false){
  // include configuration
  require("../config.inc.php");
  // check for sap token configuration
@@ -2411,7 +2411,7 @@ function api_wsrfc($wsrfc,$function,$input,$username=null,$password=null){
      "password"=>$password,
      "function"=>$function,
      "input"=>$input,
-     "verbose"=>1
+     "verbose"=>($verbose?1:0)
  );
  // build http options
  $options=array(
