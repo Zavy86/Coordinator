@@ -311,7 +311,7 @@ public function header($title="",$nav="dashboard",$navbar=TRUE){
  ?>
 
  <!-- Content -->
- <div class="container">
+ <div class="container-fluid">
 
   <div class="row-fluid"><?php api_alert(); ?></div>
 
