@@ -51,11 +51,11 @@ function content(){
   $menu_array[]=$menu;
  }
  // show links
-  //echo "<div class='row'>\n";
+ echo "<div class='row'>\n";
  foreach($menu_array as $menu){
   if($menu->external){$target=" target='_blank'";}else{$target=NULL;}
   echo "<div class='span2'><a href='".$menu->url."'".$target." class='btn btn-index'><img src='".$menu->icon."' class='img-responsive' style='width:100%;'><b>".stripslashes($menu->menu)."</b></a></div>\n";
  }
- //echo "</div>\n";
+ echo "</div>\n";
 }
 ?>

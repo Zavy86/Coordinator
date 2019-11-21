@@ -1939,9 +1939,9 @@ function api_sound($sound="alarm"){
  * @param string $refresh add random string to refresh
  * @return string image tag
  */
-function api_image($image,$class=NULL,$width=NULL,$height=NULL,$refresh=FALSE){
+function api_image($image,$class=NULL,$width=NULL,$height=NULL,$refresh=FALSE,$style=NULL){
  if($refresh){$refresh="?".rand(1000,9999);}
- $image_tag="<img src='".$image.$refresh."' class='".$class."' width='".$width."' height='".$height."'>";
+ $image_tag="<img src='".$image.$refresh."' class='".$class."' width='".$width."' height='".$height."' style=\"".$style."\">";
  return $image_tag;
 }
 
