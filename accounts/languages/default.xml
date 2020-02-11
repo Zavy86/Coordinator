@@ -207,6 +207,15 @@
  <text key="accounts_ldap-fc-submit">Sign up</text>
  <text key="accounts_ldap-fc-cancel">Cancel</text>
 
+ <!-- accounts_ldap_update.php -->
+ <text key="accounts_ldap_update-p-informations">Welcome, your password is expired! Please fill out the form below to proceed with the password update.</text>
+ <text key="accounts_ldap_update-ff-username">Account</text>
+ <text key="accounts_ldap_update-ff-password">Current password</text>
+ <text key="accounts_ldap_update-ff-password_new1">Choose a new password</text>
+ <text key="accounts_ldap_update-ff-password_new2">Confirm new password</text>
+ <text key="accounts_ldap_update-fc-submit">Update</text>
+ <text key="accounts_ldap_update-fc-cancel">Cancel</text>
+
  <!-- accounts_customize.php -->
  <text key="accounts_customize-ff-avatar">Avatar</text>
  <text key="accounts_customize-ff-avatar-placeholder">Select an image</text>
