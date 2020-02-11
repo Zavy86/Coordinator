@@ -211,8 +211,8 @@
  <text key="accounts_ldap_update-p-informations">Benvenuto/a, la tua password è scaduta! Compila il modulo seguente per procedere con l'aggiornamento della password.</text>
  <text key="accounts_ldap_update-ff-username">Account</text>
  <text key="accounts_ldap_update-ff-password">Password attuale</text>
- <text key="accounts_ldap_update-ff-password_new1">Scegli una nuova password</text>
- <text key="accounts_ldap_update-ff-password_new2">Conferma nuova password</text>
+ <text key="accounts_ldap_update-ff-password_new1">Nuova password</text>
+ <text key="accounts_ldap_update-ff-password_new2">Conferma password</text>
  <text key="accounts_ldap_update-fc-submit">Aggiorna</text>
  <text key="accounts_ldap_update-fc-cancel">Annulla</text>
 
