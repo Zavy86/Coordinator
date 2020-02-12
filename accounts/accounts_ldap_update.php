@@ -34,8 +34,8 @@ $form->render();
    rules:{
     username:{required:true},
     password:{required:true},
-    password_new1:{required:true},
-    password_new2:{required:true}
+    password_new1:{required:true,minlength:8},
+    password_new2:{required:true,minlength:8,equalTo:"#accounts_ldap_update_input_password_new1"}
    },
    submitHandler:function(form){form.submit();}
   });
