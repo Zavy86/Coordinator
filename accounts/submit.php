@@ -12,6 +12,7 @@ switch($act){
  case "account_logout":account_logout();break;
  case "account_save":account_save();break;
  case "account_save_ldap":account_save_ldap();break;
+ case "account_ldap_update":account_ldap_update();break;
  case "account_customize":account_customize();break;
  case "account_customize_webcam":account_customize_webcam();break;
  case "account_delete":account_delete("delete");break;
@@ -393,6 +394,19 @@ function account_save_ldap(){
   $alert="?alert=accountLDAPError&alert_class=alert-error";
   exit(header("location: login.php".$alert));
  }
+}
+
+/**
+ * Account LDAP Update (Password)
+ */
+function account_ldap_update(){
+ // check for external file
+ if(!file_exists("../ldap_update.inc.php")){
+  $alert="?alert=ldap_update_script_not_found&alert_class=alert-error";
+  exit(header("location: login.php".$alert));
+ }
+ // include external file
+ require_once("../ldap_update.inc.php");
 }
 
 /**

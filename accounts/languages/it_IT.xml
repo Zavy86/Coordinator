@@ -29,6 +29,7 @@
  <text key="accountError">Si è verificato un errore con l'account; contatta l'amministratore di sistema</text>
  <text key="passwordRetrived">La tua richiesta di ripristino della password è stata inoltrata, riceverai a breve una mail</text>
  <text key="passwordResetted">Il ripristino della tua password è avvenuto correttamente</text>
+ <text key="passwordUpdated">La tua password è stata aggiornata correttamente</text>
  <text key="roleNotFound">Il ruolo non è stato trovato</text>
  <text key="roleCreated">Il ruolo {0} è stato creato</text>
  <text key="roleUpdated">Il ruolo {0} è stato aggiornato</text>
@@ -206,6 +207,15 @@
  <text key="accounts_ldap-fo-language-select">Seleziona una lingua</text>
  <text key="accounts_ldap-fc-submit">Registrati</text>
  <text key="accounts_ldap-fc-cancel">Annulla</text>
+
+ <!-- accounts_ldap_update.php -->
+ <text key="accounts_ldap_update-p-informations">Benvenuto/a, la tua password è scaduta! Compila il modulo seguente per procedere con l'aggiornamento della password.</text>
+ <text key="accounts_ldap_update-ff-username">Account</text>
+ <text key="accounts_ldap_update-ff-password">Password attuale</text>
+ <text key="accounts_ldap_update-ff-password_new1">Nuova password</text>
+ <text key="accounts_ldap_update-ff-password_new2">Conferma password</text>
+ <text key="accounts_ldap_update-fc-submit">Aggiorna</text>
+ <text key="accounts_ldap_update-fc-cancel">Annulla</text>
 
  <!-- accounts_customize.php -->
  <text key="accounts_customize-ff-avatar">Avatar</text>
