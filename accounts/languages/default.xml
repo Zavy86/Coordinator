@@ -29,6 +29,7 @@
  <text key="accountError">There was an error with the account. Please contact your system administrator..</text>
  <text key="passwordRetrived">Your password reset request has been submitted, you will receive a mail shortly</text>
  <text key="passwordResetted">Your password has been resetted</text>
+ <text key="passwordUpdated">Your password has been updated</text>
  <text key="roleNotFound">Role was not found</text>
  <text key="roleCreated">Role {0} has been created</text>
  <text key="roleUpdated">Role {0} has been updated</text>

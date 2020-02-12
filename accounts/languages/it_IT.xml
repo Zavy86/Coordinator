@@ -29,6 +29,7 @@
  <text key="accountError">Si è verificato un errore con l'account; contatta l'amministratore di sistema</text>
  <text key="passwordRetrived">La tua richiesta di ripristino della password è stata inoltrata, riceverai a breve una mail</text>
  <text key="passwordResetted">Il ripristino della tua password è avvenuto correttamente</text>
+ <text key="passwordUpdated">La tua password è stata aggiornata correttamente</text>
  <text key="roleNotFound">Il ruolo non è stato trovato</text>
  <text key="roleCreated">Il ruolo {0} è stato creato</text>
  <text key="roleUpdated">Il ruolo {0} è stato aggiornato</text>
