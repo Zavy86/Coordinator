@@ -73,6 +73,7 @@ if($g_submit=="cron"){
   // redirect
   if(api_baseName()<>"login.php"
      && api_baseName()<>"accounts_ldap.php"
+     && api_baseName()<>"accounts_ldap_update.php"
      && api_baseName()<>"password_retrieve.php"
      && api_baseName()<>"password_reset.php"
      && api_baseName()<>"submit.php"

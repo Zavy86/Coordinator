@@ -11,6 +11,7 @@
 
 # ignore configuration file
 config.inc.php
+ldap_update.inc.php
 
 # ignore project directory
 /nbproject/
