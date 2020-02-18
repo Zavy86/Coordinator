@@ -72,17 +72,7 @@ public function header($title="",$nav="dashboard",$navbar=TRUE){
  <!-- Favicon -->
  <link rel="shortcut icon" type="image/x-icon" href="<?php echo $GLOBALS['dir']."core/images/favicon.ico";?>">
  <link rel="shortcut icon" href="<?php echo $GLOBALS['dir']."core/images/favicon.png";?>">
-
- <!-- Web Application Icon -->
- <link rel="icon" sizes="144x144" href="<?php echo $GLOBALS['dir']."core/images/logos/logo_144.png";?>" type="image/png">
-
- <!-- Apple iOS -->
- <meta name="apple-mobile-web-app-capable" content="yes">
- <link rel="apple-touch-icon-precomposed" sizes="144x144" href="<?php echo $GLOBALS['dir']."core/images/logos/logo_144.png";?>">
- <link rel="apple-touch-icon-precomposed" sizes="114x114" href="<?php echo $GLOBALS['dir']."core/images/logos/logo_114.png";?>">
- <link rel="apple-touch-icon-precomposed" sizes="72x72" href="<?php echo $GLOBALS['dir']."core/images/logos/logo_72.png";?>">
- <link rel="apple-touch-icon-precomposed" href="<?php echo $GLOBALS['dir']."core/images/logos/logo_57.png";?>">
-
+ 
 </head>
 
 <body <?php if(api_baseName()=="login.php"){echo "class='login-background'";}?>>
