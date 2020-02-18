@@ -9,7 +9,7 @@ function content(){
  if(!isset($_GET['idAccount'])){$_GET['idAccount']=0;}
  // get objects
  $account=api_accounts_account($_GET['idAccount']);
- // build account dynamic list
+ // build account description list
  if($account->id>1){
   $account_dl=new str_dl("br","dl-horizontal");
   $account_dl->addElement(api_text("accounts_edit-ff-avatar"),api_image($account->avatar,"img-polaroid",125,NULL,TRUE));
@@ -180,7 +180,7 @@ function content(){
  // open split
  $GLOBALS['html']->split_open();
  $GLOBALS['html']->split_span(6);
- // renderize account dynamic list
+ // renderize account description list
  if(is_object($account_dl)){$account_dl->render();}
  // renderize account form
  if(is_object($account_form)){$account_form->render();}

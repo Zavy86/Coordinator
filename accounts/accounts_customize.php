@@ -10,7 +10,7 @@ function content(){
  $webcam_modal=new str_modal("webcam");
  $webcam_modal->header(api_text("accounts_customize-modal-title"));
  $webcam_modal->body("<div id='buttons'><button id='start'>".api_icon("icon-off")."</button><button id='snap'>".api_icon("icon-camera")."</button><button id='upload'>".api_icon("icon-ok")."</button><br><br><button id='discard'>".api_icon("icon-repeat")."</button></div><div id='live'><video id='video' width='320' height='240' autoplay></video><div id='square'></div></div><div id='photo'><canvas id='canvas' width='200' height='200'></canvas></div>");
- // build account dynamic list
+ // build account description list
  $account_dl=new str_dl("br","dl-horizontal");
  $account_dl->addElement(api_text("accounts_customize-ff-avatar"),api_image($account->avatar,"img-polaroid",125,NULL,TRUE)." ".$webcam_modal->link(api_icon("icon-camera"),"btn"));
  // build account form
@@ -79,7 +79,7 @@ function content(){
  // open split
  $GLOBALS['html']->split_open();
  $GLOBALS['html']->split_span(6);
- // renderize account dynamic list
+ // renderize account description list
  if(is_object($account_dl)){$account_dl->render();}
  // renderize account form
  if(is_object($account_form)){$account_form->render();}

@@ -26,7 +26,7 @@ function content(){
   //$dd_links.=" ".api_link("#",api_icon("icon-share",api_text("uploads_files_view-dd-share")));
   $dd_links.=" ".$link->counter." ".api_icon("icon-time",api_text("uploads_files_view-dd-counter",$link->counter));
  }
- // build contact dynamic list
+ // build contact description list
  $dl_file=new str_dl("br","dl-horizontal");
  $dl_file->addElement(api_text("uploads_files_view-dt-name"),$file->label);
  $dl_file->addElement(api_text("uploads_files_view-dt-file"),$folder->path_html." / ".api_link("submit.php?act=file_download&idFile=".$file->id,$file->name));

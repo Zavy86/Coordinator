@@ -12,7 +12,7 @@ function content(){
  // check objects
  if(!$company->id){echo api_text("companyNotFound");return FALSE;}
 
- // build members dynamic list
+ // build members description list
  $company_dl=new str_dl("br","dl-horizontal");
 
  $company_dl->addElement(api_text("companies_view-name"),$company->name);
@@ -28,7 +28,7 @@ function content(){
   }
   $levels_array[$role->level]->members[$member->id]=$member;
  }
- // build members dynamic list
+ // build members description list
  $roles_dl=new str_dl("br","dl-horizontal");
  // cycle levels
  foreach(array_reverse($levels_array,TRUE) as $role){
