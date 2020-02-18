@@ -245,6 +245,7 @@ class str_table{
      }
      // get limit
      $limit=$_GET['l'];
+     if(!strlen($limit)){$limit=20;}
      // build url
      $return.="<a href='".api_baseName()."?of=".$th->order."&om=".$order.$this->get."&l=".$limit."'>";
     }
