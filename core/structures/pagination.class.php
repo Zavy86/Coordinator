@@ -68,7 +68,7 @@ class str_pagination{
    while($result=$GLOBALS['db']->fetchNextObject($results)){$total++;}
   }
   // build url
-  $url=api_baseName()."?p={p}".$get."&l=".$limit;
+  $url=api_baseName()."?p={p}".$get."&l=".$limit."&of=".$_GET['of']."&om=".$_GET['om'];
   // set variables
   $this->url=$url;
   $this->total=$total;

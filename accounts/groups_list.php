@@ -11,10 +11,10 @@ function content(){
  echo $GLOBALS['navigation']->filtersText();
  // check company
  if(!$company->id){
-  // build warning dynamic list
+  // build warning description list
   $warning_dl=new str_dl("br","dl-horizontal");
   $warning_dl->addElement(api_span(api_text("groups_list-dt-warning"),"text-error"),api_text("groups_list-dd-company"));
-  // renderize warning dynamic list
+  // renderize warning description list
   $warning_dl->render();
   return FALSE;
  }

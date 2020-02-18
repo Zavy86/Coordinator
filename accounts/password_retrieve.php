@@ -13,7 +13,7 @@ if(strlen($g_language)){
 }
 // open html
 $html->header("Password retrieve",NULL,FALSE);
-// build warning dynamic list
+// build warning description list
 if(api_getOption("ldap")){
  $warning_dl=new str_dl("br","dl-horizontal");
  $warning_dl->addElement(api_span(api_text("password_retrieve-dt-ldap"),"text-error"),api_text("password_retrieve-dd-ldap",api_getOption("owner")));
@@ -23,7 +23,7 @@ $form=new str_form("submit.php?act=password_retrieve&lang=".$g_language,"post","
 $form->addField("text","account",api_text("password_retrieve-ff-account"),NULL,"input-xlarge",api_text("password_retrieve-ff-account-placeholder"));
 $form->addControl("submit",api_text("password_retrieve-fc-submit"));
 $form->addControl("button",api_text("password_retrieve-fc-cancel"),NULL,"login.php?lang=".$g_language);
-// renderize warning dynamic list
+// renderize warning description list
 if(is_object($warning_dl)){$warning_dl->render();}
 // renderize password retrieve form
 $form->render();

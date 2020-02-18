@@ -14,7 +14,7 @@ $account=api_accounts_account($GLOBALS['db']->queryUniqueValue("SELECT id FROM a
 if(!$account->id){echo api_text("accountError");return FALSE;}
 // load user language file for account
 api_loadLocaleFile("../accounts/",$account->language);
-// build account dynamic list
+// build account description list
 $account_dl=new str_dl("br","dl-horizontal");
 $account_dl->addElement(api_text("password_reset-dt-name"),$account->name);
 $account_dl->addElement(api_text("password_reset-dt-account"),$account->account);
@@ -26,7 +26,7 @@ $form->addField("password","password",api_text("password_reset-ff-password"),NUL
 $form->addField("password","confirm",api_text("password_reset-ff-confirm"),NULL,"input-large",api_text("password_reset-ff-confirm-placeholder"));
 $form->addControl("submit",api_text("password_reset-fc-submit"));
 $form->addControl("button",api_text("password_reset-fc-cancel"),NULL,"login.php");
-// renderize account dynamic list
+// renderize account description list
 $account_dl->render();
 // renderize password reset form
 $form->render();
