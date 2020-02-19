@@ -17,7 +17,6 @@ public function header($title="",$nav="dashboard",$navbar=TRUE){
 <html lang="it">
 <head>
  <meta charset="utf-8">
- <meta name="viewport" content="width=device-width, initial-scale=1.0">
  <meta name="author" content="Manuel Zavatta">
  <meta name="copyright" content="2009-<?php echo date('Y'); ?> © Coordinator [www.coordinator.it]">
  <meta name="owner" content="<?php echo api_getOption('owner'); ?>">
@@ -72,7 +71,7 @@ public function header($title="",$nav="dashboard",$navbar=TRUE){
  <!-- Favicon -->
  <link rel="shortcut icon" type="image/x-icon" href="<?php echo $GLOBALS['dir']."core/images/favicon.ico";?>">
  <link rel="shortcut icon" href="<?php echo $GLOBALS['dir']."core/images/favicon.png";?>">
- 
+
 </head>
 
 <body <?php if(api_baseName()=="login.php"){echo "class='login-background'";}?>>
