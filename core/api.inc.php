@@ -2385,6 +2385,26 @@ function api_accountGroupMember($idGroup,$idAccount=NULL,$subGroups=TRUE){
 }
 
 /**
+ * Period (from number to text)
+ *
+ * @param integer $period
+ * @return string|boolean Textual period
+ */
+function api_period($period){
+ // check parameters
+ if(strlen($period)!=6){return false;}
+ // definitions
+ $year=(int)substr($period,0,4);
+ $month=(int)substr($period,4,2);
+ // set locale
+ setlocale(LC_TIME,$GLOBALS['session']->user->localization);
+ // convert month to text
+ $return=ucfirst(strftime("%B",strtotime($year."-".$month."-01")))." ".$year;
+ // return
+ return $return;
+}
+
+/**
  * WSRFC API
  *
  * @param string $wsrfc WSRFC Configuration [ default | development | production ]
