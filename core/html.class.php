@@ -72,6 +72,8 @@ public function header($title="",$nav="dashboard",$navbar=TRUE){
  <link rel="shortcut icon" type="image/x-icon" href="<?php echo $GLOBALS['dir']."core/images/favicon.ico";?>">
  <link rel="shortcut icon" href="<?php echo $GLOBALS['dir']."core/images/favicon.png";?>">
 
+ <?php if(file_exists("../analytics.inc.php")){include_once("../analytics.inc.php");} ?>
+
 </head>
 
 <body <?php if(api_baseName()=="login.php"){echo "class='login-background'";}?>>
