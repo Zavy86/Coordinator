@@ -693,7 +693,7 @@ function api_date_years($years_from,$years_to=NULL){
  *
  * @param string $month_from start month, if null january
  * @param string $month_to end month, if null december
- * @return array $months_array array of years
+ * @return array $months_array array of months
  */
 function api_date_months($month_from=NULL,$month_to=NULL){
  $months_array=array();
@@ -702,6 +702,35 @@ function api_date_months($month_from=NULL,$month_to=NULL){
  $locale_months=array(1=>api_text("month-january"),2=>api_text("month-february"),3=>api_text("month-march"),4=>api_text("month-april"),5=>api_text("month-may"),6=>api_text("month-june"),7=>api_text("month-july"),8=>api_text("month-august"),9=>api_text("month-september"),10=>api_text("month-october"),11=>api_text("month-november"),12=>api_text("month-december"));
  for($month=$month_from;$month<=$month_to;$month++){$months_array[$month]=$locale_months[$month];}
  return $months_array;
+}
+
+/**
+ * Date Days
+ *
+ * @param string $day_from start day, if null monday (0 to 6)
+ * @param string $day_to end day, if null sunday (1 to 7)
+ * @return array Array of days
+ */
+function api_date_days($day_from=1,$day_to=7){
+ // check parameters
+ if($day_from<0||$day_from>6){$day_from=1;}
+ if($day_to<1||$day_to>7){$day_to=7;}
+ // make days array
+ $days_array=array(
+  0=>api_text("day-sunday"),
+  1=>api_text("day-monday"),
+  2=>api_text("day-tuesday"),
+  3=>api_text("day-wednesday"),
+  4=>api_text("day-thursday"),
+  5=>api_text("day-friday"),
+  6=>api_text("day-saturday"),
+  7=>api_text("day-sunday")
+ );
+ // make return array
+ $return_array=array();
+ for($i=$day_from;$i<=$day_to;$i++){$return_array[$i]=$days_array[$i];}
+ // return
+ return $return_array;
 }
 
 /* -[ Random Generator ]----------------------------------------------------- */
