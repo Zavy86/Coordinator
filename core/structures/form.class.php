@@ -440,6 +440,7 @@ class str_form{
        case "multiselect":
         $return.="   <option value=\"".$fo->value."\" id='".$this->name."_input_".$ff->name."_option_".$fo->value."'";
         if($fo->checked){$return.=" selected='selected'";}
+        if($fo->disabled){$return.=" disabled";}
         $return.=">".$fo->label."</option>\n";
         break;
       }
