@@ -181,7 +181,7 @@ public function header($title="",$nav="dashboard",$navbar=TRUE){
 
       <?php if($GLOBALS['initial_module']<>"index"){ ?><li><a href="<?php echo $GLOBALS['dir']."index/index.php";?>"><i class="icon-home"></i></a></li> <?php } ?>
 
-      <?php if(api_checkPermission("chats","chats_chat")){ ?>
+      <?php if(false){ //api_checkPermission("chats","chats_chat")){ ?>
 
       <li class="dropdown">
        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
