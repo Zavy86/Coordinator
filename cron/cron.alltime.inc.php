@@ -11,7 +11,7 @@ $count=$GLOBALS['db']->countOf("logs_mails","status='0'");
 $count_sended=0;
 $count_failed=0;
 if($count){
- $mails=$GLOBALS['db']->query("SELECT * FROM logs_mails WHERE status='0'");
+ $mails=$GLOBALS['db']->query("SELECT * FROM logs_mails WHERE status<>'1'");
  while($mail=$GLOBALS['db']->fetchNextObject($mails)){
   // send mail
   $sendmail=api_mailer_process($mail);
