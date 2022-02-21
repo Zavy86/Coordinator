@@ -1,1 +1,2 @@
-1.13.1
+SimpleXlsx 1.13.1
+SimpleXlsxGen 1.1.11
