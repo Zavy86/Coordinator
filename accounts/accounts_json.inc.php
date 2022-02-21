@@ -8,7 +8,7 @@ $search=$_GET['q'];
 if(!$search){die();}
 $answer=array();
 // execute the query
-$accounts=$GLOBALS['db']->query("SELECT id,name FROM accounts_accounts WHERE id='".$search."' OR name LIKE '%".$search."%' ORDER BY name ASC LIMIT 25");
+$accounts=$GLOBALS['db']->query("SELECT id,name FROM accounts_accounts WHERE id='".$search."' OR name LIKE '%".$search."%' AND enabled='1' ORDER BY name ASC LIMIT 25");
 while($account=$GLOBALS['db']->fetchNextObject($accounts)){
  $answer[]=array("id"=>$account->id,"text"=>$account->name);
 }
