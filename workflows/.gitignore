@@ -1,0 +1,5 @@
+# ignore configuration file
+config.inc.php
+
+# Never ignore index.php files
+!index.php

@@ -1,0 +1,486 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<locale language="IT">
+
+ <!-- module -->
+ <text key="module-title">Attività</text>
+
+ <!-- alerts -->
+ <text key="workflowNotFound">L'attività non è stata trovata</text>
+ <text key="workflowCreated">L'attività è stata creata</text>
+ <text key="workflowUpdated">L'attività è stata aggiornata</text>
+ <text key="workflowUrged">L'attività è stata sollecitata</text>
+ <text key="workflowClosed">L'attività è stata chiusa</text>
+ <text key="workflowError">Si è verificato un errore durante il salvataggio dell'attività</text>
+ <text key="ticketAssigned">Il ticket ti è stato assegnato</text>
+ <text key="ticketCreated">Il ticket ti è stato creato</text>
+ <text key="ticketUpdated">Il ticket è stato aggiornato</text>
+ <text key="ticketClosed">Il ticket è stato chiuso</text>
+ <text key="ticketError">Si è verificato un errore durante il salvataggio del ticket</text>
+ <text key="ticketErrorAssigned">Si è verificato un errore durante l'assegnazione del ticket</text>
+ <text key="mailDeleted">La mail è stata eliminata</text>
+ <text key="mailError">Si è verificato un errore con questa mail</text>
+ <text key="noteCreated">La nota è stata salvata</text>
+ <text key="noteDeleted">La nota è stata eliminata</text>
+ <text key="noteError">Si è verificato un errore con la nota</text>
+ <text key="flowNotFound">Il flusso non è stato trovato</text>
+ <text key="flowCreated">Il flusso è stato creato</text>
+ <text key="flowUpdated">Il flusso è stato aggiornato</text>
+ <text key="flowError">Si è verificato un errore durante il salvataggio del flusso</text>
+ <text key="fieldCreated">Il campo è stato creato</text>
+ <text key="fieldUpdated">Il campo è stato aggiornato</text>
+ <text key="fieldMoved">Il campo è stato spostato</text>
+ <text key="fieldDeleted">Il campo è stato eliminato</text>
+ <text key="categoryCreated">La categoria è stata creata</text>
+ <text key="categoryUpdated">La categoria è stata aggiornata</text>
+ <text key="categoryError">Si è verificato un errore durante il salvataggio della categoria (verifica di aver compilato correttamente il nome e il gruppo)</text>
+ <text key="actionCreated">L'azione è stata creata</text>
+ <text key="actionUpdated">L'azione è stata aggiornata</text>
+ <text key="actionDeleted">L'azione è stata eliminata</text>
+ <text key="actionRequired">Non è possibile eliminare questa azione in quanto richiesta da altre azioni</text>
+ <text key="sendmailSuccess">Il ticket è stato inoltrato con successo</text>
+ <text key="sendmailError">Si è verificato un errore durante l'inoltro del ticket</text>
+
+ <!-- logs -->
+ <text key="logs_workflows_workflowCreated">Attività - Attività {0} [Aperta] {1}&#xA;&#xA;{2}</text>
+ <text key="logs_workflows_workflowAssigned">Attività - Attività {0} [Presa in carico] {1}</text>
+ <text key="logs_workflows_workflowClosed">Attività - Attività {0} [Chiusa] {1}</text>
+ <text key="logs_workflows_workflowsCron">Attività - Mail disponibili&#xA;&#xA;{1}</text>
+ <text key="logs_workflows_ticketCreated">Attività - Ticket {0} [Aperto] {1}</text>
+ <text key="logs_workflows_ticketAssigned">Attività - Ticket {0} [Preso in carico] {1}</text>
+ <text key="logs_workflows_ticketStandby">Attività - Ticket {0} [Sospeso] {1}&#xA;&#xA;Note: {3}</text>
+ <text key="logs_workflows_ticketClosed">Attività - Ticket {0} [Chiuso] {1}&#xA;&#xA;Note: {4}</text>
+ <text key="logs_workflows_ticketAssigned">Attività - Ticket {0} [Preso in carico] {1}</text>
+ <text key="logs_workflows_ticketUrged">Attività - Ticket {0} [Sollecitata] {1}&#xA;&#xA;{2}&#xA;&#xA;Note: {3}</text>
+ <text key="logs_workflows_categoryCreated">Attività - Categoria {0} creata</text>
+ <text key="logs_workflows_categoryUpdated">Attività - Categoria {0} aggiornata</text>
+ <text key="logs_workflows_flowCreated">Attività - Flusso {0} creato</text>
+ <text key="logs_workflows_flowUpdated">Attività - Flusso {0} aggiornato</text>
+ <text key="logs_workflows_fieldCreated">Attività - Flusso {0} - Campo {1} creato</text>
+ <text key="logs_workflows_fieldUpdated">Attività - Flusso {0} - Campo {1} aggiornato</text>
+ <text key="logs_workflows_fieldMoved">Attività - Flusso {0} - Campo {1} spostato</text>
+ <text key="logs_workflows_fieldDeleted">Attività - Flusso {0} - Campo {1} eliminato</text>
+ <text key="logs_workflows_actionCreated">Attività - Flusso {0} - Azione {1} creata</text>
+ <text key="logs_workflows_actionUpdated">Attività - Flusso {0} - Azione {1} aggiornata</text>
+ <text key="logs_workflows_actionDeleted">Attività - Flusso {0} - Azione {1} eliminata</text>
+ <!-- workflowCreated -->
+ <text key="logs_workflows_workflowCreated-label">Apri un'attività</text>
+ <text key="logs_workflows_workflowCreated-description">Quando tu avvii un nuova attività</text>
+ <text key="logs_workflows_workflowCreated-subject">Attività - Attività {0} [Aperta] {1}</text>
+ <text key="logs_workflows_workflowCreated-message">{2}</text>
+ <!-- workflowAssigned -->
+ <text key="logs_workflows_workflowAssigned-label">Attività assegnata</text>
+ <text key="logs_workflows_workflowAssigned-description">Quando una tua attività viene presa in carico</text>
+ <text key="logs_workflows_workflowAssigned-subject">Attività - Attività {0} [Presa in carico] {1}</text>
+ <text key="logs_workflows_workflowAssigned-message">L'attività in oggetto è stata presa in carico da {2}.</text>
+ <!-- workflowClosed -->
+ <text key="logs_workflows_workflowClosed-label">Attività chiusa</text>
+ <text key="logs_workflows_workflowClosed-description">Quando una tua attività viene chiusa</text>
+ <text key="logs_workflows_workflowClosed-subject">Attività - Attività {0} [Chiusa] {1}</text>
+ <text key="logs_workflows_workflowClosed-message">L'attività in oggetto è stata chiusa.</text>
+ <!-- ticketDisponible -->
+ <text key="logs_workflows_ticketDisponible-label">Ticket Disponibile</text>
+ <text key="logs_workflows_ticketDisponible-description">Quando è disponibile un ticket che puoi prendere in carico</text>
+ <text key="logs_workflows_ticketDisponible-subject">Attività - Ticket {0} [Aperto] {1}</text>
+ <text key="logs_workflows_ticketDisponible-message">{2}</text>
+ <!-- ticketStandby -->
+ <text key="logs_workflows_ticketStandby-label">Ticket sospeso</text>
+ <text key="logs_workflows_ticketStandby-description">Quando un tuo ticket viene sospeso</text>
+ <text key="logs_workflows_ticketStandby-subject">Attività - Ticket {0} [Sospeso] {1}</text>
+ <text key="logs_workflows_ticketStandby-message">Il ticket in oggetto è stato sospeso da {2}.&#xA;&#xA;Note: {3}</text>
+ <!-- ticketClosed -->
+ <text key="logs_workflows_ticketClosed-label">Ticket chiuso</text>
+ <text key="logs_workflows_ticketClosed-description">Quando un tuo ticket viene chiuso</text>
+ <text key="logs_workflows_ticketClosed-subject">Attività - Ticket {0} [Chiuso] {1}</text>
+ <text key="logs_workflows_ticketClosed-message">Il ticket in oggetto è stato chiuso come {2} da {3}.&#xA;&#xA;Note: {4}</text>
+
+ <!-- status -->
+ <text key="status">Stato</text>
+ <text key="status-opened">Aperto</text>
+ <text key="status-assigned">Assegnato</text>
+ <text key="status-standby">Sospeso</text>
+ <text key="status-closed">Chiuso</text>
+ <text key="status-closedExecuted">Chiuso (Eseguito)</text>
+ <text key="status-closedUnnecessary">Chiuso (Non necessario)</text>
+ <text key="status-closedUnexecuted">Chiuso (Non eseguibile)</text>
+ <text key="status-locked">Bloccato</text>
+
+ <!-- solved -->
+ <text key="solved-executed">Eseguito</text>
+ <text key="solved-unexecuted">Non eseguibile</text>
+ <text key="solved-unnecessary">Non necessario</text>
+
+ <!-- approved -->
+ <text key="approved-false">Non approvato</text>
+ <text key="approved-true">Approvato</text>
+
+ <!-- typology -->
+ <text key="typology">Typologia</text>
+ <text key="typology-request">Richiesta</text>
+ <text key="typology-incident">Problematica</text>
+
+ <!-- priority -->
+ <text key="priority">Priorità</text>
+ <text key="priority-highest">Massima</text>
+ <text key="priority-high">Alta</text>
+ <text key="priority-medium">Media</text>
+ <text key="priority-low">Bassa</text>
+ <text key="priority-lowest">Minima</text>
+
+ <!-- typology -->
+ <text key="difficulty">Difficoltà</text>
+ <text key="difficulty-low">Bassa</text>
+ <text key="difficulty-medium">Media</text>
+ <text key="difficulty-high">Alta</text>
+
+ <!-- ticket -->
+ <text key="ticket-standard">Ticket standard</text>
+ <text key="ticket-external">Ticket gestito esternamente</text>
+ <text key="ticket-external-by">Ticket gestito esternamente da {0}</text>
+ <text key="ticket-authorization">Richiesta di autorizzazione</text>
+ <text key="ticket-authorization-by">Richiesta autorizzazione di {0}</text>
+
+ <!-- filters -->
+ <text key="filter-status">Stato</text>
+ <text key="filter-show">Mostra</text>
+ <text key="filter-showProcessable">Tickets che puoi prendere in carico</text>
+ <text key="filter-showAll">Tutti i tickets</text>
+ <text key="filter-opened">Aperti</text>
+ <text key="filter-assigned">Assegnati</text>
+ <text key="filter-standby">Sospesi</text>
+ <text key="filter-closed">Chiusi</text>
+ <text key="filter-locked">Bloccati</text>
+ <text key="filter-category">Categoria</text>
+ <text key="filter-typology">Tipologia</text>
+ <text key="filter-addDate">Data inserimento</text>
+ <text key="filter-addIdAccount">Utente</text>
+ <text key="filter-idAssigned">Incaricato</text>
+
+ <!-- api.inc.php -->
+ <text key="api-sla">{0} minuti</text>
+ <text key="api-sla-expire">Scadenza fra {0}</text>
+ <text key="api-sla-expired">Scaduta da {0}</text>
+ <text key="api-sla-completed">Completata in {0}</text>
+ <text key="api-sla-completedExpired">Completata con {0} di ritardo</text>
+ <text key="api-details-mh-ticket">Ticket: {0}</text>
+ <text key="api-details-dt-category">Categoria</text>
+ <text key="api-details-dt-add">Creazione</text>
+ <text key="api-details-dd-add">{0} il {1}</text>
+ <text key="api-details-dt-ass">Assegnazione</text>
+ <text key="api-details-dd-ass">{0} il {1}</text>
+ <text key="api-details-dt-end">Conclusione</text>
+ <text key="api-details-dt-hostname">Hostname</text>
+ <text key="api-details-dt-note">Note</text>
+ <text key="api-option-undefined">Non definito</text>
+ <text key="api-ocs-dt-tag">TAG</text>
+ <text key="api-ocs-dt-manufacturer">Costruttore</text>
+ <text key="api-ocs-dt-model">Modello</text>
+ <text key="api-ocs-dt-serial">Numero di serie</text>
+ <text key="api-ocs-dt-ip">Indirizzo IP</text>
+ <text key="api-ocs-dt-osname">Sistema Operativo</text>
+ <text key="api-ocs-dt-osversion">Versione</text>
+ <text key="api-ocs-dt-account">Account</text>
+ <text key="api-ocs-dt-processor">Processore</text>
+ <text key="api-ocs-dt-memory">Memoria</text>
+ <text key="api-ocs-dt-monitor">Monitor</text>
+
+ <!-- template.inc.php -->
+ <text key="nav-workflows">Attività</text>
+ <text key="nav-open">Apri un'attività</text>
+ <text key="nav-operations">Operazioni</text>
+ <text key="nav-urge">Sollecita</text>
+ <text key="nav-close">Chiudi attività</text>
+ <text key="nav-close-confirm">Confermi di voler chiudere questa attività?</text>
+ <text key="nav-edit">Modifica attività</text>
+ <text key="nav-sendmail">Inoltra per e-mail</text>
+ <text key="nav-addTicket">Aggiungi ticket</text>
+ <text key="nav-authorization">Richiedi autorizzazione</text>
+ <text key="nav-ticket">Ticket: {0}</text>
+ <text key="nav-assign">Assegnati il ticket</text>
+ <text key="nav-process">Processa il ticket</text>
+ <text key="nav-unlock">Sblocca il ticket</text>
+ <text key="nav-reopen">Riapri il ticket</text>
+ <text key="nav-clone">Clona il ticket</text>
+ <text key="nav-ticket-mails">Mail {0}</text>
+ <text key="nav-administration">Amministrazione</text>
+ <text key="nav-list">Lista flussi</text>
+ <text key="nav-add">Nuovo flusso</text>
+ <text key="nav-history">Storico attività</text>
+ <text key="nav-categories">Gestione categorie</text>
+
+ <!-- workflows.php -->
+ <text key="workflows-workflows">Attività personali</text>
+ <text key="workflows-workflows-all">Mostra tutte le attività personali</text>
+ <text key="workflows-workflows-recents">Mostra le attività personali più recenti</text>
+ <text key="workflows-tickets-opened">Tickets disponibili</text>
+ <text key="workflows-tickets-assigned">Tickets assegnati a te</text>
+ <text key="workflows-tickets-standby">Tickets sospesi da te</text>
+ <text key="workflows-th-timestamp">Data</text>
+ <text key="workflows-th-sla">SLA</text>
+ <text key="workflows-th-account">Utente</text>
+ <text key="workflows-th-status">Stato</text>
+ <text key="workflows-th-category">Categoria</text>
+ <text key="workflows-th-subject">Oggetto</text>
+ <text key="workflows-th-assigned">Incaricato</text>
+ <text key="workflows-th-group">Gruppo</text>
+ <text key="workflows-tr-workflowsUnvalued">Non è presente nessuna attività aperta da te recentemente..</text>
+ <text key="workflows-tr-ticketsUnvalued">Non è presente nessun ticket..</text>
+
+ <!-- workflows_flows.php -->
+ <text key="flows-workflows">Attività personali</text>
+ <text key="flows-assigned-tickets">Tickets incaricati</text>   <!-- cancellare se lasciamo una sola vista -->
+ <text key="flows-tickets">Tickets</text>
+ <text key="flows-th-idWorkflow">Attività</text>
+ <text key="flows-th-idTicket">Ticket</text>
+ <text key="flows-th-timestamp">Data</text>
+ <text key="flows-th-sla">SLA</text>
+ <text key="flows-th-category">Categoria</text>
+ <text key="flows-th-subject">Oggetto</text>
+ <text key="flows-th-account">Utente</text>
+ <text key="flows-th-group">Gruppo</text>
+ <text key="flows-th-assigned">Incaricato</text>
+ <text key="flows-th-update">Aggiornamento</text>
+ <text key="flows-tr-workflowsUnvalued">Non è presente nessuna attività aperto da te..</text>
+ <text key="flows-tr-ticketsUnvalued">Non è presente nessun ticket..</text>
+
+ <!-- workflows_view.php -->
+ <text key="view-dt-idWorkflow">Attività</text>
+ <text key="view-dt-category">Categoria</text>
+ <text key="view-dt-subject">Oggetto</text>
+ <text key="view-dt-account">Utente</text>
+ <text key="view-dt-typology">Tipologia</text>
+ <text key="view-dt-priority">Priorità</text>
+ <text key="view-dt-status">Stato</text>
+ <text key="view-dt-addDate">Creazione</text>
+ <text key="view-dt-endDate">Conclusione</text>
+ <text key="view-dt-sla">SLA</text>
+ <text key="view-dt-details">Dettagli</text>
+ <text key="view-dt-note">Note</text>
+ <text key="view-dt-hostname">Hostname</text>
+ <text key="view-dd-connect">Vuoi connetterti all'host {0}?</text>
+ <text key="view-dt-guide">Procedura</text>
+ <text key="view-dd-guide">Link diretto alla procedura: (Ctrl+C per copiare)</text>
+ <text key="view-th-idTicket">Ticket</text>
+ <text key="view-th-sla">SLA</text>
+ <text key="view-th-subject">Oggetto</text>
+ <text key="view-th-group">Gruppo</text>
+ <text key="view-th-assigned">Incaricato</text>
+ <text key="view-th-update">Aggiornamento</text>
+ <text key="view-td-assign">Assegnati il ticket</text>
+ <text key="view-td-assign-confirm">Confermi di volerti assegnare questo ticket?</text>
+ <text key="view-td-process">Processa il ticket</text>
+ <text key="view-td-unlock">Sblocca manualmente il ticket</text>
+ <text key="view-td-reopen">Riapri il ticket</text>
+ <text key="view-td-note">Note</text>
+ <text key="view-tr-unvalued">Non è presente nessun ticket..</text>
+ <text key="view-ticketAdd">Nuovo ticket</text>
+ <text key="view-dd-notesNull">Non è presente nessuna nota..</text>
+ <text key="view-ff-note-placeholder">Aggiungi una nota</text>
+ <text key="view-ff-note-delete">Elimina nota</text>
+ <text key="view-ff-note-delete-confirm">Confermi di voler eliminare definitivamente questa nota?</text>
+ <text key="view-ff-idGroup">Gruppo</text>
+ <text key="view-ff-idGroup-placeholder">Seleziona un gruppo</text>
+ <text key="view-ff-idAssigned">Incaricato</text>
+ <text key="view-ff-idAssigned-placeholder">Seleziona un utente</text>
+ <text key="view-ff-subject">Oggetto</text>
+ <text key="view-ff-subject-placeholder">Oggetto del ticket</text>
+ <text key="view-ff-mail">Indirizzo mail</text>
+ <text key="view-ff-mail-placeholder">Indirizzo mail dell'incaricato</text>
+ <text key="view-ff-typology">Tipologia</text>
+ <text key="view-ff-group">Assegnata al Gruppo</text>
+ <text key="view-ff-group-placeholder">Seleziona un gruppo</text>
+ <text key="view-ff-assigned">Incaricato</text>
+ <text key="view-ff-assigned-placeholder">Seleziona un utente</text>
+ <text key="view-ff-priority">Priorità</text>
+ <text key="view-ff-difficulty">Difficoltà</text>
+ <text key="view-ff-note">Note</text>
+ <text key="view-ff-message">Messaggio utente</text>
+ <text key="view-ff-mail_cc">C/C Messaggio</text>
+ <text key="view-ff-mail_cc-placeholder">Destinatari in copia separati da virgola ,</text>
+ <text key="view-ff-referents">Referenti</text>
+ <text key="view-ff-referents-placeholder">Inserisci un referente per riga per ogni ticket che vuoi clonare.&#xA;Se non specifichi nessun referente il ticket verrà clonato una singola volta.</text>
+ <text key="view-ff-slaAssignment">SLA Assegnamento</text>
+ <text key="view-ff-slaClosure">SLA Chiusura</text>
+ <text key="view-fc-submit">Salva</text>
+ <text key="view-fc-clone">Clona ticket</text>
+
+ <!-- workflows_view.php -->
+ <text key="search-li-show">Mostra tutta la categoria {0}</text>
+ <text key="search-li-other">Altra richiesta o problema non in elenco</text>
+
+ <!-- workflows_add.php -->
+ <text key="add-ff-category">Categoria</text>
+ <text key="add-ff-typology">Tipologia</text>
+ <text key="add-ff-subject">Oggetto</text>
+ <text key="add-ff-priority">Priorità</text>
+ <text key="add-ff-referent">Referente</text>
+ <text key="add-ff-phone">Telefono</text>
+ <text key="add-ff-note">Note</text>
+ <text key="add-ff-file">Allegato</text>
+ <text key="add-fc-submit">Salva</text>
+ <text key="add-fc-cancel">Annulla</text>
+
+ <!-- workflows_edit.php -->
+ <text key="edit-ff-category">Categoria</text>
+ <text key="edit-ff-flow">Flusso</text>
+ <text key="edit-ff-typology">Tipologia</text>
+ <text key="edit-ff-subject">Oggetto</text>
+ <text key="edit-ff-priority">Priorità</text>
+ <text key="edit-ff-description">Dettagli</text>
+ <text key="edit-ff-note">Note</text>
+ <text key="edit-ff-tickets">Tickets</text>
+ <text key="edit-fo-tickets-null">Lascia invariati</text>
+ <text key="edit-fo-tickets-open">Apri nuovo ticket</text>
+ <text key="edit-fc-submit">Salva</text>
+ <text key="edit-fc-cancel">Annulla</text>
+
+ <!-- workflows_sendmail.php -->
+ <text key="sendmail-ff-to">Destinatario</text>
+ <text key="sendmail-ff-to-placeholder">Indirizzo e-mail del destinatario</text>
+ <text key="sendmail-ff-cc">Copia conoscenza</text>
+ <text key="sendmail-ff-cc-placeholder">Indirizzi e-mail separati da una virgola</text>
+ <text key="sendmail-ff-subject">Oggetto</text>
+ <text key="sendmail-ff-message">Messaggio</text>
+ <text key="sendmail-ff-note">Note</text>
+ <text key="sendmail-fc-submit">Invia</text>
+ <text key="sendmail-fc-submit-confirm">Confermi di voler inviare questo messaggio?</text>
+ <text key="sendmail-fc-cancel">Annulla</text>
+
+ <!-- workflows_categories.php -->
+ <text key="categories-th-category">Categoria</text>
+ <text key="categories-th-description">Descrizione</text>
+ <text key="categories-tr-unvalued">Non è presente nessuna categoria..</text>
+ <text key="categories-create">Nuova categoria</text>
+ <text key="categories-update">Modifica categoria</text>
+ <text key="categories-ff-category">Categoria padre</text>
+ <text key="categories-ff-category-default">Categoria principale</text>
+ <text key="categories-ff-name">Categoria</text>
+ <text key="categories-ff-name-placeholder">Nome visualizzato</text>
+ <text key="categories-ff-description">Descrizione</text>
+ <text key="categories-ff-description-placeholder">Breve descrizione della categoria</text>
+ <text key="categories-ff-group">Gruppo</text>
+ <text key="categories-ff-group-placeholder">Seleziona un gruppo</text>
+ <text key="categories-fc-submit">Salva categoria</text>
+ <text key="categories-fc-cancel">Annulla</text>
+
+ <!-- workflows_flows_list.php -->
+ <text key="flows_list-th-category">Categoria</text>
+ <text key="flows_list-th-flow">Attività</text>
+ <text key="flows_list-th-description">Descrizione</text>
+ <text key="flows_list-th-counter">Utilizzi</text>
+ <text key="flows_list-tr-unvalued">Non è presente nessuna attività..</text>
+
+ <!-- workflows_flows_edit.php -->
+ <text key="flows_edit-ff-category">Categoria</text>
+ <text key="flows_edit-ff-subject">Oggetto</text>
+ <text key="flows_edit-ff-subject-placeholder">Oggetto dell'attività</text>
+ <text key="flows_edit-ff-description">Descrizione</text>
+ <text key="flows_edit-ff-description-placeholder">Descrizione sintetica dell'attività</text>
+ <text key="flows_edit-ff-advice">Suggerimento</text>
+ <text key="flows_edit-ff-advice-placeholder">Suggerimenti, requisiti o prove da eseguire prima di avviare l'attività</text>
+ <text key="flows_edit-ff-sla">SLA</text>
+ <text key="flows_edit-ff-guide">Procedura</text>
+ <text key="flows_edit-ff-guide-placeholder">Link diretto alla procedura</text>
+ <text key="flows_edit-ff-typology">Tipologia</text>
+ <text key="flows_edit-fo-pinned">In evidenza</text>
+ <text key="flows_edit-ff-priority">Priorità</text>
+ <text key="flows_edit-fc-submit">Salva</text>
+ <text key="flows_edit-fc-cancel">Annulla</text>
+
+ <!-- workflows_flows_view.php -->
+ <text key="flows_view-flow">ATTIVITÀ</text>
+ <text key="flows_view-flow-edit">Modifica attività</text>
+ <text key="flows_view-flow-preview">Anteprima attività</text>
+ <text key="flows_view-dt-category">Categoria</text>
+ <text key="flows_view-dt-subject">Oggetto</text>
+ <text key="flows_view-dt-typology">Tipologia</text>
+ <text key="flows_view-dt-priority">Priorità</text>
+ <text key="flows_view-dd-pinned">In evidenza</text>
+ <text key="flows_view-dt-sla">SLA</text>
+ <text key="flows_view-dt-description">Descrizione</text>
+ <text key="flows_view-dt-advice">Suggerimento</text>
+ <text key="flows_view-fields">CAMPI</text>
+ <text key="flows_view-fields-add">Aggiungi campo</text>
+ <text key="flows_view-fields-th-label">Campo</text>
+ <text key="flows_view-fields-th-typology">Tipologia</text>
+ <text key="flows_view-fields-th-name">Nome</text>
+ <text key="flows_view-fields-th-value">Valore</text>
+ <text key="flows_view-fields-th-options">Opzioni</text>
+ <text key="flows_view-fields-tr-unvalued">Non è presente nessun campo..</text>
+ <text key="flows_view-fields-mh-field">Modifica campo: {0}</text>
+ <text key="flows_view-fields-mh-fieldAdd">Nuovo campo</text>
+ <text key="flows_view-fields-ff-label">Etichetta</text>
+ <text key="flows_view-fields-ff-label-placeholder">Etichetta visualizzata</text>
+ <text key="flows_view-fields-ff-typology">Tipologia</text>
+ <text key="flows_view-fields-ff-name">Nome</text>
+ <text key="flows_view-fields-ff-name-placeholder">Nome univoco del campo</text>
+ <text key="flows_view-fields-ff-value">Valore</text>
+ <text key="flows_view-fields-ff-value-placeholder">Valore predefinito</text>
+ <text key="flows_view-fields-ff-class">Classe</text>
+ <text key="flows_view-fields-ff-classNull">Nessuna classe</text>
+ <text key="flows_view-fields-ff-placeholder">Placeholder</text>
+ <text key="flows_view-fields-ff-placeholder-placeholder">Messaggio di suggerimento</text>
+ <text key="flows_view-fields-ff-optionsMethod">Metodo opzioni</text>
+ <text key="flows_view-fields-ff-optionsValues">Opzioni</text>
+ <text key="flows_view-fields-ff-optionsValues-placeholder">Inserire un valore per riga nel formato: valore=etichetta</text>
+ <text key="flows_view-fields-ff-optionsQuery">MySQL Query</text>
+ <text key="flows_view-fields-ff-optionsQuery-placeholder">SELECT valore,etichetta FROM tabella ORDER BY etichetta ASC</text>
+ <text key="flows_view-fields-ff-required">Obbligatorio</text>
+ <text key="flows_view-fields-fc-submit">Salva campo</text>
+ <text key="flows_view-fields-fc-delete">Elimina campo</text>
+ <text key="flows_view-fields-fc-delete-confirm">Eliminare definitivamente questo campo?</text>
+ <text key="flows_view-actions">AZIONI</text>
+ <text key="flows_view-actions-add">Aggiungi azione</text>
+ <text key="flows_view-actions-th-condition">Condizione</text>
+ <text key="flows_view-actions-th-sla">SLA</text>
+ <text key="flows_view-actions-th-subject">Oggetto</text>
+ <text key="flows_view-actions-th-assigned">Incaricato</text>
+ <text key="flows_view-actions-th-group">Gruppo</text>
+ <text key="flows_view-actions-tr-unvalued">Non è presente nessuna azione..</text>
+ <text key="flows_view-actions-mh-action">Modifica azione: {0}</text>
+ <text key="flows_view-actions-mh-actionAdd">Nuova azione</text>
+ <text key="flows_view-actions-ff-subject">Oggetto</text>
+ <text key="flows_view-actions-ff-subject-placeholder">Oggetto del ticket</text>
+ <text key="flows_view-actions-ff-mail">Indirizzo mail</text>
+ <text key="flows_view-actions-ff-mail-placeholder">Indirizzo mail dell'incaricato</text>
+ <text key="flows_view-actions-ff-typology">Tipologia</text>
+ <text key="flows_view-actions-ff-requiredAction">Azione richiesta</text>
+ <text key="flows_view-actions-ff-requiredAction-null">Nessuna azione</text>
+ <text key="flows_view-actions-ff-conditionedField">Condizionata da</text>
+ <text key="flows_view-actions-ff-conditionedField-null">Nessun campo</text>
+ <text key="flows_view-actions-ff-conditionedValue">Valore campo</text>
+ <text key="flows_view-actions-ff-group">Assegnata al Gruppo</text>
+ <text key="flows_view-actions-ff-group-placeholder">Seleziona un gruppo</text>
+ <text key="flows_view-actions-ff-assigned">Incaricato</text>
+ <text key="flows_view-actions-ff-assigned-placeholder">Seleziona un utente</text>
+ <text key="flows_view-actions-ff-priority">Priorità</text>
+ <text key="flows_view-actions-ff-difficulty">Difficoltà</text>
+ <text key="flows_view-actions-ff-slaAssignment">SLA Assegnamento</text>
+ <text key="flows_view-actions-ff-slaClosure">SLA Chiusura</text>
+ <text key="flows_view-actions-fc-submit">Salva azione</text>
+ <text key="flows_view-actions-fc-delete">Elimina azione</text>
+ <text key="flows_view-actions-fc-delete-confirm">Eliminare definitivamente questa azione?</text>
+
+ <!-- workflows_mails_list.php -->
+ <text key="mails-tr-unvalued">Non è presente nessuna mail da importare..</text>
+ <text key="mails-th-timestamp">Data</text>
+ <text key="mails-th-sender">Mittente</text>
+ <text key="mails-th-subject">Oggetto</text>
+ <text key="mails-delete-confirm">Confermi l'eliminazione di questa mail?</text>
+
+ <!-- widget.inc.php -->
+ <text key="widget-title">Attività</text>
+ <text key="widget-workflows">Attività personali</text>
+ <text key="widget-tickets">Tickets disponibili</text>
+ <text key="widget-tickets-null">Nessun ticket da processare</text>
+ <text key="widget-showAll">Visualizza tutti i tickets</text>
+ <text key="widget-workflows-opened">Attività aperte</text>
+ <text key="widget-workflows-assigned">Attività prese in carico</text>
+ <text key="widget-workflows-standby">Attività sospese</text>
+ <text key="widget-workflows-closed">Attività completate</text>
+ <text key="widget-tickets-opened">Ticket disponibili</text>
+ <text key="widget-tickets-assigned">Ticket assegnati a te</text>
+ <text key="widget-tickets-standby">Ticket sospesi da te</text>
+ <text key="widget-tickets-closed">Ticket completati da te</text>
+
+</locale>
